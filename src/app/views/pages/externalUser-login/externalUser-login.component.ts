@@ -1,0 +1,259 @@
+import {FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors, FormControl  } from '@angular/forms';
+import {  Component,  OnInit,  } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
+import {
+  UntypedFormBuilder
+} from '@angular/forms';
+import swal from 'sweetalert2';
+import { LoginSessionService } from 'src/app/_services/login-session.service';
+import { CookieService } from 'ngx-cookie-service';
+import { LpujournalbookService } from 'src/app/_services/lpujournalbook.service';
+
+@Component({
+  selector: 'app-login-page',
+  templateUrl: './externalUser-login.component.html',
+  styleUrls: ['./externalUser-login.component.scss'],
+})
+export class ExternalUserLoginComponent implements OnInit {
+  registrationNumber: any;    EmployeeDetails: any[] = [];  regdId: any;  DriveDropDown: any;  showNoDataFoundMessage: boolean | undefined;
+  UserData: any;  isLoginFailed: boolean | undefined;  EmployeeName: any;  EmployeeCode: any;  Department: any;
+  DepartmentName: any;  loadingIndicator: boolean | undefined;  CandidateName: any;  UserId: any;
+  Designation: any;  EmailId: any;  MobileNo: any;  UserRole: any;  SupervisorName: any;  ProofNumber: any;  ProofName: any;
+  SecretKey: any;  BookId: any;  name: any;  isForm1Submitted: boolean = false;
+
+  UserLoginForm!: FormGroup;  formdata: FormGroup;
+  constructor(
+    public formBuilder: UntypedFormBuilder,
+    private AuthSession: LoginSessionService,
+    private fb: FormBuilder,    
+    private router: Router,
+    private route: ActivatedRoute,
+    private cookieService: CookieService,
+    private lpuWebServices: LpujournalbookService
+
+  ) {
+    this.formdata = this.fb.group({
+      Email: ['', [Validators.required, Validators.email]], // Email validation
+      Password: ['', [Validators.required, Validators.minLength(6)]] // Password validation
+    });
+  }
+
+  ngOnInit(): void {
+    this.cookieService.delete('authData');
+    this.AuthSession.clearSession();
+
+    this.BookId  = this.route.snapshot.params['Id'];
+    this.name  = this.route.snapshot.params['name'];
+
+    this.formdata.get('Email')?.valueChanges.subscribe(() => {
+      this.formdata.get('Email')?.markAsTouched();
+    });
+    this.formdata.get('Password')?.valueChanges.subscribe(() => {
+      this.formdata.get('Password')?.markAsTouched();
+    });
+
+    this.UserLoginForm = this.fb.group({
+      Email: new FormControl('', [Validators.required,this.emailValidator]),
+      Password: new FormControl('', [Validators.required,Validators.minLength(6),
+      ]),
+    });
+   
+  }
+
+ 
+  emailValidator(control: AbstractControl): ValidationErrors | null {
+    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    return emailPattern.test(control.value) ? null : { invalidEmail: true };
+  }
+  get email() {
+    return this.formdata.get('Email');
+  }
+  get passwordText() {
+    return this.formdata.get('Password');
+  }
+ 
+  get password() {
+    return this.formdata.get('Password');
+  }
+
+  CheckUserType(event: Event) {
+    const selectElement = event.target as HTMLSelectElement;
+    const selectedValue = selectElement.value;
+    const UserRole = Array.from(selectElement.options).findIndex(
+      (option) => option.value === selectedValue
+    );
+  }
+
+  OnSubmit() {
+    this.submitted = true;
+    if (this.formdata.invalid) {
+      return; 
+    }    
+
+    if (this.formdata.valid) {
+      var DataX = this.formdata.value;
+      var uid = DataX.Email ?? '';
+      var password = DataX.Password ?? '';
+      var encodeduid = btoa(uid);
+      var encodedPassword = btoa(password);
+      var userRoleX: number | null = null;
+
+      // if (DataX.UserRoleS !== null && DataX.UserRoleS !== undefined) {
+      //   userRoleX = parseInt(DataX.UserRoleS as string);
+      //   this.AuthoriseUser(uid,password, userRoleX);
+      // }
+      this.submitted = true; // Set the flag to true on submit
+      this.AuthoriseUser(uid, password);
+
+    }
+  }
+
+  LoginFailed(_NewError: any) {
+    this.isLoginFailed = true;
+    swal.fire({
+      title: 'Login Failed',
+      text: 'Login details are Invalid!',
+      icon: 'warning',
+    });
+  }
+// Old Login MEthod with User Role and id as well as pwd 
+
+  // AuthoriseUser(Id: any, Key: any, Role: number): void{
+  //   this.lpuWebServices.GetAuthoriseUserData(Id, Key, Role).subscribe({
+  //     next: response => {
+  //       if (response.item1 && response.item1.length > 0) {
+  //         this.UserData = response.item1;
+  //         this.CandidateName = this.EmployeeName = response.item1[0].candidateName;
+  //         this.UserId = this.EmployeeCode = Id;
+  //         this.Department = response.item1[0].department;
+  //         this.DepartmentName = response.item1[0].departmentName;
+  //         this.Designation = response.item1[0].department;
+  //         this.EmailId = response.item1[0].emailId;
+  //         this.MobileNo = response.item1[0].mobileNumber;
+  //         this.UserRole = response.item1[0].userRole;
+  //         this.SupervisorName = response.item1[0].supervisorName;
+  //         this.ProofNumber = btoa(response.item1[0].idProofNumber);
+  //         this.ProofName = response.item1[0].idProofType;
+  //         this.SecretKey = btoa(response.item1[0].passwordText);
+
+  //         this.loadingIndicator = false;
+  //         this.showNoDataFoundMessage = false;
+  //         this.isLoginFailed = false;
+
+  //         const userCookiesData = {
+  //           CandidateName: this.CandidateName,
+  //           UserId: Id,
+  //           Department: this.Department,
+  //           DepartmentName: this.DepartmentName,
+  //           Designation: this.Designation,
+  //           EmailId: this.EmailId,
+  //           MobileNo: this.MobileNo,
+  //           UserRole: this.UserRole,
+  //           SupervisorName: this.SupervisorName,
+  //           ProofNumber:this.ProofNumber,
+  //           ProofName: this.ProofName,
+  //         };
+
+  //         const UserCookies = JSON.stringify(userCookiesData);
+  //         this.cookieService.set('authData', UserCookies);
+  //         swal.fire({
+  //           title: 'Login Successful',
+  //           text: 'Login details are Valid!',
+  //           icon: 'success',
+  //         });
+  //         this.AuthSession.addToSession(this.UserData);
+  //         if(this.BookId>0 && this.name.length>0)
+  //           this.VisitUrl(this.BookId,this.name,'About')
+  //         else
+  //         this.router.navigate(['/Home']);
+           
+  //       } else {
+  //         this.showNoDataFoundMessage = true;
+  //         swal.fire({
+  //           title: 'Invalid Login Details ',
+  //           text: 'Login details are Invalid!',
+  //           icon: 'warning',
+  //         });
+  //       }
+  //     },
+  //     error: (err) => {
+  //       console.log(err);
+  //     },
+  //   });
+  //   this.formdata.reset();
+  // }
+ 
+  
+  submitted: boolean = false; 
+
+  VisitUrl(Id: any, name: any, Sufix: any) {
+    this.router.navigateByUrl(Id + '/' + name + '/' + Sufix).then(() => {
+      window.location.reload();
+    });;
+  }
+
+
+   AuthoriseUser(Id: any, Key: any): void{
+    this.lpuWebServices.AuthoriseUserDetails(Id, Key).subscribe({
+      next: response => {
+        if (response.item1 && response.item1.length > 0) {
+          this.UserData = response.item1;
+          this.CandidateName = this.EmployeeName = response.item1[0].candidateName;
+          this.UserId = this.EmployeeCode = Id;
+          this.Department = response.item1[0].department;
+          this.DepartmentName = response.item1[0].departmentName;
+          this.Designation = response.item1[0].department;
+          this.EmailId = response.item1[0].emailId;
+          this.MobileNo = response.item1[0].mobileNumber;
+          this.UserRole = response.item1[0].userRole;
+          this.SupervisorName = response.item1[0].supervisorName;
+          this.ProofNumber = btoa(response.item1[0].idProofNumber);
+          this.ProofName = response.item1[0].idProofType;
+          this.SecretKey = btoa(response.item1[0].passwordText);
+
+          this.loadingIndicator = false;
+          this.showNoDataFoundMessage = false;
+          this.isLoginFailed = false;
+
+          const userCookiesData = {
+            CandidateName: this.CandidateName,
+            UserId: Id,
+            Department: this.Department,
+            DepartmentName: this.DepartmentName,
+            Designation: this.Designation,
+            EmailId: this.EmailId,
+            MobileNo: this.MobileNo,
+            UserRole: this.UserRole,
+            SupervisorName: this.SupervisorName,
+            ProofNumber:this.ProofNumber,
+            ProofName: this.ProofName,
+          };
+
+          const UserCookies = JSON.stringify(userCookiesData);
+          this.cookieService.set('authData', UserCookies);
+          swal.fire({
+            title: 'Login Successful',
+            text: 'Login details are Valid!',
+            icon: 'success',
+          });
+          this.AuthSession.addToSession(this.UserData);
+          // console.log(this.BookId+""+this.name)
+            this.VisitUrl(this.BookId,this.name,'About')
+           
+        } else {
+          this.showNoDataFoundMessage = true;
+          swal.fire({
+            title: 'Invalid Login Details ',
+            text: 'Login details are Invalid!',
+            icon: 'warning',
+          });
+        }
+      },
+      error: (err) => {
+        console.log(err);
+      },
+    });
+    this.formdata.reset();
+  }
+ 
+}

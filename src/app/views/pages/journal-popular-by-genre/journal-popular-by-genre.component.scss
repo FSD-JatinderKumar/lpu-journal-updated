@@ -1,0 +1,19 @@
+.hidden {
+    display: block;
+  }
+  
+  .error-message {
+    // border: 1px solid ; /* 5px thick solid red border */
+    position: absolute;
+    margin-top: 2rem;
+    color: red;
+    font-size: 1rem;
+    padding: 1rem; 
+    height: auto;
+    background-color: transparent; /* Optional: Add background to make text more readable */
+  }
+  .arrowColor{
+    background-color: bisque !important;
+    // border: none !important;
+    color: black !important;
+  }
