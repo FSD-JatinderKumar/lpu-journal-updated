@@ -1,13 +1,9 @@
-<app-topslider></app-topslider>
+<!-- <app-topslider></app-topslider>
 <app-journalmenubar></app-journalmenubar>
-<app-journal-inner-menu></app-journal-inner-menu>
-<div class="row d-flex justify-content-center mt-2">
-  <div class="col-md-10 text-center">
-    <label class="badge bg-info text-dark fs-4"> Current Journal <span class=" ms-3 text-danger "> {{this.JournalTitle}}</span></label>
-  </div>
-</div>
+<app-journal-inner-menu></app-journal-inner-menu> -->
 
-  <div class="row mt-4 d-flex justify-content-center p-3">
+<section>
+  <div class="row mt-2 d-flex justify-content-center p-3">
     <div class="col-md-6 grid-margin stretch-card ">
       <div class="card">
         <div class="card-body">
@@ -66,22 +62,14 @@
             </div>
 
           </div>
-          <div class="row " *ngIf="isGuest" [ngClass]="isGuest?'DBlock':'DNone'">
-            <div class="row d-flex justify-content-center">
-              <div class="text-center ">
-               <label class="form-label fs-4 p-2 text-center"> 
-                   Forbidden Access as {{this.selectedAction}}
-               </label>
-             </div>
-           </div>
-          </div>
         </div>
       </div>
     </div>
   </div>
+</section>
 
 <!-- Guest User or Other User  -->
-<!-- <section >
+<section >
   <div class="row " *ngIf="isGuest" [ngClass]="isGuest?'DBlock':'DNone'">
   <div class="row mt-2 d-flex justify-content-center p-3">
     <div class="col-md-12 grid-margin stretch-card">
@@ -90,6 +78,7 @@
           <div class="row d-flex justify-content-center">
              <div class="text-center ">
               <label class="form-label fs-1 p-2 text-center"> 
+                <!-- Since Your are not Author or Editor or Reviwer -->
                   Forbidden Access!
               </label>
             </div>
@@ -99,7 +88,7 @@
     </div>
   </div>
   </div>
-</section> -->
+</section>
 <!--  For Author  -->
 
 <section>

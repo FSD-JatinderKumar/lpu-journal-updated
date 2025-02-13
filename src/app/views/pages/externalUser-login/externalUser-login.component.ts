@@ -8,6 +8,8 @@ import swal from 'sweetalert2';
 import { LoginSessionService } from 'src/app/_services/login-session.service';
 import { CookieService } from 'ngx-cookie-service';
 import { LpujournalbookService } from 'src/app/_services/lpujournalbook.service';
+import { AuthService } from 'src/app/_services/auth.service';
+import { StorageService } from 'src/app/_services/storage.service';
 
 @Component({
   selector: 'app-login-page',
@@ -20,11 +22,13 @@ export class ExternalUserLoginComponent implements OnInit {
   DepartmentName: any;  loadingIndicator: boolean | undefined;  CandidateName: any;  UserId: any;
   Designation: any;  EmailId: any;  MobileNo: any;  UserRole: any;  SupervisorName: any;  ProofNumber: any;  ProofName: any;
   SecretKey: any;  BookId: any;  name: any;  isForm1Submitted: boolean = false;
-
+  JournalTitle: any;
   UserLoginForm!: FormGroup;  formdata: FormGroup;
   constructor(
     public formBuilder: UntypedFormBuilder,
     private AuthSession: LoginSessionService,
+    private authService: AuthService,
+    private storageService: StorageService,
     private fb: FormBuilder,    
     private router: Router,
     private route: ActivatedRoute,
@@ -43,7 +47,7 @@ export class ExternalUserLoginComponent implements OnInit {
     this.AuthSession.clearSession();
 
     this.BookId  = this.route.snapshot.params['Id'];
-    this.name  = this.route.snapshot.params['name'];
+   this.JournalTitle= this.name  = this.route.snapshot.params['name'];
 
     this.formdata.get('Email')?.valueChanges.subscribe(() => {
       this.formdata.get('Email')?.markAsTouched();
@@ -89,7 +93,7 @@ export class ExternalUserLoginComponent implements OnInit {
     if (this.formdata.invalid) {
       return; 
     }    
-
+    debugger;
     if (this.formdata.valid) {
       var DataX = this.formdata.value;
       var uid = DataX.Email ?? '';
@@ -102,8 +106,15 @@ export class ExternalUserLoginComponent implements OnInit {
       //   userRoleX = parseInt(DataX.UserRoleS as string);
       //   this.AuthoriseUser(uid,password, userRoleX);
       // }
-      this.submitted = true; // Set the flag to true on submit
-      this.AuthoriseUser(uid, password);
+      this.submitted = true;  
+      if(uid.length>5 && password.length>5)
+      {
+        this.AuthoriseUser(uid, password);
+      }
+      else
+      {
+        alert('Invalid Details')
+      }
 
     }
   }
@@ -193,67 +204,143 @@ export class ExternalUserLoginComponent implements OnInit {
   }
 
 
-   AuthoriseUser(Id: any, Key: any): void{
-    this.lpuWebServices.AuthoriseUserDetails(Id, Key).subscribe({
-      next: response => {
-        if (response.item1 && response.item1.length > 0) {
-          this.UserData = response.item1;
-          this.CandidateName = this.EmployeeName = response.item1[0].candidateName;
-          this.UserId = this.EmployeeCode = Id;
-          this.Department = response.item1[0].department;
-          this.DepartmentName = response.item1[0].departmentName;
-          this.Designation = response.item1[0].department;
-          this.EmailId = response.item1[0].emailId;
-          this.MobileNo = response.item1[0].mobileNumber;
-          this.UserRole = response.item1[0].userRole;
-          this.SupervisorName = response.item1[0].supervisorName;
-          this.ProofNumber = btoa(response.item1[0].idProofNumber);
-          this.ProofName = response.item1[0].idProofType;
-          this.SecretKey = btoa(response.item1[0].passwordText);
+  AuthoriseUser(Id: any, Key: any): void{
 
-          this.loadingIndicator = false;
-          this.showNoDataFoundMessage = false;
-          this.isLoginFailed = false;
+    this.authService.LoginJournalAccessTemp(Id).subscribe({
+      next: data => {
+        
+        this.storageService.saveUser(data);
+        this.lpuWebServices.AuthoriseUserDetails(Id, Key).subscribe({
+          next: response => {
+            if (response.item1 && response.item1.length > 0) {
+              this.UserData = response.item1;
+              this.CandidateName = this.EmployeeName = response.item1[0].candidateName;
+              this.UserId = this.EmployeeCode = Id;
+              this.Department = response.item1[0].department;
+              this.DepartmentName = response.item1[0].departmentName;
+              this.Designation = response.item1[0].department;
+              this.EmailId = response.item1[0].emailId;
+              this.MobileNo = response.item1[0].mobileNumber;
+              this.UserRole = response.item1[0].userRole;
+              this.SupervisorName = response.item1[0].supervisorName;
+              this.ProofNumber = btoa(response.item1[0].idProofNumber);
+              this.ProofName = response.item1[0].idProofType;
+              this.SecretKey = btoa(response.item1[0].passwordText);
 
-          const userCookiesData = {
-            CandidateName: this.CandidateName,
-            UserId: Id,
-            Department: this.Department,
-            DepartmentName: this.DepartmentName,
-            Designation: this.Designation,
-            EmailId: this.EmailId,
-            MobileNo: this.MobileNo,
-            UserRole: this.UserRole,
-            SupervisorName: this.SupervisorName,
-            ProofNumber:this.ProofNumber,
-            ProofName: this.ProofName,
-          };
+              this.loadingIndicator = false;
+              this.showNoDataFoundMessage = false;
+              this.isLoginFailed = false;
 
-          const UserCookies = JSON.stringify(userCookiesData);
-          this.cookieService.set('authData', UserCookies);
-          swal.fire({
-            title: 'Login Successful',
-            text: 'Login details are Valid!',
-            icon: 'success',
-          });
-          this.AuthSession.addToSession(this.UserData);
-          // console.log(this.BookId+""+this.name)
-            this.VisitUrl(this.BookId,this.name,'About')
-           
-        } else {
-          this.showNoDataFoundMessage = true;
-          swal.fire({
-            title: 'Invalid Login Details ',
-            text: 'Login details are Invalid!',
-            icon: 'warning',
-          });
-        }
+              const userCookiesData = {
+                CandidateName: this.CandidateName,
+                UserId: Id,
+                Department: this.Department,
+                DepartmentName: this.DepartmentName,
+                Designation: this.Designation,
+                EmailId: this.EmailId,
+                MobileNo: this.MobileNo,
+                UserRole: this.UserRole,
+                SupervisorName: this.SupervisorName,
+                ProofNumber: this.ProofNumber,
+                ProofName: this.ProofName,
+              };
+
+              const UserCookies = JSON.stringify(userCookiesData);
+              this.cookieService.set('authData', UserCookies);
+              swal.fire({
+                title: 'Login Successful',
+                text: 'Login details are Valid!',
+                icon: 'success',
+              });
+              this.AuthSession.addToSession(this.UserData);
+              // console.log(this.BookId+""+this.name)
+              this.VisitUrl(this.BookId, this.name, 'About')
+
+            } else {
+              this.showNoDataFoundMessage = true;
+              swal.fire({
+                title: 'Invalid Login Details ',
+                text: 'Login details are Invalid!',
+                icon: 'warning',
+              });
+            }
+          },
+          error: (err) => {
+            console.log(err);
+          },
+        });
       },
-      error: (err) => {
-        console.log(err);
-      },
+      error: err => {
+        this.loadingIndicator = false;
+              this.showNoDataFoundMessage = false;
+              this.isLoginFailed = false;
+      }
     });
     this.formdata.reset();
   }
+ 
+
+  //  AuthoriseUser(Id: any, Key: any): void{
+  //   this.lpuWebServices.AuthoriseUserDetails(Id, Key).subscribe({
+  //     next: response => {
+  //       if (response.item1 && response.item1.length > 0) {
+  //         this.UserData = response.item1;
+  //         this.CandidateName = this.EmployeeName = response.item1[0].candidateName;
+  //         this.UserId = this.EmployeeCode = Id;
+  //         this.Department = response.item1[0].department;
+  //         this.DepartmentName = response.item1[0].departmentName;
+  //         this.Designation = response.item1[0].department;
+  //         this.EmailId = response.item1[0].emailId;
+  //         this.MobileNo = response.item1[0].mobileNumber;
+  //         this.UserRole = response.item1[0].userRole;
+  //         this.SupervisorName = response.item1[0].supervisorName;
+  //         this.ProofNumber = btoa(response.item1[0].idProofNumber);
+  //         this.ProofName = response.item1[0].idProofType;
+  //         this.SecretKey = btoa(response.item1[0].passwordText);
+
+  //         this.loadingIndicator = false;
+  //         this.showNoDataFoundMessage = false;
+  //         this.isLoginFailed = false;
+
+  //         const userCookiesData = {
+  //           CandidateName: this.CandidateName,
+  //           UserId: Id,
+  //           Department: this.Department,
+  //           DepartmentName: this.DepartmentName,
+  //           Designation: this.Designation,
+  //           EmailId: this.EmailId,
+  //           MobileNo: this.MobileNo,
+  //           UserRole: this.UserRole,
+  //           SupervisorName: this.SupervisorName,
+  //           ProofNumber:this.ProofNumber,
+  //           ProofName: this.ProofName,
+  //         };
+
+  //         const UserCookies = JSON.stringify(userCookiesData);
+  //         this.cookieService.set('authData', UserCookies);
+  //         swal.fire({
+  //           title: 'Login Successful',
+  //           text: 'Login details are Valid!',
+  //           icon: 'success',
+  //         });
+  //         this.AuthSession.addToSession(this.UserData);
+  //         // console.log(this.BookId+""+this.name)
+  //           this.VisitUrl(this.BookId,this.name,'About')
+           
+  //       } else {
+  //         this.showNoDataFoundMessage = true;
+  //         swal.fire({
+  //           title: 'Invalid Login Details ',
+  //           text: 'Login details are Invalid!',
+  //           icon: 'warning',
+  //         });
+  //       }
+  //     },
+  //     error: (err) => {
+  //       console.log(err);
+  //     },
+  //   });
+  //   this.formdata.reset();
+  // }
  
 }

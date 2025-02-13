@@ -1,62 +1,96 @@
 <app-topslider></app-topslider>
 <app-journalmenubar></app-journalmenubar>
 <app-journal-inner-menu></app-journal-inner-menu>
+<div class="row mt-4">
+  <div class="col-md-12 text-center">
+    <div class="badge bg-dark text-light fs-5 "> Welcome to LPU Journal ® for <br />
+      <div class=" mt-3 text-light fs-3">{{this.JournalTitle}} </div>
+    </div>
+  </div>
+</div>
 <section>
-<div class="row w-100 mx-0 auth-page wrapper mt-5">
-  <div class="col-md-12 col-xl-12 mx-auto">
-    <div class="row">
-      <div class="col-md-6 pe-md-0">
-        <div class="col-md-6 d-none d-lg-block ">
-          <img src="/assets/images/login-left.png" />
-          <img src="https://www.lpu.in/journals/assets/images/login-left.png" />
+  <div class="row w-100 mx-0 auth-page wrapper mt-5">
+    <div class="col-md-12 col-xl-12 mx-auto">
+      <div class="row">
+        <div class="col-md-6 pe-md-0  d-none d-lg-block">
+            <img src="/assets/images/login-left.png"   />
+            <!-- <img src="https://www.lpu.in/journals/assets/images/login-left.png" /> -->
         </div>
-      </div>
-      <div class="col-md-6 ps-md-0">
-        <div class="auth-form-wrapper px-4 py-5 p-5">
-          <h2 class="nobleui-logo d-block mb-2"> User <span>Login Page</span></h2>
-          
-      
-          <form class="forms-sample" [formGroup]="formdata" (ngSubmit)="OnSubmit()">
-            <div class="row mb-2 mt-3">
-              <div class="col-md-4">
-                <label for="exampleInputEmail1" class="col-md-6 form-label">Email address</label>
-              </div>
-              <div class="col-md-6">
-                <input type="email" formControlName="Email" placeholder="Enter Email or User Id" 
-                       class="col-md-6 form-control" id="exampleInputEmail1">
-                <div *ngIf="submitted && email?.errors" class="text-danger">
-                  <small *ngIf="email?.errors?.['required']">Email is required.</small>
-                  <small *ngIf="email?.errors?.['email']">Enter a valid email address.</small>
+        <div class="col-md-5 ">
+          <div class="auth-form-wrapper px-4 py-5 p-5">
+            <div class="col-md-12 text-center">
+              <h2 class="nobleui-logo d-block mb-2"> User <span>Login Page</span></h2>
+            </div>
+
+            <form class="forms-sample" [formGroup]="formdata" (ngSubmit)="OnSubmit()">
+              <div class="row mb-2 mt-5">
+                <div class="col-md-1">
+                  <label for="exampleInputPassword1" class="col-md-4 form-label"> </label>
+                </div>
+                <div class="col-md-4">
+                  <label for="exampleInputEmail1" class="col-md-6 form-label">Username</label>
+                </div>
+                <div class="col-md-6">
+                  <input type="email" formControlName="Email" placeholder="Enter Email or User Id"
+                    class="col-md-6 form-control" id="exampleInputEmail1">
+                  <div *ngIf="submitted && email?.errors" class="text-danger">
+                    <small *ngIf="email?.errors?.['required']">Email is required.</small>
+                    <small *ngIf="email?.errors?.['email']">Enter a valid email address.</small>
+                  </div>
+                </div>
+                <div class="col-md-1">
+                  <label for="exampleInputPassword1" class="col-md-4 form-label"> </label>
                 </div>
               </div>
-            </div>
-          
-            <div class="row mb-2 mt-3">
-              <div class="col-md-4">
-                <label for="exampleInputPassword1" class="col-md-6 form-label">Password</label>
-              </div>
-              <div class="col-md-6">
-                <input type="password" formControlName="Password" placeholder="Enter Password" 
-                       class="col-md-6 form-control" id="exampleInputPassword1">
-                <div *ngIf="submitted && password?.errors" class="text-danger">
-                  <small *ngIf="password?.errors?.['required']">Password is required.</small>
-                  <small *ngIf="password?.errors?.['minlength']">Password must be at least 6 characters long.</small>
+
+              <div class="row mb-2 mt-3">
+                <div class="col-md-1">
+                  <label for="exampleInputPassword1" class="col-md-4 form-label"> </label>
+                </div>
+                <div class="col-md-4">
+                  <label for="exampleInputPassword1" class="col-md-6 form-label">Password</label>
+                </div>
+                <div class="col-md-6">
+                  <input type="password" formControlName="Password" placeholder="Enter Password"
+                    class="col-md-6 form-control" id="exampleInputPassword1">
+                  <div *ngIf="submitted && password?.errors" class="text-danger">
+                    <small *ngIf="password?.errors?.['required']">Password is required.</small>
+                    <small *ngIf="password?.errors?.['minlength']">Password must be at least 6 characters long.</small>
+                  </div>
+                </div>
+                <div class="col-md-1">
+                  <label for="exampleInputPassword1" class="col-md-4 form-label"> </label>
                 </div>
               </div>
-            </div>
-            <div class="row mb-2 mt-3">
-            <div class="col-md-4">
-              <button type="submit" class="btn btn-primary mb-2  ms-2" >Submit</button>
-            </div>
-            <div class="col-md-6">
-              <a (click)="VisitUrl(BookId, name, 'signup')"class="  mb-2">New User Sign Up</a>
-            </div>
-            </div>
-          </form>
+              <div class="row m-4">
+                <br/>
+              </div>
+              <div class="row mb-2 mt-3">
+                <div class="col-md-3">
+                  <button type="submit" class="loginButton">Author Login</button>
+                </div>
+                <div class="col-md-3">
+                  <button type="submit" class="loginButton" disabled>Reviewer Login</button>
+                </div>
+                <div class="col-md-3">
+                  <button type="submit" class="loginButton" disabled>Editor Login</button>
+                </div>
+                <div class="col-md-3">
+                  <button type="submit" class="loginButton" disabled>Publisher Login</button>
+                </div>
+              </div>
+              <div class="row mb-2 mt-5">
+                <!-- <div class="col-md-4">
+                  <button type="submit" class="btn btn-dark mb-2">Submit</button>
+                </div> -->
+                <div class="col-md-12 text-center">
+                  <a (click)="VisitUrl(BookId, name, 'signup')" class="signupLink mb-2">Register Now</a>
+                </div>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
 </section>
- 

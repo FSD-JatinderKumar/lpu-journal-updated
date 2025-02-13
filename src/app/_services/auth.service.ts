@@ -15,6 +15,18 @@ const httpOptions = {
 export class AuthService {
   constructor(private http: HttpClient) {}
 
+  LoginJournalAccessTemp(username: string): Observable<any> {
+    return this.http.post(
+      AUTH_API_LOCAL + 'security/createjournalToken',
+      {
+        username
+      },
+      httpOptions
+    );
+  }
+
+
+
   loginTemp(username: string,menuName:string=''): Observable<any> {
 
     const checkData = {
@@ -38,15 +50,7 @@ export class AuthService {
       httpOptions
     );
   }
-  LoginJournalAccessTemp(username: string): Observable<any> {
-    return this.http.post(
-      AUTH_API_LOCAL + 'security/createjournalToken',
-      {
-        username
-      },
-      httpOptions
-    );
-  }
+ 
 
   loginInternalUser(userId: string, key: string): Observable<any> {
     return this.http.post(

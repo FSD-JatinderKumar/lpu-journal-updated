@@ -24,8 +24,8 @@ export class NewRegistrationPageComponent implements OnInit {
   IdProofFile: string | null = null;
   sessionData: any[] = [];
   JournalUserAccountForm!: FormGroup;
-  BookId: any;
-  name: any;
+  BookId: any; JournalId: any;
+  name: any; JournalTitle: any;
 
   constructor(
     private LpuWebService: LpujournalbookService,
@@ -37,8 +37,8 @@ export class NewRegistrationPageComponent implements OnInit {
     var BookId = this.route.snapshot.params['Id'];
     var name = this.route.snapshot.params['name'];
     if (BookId != undefined && BookId != null) {
-      this.BookId = BookId;
-      this.name = name;
+      this.BookId =this.JournalId= BookId;
+      this.name = this.JournalTitle= name;
     }
     this.JournalUserAccountForm = this.fb.group({
       CandidateName: ['', Validators.required],
@@ -70,9 +70,10 @@ export class NewRegistrationPageComponent implements OnInit {
   }
 
   availableRoles = [
-    { value: '1', label: 'Author' },
-    { value: '2', label: 'Reviewer' },
-    { value: '3', label: 'Other Users' },
+    { value: '0', label: 'Editor Login' },
+    { value: '1', label: 'Author Login' },
+    { value: '2', label: 'Reviewer Login' },
+    { value: '3', label: 'Publisher Login' },
   ];
 
   selectedRoles: string[] = [];

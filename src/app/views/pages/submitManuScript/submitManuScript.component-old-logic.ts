@@ -19,7 +19,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { forkJoin } from 'rxjs';
 @Component({
   selector: 'app-register-page',
-  templateUrl: './submitManuScript.component.html',
+  templateUrl: './submitManuScript.component-old-logic.html',
   styleUrls: ['./submitManuScript.component.scss']
 })
 export class SubmitManuScriptComponent implements OnInit {
@@ -117,7 +117,8 @@ export class SubmitManuScriptComponent implements OnInit {
       '0': 'Editor',
       '1': 'Author',
       '2': 'Reviewer',
-      '3': 'Publisher'
+      '3': 'Guest',
+      '4': 'Publisher'
     };
   
     this.journalWebApiService.GetUserRolesforUser(this.userId).subscribe((response) => {
@@ -506,7 +507,7 @@ export class SubmitManuScriptComponent implements OnInit {
   columnHeaders: { [key: string]: string } = { 
     journalTitle: 'Journal Title', 
     editorInChief: 'Author Name', 
-    menuScriptType: 'Manuscript Type', 
+    menuScriptType: 'Manu Script Type', 
     submissionType: 'Submitted Script ', 
     fileUrl: 'File Download' ,
     journalId: 'Action' 
@@ -547,19 +548,19 @@ export class SubmitManuScriptComponent implements OnInit {
 
 TakeActionAs() {
   if (this.selectedAction === 'Editor') {
-    this.isEditor = false;     this.isReviewer = false;   
-    this.isGuest = this.isAuthor = true; 
+    this.isEditor = true;  
+    this.isGuest = this.isAuthor = false; 
+    this.isReviewer = false;  
   }else if (this.selectedAction === 'Reviewer') {
     this.isReviewer = true;  
-    this.isEditor = false; 
-    this.isGuest = this.isAuthor = true;  
+    this.isEditor = this.isGuest = this.isAuthor = false;   
   } else if (this.selectedAction === 'Author') {
-    this.isGuest = this.isAuthor = true;  
-    this.isEditor = this.isReviewer = false; 
+    this.isAuthor = true;    
+    this.isEditor =this.isGuest = this.isReviewer = false; 
   }
-   else if (this.selectedAction === 'Publisher') {
-    this.isGuest = this.isAuthor = true;    
-    this.isEditor =this.isReviewer = false; 
+   else if (this.selectedAction === 'Guest') {
+    this.isGuest = true;    
+    this.isEditor =this.isReviewer = false; this.isAuthor = false; 
   }
 }
 
@@ -567,7 +568,7 @@ TakeActionAs() {
     { id: '1', name: 'Reviewer 1' },
     { id: '2', name: 'Reviewer 2' },
     { id: '3', name: 'Reviewer 3' }
-  ];  
+  ]; // Dummy reviewers
 
   selectedJournalId: string | null = null;
   selectedReviewerId: string | null = null;
@@ -669,37 +670,37 @@ TakeActionAs() {
     formData.append('manuscriptOrganisedRating', this.reviewForm.questions[4].answer);
     formData.append('manuscriptOtherInfoRating', this.reviewForm.questions[5].answer);
   
-    this.journalWebApiService.NewReviewersRemarks(formData).subscribe({
-      next: (data) => {
-        let result = data.item1[0]['returnData'];
-        let errorCode = data.item1[0]['returnId'];
+    // this.journalWebApiService.AddNewJournalMenuScriptData(formData).subscribe({
+    //   next: (data) => {
+    //     let result = data.item1[0]['msg'];
+    //     let errorCode = data.item1[0]['returnId'];
   
-        if (result === 'success') {
-          Swal.fire({
-            title: 'Stored Remarks ',
-            text: data.item1[0]['msg'],
-            icon: 'success',
-          }).then(() => {
-            this.VisitUrl(this.BookId, this.JournalTitle, 'About');
-          });
-        } else {
-          Swal.fire({
-            title: 'Some Technical Issue',
-            text: result,
-            icon: 'error',
-          }).then(() => {
-            window.location.reload();
-          });
-        }
-      },
-      error: (err) => {
-        Swal.fire({
-          title: 'Error Occurred',
-          text: 'Unable to complete the request. Please try again later.',
-          icon: 'error',
-        });
-      }
-    });
+    //     if (result === 'OK') {
+    //       Swal.fire({
+    //         title: 'Uploaded all Documents',
+    //         text: data.item1[0]['msg'],
+    //         icon: 'success',
+    //       }).then(() => {
+    //         this.VisitUrl(this.BookId, this.JournalTitle, 'MyManuScript');
+    //       });
+    //     } else {
+    //       Swal.fire({
+    //         title: 'Some Technical Issue',
+    //         text: result,
+    //         icon: 'error',
+    //       }).then(() => {
+    //         window.location.reload();
+    //       });
+    //     }
+    //   },
+    //   error: (err) => {
+    //     Swal.fire({
+    //       title: 'Error Occurred',
+    //       text: 'Unable to complete the request. Please try again later.',
+    //       icon: 'error',
+    //     });
+    //   }
+    // });
 
     let modal = bootstrap.Modal.getInstance(document.getElementById('ReviewerModal'));
     modal.hide();  
