@@ -1,0 +1,55 @@
+/* You can add global styles to this file, and also import other style files */
+
+// html, body { height: 100% !important; width: 100% !important;}
+// body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+// .slick-next {
+//     right: 25px !important;
+//     z-index: 2121212122;
+//     opacity: 1 !important;
+//     content: url('./assets/images/icon/right-arrow.svg') !important;
+// }
+// .slick-prev {
+//     left: 25px !important;
+//     z-index: 2121212122;
+//     content: url('./assets/images/icon/left-arrow.svg') !important;
+// }
+
+// .slick-prev:after{
+//     background-color: #fff;
+//     justify-content: center;
+//     border-radius: 50% !important;
+//     content: url('./assets/images/icon/left-arrow.svg') !important;
+// }
+// .slick-next:after {
+//     // font-size: 3.3rem !important;
+//     background-color: #fff;
+//     justify-content: center;
+//     border-radius: 50% !important;
+//  content: url('./assets/images/icon/right-arrow.svg') !important;
+    
+// }
+
+html, body {
+    height: 100%;
+    margin: 0;
+  }
+  
+  body {
+    display: flex;
+    flex-direction: column;
+    background-color: #FDFFF7 !important;
+  }
+  
+  app-root {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  
+  main {
+    flex: 1;
+  }
+  .accordionColor{
+    background-color: #FDFFF7 !important;
+}
