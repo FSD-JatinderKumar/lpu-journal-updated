@@ -5,17 +5,18 @@
 <div class="row w-100 mx-0 auth-page wrapper mt-5">
   <div class="col-md-12 col-xl-12 mx-auto">
     <div class="row">
-      <div class="col-md-6 pe-md-0">
-        <div class="col-md-6 d-none d-lg-block ">
-          <img src="/assets/images/login-left.png" />
-          <img src="https://www.lpu.in/journals/assets/images/login-left.png" />
-        </div>
+      <div class="col-md-6 pe-md-2 d-none d-md-block">
+        <!-- <div class="col-md-6 d-none d-lg-block"> -->
+          <!-- <img src="/assets/images/login-left.png" class="img-fluid" /> -->
+          <!-- <img src="https://www.lpu.in/journals/assets/images/login-left.png" /> -->
+          <img src="https://www.lpu.in/journals/assets/images/login-left.png" onerror="this.onerror=null; this.src='/assets/images/login-left.png';" />
+
+        <!-- </div> -->
       </div>
-      <div class="col-md-6 ps-md-0">
+      
+      <div class="col-md-6 ps-md-0 col-12">
         <div class="auth-form-wrapper px-4 py-5 p-5">
           <h2 class="nobleui-logo d-block mb-2"> User <span>Login Page</span></h2>
-          
-      
           <form class="forms-sample" [formGroup]="formdata" (ngSubmit)="OnSubmit()">
             <div class="row mb-2 mt-3">
               <div class="col-md-4">

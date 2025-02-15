@@ -232,6 +232,7 @@ section {
 .about-journal .journal-details {
   border: 1.5px solid #909090;
   padding: 20px;
+  height: 30rem;
 }
 
 .about-journal .journal-details ul {

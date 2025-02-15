@@ -30,13 +30,18 @@
                     </ul>
                     <p>{{bookData?.subTitle}} </p>
                 </div>
-                <div class="col-lg-4">
+                <div class="col-lg-4 mt-md-5">
                     <div class="journal-details">
-                      <ul>
-                        <li style="text-align: justify;" *ngFor="let detail of detailsArray">
-                          <span class=" me-1 ">{{ detail.key }}:</span> <span class="ms-3 text-end text-danger" >{{ detail.value }}</span>
-                        </li>
-                      </ul>
+                        <ul>
+                            <ng-container *ngFor="let detail of detailsArray">
+                              <li *ngIf="detail.key !== 'Scope'" style="text-align: justify;">
+                                <span class="me-1">{{ detail.key }}:</span> 
+                                <span class="ms-3 text-end text-danger">{{ detail.value }}</span>
+                              </li>
+                            </ng-container>
+                          </ul>
+                          
+                          
                     
                     </div>
                 </div>
