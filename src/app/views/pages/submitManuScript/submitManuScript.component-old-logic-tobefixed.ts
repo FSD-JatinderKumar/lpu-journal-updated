@@ -19,7 +19,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { forkJoin } from 'rxjs';
 @Component({
   selector: 'app-register-page',
-  templateUrl: './submitManuScript.component.html',
+  templateUrl: './submitManuScript.component--old-logic-tobefixed.html',
   styleUrls: ['./submitManuScript.component.scss']
 })
 export class SubmitManuScriptComponent implements OnInit {
@@ -546,20 +546,20 @@ export class SubmitManuScriptComponent implements OnInit {
   selectedAction: string = '';
 
 TakeActionAs() {
-  if (this.selectedAction == 'Editor') {
-    this.isEditor = false; this.isGuest =     this.isReviewer = false;   
-    this.isAuthor = true; 
-  }else if (this.selectedAction == 'Reviewer') {
+  if (this.selectedAction === 'Editor') {
+    this.isEditor = false;     this.isReviewer = false;   
+    this.isGuest = this.isAuthor = true; 
+  }else if (this.selectedAction === 'Reviewer') {
     this.isReviewer = true;  
     this.isEditor = false; 
-    this.isGuest = this.isAuthor = false;  
-  } else if (this.selectedAction == 'Author') {
-    this.isAuthor = true;  
-    this.isGuest = this.isEditor = this.isReviewer = false; 
+    this.isGuest = this.isAuthor = true;  
+  } else if (this.selectedAction === 'Author') {
+    this.isGuest = this.isAuthor = true;  
+    this.isEditor = this.isReviewer = false; 
   }
-   else if (this.selectedAction == 'Publisher') {
-     this.isAuthor = true;    
-     this.isGuest =this.isEditor =this.isReviewer = false; 
+   else if (this.selectedAction === 'Publisher') {
+    this.isGuest = this.isAuthor = true;    
+    this.isEditor =this.isReviewer = false; 
   }
 }
 

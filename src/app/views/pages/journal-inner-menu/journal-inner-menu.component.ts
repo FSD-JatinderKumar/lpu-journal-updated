@@ -4,6 +4,8 @@ import { ActivatedRoute } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { LoginSessionService } from 'src/app/_services/login-session.service';
 import { LpujournalbookService } from 'src/app/_services/lpujournalbook.service';
+import { StorageService } from 'src/app/_services/storage.service';
+ 
 import Swal from 'sweetalert2';
 // import swal from 'sweetalert2';
 @Component({
@@ -23,6 +25,8 @@ export class JournalInnerMenuComponent implements OnInit {
   constructor(
     private journalWebApiService: LpujournalbookService,
     private AuthSession: LoginSessionService,
+    private StoragesServices: StorageService,
+
     private router: Router, private route: ActivatedRoute,
     private cookieService: CookieService) { }
 
@@ -81,6 +85,7 @@ export class JournalInnerMenuComponent implements OnInit {
   
     // Clear session storage if used
     this.AuthSession.clearSession();
+    this.StoragesServices.clean();
     sessionStorage.clear();
     localStorage.clear();
   
