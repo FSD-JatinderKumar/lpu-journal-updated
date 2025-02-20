@@ -137,6 +137,11 @@ const routes: Routes = [
         // component:SubmitManuScriptComponentModule
         // loadChildren: () => import('./views/pages/SubmitManuScript/SubmitManuScript.module').then(m => m.SubmitManuScriptComponentModule)
       },
+      {
+        path: "PublisherDashboard",
+        // component:SubmitManuScriptComponentModule
+        loadChildren: () => import('./views/pages/Journal-Publisher/Publisher-Dashboard/Publisher-Dashboard.module').then(m=>m.PublisherDashboardModule)
+      }
     ]
   }
 ];
