@@ -244,4 +244,15 @@ export class LpujournalbookService {
     );
   }
 
+  // 21-feb-25
+
+  GetAllMenuScriptForJournalId(JournalId:any): Observable<any> {
+    let token = this.storageService.getUser();
+    let headers = new HttpHeaders()
+    .set('Authorization', 'Bearer ' + token)
+    return this.http.get(
+      // AUTH_API_LOCAL + 'api/LpuJournal/GetAllMenuScriptForUser?Email=' + UserEmail, { headers }
+      AUTH_API_LOCAL + 'api/LpuJournal/GetAllMenuScriptForJournal?Id=' + JournalId, { headers }
+    );
+  }
 }

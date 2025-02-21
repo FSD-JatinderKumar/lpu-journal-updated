@@ -92,7 +92,8 @@ export class SubmitManuScriptComponent implements OnInit {
       this.showData();
       this.getUserRolesforId();
      
-      this.showEditorData(this.userId);
+      this.showReviewerData(this.userId);
+      this.showEditorData(this.BookId);
     }
     else {
       // this.router.navigateByUrl( '/Login');
@@ -111,34 +112,75 @@ export class SubmitManuScriptComponent implements OnInit {
       file: [null, Validators.required]
     });
   }
-  UserRolesArray: any[] | undefined;
-  getUserRolesforId() {
-    const roleMapping: { [key: string]: string } = {
+
+  // old code for user roles 
+  // UserRolesArray: any[] | undefined;
+  // getUserRolesforId() {
+  //   const roleMapping: { [key: string]: string } = {
+  //     '0': 'Editor',
+  //     '1': 'Author',
+  //     '2': 'Reviewer',
+  //     '3': 'Publisher'
+  //   };
+  
+  //   this.journalWebApiService.GetUserRolesforUser(this.userId).subscribe((response) => {
+  //     if (response.item1 && response.item1.length > 0) {
+  //       this.UserRolesData = response.item1[0];
+  //       const roles = this.UserRolesData.userRole.split(',');
+  //       this.UserRolesArray = roles.map((role: string | number) => ({
+  //         value: role,
+  //         label: roleMapping[role] || role,
+  //         id: roleMapping[role].replace(/\s+/g, '')
+  //       }));
+        
+  //       // Set flags based on roles
+  //       // this.isEditor = roles.includes('0');
+  //       // this.isAuthor = roles.includes('1');
+  //       // this.isReviewer = roles.includes('2');
+  //       // this.isEditor=true;
+  //       // this.isReviewer=true;
+  //       // this.isAuthor=true
+  //     } else {
+  //       this.bookData = [];
+  //     }
+  //   });
+  // }
+  // new code for user roles 
+  UserRolesArray: { value: string; label: string; id: string }[] = [];
+
+  getUserRolesforId(): void {
+    const roleMapping: Record<string, string> = {
       '0': 'Editor',
       '1': 'Author',
       '2': 'Reviewer',
       '3': 'Publisher'
     };
   
-    this.journalWebApiService.GetUserRolesforUser(this.userId).subscribe((response) => {
-      if (response.item1 && response.item1.length > 0) {
-        this.UserRolesData = response.item1[0];
-        
-        const roles = this.UserRolesData.userRole.split(',');
-        this.UserRolesArray = roles.map((role: string | number) => ({
-          value: role,
-          label: roleMapping[role] || role
-        }));
-        
-        // Set flags based on roles
-        // this.isEditor = roles.includes('0');
-        // this.isAuthor = roles.includes('1');
-        // this.isReviewer = roles.includes('2');
-        // this.isEditor=true;
-        // this.isReviewer=true;
-        // this.isAuthor=true
-      } else {
-        this.bookData = [];
+    this.journalWebApiService.GetUserRolesforUser(this.userId).subscribe({
+      next: (response) => {
+        if (response?.item1?.length > 0) {
+          this.UserRolesData = response.item1[0];
+  
+          // Ensure userRole exists before splitting
+          const roles = this.UserRolesData?.userRole ? this.UserRolesData.userRole.split(',') : [];
+  
+          this.UserRolesArray = roles.map((role: any) => {
+            const roleKey = String(role); // Ensure role is a string
+            const label = roleMapping[roleKey] || roleKey; // Use mapped label or fallback to role itself
+  
+            return {
+              value: roleKey,
+              label,
+              id: label.replace(/\s+/g, '') // Safe to call replace() now
+            };
+          });
+        } else {
+          this.UserRolesArray = []; // Reset array if no roles found
+        }
+      },
+      error: (err) => {
+        console.error('Error fetching user roles:', err);
+        this.UserRolesArray = []; // Reset array on error
       }
     });
   }
@@ -212,6 +254,7 @@ export class SubmitManuScriptComponent implements OnInit {
         this.dataLoaded = true;
         this.booksData = dataX.item1;
         // alert(JSON.stringify(this.booksData))
+        // console.log(JSON.stringify(this.booksData))
         if (this.booksData.length > 0) {
           this.booksDataColumns = Object.keys(this.booksData[0]);
         }
@@ -232,9 +275,9 @@ export class SubmitManuScriptComponent implements OnInit {
     const target = event.target as HTMLInputElement;
     const file: File | null = (target.files as FileList)[0] || null;
     if (file) {
-      if (file.size > 25991576) {
+      if (file.size > 54991576) {
         Swal.fire({
-          title: 'File size exceeds 5MB. Please upload a smaller file.',
+          title: 'File size exceeds 25MB. Please upload a smaller file.',
           text: 'Invalid File size',
           icon: 'warning'
         });
@@ -279,6 +322,7 @@ export class SubmitManuScriptComponent implements OnInit {
     if (this.scriptUploadForm.valid) {
       this.cartItems.push(this.scriptUploadForm.value);  // Add to cart
       this.scriptUploadForm.reset();  // Reset the form after adding
+      
       this.showAddToCartButton = false;  // Show the "Save All" button after adding
       // console.log(JSON.stringify(this.cartItems))
     }
@@ -394,7 +438,7 @@ export class SubmitManuScriptComponent implements OnInit {
             text: data.item1[0]['msg'],
             icon: 'success',
           }).then(() => {
-            this.VisitUrl(this.BookId, this.JournalTitle, 'MyManuScript');
+            window.location.reload();
           });
         } else {
           Swal.fire({
@@ -414,6 +458,7 @@ export class SubmitManuScriptComponent implements OnInit {
         });
       }
     });
+    this.scriptUploadForm.reset();  // Reset the form after adding
   }
    
   generatedFile: Blob | null = null; // Store generated file data
@@ -433,13 +478,13 @@ export class SubmitManuScriptComponent implements OnInit {
   
   
     }
-//  For Editor  Logic
+//  For Reviewer  Logic
 
     displayedColumns: string[] = [
       // 'journalId',
       'journalTitle',
       'editorInChief',
-      'menuScriptType',
+      'manuScriptType',
       // 'submissionType',
       'fileUrl',
       'journalId'
@@ -454,19 +499,39 @@ export class SubmitManuScriptComponent implements OnInit {
       'Action'
     ];
 
-
-
+ReviewerData: any;
+ReviewerDataColumns: any;
     
-  showEditorData(Emailid: any) {
+ReviewerdisplayedColumns: string[] = [
+  // 'journalId',
+  'journalTitle',
+  'editorInChief',
+  // 'manuScriptType',
+  // 'submissionType',
+  'fileUrl',
+  'journalId'
+];
+
+ReviewerdisplayedColumnsHeader: string[] = [
+  // 'journalId',
+  'Journal Title',
+  'Editor In Chief',
+  // 'Manu Script',
+  // 'Submission Type',
+  'Download File',
+  'Action'
+];
+  showReviewerData(Emailid: any) {
     this.journalWebApiService.UserWiseAllMenuScript(Emailid).subscribe({
       next: (dataX: any) => {
         this.dataSource = dataX.item1;
         this.dataLoaded = true;
-        this.booksData = dataX.item1;
+        this.ReviewerData = dataX.item1;
         // console.log("ALL Scripts Data" + JSON.stringify(this.booksData))
-        // alert("ALL Scripts Data" + JSON.stringify(this.booksData))
-        if (this.booksData.length > 0) {
-          this.booksDataColumns = Object.keys(this.booksData[0]);
+        // alert("ALL ReviewerData  Data" + JSON.stringify(this.ReviewerData))
+        console.log("ALL ReviewerData  Data" + JSON.stringify(this.ReviewerData))
+        if (this.ReviewerData.length > 0) {
+          this.ReviewerDataColumns = Object.keys(this.ReviewerData[0]);
           this.calculateTotalPages();
           this.updatePaginatedData();
         }
@@ -500,33 +565,20 @@ export class SubmitManuScriptComponent implements OnInit {
     window.open(aa, '_blank');
   }
 
-
-  //  Editors login action Data grid start 
-
-  columnHeaders: { [key: string]: string } = { 
-    journalTitle: 'Journal Title', 
-    editorInChief: 'Author Name', 
-    menuScriptType: 'Manuscript Type', 
-    submissionType: 'Submitted Script ', 
-    fileUrl: 'File Download' ,
-    journalId: 'Action' 
-  }; // Custom header text journalTitle	editorInChief	ManuScriptType	submissionType
-
-
   currentPage: number = 1;
   pageSize: number = 10;
-  paginatedData: any[] = [];
+  paginatedReviewerData: any[] = [];
   totalPages: number = 1;
 
  
 
   calculateTotalPages() {
-    this.totalPages = Math.ceil(this.booksData.length / this.pageSize);
+    this.totalPages = Math.ceil(this.ReviewerData.length / this.pageSize);
   }
 
   updatePaginatedData() {
     const startIndex = (this.currentPage - 1) * this.pageSize;
-    this.paginatedData = this.booksData.slice(startIndex, startIndex + this.pageSize);
+    this.paginatedReviewerData = this.ReviewerData.slice(startIndex, startIndex + this.pageSize);
   }
 
   nextPage() {
@@ -542,6 +594,8 @@ export class SubmitManuScriptComponent implements OnInit {
       this.updatePaginatedData();
     }
   }
+
+
   actionList: any[] = [{id:'0',name:'Editor'},{id:'1',name:'Author'},{id:'2',name:'Reviewer'},{id:'13',name:'Guest'},];
   selectedAction: string = '';
 
@@ -600,7 +654,7 @@ TakeActionAs() {
 
   reviewForm = {
     recommendation: 'Minor Revisions',
-    rating: 90,
+    rating: 0,
     commentsToEditor: '',
     commentsToAuthor: '',
     transferAuthorization:'No',
@@ -680,7 +734,19 @@ TakeActionAs() {
             text: data.item1[0]['msg'],
             icon: 'success',
           }).then(() => {
-            this.VisitUrl(this.BookId, this.JournalTitle, 'About');
+            // this.VisitUrl(this.BookId, this.JournalTitle, 'About');
+            this.reviewForm = {
+              recommendation: '',
+              rating: 0,
+              commentsToEditor: '',
+              commentsToAuthor: '',
+              transferAuthorization: '',
+              questions: this.reviewForm.questions.map(q => ({
+                ...q,
+                answer: '' // Reset answer to an empty string or default value
+              }))
+            };
+
           });
         } else {
           Swal.fire({
@@ -704,5 +770,141 @@ TakeActionAs() {
     let modal = bootstrap.Modal.getInstance(document.getElementById('ReviewerModal'));
     modal.hide();  
   }
+
+
+
+
+  // 
+  
+  //  Editors login action Data grid start 
+
+  columnHeaders: { [key: string]: string } = { 
+    journalTitle: 'Journal Title', 
+    editorInChief: 'Author Name', 
+    // manuScriptType: 'Manuscript Type', 
+    submissionType: 'Submitted Script ', 
+    fileUrl: 'File Download' ,
+    journalId: 'Action' 
+  }; // Custom header text journalTitle	editorInChief	ManuScriptType	submissionType
+
+
+
+ // 21-feb-25
+
+  displayedEditorColumns: string[] = [
+    // 'journalId',
+    'journalTitle',
+    'editorInChief',
+    'manuScriptType',
+    // 'submissionType',
+    'fileUrl',
+    'journalId'
+  ];
+  displayedEditorColumnsHeader: string[] = [
+    // 'journalId',
+    'Journal Title',
+    'Editor In Chief',
+    'ManuScript Type',
+    // 'Submission Type',
+    'Download File',
+    'Action'
+  ];
+
+EditorData: any;
+EditorDataColumns: any;
+  
+EditordisplayedColumns: string[] = [
+// 'journalId',
+'journalTitle',
+'editorInChief',
+// 'manuScriptType',
+// 'submissionType',
+'fileUrl',
+'journalId'
+];
+
+EditordisplayedColumnsHeader: string[] = [
+// 'journalId',
+'Journal Title',
+'Editor In Chief',
+// 'Manu Script',
+// 'Submission Type',
+'Download File',
+'Action'
+];
+showEditorData(journalId: any) {
+  this.journalWebApiService.GetAllMenuScriptForJournalId(journalId).subscribe({
+    next: (dataX: any) => {
+      this.dataSource = dataX.item1;
+      this.dataLoaded = true;
+      this.EditorData = dataX.item1;
+      // console.log("ALL Scripts Data" + JSON.stringify(this.booksData))
+      // alert("ALL ReviewerData  Data" + JSON.stringify(this.ReviewerData))
+      console.log("ALL EDitors  Data" + JSON.stringify(this.EditorData))
+      if (this.EditorData.length > 0) {
+        this.EditorDataColumns = Object.keys(this.EditorData[0]);
+        this.calculateTotalPagesEditor();
+        this.updatePaginatedDataEditor();
+      }
+      this.dataShowing = true;
+      // setTimeout(() => {
+
+      //   var wrapper1 = (<HTMLInputElement>document.getElementById('wrapper1'));
+      //   var wrapper2 = (<HTMLInputElement>document.getElementById('wrapper2'));
+      //   wrapper1.onscroll = function () {
+      //     wrapper2.scrollLeft = wrapper1.scrollLeft;
+      //   };
+      //   wrapper2.onscroll = function () {
+      //     wrapper1.scrollLeft = wrapper2.scrollLeft;
+      //   };
+
+      // }, 500);
+
+    },
+    error: (error: any) => {
+      this.dataShowing = false;
+      console.error('Error fetching data', error);
+    },
+    complete: () => {
+      this.dataShowing = true;
+      // console.log('Data fetching complete');
+    }
+  });
+}
+onSelectFileEditorX(a: any) {
+  let aa = a;
+  window.open(aa, '_blank');
+}
+
+currentPageEditor: number = 1;
+pageSizeEditor: number = 10;
+paginatedEditorData: any[] = [];
+totalPagesEditor: number = 1;
+
+
+
+calculateTotalPagesEditor() {
+  this.totalPages = Math.ceil(this.EditorData.length / this.pageSize);
+}
+
+updatePaginatedDataEditor() {
+  const startIndex = (this.currentPageEditor - 1) * this.pageSize;
+  this.paginatedEditorData = this.EditorData.slice(startIndex, startIndex + this.pageSize);
+}
+
+nextPageEditor() {
+  if (this.currentPageEditor < this.totalPagesEditor) {
+    this.currentPageEditor++;
+    this.updatePaginatedDataEditor();
+  }
+}
+
+previousPageEditor() {
+  if (this.currentPageEditor > 1) {
+    this.currentPageEditor--;
+    this.updatePaginatedDataEditor();
+  }
+}
+
 }
 
