@@ -13,7 +13,7 @@ export const environment = {
       appId: "1:725668905079:web:d3c1542ab17479b45d4672",
       measurementId: "G-SRK4QGDCXD"
     }  ,
-    apiUrl:'https://localhost:7125/api/',
+    apiUrl:'https://projectsapi.lpu.in/api/',//'https://localhost:7125/api/',
     authToken:'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJMb2dpbk5hbWUiOiIzMTMwOSIsIkRlcGFydG1lbnROYW1lIjoiTi9BIiwiUm9sbElkIjoiNTAiLCJlbWFpbElkIjoiamF0aW5kZXIuMzEzMDlAbHB1LmNvLmluIiwiTkFNRSI6IkphdGluZGVyIEt1bWFyIiwiaXNBY3RpdmUiOiJUcnVlIiwiVW5pcXVlaWQiOiJmYzJhYjI4Yi0zYmFiLTRmNmMtOWE3MS0yNTk2OTYwZWM2ZDAiLCJJc1BhcmVudCI6IkZhbHNlIiwiVXNlclR5cGUiOiJOL0EiLCJTcGVjaWFsQmxvY2siOiJOL0EiLCJuYmYiOjE3MTY5NTM5OTgsImV4cCI6MTcxNzA0MDM5OCwiaWF0IjoxNzE2OTUzOTk4LCJpc3MiOiJodHRwczovL2xvY2FsaG9zdDo3MTI1LyIsImF1ZCI6Imh0dHBzOi8vbG9jYWxob3N0OjcxMjUvIn0.C0IrOsxPc046tp-OmkPN5yEcZ37ud-GT2TPhYvVl7Gs' 
      // apiUrl:'https://localhost:7178/api/'   // apiUrl: 'https://ums.lpu.in/obpapi/api/'   //apiUrl:'https://devums.lpu.in/webapi/api/'
   

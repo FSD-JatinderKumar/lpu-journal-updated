@@ -73,7 +73,7 @@ export class NewRegistrationPageComponent implements OnInit {
     { value: '0', label: 'Editor Login' },
     { value: '1', label: 'Author Login' },
     { value: '2', label: 'Reviewer Login' },
-    { value: '3', label: 'Publisher Login' },
+    // { value: '3', label: 'Publisher Login' },
   ];
 
   selectedRoles: string[] = [];

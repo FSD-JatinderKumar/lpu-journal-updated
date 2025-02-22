@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 const AUTH_API = 'https://projectsapi.lpu.in/';
-const AUTH_API_LOCAL = 'https://localhost:7125/api/';
+const AUTH_API_LOCAL = 'https://projectsapi.lpu.in/';//'https://localhost:7125/api/';
 
 @Injectable({
   providedIn: 'root'
