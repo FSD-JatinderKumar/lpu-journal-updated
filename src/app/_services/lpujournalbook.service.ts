@@ -3,9 +3,9 @@ import { Injectable } from '@angular/core';
 import { Observable, catchError, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { StorageService } from './storage.service';
-const AUTH_API = 'https://localhost:7125/';
+const AUTH_API = 'https://projectsapi.lpu.in/';
 //  const AUTH_API = 'https://localhost:7125/';// 'https://projectsapi.lpu.in/';//'https://projectsapi.lpu.in/'; //
-const AUTH_API_LOCAL = 'https://localhost:7125/';
+const AUTH_API_LOCAL = 'https://projectsapi.lpu.in/'; //'https://localhost:7125/';
 
 @Injectable({
   providedIn: 'root'
@@ -219,13 +219,13 @@ export class LpujournalbookService {
   }
 
 
- AuthoriseUserDetails(UserEmail: any, secreatKeys: any): Observable<any> {
-   var authToken = this.storageService.getUser();
+ AuthoriseUserDetails(UserEmail: any, secreatKeys: any, JournalId: any): Observable<any> {
+  //  var authToken = this.storageService.getUser();
     let headers = new HttpHeaders()
-    .set('Authorization', 'Bearer ' + authToken)
+    .set('Authorization', 'Bearer ' + this.authToken)
     .set('Content-Type', 'application/json');
     return this.http.get(   
-      AUTH_API_LOCAL + 'api/LpuJournal/GetUserDetailsIdWise?Email=' + UserEmail + '&PasswordText=' + secreatKeys ,
+      AUTH_API_LOCAL + 'api/LpuJournal/GetUserDetailsIdWise?Email=' + UserEmail + '&PasswordText=' + secreatKeys +'&JournalId='+JournalId,
       // AUTH_API + 'api/LpuJournal/GetUserDetailsIdWise?Email=' + UserEmail + '&PasswordText=' + secreatKeys ,
      {headers}
     );
@@ -233,7 +233,6 @@ export class LpujournalbookService {
 
 //  13-feb-25
   NewReviewersRemarks(newReviewersRemarks: FormData): Observable<any> {
-    debugger;
     let token = this.storageService.getUser();
     let headers = new HttpHeaders()
     .set('Authorization', 'Bearer ' + token)
@@ -255,4 +254,17 @@ export class LpujournalbookService {
       AUTH_API_LOCAL + 'api/LpuJournal/GetAllMenuScriptForJournal?Id=' + JournalId, { headers }
     );
   }
+
+  
+  GetAllReviewersForJournalId(JournalId:any): Observable<any> {
+    let token = this.storageService.getUser();
+    let headers = new HttpHeaders()
+    .set('Authorization', 'Bearer ' + token)
+    return this.http.get(
+      // AUTH_API_LOCAL + 'api/LpuJournal/GetAllMenuScriptForUser?Email=' + UserEmail, { headers }
+      AUTH_API_LOCAL + 'api/LpuJournal/GetAllReviewersForJournal?Id=' + JournalId, { headers }
+    );
+  }
+
+
 }

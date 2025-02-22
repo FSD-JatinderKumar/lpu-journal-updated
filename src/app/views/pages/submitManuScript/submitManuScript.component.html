@@ -42,7 +42,7 @@
         <div class="row d-flex justify-content-around">
           <label class="col-md-5 form-label  " style="font-weight: 700;">Email Id</label>
           <label class="col-md-7 form-label text-dark " style="text-align: right;font-weight: 700;">
-            {{this.userId.length>0 ? this.userId: 'NA' }}
+            {{this.userId?.length>0 ? this.userId: 'NA' }}
           </label>
         </div>
       </div>
@@ -99,7 +99,7 @@
         aria-selected="false">Publisher Section</button>
     </div>
   </nav> -->
-<nav>
+<nav >
   <div class="nav nav-tabs d-flex justify-content-center" id="nav-tab" role="tablist">
     <button *ngFor="let action of UserRolesArray; let i = index" class="btn btn-lg btn-primary me-5"
       id="{{ action.id }}-tab" data-bs-toggle="tab" style="padding: .95rem 8rem;"
@@ -110,7 +110,7 @@
   </div>
 </nav>
 
-<div class="tab-content mt-4" id="nav-tabContent">
+<div class="tab-content mt-4 blockHeight" id="nav-tabContent" >
   <div *ngFor="let action of UserRolesArray; let i = index" class="tab-pane fade" [class.show]="i === 0"
     [class.active]="i === 0" id="{{ action.id }}" role="tabpanel" [attr.aria-labelledby]="action.id + '-tab'">
 
@@ -118,6 +118,7 @@
 
       <!-- Author Section -->
       <div *ngSwitchCase="'Author'">
+        
         <div class="row d-flex p-3 align-items-center justify-content-center ">
           <div class="col-md-12 grid-margin stretch-card">
             <div class="card">
@@ -275,6 +276,7 @@
             </div>
           </div>
         </div>
+      
       </div>
 
       <!-- Reviewer Section -->
@@ -341,7 +343,7 @@
         </div>
 
       <!-- Editor Section -->
-      <div *ngSwitchCase="'Reviewer'">
+      <div *ngSwitchCase="'Editor'">
         <div class="text-center">
           <h2 class="text-center fs-1 text-danger mb-5"> Editor Section </h2>
         </div>
@@ -354,12 +356,12 @@
                     <table class="table table-bordered">
                       <thead>
                         <tr>
-                          <th *ngFor="let col of displayedColumns">{{ columnHeaders[col] }}</th>
+                          <th *ngFor="let col of EditordisplayedColumns">{{ displayedEditorColumnHeaders[col] }}</th>
                         </tr>
                       </thead>
                       <tbody>
                         <tr *ngFor="let row of paginatedEditorData">
-                          <td *ngFor="let col of EditorDataColumns">
+                          <td *ngFor="let col of EditordisplayedColumns">
                             <ng-container [ngSwitch]="col">
                               <!-- File URL Case -->
                               <button *ngSwitchCase="'fileUrl'" class="btn btn-dark" (click)="onSelectFileEditorX(row[col])">
@@ -380,7 +382,6 @@
                       </tbody>
                     </table>
     
-                    <!-- Pagination Controls -->
                     <div class="pagination-controls">
                       <button (click)="previousPageEditor()" [disabled]="currentPageEditor === 1">Previous</button>
                       <span> Page {{ currentPageEditor }} of {{ totalPagesEditor }} </span>
@@ -400,16 +401,59 @@
       </div>
 
       <!-- Publisher Section -->
-      <div *ngSwitchCase="'Publisher'">
-        <h3>Publisher Section</h3>
-        <p>Publisher-specific tools and settings. Manage publication scheduling and final release.</p>
-        <button class="btn btn-warning">Publish Article</button>
+      <div *ngSwitchCase="'Publishers'">
+        <div class="row mt-4 d-flex justify-content-center p-3">
+          <div class="col-md-12 grid-margin stretch-card ">
+            <div class="card">
+              <div class="card-body">
+                <div class="row d-flex justify-content-around">
+                  <label class="col-md-6 form-label " style="font-weight: 700;">
+                    <h3>Publisher Section</h3>
+                  </label>
+                  <label class="col-md-6 form-label text-dark  " style="text-align: right; font-weight: 700;">
+                    <p>Publisher-specific tools and settings. Manage publication scheduling and final release.</p>
+                  </label>
+                </div>
+                <div class="row d-flex justify-content-around">
+                  <label class="col-md-6 form-label " style="font-weight: 700;">
+                  </label>
+                  <button class="col-md-6 btn btn-warning">Publish Article</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      
+        
+        
       </div>
 
       <!-- Default Section (For any unknown role) -->
       <div *ngSwitchDefault>
-        <h3>Access Denied</h3>
-        <p>You don't have access to this section.</p>
+        
+        
+        <div class="row mt-4 d-flex justify-content-center p-3">
+          <div class="col-md-12 grid-margin stretch-card ">
+            <div class="card">
+              <div class="card-body">
+                <div class="row d-flex justify-content-around">
+                  <label class="col-md-6 form-label " style="font-weight: 700;">
+                    <h3>Publisher Section</h3>
+                  </label>
+                  <label class="col-md-6 form-label text-dark  " style="text-align: right; font-weight: 700;">
+                    <h3>Access Denied</h3>
+                  </label>
+                </div>
+                <div class="row d-flex justify-content-around">
+                  <label class="col-md-6 form-label " style="font-weight: 700;">
+                  </label>
+                 <p>You don't have access to this section.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
       </div>
 
     </ng-container>
@@ -727,17 +771,23 @@
             <label class="form-label">Journal ID:</label>
             <input type="text" class="form-control" [(ngModel)]="selectedJournalId" name="journalId" readonly />
           </div>
+          
           <div class="mb-3">
-            <label class="form-label">Select Reviewer:</label>
-            <select class="form-select" [(ngModel)]="selectedReviewerId" name="reviewerId" required>
-              <option *ngFor="let reviewer of reviewerList" [value]="reviewer.id">{{ reviewer.name }}</option>
+            <label for="reviewerDropdown" class="form-label">Select Reviewer:</label>
+            <select id="reviewerDropdown" class="form-select" [(ngModel)]="selectedReviewerId" name="reviewerId" required>
+              <option value="" disabled>Select Reviewer</option>
+              <option *ngFor="let reviewer of reviewerList" [value]="reviewer.emailId">
+                {{ reviewer.candidateName }} 
+              </option>
             </select>
           </div>
+          
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-            <button type="submit" class="btn btn-success">Assign Reviewer</button>
+            <button type="submit" class="btn btn-success" [disabled]="selectedReviewerId === ''">Assign Reviewer</button>
           </div>
         </form>
+        
       </div>
     </div>
   </div>

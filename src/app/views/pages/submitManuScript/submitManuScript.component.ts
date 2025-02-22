@@ -94,6 +94,7 @@ export class SubmitManuScriptComponent implements OnInit {
      
       this.showReviewerData(this.userId);
       this.showEditorData(this.BookId);
+      this.loadReviewers(this.BookId);
     }
     else {
       // this.router.navigateByUrl( '/Login');
@@ -527,27 +528,14 @@ ReviewerdisplayedColumnsHeader: string[] = [
         this.dataSource = dataX.item1;
         this.dataLoaded = true;
         this.ReviewerData = dataX.item1;
-        // console.log("ALL Scripts Data" + JSON.stringify(this.booksData))
         // alert("ALL ReviewerData  Data" + JSON.stringify(this.ReviewerData))
-        console.log("ALL ReviewerData  Data" + JSON.stringify(this.ReviewerData))
+        // console.log("ALL ReviewerData  Data" + JSON.stringify(this.ReviewerData))
         if (this.ReviewerData.length > 0) {
           this.ReviewerDataColumns = Object.keys(this.ReviewerData[0]);
           this.calculateTotalPages();
           this.updatePaginatedData();
         }
         this.dataShowing = true;
-        // setTimeout(() => {
-
-        //   var wrapper1 = (<HTMLInputElement>document.getElementById('wrapper1'));
-        //   var wrapper2 = (<HTMLInputElement>document.getElementById('wrapper2'));
-        //   wrapper1.onscroll = function () {
-        //     wrapper2.scrollLeft = wrapper1.scrollLeft;
-        //   };
-        //   wrapper2.onscroll = function () {
-        //     wrapper1.scrollLeft = wrapper2.scrollLeft;
-        //   };
-
-        // }, 500);
 
       },
       error: (error: any) => {
@@ -617,25 +605,36 @@ TakeActionAs() {
   }
 }
 
-  reviewerList: any[] = [
-    { id: '1', name: 'Reviewer 1' },
-    { id: '2', name: 'Reviewer 2' },
-    { id: '3', name: 'Reviewer 3' }
-  ];  
-
-  selectedJournalId: string | null = null;
-  selectedReviewerId: string | null = null;
-
-  loadReviewers() {
+selectedJournalId: string | null = null;
+selectedReviewerId: string = ''; 
+reviewerList: any[] = [];
+  loadReviewers(id:any) {
     // API call to fetch reviewer list
-    // this.journalWebApiService.getReviewers().subscribe((reviewers) => {
+    this.journalWebApiService.GetAllReviewersForJournalId(id).subscribe({
+      next: (dataX: any) => {
+        this.dataSource = dataX.item1;
+        this.reviewerList = dataX.item1;
+        console.log("ALL Reviewerlist" + JSON.stringify(this.reviewerList))
+
+      },
+      error: (error: any) => {
+        this.dataShowing = false;
+        console.error('Error fetching data', error);
+      },
+      complete: () => {
+        this.dataShowing = true;
+        // console.log('Data fetching complete');
+      }
+    });
+    // this.journalWebApiService.GetAllReviewersForJournalId(id).subscribe((reviewers) => {
     //   this.reviewerList = reviewers;
     // });
+    // this.selectedReviewerId.value='select';
   }
 
   onTakeAction(journalId: string) {
     this.selectedJournalId = journalId;
-    this.selectedReviewerId = null; // Reset reviewer selection
+    this.selectedReviewerId = ''; // Reset reviewer selection
   }
   assignReviewer() {
     if (!this.selectedReviewerId) {
@@ -794,41 +793,46 @@ TakeActionAs() {
   displayedEditorColumns: string[] = [
     // 'journalId',
     'journalTitle',
+    'manuScript',
     'editorInChief',
-    'manuScriptType',
-    // 'submissionType',
+    'emailId',
+    'userName',
+    'submissionType',
     'fileUrl',
     'journalId'
   ];
-  displayedEditorColumnsHeader: string[] = [
-    // 'journalId',
-    'Journal Title',
-    'Editor In Chief',
-    'ManuScript Type',
-    // 'Submission Type',
-    'Download File',
-    'Action'
-  ];
+  displayedEditorColumnHeaders: { [key: string]: string } = { 
+    journalTitle: 'Journal Title', 
+    manuScript: 'Manu Script', 
+    editorInChief: 'Author Name', 
+    emailId: 'User Email', 
+    userName: 'User Name', 
+    submissionType: 'Submitted Script ', 
+    fileUrl: 'File Download' ,
+    journalId: 'Action' 
+  }; // Custom header text journalTitle	editorInChief	ManuScriptType	submissionType
+
+
 
 EditorData: any;
 EditorDataColumns: any;
   
 EditordisplayedColumns: string[] = [
-// 'journalId',
 'journalTitle',
-'editorInChief',
-// 'manuScriptType',
-// 'submissionType',
-'fileUrl',
-'journalId'
+    'manuScript',
+    'editorInChief',
+    'emailId',
+    'userName',
+    'fileUrl',
+    'journalId'
 ];
 
 EditordisplayedColumnsHeader: string[] = [
-// 'journalId',
 'Journal Title',
+'Manu Script',
 'Editor In Chief',
-// 'Manu Script',
-// 'Submission Type',
+'User Email Id',
+'User Name',
 'Download File',
 'Action'
 ];
@@ -838,27 +842,13 @@ showEditorData(journalId: any) {
       this.dataSource = dataX.item1;
       this.dataLoaded = true;
       this.EditorData = dataX.item1;
-      // console.log("ALL Scripts Data" + JSON.stringify(this.booksData))
-      // alert("ALL ReviewerData  Data" + JSON.stringify(this.ReviewerData))
-      console.log("ALL EDitors  Data" + JSON.stringify(this.EditorData))
+      // console.log("ALL EDitors  Data" + JSON.stringify(this.EditorData))
       if (this.EditorData.length > 0) {
         this.EditorDataColumns = Object.keys(this.EditorData[0]);
         this.calculateTotalPagesEditor();
         this.updatePaginatedDataEditor();
       }
       this.dataShowing = true;
-      // setTimeout(() => {
-
-      //   var wrapper1 = (<HTMLInputElement>document.getElementById('wrapper1'));
-      //   var wrapper2 = (<HTMLInputElement>document.getElementById('wrapper2'));
-      //   wrapper1.onscroll = function () {
-      //     wrapper2.scrollLeft = wrapper1.scrollLeft;
-      //   };
-      //   wrapper2.onscroll = function () {
-      //     wrapper1.scrollLeft = wrapper2.scrollLeft;
-      //   };
-
-      // }, 500);
 
     },
     error: (error: any) => {
@@ -867,13 +857,13 @@ showEditorData(journalId: any) {
     },
     complete: () => {
       this.dataShowing = true;
-      // console.log('Data fetching complete');
     }
   });
 }
 onSelectFileEditorX(a: any) {
   let aa = a;
-  window.open(aa, '_blank');
+  // alert(aa)
+  window.open('https://files.lpu.in/umsweb/Journal/'+aa, '_blank');
 }
 
 currentPageEditor: number = 1;

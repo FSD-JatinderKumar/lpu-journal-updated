@@ -26,7 +26,7 @@ export class ManuScriptReportComponent implements OnInit {
     // 'journalId',
     'journalTitle',
     'editorInChief',
-    'ManuScriptType',
+    // 'ManuScriptType',
     'submissionType',
     // 'fileUrl'
   ];
@@ -34,7 +34,7 @@ export class ManuScriptReportComponent implements OnInit {
     // 'journalId',
     'Journal Title',
     'Editor In Chief',
-    'ManuScript Type',
+    // 'ManuScript Type',
     'Submission Type',
     // 'Action'
   ];

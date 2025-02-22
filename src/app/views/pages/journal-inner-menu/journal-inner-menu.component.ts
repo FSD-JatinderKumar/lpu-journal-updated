@@ -88,7 +88,9 @@ export class JournalInnerMenuComponent implements OnInit {
     this.StoragesServices.clean();
     sessionStorage.clear();
     localStorage.clear();
-  
+    this.cookieService.delete('authData');
+    this.AuthSession.clearSession();
+    this.StoragesServices.clean();
     // Reset user variables
     this.UserRole = null;
     this.user_Email = null;

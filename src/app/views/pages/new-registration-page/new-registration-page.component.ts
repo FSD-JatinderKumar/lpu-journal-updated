@@ -138,6 +138,7 @@ export class NewRegistrationPageComponent implements OnInit {
     if (this.JournalUserAccountForm.valid) {
       const formData = new FormData();
   
+    formData.append("JournalId", this.JournalId);
     formData.append("CandidateName", formValue.CandidateName);
     formData.append("InstituteName", formValue.InstituteName);
     formData.append("DepartmentName", formValue.DepartmentName);
