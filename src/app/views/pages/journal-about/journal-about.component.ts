@@ -59,6 +59,7 @@ export class JournalAboutComponent implements OnInit {
 
         this.cookieService.set('BookData', JSON.stringify(journalCookiesData));
         this.GetJournalDetailsAbout(this.BookId);
+        this.GetJournalEditorsDetailsByBookId(this.BookId);
       } 
   }
   imageLoadError: boolean = false;
@@ -67,6 +68,7 @@ export class JournalAboutComponent implements OnInit {
       if (response.item1 && response.item1.length > 0) {
         this.bookData = response.item1[0];
         this.JournalDetails = this.bookData['journalDetails']
+        // console.log(JSON.stringify(this.bookData))
         this.extractDetails();
       }
       else {
@@ -95,17 +97,45 @@ export class JournalAboutComponent implements OnInit {
   
     // console.log("Details: " + JSON.stringify(this.detailsArray));
   }
-  
-  
-  // extractDetails() {
-  //   const items = this.JournalDetails.split('#').map((item: string) => item.trim());
+  AssociateEditor: any;
+  ManagingEditor: any;
+  EditorInChief: any;
+  EditorialboardmembersNational: any;
+  EditorialboardmembersReviews: any;
+  EditorialboardmembersInterNational: any;
+  editorData: any;
+  filteredEditors: any;
+  GetJournalEditorsDetailsByBookId(BookId: any): void {
+    this.journalWebApiService.GetAllJournalEditorsDetails().subscribe((response) => {
+      if (response.item1 && response.item1.length > 0) {
+        this.editorData = response.item1;        
+      this.filteredEditors = this.editorData.filter((item: { journalId: any }) => item.journalId === BookId);
+      this.GetDataforEditors();
+      this.EditorialboardmembersNational = this.filteredEditors.filter((item: { editorType: string; }) => item.editorType.toLowerCase().includes('editorial board members national'));
+      this.EditorialboardmembersInterNational = this.filteredEditors.filter((item: { editorType: string; }) => item.editorType.toLowerCase().includes('editorial board members international'));
 
-  //   this.detailsArray = items.map((item: { split: (arg0: string) => { (): any; new(): any; map: { (arg0: (part: any) => any): [any, any]; new(): any; }; }; }) => {
-  //     const [key, value] = item.split(':').map(part => part.trim());
-  //     return { key, value };
-  //   });
+      // console.log(JSON.stringify(this.EditorialboardmembersNational))
+      // console.log(JSON.stringify(this.EditorialboardmembersInterNational))
+      }
+      else {
+        this.editorData =  this.EditorInChief = this.AssociateEditor =  this.ManagingEditor =this.EditorialboardmembersNational = this.EditorialboardmembersInterNational = this.EditorialboardmembersReviews =[];
+      }
 
-  //   console.log("DEtails "+ JSON.stringify(this.detailsArray));
-  // }
+      if(this.editorData.length < 1 )
+        {
+          // this.LoadingData= true;
+          this.router.navigateByUrl('/');
+        }
+     
+    });
+  }
+
+  GetDataforEditors()
+  {
+    this.EditorInChief = this.filteredEditors.filter((item: { editorType: string; }) => item.editorType.toLowerCase().includes('editor in chief')); //
+    this.AssociateEditor = this.filteredEditors.filter((item: { editorType: string; }) => item.editorType.toLowerCase().includes('associate editors'));
+    this.ManagingEditor = this.filteredEditors.filter((item: { editorType: string; }) => item.editorType.toLowerCase().includes('managing editor'));
+    // this.EditorialboardmembersReviews = this.filteredEditors.filter((item: { editorType: string; }) => item.editorType.toLowerCase().includes('reviewers '));
+  }
 
 }
