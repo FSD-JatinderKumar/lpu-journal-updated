@@ -78,16 +78,16 @@ export class SubmitManuScriptComponent implements OnInit {
     this.router.navigateByUrl(Id + '/' + name + '/' + Sufix);
   }
   isEditor: boolean= false;     isReviewer: boolean= false;   isAuthor: boolean= false;   isOther: boolean= false;
-  isGuest: boolean= false; 
+  isGuest: boolean= false;  newJournalTitle: any;
   UserRoles: any;
   ngOnInit(): void {
     let BookId = this.route.snapshot.params['Id'];
-    let name = this.route.snapshot.params['name'];
-    let loginStatus = this.checkUserLogin();
-    if (BookId != undefined && BookId != null && loginStatus != false) {
+    let name = this.newJournalTitle = this.route.snapshot.params['name'];
+   this.checkUserLogin();
+    if (BookId != undefined && BookId != null && this.isLoginFailed == false) {
       this.BookId = BookId;
       this.JournalId = BookId;
-      this.JournalTitle = name;
+      this.JournalTitle = name.replace(/-/g, ' ');
       this.GetJournalDetailsAbout(this.BookId);
       this.showData();
       this.getUserRolesforId();
@@ -96,9 +96,8 @@ export class SubmitManuScriptComponent implements OnInit {
       this.showEditorData(this.BookId);
       this.loadReviewers(this.BookId);
     }
-    else {
-      // this.router.navigateByUrl( '/Login');
-      this.router.navigateByUrl(BookId + '/' + name + '/' + 'ExternalLogin');
+    else { 
+      this.VisitUrl(this.BookId,this.newJournalTitle,'ExternalLogin')
     }
     this.LoadForm();
   }
@@ -114,38 +113,6 @@ export class SubmitManuScriptComponent implements OnInit {
     });
   }
 
-  // old code for user roles 
-  // UserRolesArray: any[] | undefined;
-  // getUserRolesforId() {
-  //   const roleMapping: { [key: string]: string } = {
-  //     '0': 'Editor',
-  //     '1': 'Author',
-  //     '2': 'Reviewer',
-  //     '3': 'Publisher'
-  //   };
-  
-  //   this.journalWebApiService.GetUserRolesforUser(this.userId).subscribe((response) => {
-  //     if (response.item1 && response.item1.length > 0) {
-  //       this.UserRolesData = response.item1[0];
-  //       const roles = this.UserRolesData.userRole.split(',');
-  //       this.UserRolesArray = roles.map((role: string | number) => ({
-  //         value: role,
-  //         label: roleMapping[role] || role,
-  //         id: roleMapping[role].replace(/\s+/g, '')
-  //       }));
-        
-  //       // Set flags based on roles
-  //       // this.isEditor = roles.includes('0');
-  //       // this.isAuthor = roles.includes('1');
-  //       // this.isReviewer = roles.includes('2');
-  //       // this.isEditor=true;
-  //       // this.isReviewer=true;
-  //       // this.isAuthor=true
-  //     } else {
-  //       this.bookData = [];
-  //     }
-  //   });
-  // }
   // new code for user roles 
   UserRolesArray: { value: string; label: string; id: string }[] = [];
 
@@ -182,26 +149,19 @@ export class SubmitManuScriptComponent implements OnInit {
       error: (err) => {
         console.error('Error fetching user roles:', err);
         this.UserRolesArray = []; // Reset array on error
+        this.LoginFalied();
       }
     });
   }
-  
-  // getUserRolesforId()
-  // {
-  //   this.journalWebApiService.GetUserRolesforUser(this.userId).subscribe((response) => {
-  //     if (response.item1 && response.item1.length > 0) {
-  //       this.UserRolesData = response.item1[0];
-  //       // this.UserRoles = this.UserRolesData.userRole;
-  //       // console.log(JSON.stringify(this.UserRolesData))
-  //       //  alert(JSON.stringify(this.UserRoles))
-  //     }
-  //     else {
-  //       this.bookData = [];
-  //       // this.router.navigateByUrl('/');
-  //     }
-  //   });
-    
-  // }
+  LoginFalied(){
+    // this.isLoginFailed==true;
+    // Swal.fire({
+    //   title: 'Login Falied ',
+    //   text: 'Relogin ',
+    //   icon: 'warning'
+    // });
+    // this.VisitUrl(this.BookId,this.newJournalTitle,'ExternalLogin');    
+  }
   checkUserLogin() {
     // this.userRole = 'Editor in Chief';
     // this.userId = 'testcase.user3@gmail.com';
@@ -213,18 +173,19 @@ export class SubmitManuScriptComponent implements OnInit {
     if (GetCookieData) {
       try {
         const retrievedCookies = JSON.parse(GetCookieData);
-        this.userRole = retrievedCookies.UserRole?.length > 0 ? retrievedCookies.UserRole : 'Guest';
+        this.userRole = retrievedCookies.UserRole?.length > 0 ? retrievedCookies.UserRole : -1;
         this.userId = retrievedCookies.EmailId;
+        let Token = retrievedCookies.AccessToken;
         this.supervisorName = retrievedCookies.SupervisorName;
         this.departmentName = retrievedCookies.DepartmentName;
         this.candidateName = retrievedCookies.CandidateName;
-        return true;
+        this.isLoginFailed=false;
       } catch (error) {
-        
-        return false;
+       console.log("error")        ;
       }
     } else {
-      return false;
+      this.LoginFalied();
+      
     }
 
   }
@@ -238,10 +199,11 @@ export class SubmitManuScriptComponent implements OnInit {
         this.JournalDetails = this.bookData['journalDetails']
         this.EditorInChief = this.bookData?.editorName
         this.JournalSubTitle = this.bookData?.subTitle;
-        //  alert(this.EditorInChief)
+        this.extractDetails();        
       }
       else {
         this.bookData = [];
+        this.LoginFalied();
         // this.router.navigateByUrl('/');
       }
     });
@@ -263,7 +225,9 @@ export class SubmitManuScriptComponent implements OnInit {
 
       },
       error: (error: any) => {
+        
         this.dataShowing = false;
+        this.LoginFalied();
       },
       complete: () => {
         this.dataShowing = true;
@@ -358,6 +322,7 @@ export class SubmitManuScriptComponent implements OnInit {
   AllSubmissionTypes: any;
   selectedOption: string = 'zip';  
   uploadFile() {
+    // this.generateZip();
     const reader = new FileReader();
     const fileName = 'merged-files.zip';
 
@@ -435,7 +400,7 @@ export class SubmitManuScriptComponent implements OnInit {
   
         if (result === 'OK') {
           Swal.fire({
-            title: 'Uploaded all Documents',
+            title: 'Manuscripts are Uploaded and Saved Successfully',
             text: data.item1[0]['msg'],
             icon: 'success',
           }).then(() => {
@@ -541,6 +506,7 @@ ReviewerdisplayedColumnsHeader: string[] = [
       error: (error: any) => {
         this.dataShowing = false;
         console.error('Error fetching data', error);
+        this.LoginFalied();
       },
       complete: () => {
         this.dataShowing = true;
@@ -620,6 +586,7 @@ reviewerList: any[] = [];
       error: (error: any) => {
         this.dataShowing = false;
         console.error('Error fetching data', error);
+        this.LoginFalied();
       },
       complete: () => {
         this.dataShowing = true;
@@ -854,6 +821,7 @@ showEditorData(journalId: any) {
     error: (error: any) => {
       this.dataShowing = false;
       console.error('Error fetching data', error);
+      this.LoginFalied();
     },
     complete: () => {
       this.dataShowing = true;
@@ -895,6 +863,32 @@ previousPageEditor() {
     this.updatePaginatedDataEditor();
   }
 }
+
+// Added on 24-feb-25
+
+NewIdForJournal: any;
+extractDetails() {
+  const items = this.JournalDetails.split('#').map((item: string) => item.trim());
+
+  this.detailsArray = items.map((item: { split: (arg0: string) => { (): any; new(): any; map: { (arg0: (part: any) => any): [any, any]; new(): any; }; }; }) => {
+    const [key, value] = item.split(':').map(part => part.trim());
+
+    // Handle specific cases for abbreviations to avoid unwanted spacing
+    let formattedKey; 
+    if (key === 'Journal Id') {
+      // alert(value+"== Journal New Id")
+      this.NewIdForJournal = value;
+    } else {
+      // Add space before uppercase letters and numbers, except the first character
+      formattedKey = key.replace(/([A-Z0-9])/g, ' $1').trim();
+    }
+
+    return { key: formattedKey, value };
+  });
+
+  // console.log("Details: " + JSON.stringify(this.detailsArray));
+}
+
 
 }
 

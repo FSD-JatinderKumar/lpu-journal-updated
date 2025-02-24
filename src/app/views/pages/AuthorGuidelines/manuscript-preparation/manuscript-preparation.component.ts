@@ -23,9 +23,10 @@ export class ManuScriptPreparationComponent implements OnInit {
       // console.log("Value of Book Id = " + BookId)
       if (BookId != undefined && BookId != null) {
         this.BookId = BookId;
-        this.name= name;
+        // this.name= name;
+        this.name = name.replace(/-/g, ' ');
       } else {
-       
+        // this.router.navigate(['/journalHome']);
         // swal.fire({
         //   icon: 'error',
         //   title: 'Oops...',

@@ -23,8 +23,8 @@ export class CopyrightandLicensingpolicyComponent implements OnInit {
       // console.log("Value of Book Id = " + BookId)
       if (BookId != undefined && BookId != null) {
         this.BookId = BookId;
-        this.name = name;
-
+        // this.name = name;
+        this.name = name.replace(/-/g, ' ');
       } else {
        
         console.log("error Somthing went wrong");

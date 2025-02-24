@@ -39,6 +39,7 @@ export class NewRegistrationPageComponent implements OnInit {
     if (BookId != undefined && BookId != null) {
       this.BookId =this.JournalId= BookId;
       this.name = this.JournalTitle= name;
+      this.name = this.JournalTitle = name.replace(/-/g, ' ');
     }
     this.JournalUserAccountForm = this.fb.group({
       CandidateName: ['', Validators.required],

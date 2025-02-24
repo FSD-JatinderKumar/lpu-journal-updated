@@ -23,7 +23,8 @@ export class ManuScriptWorkflowComponent implements OnInit {
     // console.log("Value of Book Id = " + BookId)
     if (BookId != undefined && BookId != null) {
       this.BookId = BookId;
-      this.name = name;
+      // this.name = name;
+      this.name = name.replace(/-/g, ' ');
     } else {
 
       // swal.fire({

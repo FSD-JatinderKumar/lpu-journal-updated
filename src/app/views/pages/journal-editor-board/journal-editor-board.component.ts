@@ -20,7 +20,7 @@ export class JournalEditorBoardComponent implements OnInit {
   EditorialboardmembersInterNational: any;
   LoadingData: boolean = false;
   filteredEditors: any;
-
+  JournalTitle: any;
   constructor(
     private journalWebApiService: LpujournalbookService, private route: ActivatedRoute, private router: Router) { }
 
@@ -34,7 +34,7 @@ export class JournalEditorBoardComponent implements OnInit {
       // console.log("Value of Book Id = " + BookId)
       if (BookId != undefined && BookId != null) {
         this.BookId = BookId;
-        this.name=name;
+        this.name = name.replace(/-/g, ' ');
         this.GetJournalEditorsDetailsByBookId(BookId);
       } else {
        

@@ -61,6 +61,7 @@ export class ManuScriptReportComponent implements OnInit {
         this.BookId = BookId;
         this.JournalId= BookId;
         this.JournalTitle = name;
+        this.JournalTitle = name.replace(/-/g, ' ');
         this.showData(this.userId);
       } 
   }

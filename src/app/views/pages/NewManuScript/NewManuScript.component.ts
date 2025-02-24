@@ -85,7 +85,8 @@ export class NewManuScriptComponent implements OnInit {
     if (BookId != undefined && BookId != null && loginStatus != false) {
       this.BookId = BookId;
       this.JournalId = BookId;
-      this.JournalTitle = name;
+      // this.JournalTitle = name;
+       this.JournalTitle = name.replace(/-/g, ' ');
       this.GetJournalDetailsAbout(this.BookId);
       this.showData();
       this.getUserRolesforId();

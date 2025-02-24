@@ -49,7 +49,8 @@ export class ExternalUserLoginComponent implements OnInit {
     this.storageService.clean();
     this.BookId = this.route.snapshot.params['Id'];
     this.JournalTitle = this.name = this.route.snapshot.params['name'];
-
+    
+    this.JournalTitle = this.name.replace(/-/g, ' ');
     this.formdata.get('Email')?.valueChanges.subscribe(() => {
       this.formdata.get('Email')?.markAsTouched();
     });
@@ -214,8 +215,8 @@ export class ExternalUserLoginComponent implements OnInit {
           next: response => {
             if (response.item1 && response.item1.length > 0) {
               this.Email = response.item1[0].email;
-              this.CreateToken(this.Email);
-              this.SetUserData(response);
+              this.CreateToken(this.Email, response);
+              
 
             } else {
               this.showNoDataFoundMessage = true;
@@ -233,12 +234,13 @@ export class ExternalUserLoginComponent implements OnInit {
        
     this.formdata.reset();
   }
-
-  CreateToken(Id: any) {
+// 24-feb-25
+AccessToken: any;
+  CreateToken(Id: any, response: any) {
     this.authService.LoginJournalAccessTemp(Id).subscribe({
       next: data => {
         this.storageService.saveUser(data);
-        
+        this.SetUserData(response);
       },
       error: err => {
         this.loadingIndicator = false;
@@ -251,7 +253,7 @@ export class ExternalUserLoginComponent implements OnInit {
   SetUserData(response:any){
     this.UserData = response.item1;
     this.CandidateName = this.EmployeeName = response.item1[0].candidateName;
-    // this.UserId = this.EmployeeCode = Id;
+    this.AccessToken = response.item1[0].email;
     this.Department = response.item1[0].department;
     this.DepartmentName = response.item1[0].departmentName;
     this.Designation = response.item1[0].department;
@@ -270,7 +272,7 @@ export class ExternalUserLoginComponent implements OnInit {
 
     const userCookiesData = {
       CandidateName: this.CandidateName,
-      // UserId: Id,
+      AccessToken: this.AccessToken,
       Department: this.Department,
       DepartmentName: this.DepartmentName,
       Designation: this.Designation,

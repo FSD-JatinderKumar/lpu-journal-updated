@@ -19,7 +19,9 @@ export class PeerReviewPolicyComponent implements OnInit {
     let BookId  = this.route.snapshot.params['Id'];
     let name  = this.route.snapshot.params['name'];
       if (BookId != undefined && BookId != null) {
-        this.BookId = BookId;        this.name = name;
+        this.BookId = BookId;        
+        // this.name = name;
+        this.name = name.replace(/-/g, ' ');
       } else {       
         console.log("error Somthing went wrong");
        this.router.navigate(['/Home']);
