@@ -6,6 +6,7 @@ import { StorageService } from './storage.service';
 const AUTH_API = 'https://projectsapi.lpu.in/';
 //  const AUTH_API = 'https://localhost:7125/';// 'https://projectsapi.lpu.in/';//'https://projectsapi.lpu.in/'; //
 const AUTH_API_LOCAL = 'https://projectsapi.lpu.in/'; //'https://localhost:7125/';
+const AUTH_API_LOCALs = 'https://localhost:7125/'; //'https://localhost:7125/';
 
 @Injectable({
   providedIn: 'root'
@@ -239,7 +240,7 @@ export class LpujournalbookService {
     .set('Accept', '*/*',);
     return this.http.post(
       // AUTH_API + 'api/LpuJournal/NewJournalMenuScript', newMenuscriptData, { headers }
-      AUTH_API_LOCAL + 'api/LpuJournal/UpdateReviewersRemarks', newReviewersRemarks, { headers }
+      AUTH_API_LOCALs + 'api/LpuJournal/UpdateReviewersRemarks', newReviewersRemarks, { headers }
     );
   }
 
@@ -251,7 +252,7 @@ export class LpujournalbookService {
     .set('Authorization', 'Bearer ' + token)
     return this.http.get(
       // AUTH_API_LOCAL + 'api/LpuJournal/GetAllMenuScriptForUser?Email=' + UserEmail, { headers }
-      AUTH_API_LOCAL + 'api/LpuJournal/GetAllMenuScriptForJournal?Id=' + JournalId, { headers }
+      AUTH_API_LOCALs + 'api/LpuJournal/GetAllMenuScriptForJournal?Id=' + JournalId, { headers }
     );
   }
 
@@ -263,6 +264,18 @@ export class LpujournalbookService {
     return this.http.get(
       // AUTH_API_LOCAL + 'api/LpuJournal/GetAllMenuScriptForUser?Email=' + UserEmail, { headers }
       AUTH_API_LOCAL + 'api/LpuJournal/GetAllReviewersForJournal?Id=' + JournalId, { headers }
+    );
+  }
+
+  // added on 25-feb-25
+  AssignNewReviewerForJournal(AssignnewReviewer: FormData): Observable<any> {
+    let token = this.storageService.getUser();
+    let headers = new HttpHeaders()
+    .set('Authorization', 'Bearer ' + token)
+    .set('Accept', '*/*',);
+    return this.http.post(
+      // AUTH_API + 'api/LpuJournal/NewJournalMenuScript', newMenuscriptData, { headers }
+      AUTH_API_LOCAL + 'api/LpuJournal/AssignReviewerForJournal', AssignnewReviewer, { headers }
     );
   }
 

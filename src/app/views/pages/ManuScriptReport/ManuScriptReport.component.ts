@@ -155,7 +155,7 @@ export class ManuScriptReportComponent implements OnInit {
     window.open(aa, '_blank');
   }
 
-  displayedEditorColumns: string[] = [
+  displayedManuscriptColumns: string[] = [
     // 'journalId',
     'journalTitle',
     'manuScript',
@@ -166,7 +166,7 @@ export class ManuScriptReportComponent implements OnInit {
     'fileUrl',
     'journalId'
   ];
-  displayedEditorColumnHeaders: { [key: string]: string } = {
+  displayedManuscriptColumnHeaders: { [key: string]: string } = {
     journalTitle: 'Journal Title',
     manuScript: 'Manu Script',
     editorInChief: 'Author Name',
@@ -179,11 +179,11 @@ export class ManuScriptReportComponent implements OnInit {
 
 
 
-  EditorData: any;
-  EditorDataColumns: any;
+  ManuscriptData: any;
+  ManuscriptDataColumns: any;
   //  Data[{"journalId":53,"journalTitle":"Bioengineering and Biosciences Reports","manuScriptType":null,"submissionType":
   // "Manuscript,Manuscript","fileUrl":"53_1482989762_24_2025_merged-files.zip","file":null,"editorInChief":"Dr. Neeta Raj Sharma","userId":null,"subItemType":null}
-  EditordisplayedColumns: string[] = [
+  ManuscriptdisplayedColumns: string[] = [
     'journalTitle',
     // 'manuScriptType',
     'submissionType',
@@ -192,12 +192,12 @@ export class ManuScriptReportComponent implements OnInit {
     // 'journalId',
   ];
 
-  EditordisplayedColumnsHeader: string[] = [
+  ManuscriptdisplayedColumnsHeader: string[] = [
     'Journal Title',
     // 'Manu Script',
     'Submission ',
     'Editor In Chief',
-    'Download File',
+    'View Document',
     // 'Action'
   ];
   showData(Emailid: any) {
@@ -205,12 +205,12 @@ export class ManuScriptReportComponent implements OnInit {
       next: (dataX: any) => {
         this.dataSource = dataX.item1;
         this.dataLoaded = true;
-        this.EditorData = dataX.item1;
-        // console.log("ALL EDitors  Data" + JSON.stringify(this.EditorData))
-        if (this.EditorData.length > 0) {
-          this.EditorDataColumns = Object.keys(this.EditorData[0]);
-          this.calculateTotalPagesEditor();
-          this.updatePaginatedDataEditor();
+        this.ManuscriptData = dataX.item1;
+        // console.log("ALL EDitors  Data" + JSON.stringify(this.ManuscriptData))
+        if (this.ManuscriptData.length > 0) {
+          this.ManuscriptDataColumns = Object.keys(this.ManuscriptData[0]);
+          this.calculateTotalPagesManuscript();
+          this.updatePaginatedDataManuscript();
         }
         this.dataShowing = true;
 
@@ -224,39 +224,39 @@ export class ManuScriptReportComponent implements OnInit {
       }
     });
   }
-  onSelectFileEditorX(a: any) {
+  onSelectFileManuscriptX(a: any) {
     let aa = a;
     // alert(aa)
     window.open('https://files.lpu.in/umsweb/Journal/' + aa, '_blank');
   }
 
-  currentPageEditor: number = 1;
-  pageSizeEditor: number = 10;
-  paginatedEditorData: any[] = [];
-  totalPagesEditor: number = 1;
+  currentPageManuscript: number = 1;
+  pageSizeManuscript: number = 10;
+  paginatedManuscriptData: any[] = [];
+  totalPagesManuscript: number = 1;
 
 
 
-  calculateTotalPagesEditor() {
-    this.totalPagesEditor = Math.ceil(this.EditorData.length / this.pageSizeEditor);
+  calculateTotalPagesManuscript() {
+    this.totalPagesManuscript = Math.ceil(this.ManuscriptData.length / this.pageSizeManuscript);
   }
 
-  updatePaginatedDataEditor() {
-    const startIndex = (this.currentPageEditor - 1) * this.pageSizeEditor;
-    this.paginatedEditorData = this.EditorData.slice(startIndex, startIndex + this.pageSizeEditor);
+  updatePaginatedDataManuscript() {
+    const startIndex = (this.currentPageManuscript - 1) * this.pageSizeManuscript;
+    this.paginatedManuscriptData = this.ManuscriptData.slice(startIndex, startIndex + this.pageSizeManuscript);
   }
 
-  nextPageEditor() {
-    if (this.currentPageEditor < this.totalPagesEditor) {
-      this.currentPageEditor++;
-      this.updatePaginatedDataEditor();
+  nextPageManuscript() {
+    if (this.currentPageManuscript < this.totalPagesManuscript) {
+      this.currentPageManuscript++;
+      this.updatePaginatedDataManuscript();
     }
   }
 
-  previousPageEditor() {
-    if (this.currentPageEditor > 1) {
-      this.currentPageEditor--;
-      this.updatePaginatedDataEditor();
+  previousPageManuscript() {
+    if (this.currentPageManuscript > 1) {
+      this.currentPageManuscript--;
+      this.updatePaginatedDataManuscript();
     }
   }
 

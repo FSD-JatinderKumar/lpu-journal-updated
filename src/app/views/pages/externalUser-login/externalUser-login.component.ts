@@ -190,7 +190,7 @@ export class ExternalUserLoginComponent implements OnInit {
               this.showNoDataFoundMessage = true;
               swal.fire({
                 title: 'Invalid Login Details ',
-                text: 'Login details are Invalid!',
+                text: 'Check if you have selected same Journal !',
                 icon: 'warning',
               });
             }
@@ -216,13 +216,11 @@ export class ExternalUserLoginComponent implements OnInit {
             if (response.item1 && response.item1.length > 0) {
               this.Email = response.item1[0].email;
               this.CreateToken(this.Email, response);
-              
-
             } else {
               this.showNoDataFoundMessage = true;
               swal.fire({
-                title: 'Invalid Login Details ',
-                text: 'Login details are Invalid!',
+                text: 'Invalid Login Details ',
+                title: 'Check if you have selected same Journal !',
                 icon: 'warning',
               });
             }

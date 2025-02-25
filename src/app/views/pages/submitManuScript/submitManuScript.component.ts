@@ -58,6 +58,7 @@ export class SubmitManuScriptComponent implements OnInit {
   EditorInChief: any;
   dataLoaded: boolean = false;
   UserRolesData: any;
+  Reason: any;
 
 
   constructor(
@@ -160,6 +161,17 @@ export class SubmitManuScriptComponent implements OnInit {
     //   text: 'Relogin ',
     //   icon: 'warning'
     // });
+    //  // Delete cookies properly
+    //  this.cookieService.delete('authData');
+    //  this.cookieService.delete('BookData');
+    //  this.cookieService.deleteAll();
+   
+    //  // Clear session storage if used
+    //  this.AuthSession.clearSession();
+    //  this.storageService.clean();
+    //  sessionStorage.clear();
+    //  localStorage.clear();   
+     
     // this.VisitUrl(this.BookId,this.newJournalTitle,'ExternalLogin');    
   }
   checkUserLogin() {
@@ -287,7 +299,7 @@ export class SubmitManuScriptComponent implements OnInit {
     if (this.scriptUploadForm.valid) {
       this.cartItems.push(this.scriptUploadForm.value);  // Add to cart
       this.scriptUploadForm.reset();  // Reset the form after adding
-      
+      this.LoadForm();
       this.showAddToCartButton = false;  // Show the "Save All" button after adding
       // console.log(JSON.stringify(this.cartItems))
     }
@@ -472,7 +484,7 @@ ReviewerdisplayedColumns: string[] = [
   // 'journalId',
   'journalTitle',
   'editorInChief',
-  // 'manuScriptType',
+  'manuScriptType',
   // 'submissionType',
   'fileUrl',
   'journalId'
@@ -482,11 +494,23 @@ ReviewerdisplayedColumnsHeader: string[] = [
   // 'journalId',
   'Journal Title',
   'Editor In Chief',
-  // 'Manu Script',
+  'Manu Script',
   // 'Submission Type',
   'Download File',
   'Action'
 ];
+
+ReviewercolumnHeaders: { [key: string]: string } = { 
+  journalTitle: 'Journal Title', 
+  editorInChief: 'Author Name', 
+  manuScriptType: 'Manuscript Type', 
+  // submissionType: 'Submitted Script ', 
+  fileUrl: 'Document' ,
+  journalId: 'Action' 
+}; // Custom header text journalTitle	editorInChief	ManuScriptType	submissionType
+
+
+
   showReviewerData(Emailid: any) {
     this.journalWebApiService.UserWiseAllMenuScript(Emailid).subscribe({
       next: (dataX: any) => {
@@ -497,8 +521,8 @@ ReviewerdisplayedColumnsHeader: string[] = [
         // console.log("ALL ReviewerData  Data" + JSON.stringify(this.ReviewerData))
         if (this.ReviewerData.length > 0) {
           this.ReviewerDataColumns = Object.keys(this.ReviewerData[0]);
-          this.calculateTotalPages();
-          this.updatePaginatedData();
+          this.calculateTotalPagesReviewer();
+          this.updatePaginatedDataReviewer();
         }
         this.dataShowing = true;
 
@@ -516,106 +540,40 @@ ReviewerdisplayedColumnsHeader: string[] = [
   }
   onSelectFileX(a: any) {
     let aa = a;
-    window.open(aa, '_blank');
+    window.open('https://files.lpu.in/umsweb/Journal/'+aa, '_blank');
   }
 
-  currentPage: number = 1;
-  pageSize: number = 10;
+  currentPageReviewer: number = 1;
+  pageSizeReviewer: number = 10;
   paginatedReviewerData: any[] = [];
-  totalPages: number = 1;
+  totalPagesReviewer: number = 1;
 
  
 
-  calculateTotalPages() {
-    this.totalPages = Math.ceil(this.ReviewerData.length / this.pageSize);
+  calculateTotalPagesReviewer() {
+    this.totalPagesReviewer = Math.ceil(this.ReviewerData.length / this.pageSizeReviewer);
   }
 
-  updatePaginatedData() {
-    const startIndex = (this.currentPage - 1) * this.pageSize;
-    this.paginatedReviewerData = this.ReviewerData.slice(startIndex, startIndex + this.pageSize);
+  updatePaginatedDataReviewer() {
+    const startIndex = (this.currentPageReviewer - 1) * this.pageSizeReviewer;
+    this.paginatedReviewerData = this.ReviewerData.slice(startIndex, startIndex + this.pageSizeReviewer);
   }
 
-  nextPage() {
-    if (this.currentPage < this.totalPages) {
-      this.currentPage++;
-      this.updatePaginatedData();
+  nextPageReviewer() {
+    if (this.currentPageReviewer < this.totalPagesReviewer) {
+      this.currentPageReviewer++;
+      this.updatePaginatedDataReviewer();
     }
   }
 
-  previousPage() {
-    if (this.currentPage > 1) {
-      this.currentPage--;
-      this.updatePaginatedData();
+  previousPageReviewer() {
+    if (this.currentPageReviewer > 1) {
+      this.currentPageReviewer--;
+      this.updatePaginatedDataReviewer();
     }
   }
 
-
-  actionList: any[] = [{id:'0',name:'Editor'},{id:'1',name:'Author'},{id:'2',name:'Reviewer'},{id:'13',name:'Guest'},];
-  selectedAction: string = '';
-
-TakeActionAs() {
-  if (this.selectedAction == 'Editor') {
-    this.isEditor = false; this.isGuest =     this.isReviewer = false;   
-    this.isAuthor = true; 
-  }else if (this.selectedAction == 'Reviewer') {
-    this.isReviewer = true;  
-    this.isEditor = false; 
-    this.isGuest = this.isAuthor = false;  
-  } else if (this.selectedAction == 'Author') {
-    this.isAuthor = true;  
-    this.isGuest = this.isEditor = this.isReviewer = false; 
-  }
-   else if (this.selectedAction == 'Publisher') {
-     this.isAuthor = true;    
-     this.isGuest =this.isEditor =this.isReviewer = false; 
-  }
-}
-
-selectedJournalId: string | null = null;
-selectedReviewerId: string = ''; 
-reviewerList: any[] = [];
-  loadReviewers(id:any) {
-    // API call to fetch reviewer list
-    this.journalWebApiService.GetAllReviewersForJournalId(id).subscribe({
-      next: (dataX: any) => {
-        this.dataSource = dataX.item1;
-        this.reviewerList = dataX.item1;
-        console.log("ALL Reviewerlist" + JSON.stringify(this.reviewerList))
-
-      },
-      error: (error: any) => {
-        this.dataShowing = false;
-        console.error('Error fetching data', error);
-        this.LoginFalied();
-      },
-      complete: () => {
-        this.dataShowing = true;
-        // console.log('Data fetching complete');
-      }
-    });
-    // this.journalWebApiService.GetAllReviewersForJournalId(id).subscribe((reviewers) => {
-    //   this.reviewerList = reviewers;
-    // });
-    // this.selectedReviewerId.value='select';
-  }
-
-  onTakeAction(journalId: string) {
-    this.selectedJournalId = journalId;
-    this.selectedReviewerId = ''; // Reset reviewer selection
-  }
-  assignReviewer() {
-    if (!this.selectedReviewerId) {
-      alert('Please select a reviewer.');
-      return;
-    }
-
-    alert(`Journal ID: ${this.selectedJournalId} assigned to Reviewer ID: ${this.selectedReviewerId}`);
-
-    // Close modal after success
-    let modal = bootstrap.Modal.getInstance(document.getElementById('assignReviewerModal'));
-    modal.hide();
-  }
-
+  // 25-feb-25
 
 
   reviewForm = {
@@ -624,6 +582,7 @@ reviewerList: any[] = [];
     commentsToEditor: '',
     commentsToAuthor: '',
     transferAuthorization:'No',
+    approvalAction: 'Select',
     questions: [
       {
         text: 'The subject addressed in this article is worthy of investigation',
@@ -654,7 +613,8 @@ reviewerList: any[] = [];
         text: 'Figures, tables, and supplementary data are appropriate',
         options: ['Strongly disagree', 'Disagree', 'Neutral', 'Agree', 'Strongly agree'],
         answer: 'Agree'
-      }
+      },
+      
     ]
   };
 
@@ -668,6 +628,7 @@ reviewerList: any[] = [];
       Overall Rating: ${this.reviewForm.rating}
       Comments to Editor: ${this.reviewForm.commentsToEditor}
       Comments to Author: ${this.reviewForm.commentsToAuthor}
+      Approval Action: ${this.reviewForm.approvalAction}
       Answers: ${this.reviewForm.questions.map(q => `${q.text}: ${q.answer}`).join('\n')}
     `);
 
@@ -681,6 +642,7 @@ reviewerList: any[] = [];
     formData.append('transferResponse', this.reviewForm.transferAuthorization);
     formData.append('commentsforEditor', this.reviewForm.commentsToEditor);
     formData.append('commentsForAuthor', this.reviewForm.commentsToAuthor);
+    formData.append('approvalAction', this.reviewForm.approvalAction);
   
     formData.append('newSubjectRating', this.reviewForm.questions[0].answer);
     formData.append('newInformationRating', this.reviewForm.questions[1].answer);
@@ -707,6 +669,7 @@ reviewerList: any[] = [];
               commentsToEditor: '',
               commentsToAuthor: '',
               transferAuthorization: '',
+              approvalAction:'',
               questions: this.reviewForm.questions.map(q => ({
                 ...q,
                 answer: '' // Reset answer to an empty string or default value
@@ -736,6 +699,123 @@ reviewerList: any[] = [];
     let modal = bootstrap.Modal.getInstance(document.getElementById('ReviewerModal'));
     modal.hide();  
   }
+
+
+
+  actionList: any[] = [{id:'0',name:'Editor'},{id:'1',name:'Author'},{id:'2',name:'Reviewer'},{id:'13',name:'Guest'},];
+  selectedAction: string = '';
+
+TakeActionAs() {
+  if (this.selectedAction == 'Editor') {
+    this.isEditor = false; this.isGuest =     this.isReviewer = false;   
+    this.isAuthor = true; 
+  }else if (this.selectedAction == 'Reviewer') {
+    this.isReviewer = true;  
+    this.isEditor = false; 
+    this.isGuest = this.isAuthor = false;  
+  } else if (this.selectedAction == 'Author') {
+    this.isAuthor = true;  
+    this.isGuest = this.isEditor = this.isReviewer = false; 
+  }
+   else if (this.selectedAction == 'Publisher') {
+     this.isAuthor = true;    
+     this.isGuest =this.isEditor =this.isReviewer = false; 
+  }
+}
+
+selectedJournalId: any;
+selectedReviewerId: string = ''; 
+reviewerList: any[] = [];
+  loadReviewers(id:any) {
+    // API call to fetch reviewer list
+    this.journalWebApiService.GetAllReviewersForJournalId(id).subscribe({
+      next: (dataX: any) => {
+        this.dataSource = dataX.item1;
+        this.reviewerList = dataX.item1;
+        // console.log("ALL Reviewerlist" + JSON.stringify(this.reviewerList))
+
+      },
+      error: (error: any) => {
+        this.dataShowing = false;
+        console.error('Error fetching data', error);
+        this.LoginFalied();
+      },
+      complete: () => {
+        this.dataShowing = true;
+        // console.log('Data fetching complete');
+      }
+    });
+    // this.journalWebApiService.GetAllReviewersForJournalId(id).subscribe((reviewers) => {
+    //   this.reviewerList = reviewers;
+    // });
+    // this.selectedReviewerId.value='select';
+  }
+  AssignedById: any;
+  RecordId: any;
+  onTakeAction(rowData: any) {
+    console.log(JSON.stringify(rowData))
+    this.selectedJournalId = rowData['journalId'];
+    this.AssignedById =  rowData['emailId'];
+    this.RecordId= rowData['id'];
+  }
+  assignReviewer() {
+    if (!this.selectedReviewerId) {
+      alert('Please select a reviewer.');
+      return;
+    }
+
+
+    // AssignNewReviewerForJournal
+
+
+    const formData = new FormData();
+// alert(this.AssignedById +" reviewer Emaild " + this.selectedReviewerId)
+    // Append form data to the FormData object
+    formData.append('JournalId', this.selectedJournalId);
+    formData.append('AssignedTo', this.selectedReviewerId);
+    formData.append('SubmittedBy',this.AssignedById);
+    formData.append('RecordId',this.RecordId);
+  
+  
+    this.journalWebApiService.AssignNewReviewerForJournal(formData).subscribe({
+      next: (data) => {
+        let result = data.item1[0]['returnData'];
+        let errorCode = data.item1[0]['returnId'];
+  
+        if (result === 'success') {
+          Swal.fire({
+            title: 'Reviewer Assiged ',
+            text: data.item1[0]['msg'],
+            icon: 'success',
+          }).then(() => {
+            window.location.reload();
+          });
+        } else {
+          Swal.fire({
+            title: 'Some Technical Issue',
+            text: result,
+            icon: 'error',
+          }).then(() => {
+            window.location.reload();
+          });
+        }
+      },
+      error: (err) => {
+        Swal.fire({
+          title: 'Error Occurred',
+          text: 'Unable to complete the request. Please try again later.',
+          icon: 'error',
+        });
+      }
+    });
+
+    alert(`Journal ID: ${this.selectedJournalId} assigned to Reviewer ID: ${this.selectedReviewerId}`);
+
+    // Close modal after success
+    let modal = bootstrap.Modal.getInstance(document.getElementById('assignReviewerModal'));
+    modal.hide();
+  }
+
 
 
 
@@ -772,8 +852,8 @@ reviewerList: any[] = [];
     journalTitle: 'Journal Title', 
     manuScript: 'Manu Script', 
     editorInChief: 'Author Name', 
-    emailId: 'User Email', 
-    userName: 'User Name', 
+    emailId: 'Submitted User Email', 
+    userName: 'Submitted By', 
     submissionType: 'Submitted Script ', 
     fileUrl: 'File Download' ,
     journalId: 'Action' 
@@ -809,7 +889,7 @@ showEditorData(journalId: any) {
       this.dataSource = dataX.item1;
       this.dataLoaded = true;
       this.EditorData = dataX.item1;
-      // console.log("ALL EDitors  Data" + JSON.stringify(this.EditorData))
+      console.log("ALL Menuscript   Data" + JSON.stringify(this.EditorData))
       if (this.EditorData.length > 0) {
         this.EditorDataColumns = Object.keys(this.EditorData[0]);
         this.calculateTotalPagesEditor();
@@ -842,12 +922,12 @@ totalPagesEditor: number = 1;
 
 
 calculateTotalPagesEditor() {
-  this.totalPages = Math.ceil(this.EditorData.length / this.pageSize);
+  this.totalPagesEditor = Math.ceil(this.EditorData.length / this.totalPagesEditor);
 }
 
 updatePaginatedDataEditor() {
-  const startIndex = (this.currentPageEditor - 1) * this.pageSize;
-  this.paginatedEditorData = this.EditorData.slice(startIndex, startIndex + this.pageSize);
+  const startIndex = (this.currentPageEditor - 1) * this.pageSizeEditor;
+  this.paginatedEditorData = this.EditorData.slice(startIndex, startIndex + this.pageSizeEditor);
 }
 
 nextPageEditor() {
