@@ -50,6 +50,12 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MaterialModule } from 'src/material.module';
 import { NewManuScriptComponent } from './views/pages/NewManuScript/NewManuScript.component';
+import { PublisherDashboardComponent } from './views/pages/Journal-Publisher/Publisher-Dashboard/Publisher-Dashboard.component';
+import { PublisherDashboardModule } from './views/pages/Journal-Publisher/Publisher-Dashboard/Publisher-Dashboard.module';
+import { TopMenuBarModule } from './views/pages/Journal-Publisher/TopMenuBar/TopMenuBar.moudle';
+import { TopMenuBarComponent } from './views/pages/Journal-Publisher/TopMenuBar/TopMenuBar.component';
+import { AllJournalsDetailsModule } from './views/pages/Journal-Publisher/All-Journals-Details/All-Journals-Details.module';
+import { AllJournalsDetailsComponent } from './views/pages/Journal-Publisher/All-Journals-Details/All-Journals-Details.component';
 
 @NgModule({
   declarations: [
@@ -87,7 +93,12 @@ import { NewManuScriptComponent } from './views/pages/NewManuScript/NewManuScrip
     ContactusComponent,
     SubmitManuScriptComponent,
     JournalfooterComponent,
-    NewManuScriptComponent
+    NewManuScriptComponent, 
+
+    PublisherDashboardComponent, 
+    TopMenuBarComponent,
+    AllJournalsDetailsComponent
+    
   ],
   imports: [
     BrowserModule,
@@ -108,8 +119,11 @@ import { NewManuScriptComponent } from './views/pages/NewManuScript/NewManuScrip
     MatTableModule,
     MatSortModule,
     MatDialogModule,
-    MaterialModule
+    MaterialModule,
     
+    PublisherDashboardModule, 
+    TopMenuBarModule,
+    AllJournalsDetailsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

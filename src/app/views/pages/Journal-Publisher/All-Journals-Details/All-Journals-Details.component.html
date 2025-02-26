@@ -1,0 +1,60 @@
+<app-topslider></app-topslider>
+<app-TopMenuBar></app-TopMenuBar>
+<section>
+<div class="vh-150 d-flex p-2 align-items-center justify-content-center">
+  <div class="container ">
+    <div class="row">
+
+      <div class="col-md-12 grid-margin stretch-card">
+        <!-- <div class="card accordionColor "> -->
+        <div class="card-body m-5 ">
+          <h1 class="text-center themeClr"> All Journals </h1>
+        </div>
+        <!-- </div> -->
+      </div>
+    </div>
+  </div>
+</div>
+<section>
+    <div class="vh-150 d-flex p-2 align-items-center justify-content-center p-5 tableHeight">
+      <div class="container-fluid table-bordered table-responsive ">
+        <div class="row accordionColor " *ngIf="this.Journals?.length>0; else NoData">
+          <div class="table-responsive">
+            <table class="table table-bordered  table-hover">
+              <thead>
+                <tr>
+                  <th> Sr.No</th>
+                  <th *ngFor="let col of JournalsdisplayedColumns">{{ displayedJournalsColumnHeaders[col] }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let row of paginatedJournalsData; let i = index">
+                  <td>{{ i + 1 }}</td>
+                  <td *ngFor="let col of JournalsdisplayedColumns">
+                    <ng-container [ngSwitch]="col">
+  
+                    
+  
+                      <span *ngSwitchDefault>{{ row[col] }}</span>
+                    </ng-container>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+  
+            <div class="pagination-controls">
+              <button (click)="previousPageJournals()" [disabled]="currentPageJournals === 1">Previous</button>
+              <span> Page {{ currentPageJournals }} of {{ totalPagesJournals }} </span>
+              <button (click)="nextPageJournals()"
+                [disabled]="currentPageJournals === totalPagesJournals">Next</button>
+            </div>
+          </div>
+        </div>
+        <ng-template #NoData>
+          <div class="themeClr">
+            <h1 class="fs-2 text-center vh-50 p-3 m-4 "> No Data Found </h1>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+  </section>

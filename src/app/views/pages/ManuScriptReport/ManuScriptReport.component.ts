@@ -155,6 +155,37 @@ export class ManuScriptReportComponent implements OnInit {
     window.open(aa, '_blank');
   }
 
+  showData(Emailid: any) {
+    this.journalWebApiService.UserWiseAllMenuScript(Emailid).subscribe({
+      next: (dataX: any) => {
+        this.dataSource = dataX.item1;
+        this.dataLoaded = true;
+        this.ManuscriptData = dataX.item1;
+        // console.log("ALL EDitors  Data" + JSON.stringify(this.ManuscriptData))
+        if (this.ManuscriptData.length > 0) {
+          this.ManuscriptDataColumns = Object.keys(this.ManuscriptData[0]);
+          this.calculateTotalPagesManuscript();
+          this.updatePaginatedDataManuscript();
+        }
+        this.dataShowing = true;
+
+      },
+      error: (error: any) => {
+        this.dataShowing = false;
+        console.error('Error fetching data', error);
+      },
+      complete: () => {
+        this.dataShowing = true;
+      }
+    });
+  }
+  onSelectFileManuscriptX(a: any) {
+    let aa = a;
+    // alert(aa)
+    window.open('https://files.lpu.in/umsweb/Journal/' + aa, '_blank');
+  }
+
+  
   displayedManuscriptColumns: string[] = [
     // 'journalId',
     'journalTitle',
@@ -200,35 +231,6 @@ export class ManuScriptReportComponent implements OnInit {
     'View Document',
     // 'Action'
   ];
-  showData(Emailid: any) {
-    this.journalWebApiService.UserWiseAllMenuScript(Emailid).subscribe({
-      next: (dataX: any) => {
-        this.dataSource = dataX.item1;
-        this.dataLoaded = true;
-        this.ManuscriptData = dataX.item1;
-        // console.log("ALL EDitors  Data" + JSON.stringify(this.ManuscriptData))
-        if (this.ManuscriptData.length > 0) {
-          this.ManuscriptDataColumns = Object.keys(this.ManuscriptData[0]);
-          this.calculateTotalPagesManuscript();
-          this.updatePaginatedDataManuscript();
-        }
-        this.dataShowing = true;
-
-      },
-      error: (error: any) => {
-        this.dataShowing = false;
-        console.error('Error fetching data', error);
-      },
-      complete: () => {
-        this.dataShowing = true;
-      }
-    });
-  }
-  onSelectFileManuscriptX(a: any) {
-    let aa = a;
-    // alert(aa)
-    window.open('https://files.lpu.in/umsweb/Journal/' + aa, '_blank');
-  }
 
   currentPageManuscript: number = 1;
   pageSizeManuscript: number = 10;
