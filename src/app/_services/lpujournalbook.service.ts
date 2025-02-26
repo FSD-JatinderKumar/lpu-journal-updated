@@ -279,5 +279,24 @@ export class LpujournalbookService {
     );
   }
 
+  // GetAllJournalEditorDetails(): Observable<any> {
+  //   const httpOptions = {
+  //     headers: new HttpHeaders({
+  //       'Authorization': `Bearer ${this.authToken}`
+  //     })
+  //   };
+  //   return this.http.get<any>(`${AUTH_API_LOCALs}api/LpuJournal/GetAllJournalEditorDetails`, httpOptions);
+  // }
 
+  GetAllJournalEditorDetails(): Observable<any> {
+    let token = this.storageService.getUser();
+    let headers = new HttpHeaders()
+    .set('Authorization', 'Bearer ' + this.authToken)
+    return this.http.get(
+      // AUTH_API_LOCAL + 'api/LpuJournal/GetAllMenuScriptForUser?Email=' + UserEmail, { headers }
+      AUTH_API_LOCALs + 'api/LpuJournal/GetAllJournalEditorDetails' , { headers }
+    );
+  }
+
+  
 }

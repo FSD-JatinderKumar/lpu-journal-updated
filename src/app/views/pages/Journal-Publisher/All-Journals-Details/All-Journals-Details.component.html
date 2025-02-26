@@ -1,8 +1,8 @@
 <app-topslider></app-topslider>
 <app-TopMenuBar></app-TopMenuBar>
-<section>
+
 <div class="vh-150 d-flex p-2 align-items-center justify-content-center">
-  <div class="container ">
+  <div class="container-fluid ">
     <div class="row">
 
       <div class="col-md-12 grid-margin stretch-card">
@@ -15,46 +15,64 @@
     </div>
   </div>
 </div>
-<section>
-    <div class="vh-150 d-flex p-2 align-items-center justify-content-center p-5 tableHeight">
-      <div class="container-fluid table-bordered table-responsive ">
-        <div class="row accordionColor " *ngIf="this.Journals?.length>0; else NoData">
-          <div class="table-responsive">
-            <table class="table table-bordered  table-hover">
-              <thead>
-                <tr>
-                  <th> Sr.No</th>
-                  <th *ngFor="let col of JournalsdisplayedColumns">{{ displayedJournalsColumnHeaders[col] }}</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let row of paginatedJournalsData; let i = index">
-                  <td>{{ i + 1 }}</td>
-                  <td *ngFor="let col of JournalsdisplayedColumns">
-                    <ng-container [ngSwitch]="col">
-  
-                    
-  
-                      <span *ngSwitchDefault>{{ row[col] }}</span>
-                    </ng-container>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-  
-            <div class="pagination-controls">
-              <button (click)="previousPageJournals()" [disabled]="currentPageJournals === 1">Previous</button>
-              <span> Page {{ currentPageJournals }} of {{ totalPagesJournals }} </span>
-              <button (click)="nextPageJournals()"
-                [disabled]="currentPageJournals === totalPagesJournals">Next</button>
-            </div>
-          </div>
-        </div>
-        <ng-template #NoData>
-          <div class="themeClr">
-            <h1 class="fs-2 text-center vh-50 p-3 m-4 "> No Data Found </h1>
-          </div>
-        </ng-template>
-      </div>
+<div class="d-flex p-5 align-items-center justify-content-center tableHeight">
+  <div class="row accordionColor" *ngIf="this.Journals?.length > 0; else noRecords">
+
+    <div class="container-fluid">
+      <table id="JournalslDataTableY" class="table table-bordered">
+        <thead >
+          <tr >
+            <th class="form-label text-danger  ">Sr.No</th>
+            <th class="form-label text-danger">Journal Title</th>
+            <th class="form-label text-danger">Sub Title</th>
+            <th class="form-label text-danger">Volume</th>
+            <th class="form-label text-danger">Published Date</th>
+            <th class="form-label text-danger">Editor In Chief</th>
+            <th class="form-label text-danger">Image</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <ng-container *ngFor="let JournalsDataRow of paginatedJournals; let i = index">
+            <tr>
+              <td class="form-label text-center">{{ (currentPage - 1) * itemsPerPage + i + 1 }}</td>
+              <td class="form-label">{{ JournalsDataRow.journalTitle }}</td>
+              <td class="form-label">
+                {{
+                JournalsDataRow.subTitle.split(' ').length > 8
+                ? JournalsDataRow.subTitle.split(' ').slice(0, 8).join(' ') + '...'
+                : JournalsDataRow.subTitle
+                }}
+              </td>
+              <td class="form-label text-center">{{ JournalsDataRow.volume }}</td>
+              <td class="form-label text-center">{{ JournalsDataRow.publishDate | date: 'dd/MM/yyyy' }}</td>
+              <td class="form-label">{{ JournalsDataRow.editorName }}</td>
+              <td class="text-center">
+                <ng-container *ngIf="JournalsDataRow.imageUrl; else NoSheetDoc">
+                  <a class="btn btn-outline-primary btn-sm" [href]="serverUrl + JournalsDataRow.imageUrl"
+                    target="_blank">
+                    <i class="bi bi-file-earmark-text"></i> View
+                  </a>
+                </ng-container>
+                <ng-template #NoSheetDoc>
+                  <span class="text-danger">No Uploaded Yet</span>
+                </ng-template>
+              </td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
     </div>
-  </section>
+
+    <div class="d-flex justify-content-between mt-3">
+      <button class="btn btn-danger btn-sm" (click)="prevPage()" [disabled]="currentPage === 1">Previous</button>
+      <span>Page {{ currentPage }} of {{ totalPages }}</span>
+      <button class="btn btn-danger btn-sm" (click)="nextPage()" [disabled]="currentPage === totalPages">Next</button>
+    </div>
+
+  </div>
+
+  <ng-template #noRecords>
+    <p class="fs-2 text-danger text-center">No Data Available.</p>
+  </ng-template>
+</div>

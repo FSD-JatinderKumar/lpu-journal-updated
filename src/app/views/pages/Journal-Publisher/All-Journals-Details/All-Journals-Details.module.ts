@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
 import { AllJournalsDetailsComponent } from './All-Journals-Details.component';
+import { MaterialModule } from 'src/material.module';
 
 
 const routes: Routes = [
@@ -15,7 +16,7 @@ const routes: Routes = [
     imports: [
       CommonModule,
       RouterModule.forChild(routes),
-  
+      MaterialModule,
     ],
   
   })

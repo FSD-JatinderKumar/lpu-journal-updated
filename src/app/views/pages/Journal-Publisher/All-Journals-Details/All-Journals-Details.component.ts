@@ -93,7 +93,7 @@ export class AllJournalsDetailsComponent implements OnInit {
     window.location.reload();
   }
   getBooksDetail(): void {
-    this.journalWebApiService.GetAllBooksDetails().subscribe((response) => {
+    this.journalWebApiService.GetAllJournalEditorDetails().subscribe((response) => {
       if (response.item1 && response.item1.length > 0) {
         this.booksData = response.item1;
         this.Journals = this.booksData;
@@ -164,33 +164,27 @@ export class AllJournalsDetailsComponent implements OnInit {
     'article Type'
   ];
 
-  currentPageJournals: number = 1;
-  pageSizeJournals: number = 10;
-  paginatedJournalsData: any[] = [];
-  totalPagesJournals: number = 1;
+  currentPage = 1;
+  itemsPerPage = 10;
 
-
-
-  calculateTotalPagesJournals() {
-    this.totalPagesJournals = Math.ceil(this.booksData.length / this.pageSizeJournals);
+  get totalPages(): number {
+    return Math.ceil(this.Journals.length / this.itemsPerPage);
   }
 
-  updatePaginatedDataJournals() {
-    const startIndex = (this.currentPageJournals - 1) * this.pageSizeJournals;
-    this.paginatedJournalsData = this.booksData.slice(startIndex, startIndex + this.pageSizeJournals);
+  get paginatedJournals() {
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    return this.Journals.slice(startIndex, startIndex + this.itemsPerPage);
   }
 
-  nextPageJournals() {
-    if (this.currentPageJournals < this.totalPagesJournals) {
-      this.currentPageJournals++;
-      this.updatePaginatedDataJournals();
+  nextPage() {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
     }
   }
 
-  previousPageJournals() {
-    if (this.currentPageJournals > 1) {
-      this.currentPageJournals--;
-      this.updatePaginatedDataJournals();
+  prevPage() {
+    if (this.currentPage > 1) {
+      this.currentPage--;
     }
   }
 
