@@ -1,6 +1,6 @@
 <header>
     <div class="container-fluid">
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <nav class="navbar navbar-expand-lg ">
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" 
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -9,35 +9,34 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul *ngIf="show" class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item"><a class="nav-link active" routerLink="/">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" routerLink="/"></a></li>
-                    <li class="nav-item"><a class="nav-link" routerLink="/"></a></li>
-
+                    <li class="nav-item"><a class="nav-link active" (click)="VisitPage('AllJournals')">All Journals </a></li>
                     <!--  -->
-                    <li class="nav-item dropdown">
+                    <!-- <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="policiesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Journals
+                            
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="policiesDropdown">
                             <li><a class="dropdown-item" (click)="VisitPage('AllJournals')">View all </a></li>
-                            <li><a class="dropdown-item" (click)="VisitUrl(BookId,name,'Policies/PeerReviewPolicy')">Add New </a></li>                             
                         </ul>
-                    </li>
+                    </li> -->
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="policiesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Editor in Chief
+                        <a class="nav-link dropdown-toggle" href="#" id="UserDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            User Details
                         </a>
-                        <ul class="dropdown-menu" aria-labelledby="policiesDropdown">
-                            <li><a class="dropdown-item" (click)="VisitUrl(BookId,name,'Policies/EditorialPolicy')">View all </a></li>
-                            <li><a class="dropdown-item" (click)="VisitUrl(BookId,name,'Policies/PeerReviewPolicy')">Add New </a></li>                             
+                        <ul class="dropdown-menu dropDownWidth" aria-labelledby="UserDropdown">
+                            <li><a class="dropdown-item" (click)="VisitUserPage(0,'AllUsersDetails')">Editor </a></li>                             
+                            <li><a class="dropdown-item" (click)="VisitUserPage(1,'AllUsersDetails')">Author </a></li>                             
+                            <li><a class="dropdown-item" (click)="VisitUserPage(2,'AllUsersDetails')">Reviewer </a></li>                             
+                            <li><a class="dropdown-item" (click)="VisitUserPage(99,'AllUsersDetails')">View all </a></li>
                         </ul>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="policiesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle" href="#" id="AccountDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Account Setting
                         </a>
-                        <ul class="dropdown-menu" aria-labelledby="policiesDropdown">
-                            <li><a class="dropdown-item" (click)="VisitUrl(BookId,name,'Policies/EditorialPolicy')">Change Password </a></li>
-                            <li><a class="dropdown-item" (click)="VisitUrl(BookId,name,'Policies/PeerReviewPolicy')">Logout </a></li>                             
+                        <ul class="dropdown-menu dropDownWidth" aria-labelledby="AccountDropdown">
+                            <li><a class="dropdown-item" (click)="VisitPage('/')">Change Password </a></li>
+                            <li><a class="dropdown-item" (click)="VisitPage('/')">Logout </a></li>                             
                         </ul>
                     </li>
                 </ul>

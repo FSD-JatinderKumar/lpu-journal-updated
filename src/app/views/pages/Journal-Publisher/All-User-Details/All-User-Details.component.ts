@@ -12,17 +12,18 @@ import { LoginSessionService } from 'src/app/_services/login-session.service';
 import { CookieService } from 'ngx-cookie-service';
 import { forkJoin } from 'rxjs'
 @Component({
-  selector: 'app-Publisher-Dashboard',
-  templateUrl: './Publisher-Dashboard.component.html',
-  styleUrls: ['./Publisher-Dashboard.component.scss']
+  selector: 'app-All-User-Details',
+  templateUrl: './All-User-Details.component.html',
+  styleUrls: ['./All-User-Details.component.scss']
 })
-export class PublisherDashboardComponent implements OnInit {
-  fromDate: any;    booksDataColumns: any;  toDate: any;  pipe = new DatePipe('en-CA');
-  dataSource: any[] = [];   dataX: any;   booksData: any;  dataShowing: any = false;
-  userRole: any;    BookId: any;    JournalId: any;  JournalTitle: any;
+export class AllUserDetailsComponent implements OnInit {
+  fromDate: any;    UserDataColumns: any;  toDate: any;  pipe = new DatePipe('en-CA');
+  dataSource: any[] = [];   dataX: any;   UserData: any;  dataShowing: any = false;
+  userRole: any;    BookId: any;    JournalId: any;  JournalTitle: any; Role: string='';
   userId: any;    serverUrl: any;   supervisorName: any;    departmentName: any;
   candidateName: any;
-  
+    
+    Users: any;
   constructor(
     private storageService: StorageService,
     private authService: AuthService,
@@ -39,13 +40,14 @@ export class PublisherDashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.serverUrl='https://files.lpu.in/umsweb/Journal/';
-    let BookId  = this.route.snapshot.params['Id'];
+    let Role  = this.route.snapshot.params['Role'];
     let name  = this.route.snapshot.params['name'];
     let loginStatus = this.checkUserLogin();
-      if (BookId != undefined && BookId != null ) {
-        this.BookId = BookId;
-        this.JournalId= BookId;
+    this.getUsersDetails(Role);
+      if (Role != undefined  ) {
+        this.Role = Role;
         this.JournalTitle = name;
+        this.getUsersDetails(Role);
       } 
   }
  
@@ -73,8 +75,68 @@ export class PublisherDashboardComponent implements OnInit {
 
   Reset() {
     window.location.reload();
-
   }
+  getUsersDetails(Role:any): void {
+    this.journalWebApiService.GetAllJournalUserDetails(Role).subscribe((response) => {
+      if (response.item1 && response.item1.length > 0) {
+        this.UserData = response.item1;
+        this.Users = this.UserData;
+        // console.log(JSON.stringify(this.Users))
+      }
+      else {
+        this.Users = [];
+      }
+    });
+  }
+
+  isLoading: boolean[] = [];
+  loadingTimeout: any[] = []; // Store timeout references
  
+  currentPage = 1;
+  itemsPerPage = 10;
+
+  get totalPages(): number {
+    return Math.ceil(this.Users.length / this.itemsPerPage);
+  }
+
+  get paginatedUsers() {
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    return this.Users.slice(startIndex, startIndex + this.itemsPerPage);
+  }
+
+  nextPage() {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+    }
+  }
+
+  prevPage() {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+    }
+  }
+
+
+// Define the user role mappings
+userRoleMap: { [key: number]: string } = {
+  0: 'Editor',
+  1: 'Author',
+  2: 'Reviewer',
+  3: 'Publisher',
+  99:'Users'
+};
+
+getUserRoleText(userRoles: number | number[] | null | undefined): string {
+  if (userRoles === null || userRoles === undefined) return 'N/A'; // Ensure 0 is not treated as falsy
+
+  if (typeof userRoles === 'number') {
+    userRoles = [userRoles]; // Convert single number to array
+  }
+
+  return userRoles
+    .map(role => this.userRoleMap[role] || `Unknown (${role})`)
+    .join(', ');
+}
+
 
 }

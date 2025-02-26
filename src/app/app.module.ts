@@ -56,6 +56,8 @@ import { TopMenuBarModule } from './views/pages/Journal-Publisher/TopMenuBar/Top
 import { TopMenuBarComponent } from './views/pages/Journal-Publisher/TopMenuBar/TopMenuBar.component';
 import { AllJournalsDetailsModule } from './views/pages/Journal-Publisher/All-Journals-Details/All-Journals-Details.module';
 import { AllJournalsDetailsComponent } from './views/pages/Journal-Publisher/All-Journals-Details/All-Journals-Details.component';
+import { AllUserDetailsModule } from './views/pages/Journal-Publisher/All-User-Details/All-User-Details.module';
+import { AllUserDetailsComponent } from './views/pages/Journal-Publisher/All-User-Details/All-User-Details.component';
 
 @NgModule({
   declarations: [
@@ -97,7 +99,8 @@ import { AllJournalsDetailsComponent } from './views/pages/Journal-Publisher/All
 
     PublisherDashboardComponent, 
     TopMenuBarComponent,
-    AllJournalsDetailsComponent
+    AllJournalsDetailsComponent,
+    AllUserDetailsComponent
     
   ],
   imports: [
@@ -123,7 +126,8 @@ import { AllJournalsDetailsComponent } from './views/pages/Journal-Publisher/All
     
     PublisherDashboardModule, 
     TopMenuBarModule,
-    AllJournalsDetailsModule
+    AllJournalsDetailsModule, 
+    AllUserDetailsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

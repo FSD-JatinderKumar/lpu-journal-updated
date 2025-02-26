@@ -32,6 +32,11 @@ export class TopMenuBarComponent implements OnInit {
       window.location.reload();
     });
   }
+  VisitUserPage(Id: any, Sufix: any) {
+    this.router.navigateByUrl(Id + '/' + Sufix).then(() => {
+      window.location.reload();
+    });
+  }
 VisitPage(Page:any)
 {
   this.router.navigateByUrl(Page).then(() => {

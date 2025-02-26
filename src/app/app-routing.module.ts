@@ -139,13 +139,19 @@ const routes: Routes = [
       },
       {
         path: "PublisherDashboard",
-        // component:SubmitManuScriptComponentModule
         loadChildren: () => import('./views/pages/Journal-Publisher/Publisher-Dashboard/Publisher-Dashboard.module').then(m=>m.PublisherDashboardModule)
       },
       {
         path: "AllJournals",
-        // component:SubmitManuScriptComponentModule
         loadChildren: () => import('./views/pages/Journal-Publisher/All-Journals-Details/All-Journals-Details.module').then(m=>m.AllJournalsDetailsModule)
+      },
+      {
+        path: ":Role/AllUsersDetails",
+        loadChildren: () => import('./views/pages/Journal-Publisher/All-User-Details/All-User-Details.module').then(m=>m.AllUserDetailsModule)
+      },
+      {
+        path: "AllUsersDetails",
+        loadChildren: () => import('./views/pages/Journal-Publisher/All-User-Details/All-User-Details.module').then(m=>m.AllUserDetailsModule)
       }
     ]
   }

@@ -298,5 +298,15 @@ export class LpujournalbookService {
     );
   }
 
+  GetAllJournalUserDetails(RoleId: any): Observable<any> {
+    let token = this.storageService.getUser();
+    let headers = new HttpHeaders()
+    .set('Authorization', 'Bearer ' + this.authToken)
+    return this.http.get(
+      // AUTH_API_LOCAL + 'api/LpuJournal/GetAllMenuScriptForUser?Email=' + UserEmail, { headers }
+      AUTH_API_LOCALs + 'api/LpuJournal/GetAllJournalUserDetails?Role='+RoleId , { headers }
+    );
+  }
+
   
 }

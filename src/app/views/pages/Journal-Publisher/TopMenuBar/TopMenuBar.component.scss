@@ -1,5 +1,9 @@
+.dropDownWidth{
+  margin-top: 1.2rem;
+  margin-left: 1.2rem;
+}
 header {
-  border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+  border-bottom: 1px solid rgba(68, 9, 9, 0.07);
 }
 
 header .navbar-brand {
@@ -19,7 +23,7 @@ header .navbar-brand {
   line-height: 13px;
 }
 
-.navbar-nav .nav-item:not(:last-child) .nav-link {
+.navbar-nav .nav-item:first-child .nav-link {
   margin-right: 20px;
   border-left: 0;
 

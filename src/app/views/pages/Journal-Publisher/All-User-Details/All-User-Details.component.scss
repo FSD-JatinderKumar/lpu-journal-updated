@@ -1,5 +1,9 @@
 .tableHeight{
-    margin-bottom: 45rem;
+    margin-bottom: 48rem;
+}
+.table-container {
+  height: 45rem;
+  overflow-y: auto;
 }
 /* ✅ Add border to entire table */
 .custom-table {
