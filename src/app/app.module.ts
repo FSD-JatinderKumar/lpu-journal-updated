@@ -58,6 +58,9 @@ import { AllJournalsDetailsModule } from './views/pages/Journal-Publisher/All-Jo
 import { AllJournalsDetailsComponent } from './views/pages/Journal-Publisher/All-Journals-Details/All-Journals-Details.component';
 import { AllUserDetailsModule } from './views/pages/Journal-Publisher/All-User-Details/All-User-Details.module';
 import { AllUserDetailsComponent } from './views/pages/Journal-Publisher/All-User-Details/All-User-Details.component';
+import { NewJournalComponentModule } from './views/pages/Journal-Publisher/NewJournal/NewJournal.module';
+import { UpdateJournalDetailsModule } from './views/pages/Journal-Publisher/update-journal-details/update-journal-details.module';
+import { UpdateJournalDetailsComponent } from './views/pages/Journal-Publisher/update-journal-details/update-journal-details.component';
 
 @NgModule({
   declarations: [
@@ -100,7 +103,8 @@ import { AllUserDetailsComponent } from './views/pages/Journal-Publisher/All-Use
     PublisherDashboardComponent, 
     TopMenuBarComponent,
     AllJournalsDetailsComponent,
-    AllUserDetailsComponent
+    AllUserDetailsComponent,
+    UpdateJournalDetailsComponent
     
   ],
   imports: [
@@ -127,7 +131,9 @@ import { AllUserDetailsComponent } from './views/pages/Journal-Publisher/All-Use
     PublisherDashboardModule, 
     TopMenuBarModule,
     AllJournalsDetailsModule, 
-    AllUserDetailsModule
+    AllUserDetailsModule,
+    NewJournalComponentModule,
+    UpdateJournalDetailsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

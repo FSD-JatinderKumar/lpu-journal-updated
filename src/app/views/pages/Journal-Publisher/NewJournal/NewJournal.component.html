@@ -1,0 +1,234 @@
+<!-- <nav>
+  <div class="nav nav-tabs nav nav-tabs d-flex justify-content-center active" id="nav-tab" role="tablist">
+    <button class="btn btn-warning me-5 active" id="NewJournal-Entry-tab" data-bs-toggle="tab"
+      style="padding: .95rem 8rem;" data-bs-target="#NewJournal-Entry" type="button" role="tab"
+      aria-controls="NewJournal-Entry" aria-selected="true">Add New Journal </button>
+
+    <button class=" btn btn-warning ms-5" id="AllJournal-Details-tab" data-bs-toggle="tab" style="padding: .95rem 8rem;"
+      data-bs-target="#AllJournal-Details" type="button" role="tab" aria-controls="AllJournal-Details"
+      aria-selected="false">View All Journals</button>
+
+
+  </div>
+</nav>
+<div class="tab-content" id="nav-tabContent"> -->
+
+  <!-- Tab Two  Open All Journal for Image Upload  -->
+  <div class="tab-pane fade" id="AllJournal-Details" role="tabpanel" aria-labelledby="AllJournal-Details-tab">
+    <div class="row">
+      <div class="col-md-12 stretch-card">
+        <div class="card">
+          <div class="card-body">
+            <h6 class="card-title d-flex justify-content-center fs-4 text-success">All Journal </h6>
+            <div class="row">
+              <div class="col-sm-4">
+                <div class="mb-3">
+                  <button (click)="exportToExcel()" class="btn btn-dark "
+                    [disabled]="this.TempAllJournalsDetails.length==0">Export to Excel</button>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="mb-3">
+                  <!-- [(ngModel)]="searchQueryx"  -->
+                  <input 
+                  (keyup)="searchx()" id="searchx" type="text" style=" width: 21rem;"
+                    class="form-control" placeholder="Type Search Text " aria-label="Search"
+                    aria-describedby="basic-addon1" />
+                </div>
+              </div>
+            </div>
+            <div class="table-responsive">
+              <!-- <ngx-datatable class="bootstrap table table-striped material" [rows]="this.TempAllJournalsDetails"
+                [loadingIndicator]="loadingIndicator" [columnMode]="ColumnMode.force" [footerHeight]="50" [limit]="10"
+                [headerHeight]="80" rowHeight="auto">
+                <ngx-datatable-column *ngFor="let col of columns" [prop]="col"></ngx-datatable-column>
+                <ngx-datatable-column name="Download Image" [sortable]="false" prop="Id">
+                  <ng-template let-row="row" let-value="value" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                    <ng-container *ngIf="row.imageUrl != null">
+                      <button class="btn btn-dark" (click)="onSelectFile(row)">
+                        Download
+                      </button>
+                    </ng-container>
+                    <ng-container *ngIf="row.imageUrl == null">
+                      <span style="margin: auto;float: left;
+                        font-weight: bold;padding: 10px 10px 10px 10px;">No FIle</span>
+                    </ng-container>
+                  </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Actions" [sortable]="false" prop="Id">
+                  <ng-template let-row="row" let-value="value" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+
+                    <button class="btn btn-dark" (click)="onSelect(row)">
+                      Take Action
+                    </button><br />
+                    <button class="btn btn-dark" (click)="onEditClick(row)">
+                      Edit Journal Details
+                    </button>
+                  </ng-template>
+                </ngx-datatable-column>
+              </ngx-datatable> -->
+           
+              <div class="table-container">
+                <!-- Loading Indicator -->
+                <!-- <div *ngIf="loadingIndicator" class="loading">Loading...</div> -->
+              
+                <!-- Table -->
+                <table class="table table-striped">
+                  <!-- Table Header -->
+                  <thead>
+                    <tr>
+                      <th *ngFor="let col of columns">{{col}}</th>
+                      <th>Download Image</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+              
+                  <!-- Table Body -->
+                  <tbody>
+                    <tr *ngFor="let row of paginatedJournals; let i = index">
+                      <!-- Dynamic columns -->
+                      <td *ngFor="let col of columns">{{row[col]}}</td>
+              
+                      <!-- Download Image column -->
+                      <td>
+                        <ng-container *ngIf="row.imageUrl">
+                          <button class="btn btn-dark" (click)="onSelectFile(row)">
+                            Download
+                          </button>
+                        </ng-container>
+                        <ng-container *ngIf="!row.imageUrl">
+                          <span class="no-file">No File</span>
+                        </ng-container>
+                      </td>
+              
+                      <!-- Actions column -->
+                      <td>
+                      
+
+                        <button *ngSwitchCase="'journalId'" class="btn btn-primary" click)="onSelect(row)"
+                        data-bs-toggle="modal" data-bs-target="#viewDescModal">
+                        Take Action
+                      </button>
+                        <br>
+                        <button class="btn btn-dark mt-2" (click)="onEditClick(row)">
+                          Edit Journal Details
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              
+                <!-- Pagination Controls -->
+                <div class="pagination-controls">
+                  <button 
+                    class="btn btn-secondary" 
+                    (click)="previousPage()" 
+                    [disabled]="currentPage === 1">
+                    Previous
+                  </button>
+                  
+                  <span>Page {{currentPage}} of {{totalPages}}</span>
+                  
+                  <button 
+                    class="btn btn-secondary" 
+                    (click)="nextPage()" 
+                    [disabled]="currentPage === totalPages">
+                    Next
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <ng-template #loginFailed>
+    <div class="text-center bg-danger" *ngIf="isLoginFailed">
+      <h3 class="text-center fs-2 m-5 text-warn pt-5 "> Error in User Login . </h3>
+      <div class="row mt-4 mb-4">
+        <div class="col-sm-12 text-center">
+          <div class="mb-3 p-4">
+            <Label class="form-label fs-4 text-warn ">Something Went Wrong. Please Try login again!.</Label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+
+  <!-- <ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" [fullScreen]="true" size="default" type="ball-spin-clockwise">
+    <p style="color: white">Please Wait... </p>
+  </ngx-spinner> -->
+<!-- </div> -->
+<!-- Modal -->
+ 
+<div class="modal fade" id="viewDescModal" tabindex="-1" aria-labelledby="viewDescModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h5 class="modal-title" id="viewDescModalLabel">Journal Image Modify</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="modal-body">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="card">
+                <form id="UpdateImage">
+                  <div class="card-body">
+                    <div class="row mb-4">
+                      <!-- Journal ID and Title -->
+                      <div class="col-sm-4">
+                        <div class="mb-3">
+                          <label for="journalId" class="form-label">Journal Id</label>
+                          <div>{{JournalId}}</div>
+                          <div>{{Title}}</div>
+                        </div>
+                      </div>
+
+                      <!-- File Input -->
+                      <div class="col-sm-4">
+                        <div class="mb-3">
+                          <label for="File" class="form-label">Journal Image</label>
+                          <!-- [(ngModel)]="fileNamesX"  -->
+                          <input  
+                            class="form-control" 
+                            type="file" 
+                            id="File" 
+                            name="file" 
+                            (change)="onFileXSelected($event, JournalId)" 
+                            accept=".png, .jpg, .jpeg" />
+                          <div *ngIf="isForm1Submitted && !fileNamesX" class="invalid-feedback d-block">
+                            Required
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Action Button -->
+                      <div class="col-sm-4">
+                        <div class="mb-3">
+                          <label class="form-label">Action Button</label>
+                          <button 
+                            type="submit" 
+                            class="btn btn-primary w-100" 
+                            [disabled]="!fileChosen[JournalId]" 
+                            (click)="UpdateFileDocument(JournalId)">
+                            Upload New Document
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

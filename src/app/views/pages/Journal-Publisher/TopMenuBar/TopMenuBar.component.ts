@@ -27,6 +27,15 @@ export class TopMenuBarComponent implements OnInit {
 
   showSearchForm: boolean = false; show: boolean = true; isSearchOpen: boolean = false;
 
+  isNavbarCollapsed: boolean = true;
+  toggleNavbar(): void {
+    this.isNavbarCollapsed = !this.isNavbarCollapsed;
+  }
+
+  goto(val: any) {
+    this.router.navigateByUrl(val);
+  }
+
   VisitUrl(Id: any, name: any, Sufix: any) {
     this.router.navigateByUrl(Id + '/' + name + '/' + Sufix).then(() => {
       window.location.reload();

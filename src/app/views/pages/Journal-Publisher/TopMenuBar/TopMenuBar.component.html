@@ -1,3 +1,5 @@
+
+
 <header>
     <div class="container-fluid">
         <nav class="navbar navbar-expand-lg ">
@@ -8,17 +10,19 @@
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul *ngIf="show" class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item"><a class="nav-link active" routerLink="/">Home</a></li>
-                    <li class="nav-item"><a class="nav-link active" (click)="VisitPage('AllJournals')">All Journals </a></li>
+                    <li class="nav-item"><a class="nav-link " routerLink="/">Home</a></li>
+                    <!-- <li class="nav-item"><a class="nav-link " (click)="VisitPage('AllJournals')"> Journals </a></li> -->
                     <!--  -->
-                    <!-- <li class="nav-item dropdown">
+                    <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="policiesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            
+                            Journals
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="policiesDropdown">
+                            
                             <li><a class="dropdown-item" (click)="VisitPage('AllJournals')">View all </a></li>
+                            <li><a class="dropdown-item" (click)="VisitPage('UpdateJournalsDetails')">Update </a></li>
                         </ul>
-                    </li> -->
+                    </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="UserDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             User Details
@@ -49,3 +53,38 @@
         </nav>
     </div>
 </header>
+ 
+  <div class="container-fluid  mt-4 ">
+    <div class="row">
+      <div class="col-md-12 grid-margin stretch-card">
+        <div class="card">
+          <div class="card-body">
+            <div class="row d-flex justify-content-around">
+                <div class="col-md-2">
+                    <!-- <label class=" form-label fw-bolder" >User Name
+                    </label> -->
+                </div>
+                <div class="col-md-1">
+                    <!-- <label class=" form-label fw-bolder" >{{this.candidateName}}  Test user
+                    </label> -->
+                </div>
+                <div class="col-md-4">
+                    <label class="text-success text-center fs-3 fw-bolder "> Lpu e-Journal Publisher Dashboard </label>
+                </div>
+                <div class="col-md-4">
+                    <!-- <label class=" form-label fw-bolder" >Department
+                      Name</label> -->
+                    <!-- <label class="form-label text-dark fw-bolder text-end"> Department of Research and Development Cell -->
+                      <!-- {{this.departmentName}} -->
+                    <!-- </label> -->
+                  </div>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+  
+  <!-- <router-outlet></router-outlet> -->

@@ -294,7 +294,7 @@ export class LpujournalbookService {
     .set('Authorization', 'Bearer ' + this.authToken)
     return this.http.get(
       // AUTH_API_LOCAL + 'api/LpuJournal/GetAllMenuScriptForUser?Email=' + UserEmail, { headers }
-      AUTH_API_LOCALs + 'api/LpuJournal/GetAllJournalEditorDetails' , { headers }
+      AUTH_API_LOCAL + 'api/LpuJournal/GetAllJournalEditorDetails' , { headers }
     );
   }
 
@@ -304,7 +304,7 @@ export class LpujournalbookService {
     .set('Authorization', 'Bearer ' + this.authToken)
     return this.http.get(
       // AUTH_API_LOCAL + 'api/LpuJournal/GetAllMenuScriptForUser?Email=' + UserEmail, { headers }
-      AUTH_API_LOCALs + 'api/LpuJournal/GetAllJournalUserDetails?Role='+RoleId , { headers }
+      AUTH_API_LOCAL + 'api/LpuJournal/GetAllJournalUserDetails?Role='+RoleId , { headers }
     );
   }
 

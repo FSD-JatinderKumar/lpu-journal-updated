@@ -11,10 +11,10 @@ const routes: Routes = [
     children: [
 
       //  // Journal WebAdmin Panel
-      //  {
-      //   path:'Myjournals/:loginName',
-      //   loadChildren:()=> import('./views/pages/journal-admin-page/journal-admin-page.module').then(m=> m.JournalAdminPageModule)
-      // },
+       {
+        path:'UpdateJournalsDetails',
+        loadChildren:()=> import('./views/pages/Journal-Publisher/update-journal-details/update-journal-details.module').then(m=> m.UpdateJournalDetailsModule)
+      },
       {
         path:"signup",
         loadChildren: () => import('./views/pages/new-registration-page/new-registration-page.module').then(m => m.NewRegistrationPageModule)

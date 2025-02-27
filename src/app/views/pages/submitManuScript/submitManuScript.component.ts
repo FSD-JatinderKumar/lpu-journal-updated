@@ -753,7 +753,7 @@ reviewerList: any[] = [];
   AssignedById: any;
   RecordId: any;
   onTakeAction(rowData: any) {
-    console.log(JSON.stringify(rowData))
+    // console.log(JSON.stringify(rowData))
     this.selectedJournalId = rowData['journalId'];
     this.AssignedById =  rowData['emailId'];
     this.RecordId= rowData['id'];
