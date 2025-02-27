@@ -92,6 +92,23 @@ export class UpdateJournalDetailsComponent implements OnInit {
     }
   }
 
+  filterJournals(event: any) {
+    const searchValue = event.target.value.toLowerCase();
+    
+    this.TempAllJournalsDetails = this.TempAllJournalsDetails.filter(journal => 
+        journal.journalTitle.toLowerCase().includes(searchValue) ||
+        journal.subTitle.toLowerCase().includes(searchValue)
+    );
+
+    this.currentPage = 1; // Reset to the first page after filtering
+    this.paginatedJournals = this.getPaginatedData();
+}
+
+getPaginatedData(): any[] {
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    return this.TempAllJournalsDetails.slice(startIndex, startIndex + this.itemsPerPage);
+}
+
 
   searchx() {
     // alert(1)
@@ -101,6 +118,7 @@ export class UpdateJournalDetailsComponent implements OnInit {
         String(val).toLowerCase().includes(query)
       );
     });
+    
   }
 
   onDataChange() {
