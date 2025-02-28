@@ -240,7 +240,7 @@ export class LpujournalbookService {
     .set('Accept', '*/*',);
     return this.http.post(
       // AUTH_API + 'api/LpuJournal/NewJournalMenuScript', newMenuscriptData, { headers }
-      AUTH_API_LOCALs + 'api/LpuJournal/UpdateReviewersRemarks', newReviewersRemarks, { headers }
+      AUTH_API_LOCAL + 'api/LpuJournal/UpdateReviewersRemarks', newReviewersRemarks, { headers }
     );
   }
 
@@ -252,7 +252,7 @@ export class LpujournalbookService {
     .set('Authorization', 'Bearer ' + token)
     return this.http.get(
       // AUTH_API_LOCAL + 'api/LpuJournal/GetAllMenuScriptForUser?Email=' + UserEmail, { headers }
-      AUTH_API_LOCALs + 'api/LpuJournal/GetAllMenuScriptForJournal?Id=' + JournalId, { headers }
+      AUTH_API_LOCAL + 'api/LpuJournal/GetAllMenuScriptForJournal?Id=' + JournalId, { headers }
     );
   }
 
@@ -260,7 +260,7 @@ export class LpujournalbookService {
   GetAllReviewersForJournalId(JournalId:any): Observable<any> {
     let token = this.storageService.getUser();
     let headers = new HttpHeaders()
-    .set('Authorization', 'Bearer ' + token)
+    .set('Authorization', 'Bearer ' + this.authToken)
     return this.http.get(
       // AUTH_API_LOCAL + 'api/LpuJournal/GetAllMenuScriptForUser?Email=' + UserEmail, { headers }
       AUTH_API_LOCAL + 'api/LpuJournal/GetAllReviewersForJournal?Id=' + JournalId, { headers }
@@ -275,7 +275,7 @@ export class LpujournalbookService {
     .set('Accept', '*/*',);
     return this.http.post(
       // AUTH_API + 'api/LpuJournal/NewJournalMenuScript', newMenuscriptData, { headers }
-      AUTH_API_LOCAL + 'api/LpuJournal/AssignReviewerForJournal', AssignnewReviewer, { headers }
+      AUTH_API_LOCAL  + 'api/LpuJournal/AssignReviewerForJournal', AssignnewReviewer, { headers }
     );
   }
 

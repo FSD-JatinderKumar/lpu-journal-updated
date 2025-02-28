@@ -137,6 +137,9 @@ const routes: Routes = [
         // component:SubmitManuScriptComponentModule
         // loadChildren: () => import('./views/pages/SubmitManuScript/SubmitManuScript.module').then(m => m.SubmitManuScriptComponentModule)
       },
+
+
+      // Publisher Dashboard
       {
         path: "PublisherDashboard",
         loadChildren: () => import('./views/pages/Journal-Publisher/Publisher-Dashboard/Publisher-Dashboard.module').then(m=>m.PublisherDashboardModule)
@@ -146,13 +149,24 @@ const routes: Routes = [
         loadChildren: () => import('./views/pages/Journal-Publisher/All-Journals-Details/All-Journals-Details.module').then(m=>m.AllJournalsDetailsModule)
       },
       {
-        path: ":Role/AllUsersDetails",
+        path: ":Menu/:Role/AllUsersDetails",
+        loadChildren: () => import('./views/pages/Journal-Publisher/All-User-Details/All-User-Details.module').then(m=>m.AllUserDetailsModule)
+      },
+      {
+        path: ":Menu/:Role/AllUsersDetails",
         loadChildren: () => import('./views/pages/Journal-Publisher/All-User-Details/All-User-Details.module').then(m=>m.AllUserDetailsModule)
       },
       {
         path: "AllUsersDetails",
         loadChildren: () => import('./views/pages/Journal-Publisher/All-User-Details/All-User-Details.module').then(m=>m.AllUserDetailsModule)
-      }
+      },
+
+
+// Editors Dashboard
+      {
+        path: "EditorDashboard",
+        loadChildren: () => import('./views/pages/Journal-Editors/Manuscript-Details/Manuscript-Details.module').then(m=>m.ManuscriptDetailsModule)
+      },
     ]
   }
 ];

@@ -1,4 +1,9 @@
-@import url("header.css");
+
+@media (prefers-reduced-motion: no-preference) {
+	:root {
+		scroll-behavior: auto !important;
+	}
+}
 
 body,
 html {
@@ -442,3 +447,4 @@ section {
     grid-template-columns: repeat(1, 1fr);
   }
 }
+@import url("header.css");

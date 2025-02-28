@@ -173,8 +173,8 @@ button:hover
   }
   
   .dropdown-options {
-    position: absolute;
-    width: auto;
+    // position: absolute;
+    width: 15rem;
     border: 1px solid #ced4da;
     background: white;
     max-height: 200px;
@@ -187,7 +187,8 @@ button:hover
   }
   
   .dropdown-options div:hover {
-    background: #f8f9fa;
+    // background: #f8f9fa;
+    background:  #fd6c04!important;
   }
   
   .disabled-option {

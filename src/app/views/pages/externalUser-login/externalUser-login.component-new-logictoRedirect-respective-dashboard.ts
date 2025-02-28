@@ -379,8 +379,7 @@ SetUserData(response: any) {
   this.AuthSession.addToSession(this.UserData);
 
   // Redirect based on user role
-  // this.RedirectToDashboard();
-  this.VisitUrl(this.BookId, this.name, 'SubmitManuScript')
+  this.RedirectToDashboard();
 }
 
 // Function to redirect based on UserRole

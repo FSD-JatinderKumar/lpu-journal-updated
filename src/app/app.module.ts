@@ -61,6 +61,10 @@ import { AllUserDetailsComponent } from './views/pages/Journal-Publisher/All-Use
 import { NewJournalComponentModule } from './views/pages/Journal-Publisher/NewJournal/NewJournal.module';
 import { UpdateJournalDetailsModule } from './views/pages/Journal-Publisher/update-journal-details/update-journal-details.module';
 import { UpdateJournalDetailsComponent } from './views/pages/Journal-Publisher/update-journal-details/update-journal-details.component';
+import { EditorHeaderModule } from './views/pages/Journal-Editors/Editor-Top-Bar/EditorHeader.moudle';
+import { ManuscriptDetailsModule } from './views/pages/Journal-Editors/Manuscript-Details/Manuscript-Details.module';
+import { EditorHeaderComponent } from './views/pages/Journal-Editors/Editor-Top-Bar/EditorHeader.component';
+import { ManuscriptDetailsComponent } from './views/pages/Journal-Editors/Manuscript-Details/Manuscript-Details.component';
 
 @NgModule({
   declarations: [
@@ -104,7 +108,11 @@ import { UpdateJournalDetailsComponent } from './views/pages/Journal-Publisher/u
     TopMenuBarComponent,
     AllJournalsDetailsComponent,
     AllUserDetailsComponent,
-    UpdateJournalDetailsComponent
+    UpdateJournalDetailsComponent, 
+
+    EditorHeaderComponent, 
+    ManuscriptDetailsComponent
+
     
   ],
   imports: [
@@ -133,7 +141,10 @@ import { UpdateJournalDetailsComponent } from './views/pages/Journal-Publisher/u
     AllJournalsDetailsModule, 
     AllUserDetailsModule,
     NewJournalComponentModule,
-    UpdateJournalDetailsModule
+    UpdateJournalDetailsModule, 
+
+    EditorHeaderModule,
+    ManuscriptDetailsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

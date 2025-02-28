@@ -22,7 +22,7 @@ export class AllUserDetailsComponent implements OnInit {
   userRole: any;    BookId: any;    JournalId: any;  JournalTitle: any; Role: string='';
   userId: any;    serverUrl: any;   supervisorName: any;    departmentName: any;
   candidateName: any;
-    
+  MenuBar: any;
     Users: any;
   constructor(
     private storageService: StorageService,
@@ -41,7 +41,9 @@ export class AllUserDetailsComponent implements OnInit {
   ngOnInit(): void {
     this.serverUrl='https://files.lpu.in/umsweb/Journal/';
     let Role  = this.route.snapshot.params['Role'];
-    let name  = this.route.snapshot.params['name'];
+    this.MenuBar= this.route.snapshot.params['Menu'];
+    // let name  = this.route.snapshot.params['name'];
+    // alert(name+"in Page ")
     let loginStatus = this.checkUserLogin();
     this.getUsersDetails(Role);
       if (Role != undefined  ) {
@@ -119,10 +121,11 @@ export class AllUserDetailsComponent implements OnInit {
 
 // Define the user role mappings
 userRoleMap: { [key: number]: string } = {
-  0: 'Editor',
-  1: 'Author',
-  2: 'Reviewer',
-  3: 'Publisher',
+  0: 'Editors',
+  1: 'Authors',
+  2: 'Reviewers',
+  3: 'Publishers',
+  4: 'Managing Editors',
   99:'Users'
 };
 

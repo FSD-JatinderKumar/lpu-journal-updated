@@ -755,16 +755,14 @@ reviewerList: any[] = [];
   onTakeAction(rowData: any) {
     // console.log(JSON.stringify(rowData))
     this.selectedJournalId = rowData['journalId'];
-    this.AssignedById =  rowData['emailId'];
-    this.RecordId= rowData['id'];
+    this.AssignedById = rowData['emailId'];
+    this.RecordId = rowData['id'];
   }
   assignReviewer() {
     if (!this.selectedReviewerId) {
       alert('Please select a reviewer.');
       return;
     }
-
-
     // AssignNewReviewerForJournal
 
 
@@ -855,7 +853,7 @@ reviewerList: any[] = [];
     emailId: 'Submitted User Email', 
     userName: 'Submitted By', 
     submissionType: 'Submitted Script ', 
-    fileUrl: 'File Download' ,
+    fileUrl: 'Document' ,
     journalId: 'Action' 
   }; // Custom header text journalTitle	editorInChief	ManuScriptType	submissionType
 
@@ -889,7 +887,7 @@ showEditorData(journalId: any) {
       this.dataSource = dataX.item1;
       this.dataLoaded = true;
       this.EditorData = dataX.item1;
-      console.log("ALL Menuscript   Data" + JSON.stringify(this.EditorData))
+      // console.log("ALL Menuscript   Data" + JSON.stringify(this.EditorData))
       if (this.EditorData.length > 0) {
         this.EditorDataColumns = Object.keys(this.EditorData[0]);
         this.calculateTotalPagesEditor();
@@ -922,7 +920,7 @@ totalPagesEditor: number = 1;
 
 
 calculateTotalPagesEditor() {
-  this.totalPagesEditor = Math.ceil(this.EditorData.length / this.totalPagesEditor);
+  this.totalPagesEditor = Math.ceil(this.EditorData.length / this.pageSizeEditor);
 }
 
 updatePaginatedDataEditor() {

@@ -6,11 +6,11 @@ import { LoginSessionService } from 'src/app/_services/login-session.service';
 import { LpujournalbookService } from 'src/app/_services/lpujournalbook.service';
 
 @Component({
-  selector: 'app-TopMenuBar',
-  templateUrl: './TopMenuBar.component.html',
-  styleUrls: ['./TopMenuBar.component.scss']
+  selector: 'app-EditorHeader',
+  templateUrl: './EditorHeader.component.html',
+  styleUrls: ['./EditorHeader.component.scss']
 })
-export class TopMenuBarComponent implements OnInit {
+export class EditorHeaderComponent implements OnInit {
   isDisabled: any = true;
   BookId: any; name: any;
   UserRole: any;
@@ -41,8 +41,9 @@ export class TopMenuBarComponent implements OnInit {
       window.location.reload();
     });
   }
-  VisitUserPage(Menu:any,Id: any, Sufix: any) {
-    this.router.navigateByUrl(Menu+'/'+Id + '/' + Sufix).then(() => {
+  VisitUserPage(Menu: any, Id: any, Sufix: any) {
+    // alert(Menu+'/'+Id + '/' + Sufix)
+    this.router.navigateByUrl(Menu + '/' + Id + '/' + Sufix).then(() => {
       window.location.reload();
     });
   }

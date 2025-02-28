@@ -32,7 +32,7 @@
       </div>
       <div class="col-md-6 ps-md-0">
         <div class="auth-form-wrapper px-4 py-5 p-5">
-          <h2 class="nobleui-logo d-block mb-2"> User <span>Registration Page</span></h2>
+          <h2 class="nobleui-logo d-block mb-2"> User <span>Registration </span> Page</h2>
 
           <form [formGroup]="JournalUserAccountForm" (ngSubmit)="Onsubmit()" class="forms-sample">
             <div class="row">
@@ -114,10 +114,10 @@
                   Please enter a valid mobile number (with country code).
                 </div>
               </div>
-              <div class="col-md-6 mb-3">
+              <div class="col-md-6 mb-3  ">
                 <label for="UserRole">Login Role</label>
                 <div class="dropdown-box" (click)="toggleDropdown($event)" tabindex="0">
-                  <div class="selected-items" >
+                  <div class="selected-items " >
                     <span *ngIf="selectedRoles.length === 0" class="selected-role">Select Login Role</span>
                     <span *ngFor="let role of selectedRoles" class="selected-role">
                       {{ getRoleLabel(role) }}

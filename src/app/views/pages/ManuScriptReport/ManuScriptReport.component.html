@@ -19,20 +19,21 @@
       <div class="row accordionColor " *ngIf="this.ManuscriptData?.length>0; else NoData">
         <div class="table-responsive">
           <table class="table table-bordered  table-hover">
-            <thead>
-              <tr>
-                <th> Sr.No</th>
-                <th *ngFor="let col of ManuscriptdisplayedColumns">{{ displayedManuscriptColumnHeaders[col] }}</th>
+            <thead >
+              <tr >
+                <th class="text-center"> Sr.No</th>
+                <th class="text-center" *ngFor="let col of ManuscriptdisplayedColumns">{{ displayedManuscriptColumnHeaders[col] }}</th>
               </tr>
             </thead>
             <tbody>
               <tr *ngFor="let row of paginatedManuscriptData; let i = index">
-                <td>{{ i + 1 }}</td>
-                <td *ngFor="let col of ManuscriptdisplayedColumns">
+                <td class="text-center">{{ i + 1 }}</td>
+                <td *ngFor="let col of ManuscriptdisplayedColumns" class="text-center">
                   <ng-container [ngSwitch]="col">
 
-                    <button *ngSwitchCase="'fileUrl'" class="btn btn-dark" (click)="onSelectFileManuscriptX(row[col])">
-                      View File
+                    <button *ngSwitchCase="'fileUrl'" class="btn btn-dark btn-sm " (click)="onSelectFileManuscriptX(row[col])">
+                      <!-- View File -->
+                      <i class="bi bi-file-earmark-text "></i>
                     </button>
 
                     <span *ngSwitchDefault>{{ row[col] }}</span>

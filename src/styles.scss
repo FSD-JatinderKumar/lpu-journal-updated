@@ -30,26 +30,61 @@
     
 // }
 
-html, body {
-    height: 100%;
-    margin: 0;
-  }
+// html, body {
+//     height: 100%;
+//     margin: 0;
+//   }
   
-  body {
-    display: flex;
-    flex-direction: column;
-    background-color: #FDFFF7 !important;
-  }
+//   body {
+//     display: flex;
+//     flex-direction: column;
+//     background-color: #FDFFF7 !important;
+//   }
   
-  app-root {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-  }
+//   app-root {
+//     display: flex;
+//     flex-direction: column;
+//     min-height: 100vh;
+//   }
   
-  main {
-    flex: 1;
-  }
-  .accordionColor{
-    background-color: #FDFFF7 !important;
-}
+//   main {
+//     flex: 1;
+//   }
+//   .accordionColor{
+//     background-color: #FDFFF7 !important;
+// }
+
+// html, body {
+//   height: 100%;
+//   margin: 0;
+//   width: 100%;           /* Ensure full width, no overflow */
+//   overflow-x: hidden;    /* Prevent horizontal scrolling globally */
+// }
+
+// body {
+//   display: flex;
+//   flex-direction: column;
+//   background-color: #FDFFF7 !important;
+// }
+
+// app-root {
+//   display: flex;
+//   flex-direction: column;
+//   min-height: 100vh;
+//   width: 100%;           /* Ensure app-root stays within bounds */
+//   overflow-x: hidden;    /* Prevent horizontal scrolling at app level */
+// }
+
+// main {
+//   flex: 1;
+//   width: 100%;           /* Keep main content within viewport */
+//   overflow-x: hidden;    /* Prevent horizontal scrolling in main */
+// }
+
+// .accordionColor {
+//   background-color: #FDFFF7 !important;
+// }
+// app-journalfooter {
+//   width: 100%;
+//   overflow-x: hidden;
+// }

@@ -15,12 +15,12 @@
                     <!--  -->
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="policiesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Journals
+                            Manuscript
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="policiesDropdown">
                             
-                            <li><a class="dropdown-item" (click)="VisitPage('AllJournals')">View all </a></li>
-                            <li><a class="dropdown-item" (click)="VisitPage('UpdateJournalsDetails')">Update </a></li>
+                            <li><a class="dropdown-item" (click)="VisitPage('EditorDashboard')">View all </a></li>
+                            <!-- <li><a class="dropdown-item" (click)="VisitPage('UpdateJournalsDetails')">Assign Managing Editor </a></li> -->
                         </ul>
                     </li>
                     <li class="nav-item dropdown">
@@ -28,11 +28,11 @@
                             User Details
                         </a>
                         <ul class="dropdown-menu dropDownWidth" aria-labelledby="UserDropdown">
-                            <li><a class="dropdown-item" (click)="VisitUserPage('P',0,'AllUsersDetails')">Editors </a></li>                             
-                            <li><a class="dropdown-item" (click)="VisitUserPage('P',1,'AllUsersDetails')">Authors </a></li>                             
-                            <li><a class="dropdown-item" (click)="VisitUserPage('P',2,'AllUsersDetails')">Reviewers </a></li>                             
-                            <li><a class="dropdown-item" (click)="VisitUserPage('P',4,'AllUsersDetails')">Managing Editors </a></li>                             
-                            <li><a class="dropdown-item" (click)="VisitUserPage('P',99,'AllUsersDetails')">View all </a></li>
+                            <li><a class="dropdown-item" (click)="VisitUserPage('E',0,'AllUsersDetails')">Editors </a></li>                             
+                            <li><a class="dropdown-item" (click)="VisitUserPage('E',1,'AllUsersDetails')">Authors </a></li>                             
+                            <li><a class="dropdown-item" (click)="VisitUserPage('E',2,'AllUsersDetails')">Reviewers </a></li>                             
+                            <li><a class="dropdown-item" (click)="VisitUserPage('E',4,'AllUsersDetails')">Managing Editors </a></li>                             
+                            <li><a class="dropdown-item" (click)="VisitUserPage('E',99,'AllUsersDetails')">View all </a></li>
                         </ul>
                     </li>
                     <li class="nav-item dropdown">
@@ -70,7 +70,7 @@
                     </label> -->
                 </div>
                 <div class="col-md-4">
-                    <label class="text-success text-center fs-3 fw-bolder "> Lpu e-Journal Publisher Dashboard </label>
+                    <label class="text-success text-center fs-3 fw-bolder "> Lpu e-Journal Editors Dashboard </label>
                 </div>
                 <div class="col-md-4">
                     <!-- <label class=" form-label fw-bolder" >Department
