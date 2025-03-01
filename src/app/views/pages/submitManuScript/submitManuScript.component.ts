@@ -150,7 +150,7 @@ export class SubmitManuScriptComponent implements OnInit {
       error: (err) => {
         console.error('Error fetching user roles:', err);
         this.UserRolesArray = []; // Reset array on error
-        this.LoginFalied();
+        // this.LoginFalied();
       }
     });
   }
@@ -191,7 +191,14 @@ export class SubmitManuScriptComponent implements OnInit {
         this.supervisorName = retrievedCookies.SupervisorName;
         this.departmentName = retrievedCookies.DepartmentName;
         this.candidateName = retrievedCookies.CandidateName;
-        this.isLoginFailed=false;
+        if(this.storageService.getUser===Token)
+        {
+          this.isLoginFailed=false;
+        }
+        else
+        {
+          this.isLoginFailed=true;
+        }
       } catch (error) {
        console.log("error")        ;
       }
