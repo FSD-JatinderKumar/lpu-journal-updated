@@ -2,11 +2,19 @@
 <app-journalmenubar></app-journalmenubar>
 <app-journal-inner-menu></app-journal-inner-menu>
 <div class="row" id="ActionPage" *ngIf="isLoginFailed===false; else loginFailed">
-  <div class="row d-flex justify-content-center mt-2">
+  <!-- <div class="row d-flex justify-content-center mt-2">
     <div class="col-md-10 text-center">
       <label class=" mt-4 text-dark fs-4"> Journal Title <span class=" ms-3 text-danger ">
           {{this.JournalTitle}}</span></label>
+          <h1>
+            {{this.JournalTitle}}
+          </h1>
     </div>
+  </div> -->
+  <div class="main-heading text-center mt-5">
+    <h1>
+      {{this.JournalTitle}}
+    </h1>
   </div>
   <div class="row  p-4">
     <div class="col-12 m-3 stretch-card">

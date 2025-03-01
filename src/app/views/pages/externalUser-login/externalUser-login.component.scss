@@ -26,22 +26,37 @@
 text-decoration: underline;
 font-weight: 600 ;
 }
+// button{
+//     background-color: #fd6c04!important;
+//     color:white;
+//     margin-top: 0rem;
+//     box-shadow: 0px 0px 4px 3px rgba(0, 0, 0, 0.2);
+//     margin-left: 0.5rem;
+// }
+// button:hover
+// {
+//     background-color: brown!important;
+//     color:white;
+// }
 .loginButton{
   padding: 1px 5px;
-  color: #003365;
+  color:white;
   font-weight: normal;
   font-size: 100%;
+  width: 6.5rem;
   font-family: verdana, geneva, arial, helvetica, sans-serif;
-  background-color: #cecece;
-  background-image: linear-gradient(#e4e4e4 50%, #cecece 100%);
-  border: 1px solid #cecece;
+  background-color: #fd6c04!important;
+  // background-image: linear-gradient(#e4e4e4 50%, #cecece 100%);
+  // border: 1px solid #cecece;
   border-radius: 0.35em;
   box-shadow: 1px 1px 2px #555555;
   cursor: pointer;
 }
 .loginButton:hover{
   // background-image: linear-gradient(#dedede 50%, #eeeaea 100%);
-  border: 2px solid #777777;
+  // border: 2px solid #777777;
+  color:white;
+  background-color: brown!important;
   cursor: pointer;
 }
   .auth-side-wrapper {
