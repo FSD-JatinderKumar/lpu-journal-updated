@@ -111,10 +111,12 @@ import { ManuscriptDetailsComponent } from './views/pages/Journal-Editors/Manusc
     UpdateJournalDetailsComponent, 
 
     EditorHeaderComponent, 
-    ManuscriptDetailsComponent
+    ManuscriptDetailsComponent, 
+    ExternalUserLoginComponent
 
     
   ],
+  exports: [TopsliderComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -144,9 +146,10 @@ import { ManuscriptDetailsComponent } from './views/pages/Journal-Editors/Manusc
     UpdateJournalDetailsModule, 
 
     EditorHeaderModule,
-    ManuscriptDetailsModule
+    ManuscriptDetailsModule,
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+ 
 })
 export class AppModule { }

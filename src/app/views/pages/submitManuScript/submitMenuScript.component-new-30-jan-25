@@ -211,7 +211,7 @@ export class SubmitManuScriptComponent implements OnInit {
     // console.log('Saving all cart items:', this.cartItems);
     // Logic to save all items to backend
     if (this.cartItems.length === 0) {
-      console.log("No files to save.");
+     // console.log("No files to save.");
       return;
     }
 
@@ -345,7 +345,7 @@ export class SubmitManuScriptComponent implements OnInit {
   /** Generate ZIP file with all attached files */
   async downloadAllAsZip() {
     if (this.cartItems.length === 0) {
-      console.log("No files to download.");
+     // console.log("No files to download.");
       return;
     }
 

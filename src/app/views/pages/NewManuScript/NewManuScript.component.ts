@@ -116,7 +116,7 @@ export class NewManuScriptComponent implements OnInit {
       if (response.item1 && response.item1.length > 0) {
         this.UserRolesData = response.item1[0];
         // this.UserRoles = this.UserRolesData.userRole;
-        console.log(JSON.stringify(this.UserRolesData))
+        // console.log(JSON.stringify(this.UserRolesData))
         //  alert(JSON.stringify(this.UserRoles))
       }
       else {

@@ -8,33 +8,30 @@
           {{this.JournalTitle}}</span></label>
     </div>
   </div>
-
-  <div class="row mt-4 mb-4 d-flex justify-content-center p-3">
-    <div class="col-md-12 grid-margin stretch-card ">
-      <div class="card">
-        <div class="card-body">
-          <div class="row d-flex justify-content-around">
-            <label class="col-md-3 form-label " style="font-weight: 700;">User Name
+  <div class="row  p-4">
+    <div class="col-12 m-3 stretch-card">
+      <div class="card  ">
+        <div class="card-body  ">
+          <div class="row d-flex justify-content-center">
+            <label class="col-md-3  ">User Name
             </label>
-            <label class="col-md-3 form-label text-dark  "
-              style="text-align: right; font-weight: 700;">{{this.candidateName}} </label>
-
-            <label class="col-md-3 form-label  " style="font-weight: 700;">Email Id</label>
-            <label class="col-md-3 form-label text-dark " style="text-align: right;font-weight: 700;">
+            <label class="col-md-3  text-dark  " >{{this.candidateName}} </label>
+  
+            <label class="col-md-3   ">Email Id</label>
+            <label class="col-md-3  text-dark ">
               {{this.userId?.length>0 ? this.userId: 'NA' }}
             </label>
-
           </div>
         </div>
-
       </div>
+  
     </div>
   </div>
 
   <nav>
     <div class="nav nav-tabs mt-4 d-flex justify-content-center" id="nav-tab" role="tablist">
-      <button *ngFor="let action of UserRolesArray; let i = index" class="btn btn-sm btn-danger me-5"
-        id="{{ action.id }}-tab" data-bs-toggle="tab" style="padding: .25rem 3rem;"
+      <button *ngFor="let action of UserRolesArray; let i = index" class="btn btn-sm btn-danger me-2"
+        id="{{ action.id }}-tab" data-bs-toggle="tab" style="padding: .15rem 2rem;"
         [attr.data-bs-target]="'#' + action.id" type="button" role="tab" [attr.aria-controls]="action.id"
         [class.active]="i === 0" [attr.aria-selected]="i === 0 ? 'true' : 'false'">
         {{ action.label }}
@@ -149,21 +146,22 @@
                     </div>
                   </div>
 
-                  <div class="row ">
+                  <div class="row d-flex justify-content-center ">
                     <div class="col-md-2">
                       <label for="file" class="form-label">Upload File:</label>
                     </div>
                     <div class="col-md-4">
-                      <input type="file" id="File" name="File" formControlName="file" class="form-control"
-                        style="width: auto;" (change)="onFileSelected($event)" accept="*.*" />
+                      <input type="file" id="File" name="File" formControlName="file" class="form-control "
+                        style="width: 16rem;" (change)="onFileSelected($event)" accept="*.*" />
                     </div>
-                    <div class="col-md-6 text-start text-danger"> If file size > 20 MB kindly send additional file
-                      to Editor In Chief</div>
+                    <div class="col-md-6 text-danger">
+                      <label class="form-label"> If file size > 20 MB kindly send additional file to Editor In Chief.</label>
+                    </div>
                   </div>
 
                   <div class="row">
                     <div class="col-md-12 text-center">
-                      <button type="submit" class="btn btn-primary" [disabled]="scriptUploadForm.invalid">Attach
+                      <button type="submit" class="btn btn-danger btn-sm" [disabled]="scriptUploadForm.invalid">Attach
                         More Document</button>
                     </div>
                   </div>
@@ -297,29 +295,28 @@
           <div class="text-center">
             <h2 class="text-center text-danger mb-5"> Editor Section </h2>
           </div>
-          <div class="container-fluid table-bordered table-responsive ">
-            <div class="row">
+            <div class="row m-4">
               <div class="col-md-12 stretch-card">
-                <div class="card accordionColor ">
-                  <div class="card-body accordionColor " *ngIf="this.EditorData?.length>0; else NoData">
+                <div class="card  ">
+                  <div class="card-body  " *ngIf="this.EditorData?.length>0; else NoData">
                     <div class="table-responsive">
                       <table class="table table-bordered">
                         <thead>
                           <tr>
-                            <th *ngFor="let col of EditordisplayedColumns">{{ displayedEditorColumnHeaders[col] }}</th>
+                            <th> Sr.No</th>
+                            <th *ngFor="let col of EditordisplayedColumns;">{{ displayedEditorColumnHeaders[col] }}</th>
                           </tr>
                         </thead>
                         <tbody>
-                          <tr *ngFor="let row of paginatedEditorData">
+                          <tr *ngFor="let row of paginatedEditorData let i = index">
+                            <td>{{ i + 1 }}</td>
                             <td *ngFor="let col of EditordisplayedColumns">
                               <ng-container [ngSwitch]="col">
-                                <!-- File URL Case -->
                                 <button *ngSwitchCase="'fileUrl'" class="btn btn-dark btn-sm"
                                   (click)="onSelectFileEditorX(row[col])">
                                   <i class="bi bi-file-earmark-text"></i>
                                 </button>
 
-                                <!-- Take Action Button -->
                                 <button *ngSwitchCase="'journalId'" class="btn btn-danger btn-sm"
                                   (click)="onTakeAction(row)" data-bs-toggle="modal"
                                   data-bs-target="#assignReviewerModal">
@@ -333,7 +330,6 @@
                         </tbody>
                       </table>
 
-                      <!-- Pagination Controls -->
                       <div class="pagination-controls">
                         <button (click)="previousPageEditor()" [disabled]="currentPageEditor === 1">Previous</button>
                         <span> Page {{ currentPageEditor }} of {{ totalPagesEditor }} </span>
@@ -351,7 +347,6 @@
                 </div>
               </div>
             </div>
-          </div>
         </div>
 
         <!-- Publisher Section -->

@@ -619,7 +619,7 @@ ReviewercolumnHeaders: { [key: string]: string } = {
   };
 
   onTakeAction2(rowData: any) {
-    console.log('Taking action on journal:', JSON.stringify(rowData));
+    // console.log('Taking action on journal:', JSON.stringify(rowData));
   }
 
   submitReviewerForm() {
