@@ -86,11 +86,11 @@ export class SubmitManuScriptComponent implements OnInit {
     const name: string = this.route.snapshot.params['name'];
   
     this.newJournalTitle = name.replace(/-/g, ' ');
-    this.LoginStatus = this.checkUserLogin();
     if (!this.storageService.isLoggedIn()) {
       this.VisitUrl(bookId, name, 'ExternalLogin');
       return;  
     }
+    this.LoginStatus = this.checkUserLogin();
   
    
   
@@ -387,66 +387,151 @@ export class SubmitManuScriptComponent implements OnInit {
   AllSubItemTypes: any;
   AllSubmissionTypes: any;
   selectedOption: string = 'zip';  
+  // uploadFile() {
+  //   const reader = new FileReader();
+  //   const fileName = 'merged-files.zip';
+  //     if (this.generatedFile) {
+  //       if (this.generatedFile.size > 54991576) {
+  //         Swal.fire({
+  //           title: 'File size exceeds 50MB. Please upload a smaller file.',
+  //           text: 'Invalid File size',
+  //           icon: 'warning'
+  //         });
+  //         this.fileData = null;
+  //         this.fileStatus = false;
+  //         return;
+  //       }
+  
+  //       reader.readAsDataURL(this.generatedFile);
+  //       reader.onload = () => {
+  //         const result = reader.result as string;
+  //         const resultArray = result.split(',');
+  //         this.FileData = resultArray[1];
+  //         this.fileStatus = true;
+  //       };
+  //     } else {
+  //       this.fileData = null;
+  //       this.fileStatus = false;
+  //     }
+  //   // Initialize the variables as empty strings
+  //   this.AllManuScriptType = "";        this.AllSubItemTypes = "";    this.AllSubmissionTypes = "";  
+  //   // Populate the variables with concatenated values
+  //   this.cartItems.forEach(item => {
+  //     this.AllManuScriptType += item.ManuScriptType + ',';
+  //     this.AllSubItemTypes += item.SubItemType=='Select'? 'NA' :item.SubItemType + ',';
+  //     this.AllSubmissionTypes += item.SubmissionType + ',';
+  //   });
+  
+  //   // Remove the trailing comma (optional for cleaner data)
+  //   this.AllManuScriptType = this.AllManuScriptType.replace(/,$/, '');
+  //   this.AllSubItemTypes = this.AllSubItemTypes.replace(/,$/, '');
+  //   this.AllSubmissionTypes = this.AllSubmissionTypes.replace(/,$/, '');
+  
+  //   // Create the FormData object
+  //   const formData = new FormData();
+  //   formData.append('JournalId', this.JournalId);
+  //   formData.append('JournalTitle', this.JournalTitle);
+  //   formData.append('ManuScriptType', this.AllManuScriptType);
+  //   formData.append('SubmissionType', this.AllSubmissionTypes);
+  //   formData.append('SubItemType', this.AllSubItemTypes);
+  //   formData.append('UserId', this.userId);
+  //   formData.append('EditorInchief', this.EditorInChief);
+  //   formData.append('FileUrl', fileName);
+  //   formData.append('File', this.FileData);
+  
+  //   // Call the API
+  //   this.journalWebApiService.AddNewJournalMenuScriptData(formData).subscribe({
+  //     next: (data) => {
+  //       let result = data.item1[0]['msg'];
+  //       let errorCode = data.item1[0]['returnId'];
+  
+  //       if (result === 'OK') {
+  //         Swal.fire({
+  //           title: 'Manuscripts are Uploaded and Saved Successfully',
+  //           text: data.item1[0]['msg'],
+  //           icon: 'success',
+  //         }).then(() => {
+  //           window.location.reload();
+  //         });
+  //       } else {
+  //         Swal.fire({
+  //           title: 'Some Technical Issue',
+  //           text: result,
+  //           icon: 'error',
+  //         }).then(() => {
+  //           window.location.reload();
+  //         });
+  //       }
+  //     },
+  //     error: (err) => {
+  //       Swal.fire({
+  //         title: 'Error Occurred',
+  //         text: 'Unable to complete the request. Please try again later.',
+  //         icon: 'error',
+  //       });
+  //     }
+  //   });
+  //   this.scriptUploadForm.reset();  // Reset the form after adding
+  // }
+   
+
+
+
   uploadFile() {
-    // this.generateZip();
+    alert(0)
     const reader = new FileReader();
     const fileName = 'merged-files.zip';
-
-    if (!this.generatedFile) {
+  
+    if (this.generatedFile) {
+      if (this.generatedFile.size > 54991576) {
+        Swal.fire({
+          title: 'File size exceeds 50MB. Please upload a smaller file.',
+          text: 'Invalid File size',
+          icon: 'warning'
+        });
+        this.fileData = null;
+        this.fileStatus = false;
+        return;
+      }
+  
+      reader.readAsDataURL(this.generatedFile);
+      reader.onload = () => {
+        const result = reader.result as string;
+        const resultArray = result.split(',');
+        this.FileData = resultArray[1];
+        this.fileStatus = true;
+      };
+    } else {
+      this.fileData = null;
+      this.fileStatus = false;
+    }
+  
+    // ✅ Ensure `cartItems` exists and is not empty
+    if (!Array.isArray(this.cartItems) || this.cartItems.length === 0) {
       Swal.fire({
-        title: 'Error',
-        text: 'No file generated. Please generate a ZIP or PDF before uploading.',
-        icon: 'error'
+        title: 'Cart is Empty',
+        text: 'Please add at least one manuscript before uploading.',
+        icon: 'warning'
       });
       return;
     }
-    else{
-
-      if (this.generatedFile) {
-        if (this.generatedFile.size > 54991576) {
-          Swal.fire({
-            title: 'File size exceeds 50MB. Please upload a smaller file.',
-            text: 'Invalid File size',
-            icon: 'warning'
-          });
-          this.fileData = null;
-          this.fileStatus = false;
-          return;
-        }
   
-        reader.readAsDataURL(this.generatedFile);
-        reader.onload = () => {
-          const result = reader.result as string;
-          const resultArray = result.split(',');
-          this.FileData = resultArray[1];
-          this.fileStatus = true;
-        };
-      } else {
-        this.fileData = null;
-        this.fileStatus = false;
-      }
+    // ✅ Handle single record case explicitly
+    if (this.cartItems.length === 1) {
+      const item = this.cartItems[0]; // Get the single record
+  
+      this.AllManuScriptType = item.ManuScriptType || 'NA';
+      this.AllSubItemTypes = item.SubItemType === 'Select' ? 'NA' : item.SubItemType;
+      this.AllSubmissionTypes = item.SubmissionType || 'NA';
+    } else {
+      // ✅ Process multiple records
+      alert(2);
+      this.AllManuScriptType = this.cartItems.map(item => item.ManuScriptType || 'NA').join(',');
+      this.AllSubItemTypes = this.cartItems.map(item => item.SubItemType === 'Select' ? 'NA' : item.SubItemType).join(',');
+      this.AllSubmissionTypes = this.cartItems.map(item => item.SubmissionType || 'NA').join(',');
     }
   
-    
-  
-    // Initialize the variables as empty strings
-    this.AllManuScriptType = "";
-    this.AllSubItemTypes = "";
-    this.AllSubmissionTypes = "";
-  
-    // Populate the variables with concatenated values
-    this.cartItems.forEach(item => {
-      this.AllManuScriptType += item.ManuScriptType + ',';
-      this.AllSubItemTypes += item.SubItemType=='Select'? 'NA' :item.SubItemType + ',';
-      this.AllSubmissionTypes += item.SubmissionType + ',';
-    });
-  
-    // Remove the trailing comma (optional for cleaner data)
-    this.AllManuScriptType = this.AllManuScriptType.replace(/,$/, '');
-    this.AllSubItemTypes = this.AllSubItemTypes.replace(/,$/, '');
-    this.AllSubmissionTypes = this.AllSubmissionTypes.replace(/,$/, '');
-  
-    // Create the FormData object
+    // ✅ Create FormData object
     const formData = new FormData();
     formData.append('JournalId', this.JournalId);
     formData.append('JournalTitle', this.JournalTitle);
@@ -458,16 +543,19 @@ export class SubmitManuScriptComponent implements OnInit {
     formData.append('FileUrl', fileName);
     formData.append('File', this.FileData);
   
-    // Call the API
+    // ✅ Call the API for Email Sending
     this.journalWebApiService.AddNewJournalMenuScriptData(formData).subscribe({
       next: (data) => {
         let result = data.item1[0]['msg'];
         let errorCode = data.item1[0]['returnId'];
   
         if (result === 'OK') {
+          // ✅ Send email after successful upload
+          // this.sendEmailNotification(this.userId);
+  
           Swal.fire({
-            title: 'Manuscripts are Uploaded and Saved Successfully',
-            text: data.item1[0]['msg'],
+            title: 'Manuscripts Uploaded Successfully',
+            text: 'Your manuscripts have been saved successfully.',
             icon: 'success',
           }).then(() => {
             window.location.reload();
@@ -490,9 +578,25 @@ export class SubmitManuScriptComponent implements OnInit {
         });
       }
     });
-    this.scriptUploadForm.reset();  // Reset the form after adding
+  
+    this.scriptUploadForm.reset(); // Reset the form after upload
   }
-   
+  
+  // ✅ New function to send an email notification
+  // sendEmailNotification(userId: string) {
+  //   const emailPayload = {
+  //     userId: userId,
+  //     subject: 'Manuscript Upload Confirmation',
+  //     body: 'Your manuscripts have been uploaded successfully.'
+  //   };
+  
+  //   this.journalWebApiService.sendEmail(emailPayload).subscribe({
+  //     next: () => console.log('Email sent successfully'),
+  //     error: (err) => console.error('Error sending email', err)
+  //   });
+  // }
+
+  
   generatedFile: Blob | null = null; // Store generated file data
 
   generateZip() {
@@ -782,7 +886,7 @@ selectedReviewerId: string = '';
 reviewerList: any[] = [];
   loadReviewers(id:any) {
     // API call to fetch reviewer list
-    this.journalWebApiService.GetAllReviewersForJournalId(id).subscribe({
+    this.journalWebApiService.GetReviewerDetailsForEditors(this.userId).subscribe({
       next: (dataX: any) => {
         this.dataSource = dataX.item1;
         this.reviewerList = dataX.item1;

@@ -53,10 +53,17 @@ export class ManuScriptReportComponent implements OnInit {
 
   dataLoaded: boolean = false;
 
+  VisitUrl(Id: any, name: any, Sufix: any) {
+    this.router.navigateByUrl(Id + '/' + name + '/' + Sufix);
+  }
   ngOnInit(): void {
     this.serverUrl = 'https://files.lpu.in/umsweb/Journal/';
     let BookId = this.route.snapshot.params['Id'];
     let name = this.route.snapshot.params['name'];
+    if (!this.storageService.isLoggedIn()) {
+      this.VisitUrl(BookId, name, 'ExternalLogin');
+      return;  
+    }
     let loginStatus = this.checkUserLogin();
     if (BookId != undefined && BookId != null) {
       this.BookId = BookId;

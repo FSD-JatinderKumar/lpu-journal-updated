@@ -57,7 +57,7 @@ export class ManuscriptDetailsComponent implements OnInit {
   ngOnInit(): void {
     this.serverUrl='https://files.lpu.in/umsweb/Journal/';
     this.BookId  = '45';// this.route.snapshot.params['Id'];
-    this.name  = 'Test Name Journal';//this.route.snapshot.params['name'];
+    this.name  = this.JournalTitle ='Test Name Journal';//this.route.snapshot.params['name'];
     let loginStatus = this.checkUserLogin();
     // this.getBooksDetail();
     this.showEditorData(this.BookId);
@@ -254,7 +254,7 @@ EditorDataColumns: any;
   reviewerList: any[] = [];
   loadReviewers(id:any) {
     // API call to fetch reviewer list
-    this.journalWebApiService.GetAllReviewersForJournalId(id).subscribe({
+    this.journalWebApiService.GetReviewerDetailsForEditors(this.userId).subscribe({
       next: (dataX: any) => {
         this.dataSource = dataX.item1;
         this.reviewerList = dataX.item1;

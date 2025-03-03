@@ -1,14 +1,95 @@
 
 @media (prefers-reduced-motion: no-preference) {
 	:root {
-		scroll-behavior: auto !important;
+		scroll-behavior: auto;
 	}
 }
 
-body,
-html {
-  font-family: "Montserrat", sans-serif;
+@media (min-width: 576px) {
+	.card-columns {
+		-moz-column-count: 3;
+		column-count: 3;
+		-moz-column-gap: 1.25rem;
+		column-gap: 1.25rem;
+		orphans: 1;
+		widows: 1;
+	}
+	.card-columns.grid-2 {
+		-moz-column-count: 2;
+		column-count: 2;
+	}
+	.card-columns > * {
+		display: inline-block;
+		width: 100%;
+	}
 }
+
+.form-group {
+	margin-bottom: 1rem;
+}
+
+
+/* ----------------------------------------------------------------
+	Basic
+-----------------------------------------------------------------*/
+
+dl, dt, dd, ol, ul, li {
+	margin: 0;
+	padding: 0;
+}
+
+.clear {
+	clear: both;
+	display: block;
+	font-size: 0px;
+	height: 0px;
+	line-height: 0;
+	width: 100%;
+	overflow:hidden;
+}
+
+::-moz-selection {
+	background: #ef7d00;
+	color: #FFF;
+	text-shadow: none;
+}
+
+::selection {
+	background: #ef7d00;
+	color: #FFF;
+	text-shadow: none;
+}
+
+::-moz-selection {
+	background: #ef7d00; /* Firefox */
+	color: #FFF;
+	text-shadow: none;
+}
+
+::-webkit-selection {
+	background: #ef7d00; /* Safari */
+	color: #FFF;
+	text-shadow: none;
+}
+
+:active,
+:focus { outline: none !important; }
+
+
+/* ----------------------------------------------------------------
+	Typography
+-----------------------------------------------------------------*/
+
+
+body {
+	line-height: 1.5;
+	color: #555;
+  font-family: "Montserrat", sans-serif;
+	background-color: #FDFFF7 !important;
+	overflow-x: hidden;
+	font-size:14px;
+}
+ 
 
 .topbar {
   background-color: #e47200;

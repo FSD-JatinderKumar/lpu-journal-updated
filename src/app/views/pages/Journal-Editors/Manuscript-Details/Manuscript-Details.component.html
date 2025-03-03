@@ -33,11 +33,13 @@
                     <td *ngFor="let col of displayedEditorColumns">
                       <ng-container [ngSwitch]="col">
                         <button *ngSwitchCase="'fileUrl'" class="btn btn-dark" (click)="onSelectFileEditorX(row[col])">
-                          View File
+                          <!-- View File -->
+                          <i class="bi bi-file-earmark-text"></i>
                         </button>
                         <button *ngSwitchCase="'journalId'" class="btn btn-primary" (click)="onTakeAction(row)"
                           data-bs-toggle="modal" data-bs-target="#assignReviewerModal">
-                          Assign
+                          <!-- Assign -->
+                          <i class="bi bi-exclamation-circle"></i>
                         </button>
                         <span *ngSwitchDefault>{{ row[col] }}</span>
                       </ng-container>
@@ -113,6 +115,48 @@
       </div>
       <div class="modal-body">
         <form (ngSubmit)="assignReviewer()">
+          <!-- <div class="mb-3 " [hidden]="true">
+            <label class="form-label d-none">Journal ID:</label>
+            <input type="text" class="form-control d-none" [(ngModel)]="selectedJournalId" name="journalId" readonly />
+          </div> -->
+          <div class="mb-3">
+            <label class="form-label">Journal </label>
+            <input type="text" class="form-control" [(ngModel)]="JournalTitle" name="journalId" readonly />
+          </div>
+        
+          <div class="mb-3">
+            <label for="reviewerDropdown" class="form-label">Select Reviewer:</label>
+            <select id="reviewerDropdown" class="form-select" [(ngModel)]="selectedReviewerId" name="reviewerId" required>
+              <option value="" disabled>Select Reviewer</option>
+              <option *ngFor="let reviewer of reviewerList" [value]="reviewer.emailId">
+                {{ reviewer.candidateName }}
+              </option>
+            </select>
+          </div>
+        
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-success" [disabled]="selectedReviewerId === ''">Assign
+              Reviewer</button>
+          </div>
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 
+<div class="modal fade" id="assignReviewerModal" tabindex="-1" aria-labelledby="assignReviewerModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="assignReviewerModalLabel">Assign Reviewer</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form (ngSubmit)="assignReviewer()">
           <div class="mb-3">
             <label class="form-label">Journal ID:</label>
             <input type="text" class="form-control" [(ngModel)]="selectedJournalId" name="journalId" readonly />
@@ -137,4 +181,4 @@
       </div>
     </div>
   </div>
-</div>
+</div> -->

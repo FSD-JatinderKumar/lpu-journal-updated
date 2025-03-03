@@ -3,41 +3,42 @@
 <app-journal-inner-menu></app-journal-inner-menu>
 <div class="row" id="ActionPage" *ngIf="isLoginFailed===false; else loginFailed">
   <div class="row d-flex justify-content-center mt-2">
-    <div class="col-md-10 text-center">
+    <!-- <div class="col-md-10 text-center">
       <label class=" mt-4 text-dark fs-4"> Journal Title <span class=" ms-3 text-danger ">
           {{this.JournalTitle}}</span></label>
+    </div> -->
+    <div class="main-heading text-center mt-5">
+      <h1>
+        {{this.JournalTitle}}
+      </h1>
     </div>
   </div>
 
-  <div class="row mt-4 mb-4 d-flex justify-content-center p-3">
-    <div class="col-md-12 grid-margin stretch-card ">
+  <div class="row mt-2 mb-4 d-flex justify-content-center p-5">
       <div class="card">
         <div class="card-body">
           <div class="row d-flex justify-content-around">
-            <label class="col-md-3 form-label " style="font-weight: 700;">User Name
+            <label class="col-3"  >User Name
             </label>
-            <label class="col-md-3 form-label text-dark  "
-              style="text-align: right; font-weight: 700;">{{this.candidateName}} </label>
+            <label class="col-3 text-dark  "
+               >{{this.candidateName}} </label>
 
-            <label class="col-md-3 form-label  " style="font-weight: 700;">Email Id</label>
-            <label class="col-md-3 form-label text-dark " style="text-align: right;font-weight: 700;">
+            <label class="col-3 " >Email Id</label>
+            <label class="col-3 text-dark " style="text-align: right;font-weight: 700;">
               {{this.userId?.length>0 ? this.userId: 'NA' }}
             </label>
-
           </div>
         </div>
-
-      </div>
     </div>
   </div>
 
   <nav>
     <div class="nav nav-tabs mt-4 d-flex justify-content-center" id="nav-tab" role="tablist">
-      <button *ngFor="let action of UserRolesArray; let i = index" class="btn btn-sm btn-danger me-5"
-        id="{{ action.id }}-tab" data-bs-toggle="tab" style="padding: .25rem 3rem;"
-        [attr.data-bs-target]="'#' + action.id" type="button" role="tab" [attr.aria-controls]="action.id"
+      <button *ngFor="let action of UserRolesArray; let i = index" class="dashboardButton me-5"
+        id="{{ action.id }}-tab" data-bs-toggle="tab" style="padding: 1.15rem 3.5rem;"
+        [attr.data-bs-target]="'#' + action.id"   role="tab" [attr.aria-controls]="action.id"
         [class.active]="i === 0" [attr.aria-selected]="i === 0 ? 'true' : 'false'">
-        {{ action.label }}
+        {{ action.label }} Dashboard
       </button>
     </div>
   </nav>
@@ -48,14 +49,14 @@
 
       <ng-container [ngSwitch]="action.label">
 
-        <!-- Author Section -->
+        <!-- Author Dashboard -->
         <div *ngSwitchCase="'Author'">
 
           <div class="row d-flex p-3 align-items-center justify-content-center ">
             <div class="col-md-12 grid-margin stretch-card">
 
               <div class="text-center">
-                <h2 class="text-center text-danger mb-2"> Author Section </h2>
+                <h2 class="text-center text-danger mb-2"> Author Dashboard </h2>
               </div>
               <div class="container  ">
                 <div class="row  mb-3">
@@ -171,7 +172,7 @@
                 </form>
               </div>
               <div class="container  ">
-                <!-- Cart Items Section -->
+                <!-- Cart Items Dashboard -->
                 <div class="mt-5" *ngIf="cartItems.length > 0">
                   <h5>Manuscript Details for Submission</h5>
                   <table class="table table-bordered table-hover">
@@ -220,12 +221,12 @@
 
         </div>
 
-        <!-- Reviewer Section -->
+        <!-- Reviewer Dashboard -->
         <div *ngSwitchCase="'Reviewer'">
 
           <div class="row ">
             <div class="text-center">
-              <h2 class="text-center text-danger mb-5"> Reviewer Section </h2>
+              <h2 class="text-center text-danger mb-5"> Reviewer Dashboard </h2>
             </div>
             <div class="container-fluid table-bordered table-responsive ">
               <div class="row">
@@ -292,10 +293,10 @@
           </div>
         </div>
 
-        <!-- Editor Section -->
+        <!-- Editor Dashboard -->
         <div *ngSwitchCase="'Editor'">
           <div class="text-center">
-            <h2 class="text-center text-danger mb-5"> Editor Section </h2>
+            <h2 class="text-center text-danger mb-5"> Editor Dashboard </h2>
           </div>
           <div class="container-fluid table-bordered table-responsive ">
             <div class="row">
@@ -354,10 +355,10 @@
           </div>
         </div>
 
-        <!-- Publisher Section -->
+        <!-- Publisher Dashboard -->
         <div *ngSwitchCase="'Publisher'">
           <div class="text-center">
-            <h2 class="text-center text-danger mb-5"> Publisher Section </h2>
+            <h2 class="text-center text-danger mb-5"> Publisher Dashboard </h2>
           </div>
           <div class="container-fluid table-bordered table-responsive">
             <div class="row justify-content-center">
@@ -383,7 +384,7 @@
           
         </div>
 
-        <!-- Default Section (For any unknown role) -->
+        <!-- Default Dashboard (For any unknown role) -->
         <div *ngSwitchDefault>
           <div class="text-center">
             <h2 class="text-center text-danger mb-5"> Invalid Section </h2>
@@ -401,7 +402,7 @@
                     </div>
                     <div class="row d-flex justify-content-center">
                       <label class="col-md-12 form-label " style="font-weight: 700;">
-                        <p class="text-center">You don't have access to this section.</p>
+                        <p class="text-center">You don't have access to this Dashboard.</p>
                       </label>
                     </div>
                   </div>

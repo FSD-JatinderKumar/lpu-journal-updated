@@ -145,9 +145,23 @@ select{
     margin-top:3.25rem;
     margin-left: 27.5rem;
     margin-bottom: 1rem;
-   
-   
 }
+.dashboardButton {
+  background-color: rgba(0, 0, 0, 0.2) !important;
+  color: #000;
+  font-weight: 600;
+  margin-top: 0rem;
+  // box-shadow: 0px 0px 4px 3px rgba(0, 0, 0, 0.2);
+  margin-left: 0.5rem;
+  border: none;
+}
+
+/* Fix: Apply style when the button is active */
+.dashboardButton.active {
+  background-color: #fd6c04 !important;
+  color: black !important;
+}
+
 // button{
 //     background-color: #fd6c04!important;
 //     color:white;
