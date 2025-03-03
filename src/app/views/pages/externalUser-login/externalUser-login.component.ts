@@ -372,15 +372,20 @@ SetUserData(response: any) {
 
   swal.fire({
     title: 'Login Successful',
-    text: 'Login details are valid!',
+    text: '..',
     icon: 'success',
+    confirmButtonText: 'OK'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      this.AuthSession.addToSession(this.UserData);
+      this.VisitUrl(this.BookId, this.name, 'SubmitManuScript' )
+    }
   });
+  // this.AuthSession.addToSession(this.UserData);
 
-  this.AuthSession.addToSession(this.UserData);
-
-  // Redirect based on user role
-  // this.RedirectToDashboard();
-  this.VisitUrl(this.BookId, this.name, 'SubmitManuScript')
+  // // Redirect based on user role
+  // // this.RedirectToDashboard();
+  // this.VisitUrl(this.BookId, this.name, 'SubmitManuScript')
 }
 
 // Function to redirect based on UserRole

@@ -79,29 +79,83 @@ export class SubmitManuScriptComponent implements OnInit {
     this.router.navigateByUrl(Id + '/' + name + '/' + Sufix);
   }
   isEditor: boolean= false;     isReviewer: boolean= false;   isAuthor: boolean= false;   isOther: boolean= false;
-  isGuest: boolean= false;  newJournalTitle: any;
-  UserRoles: any;
+  isGuest: boolean= false;  newJournalTitle: any; LoginStatus: any;
+  UserRoles: any; name: any;
   ngOnInit(): void {
-    let BookId = this.route.snapshot.params['Id'];
-    let name = this.newJournalTitle = this.route.snapshot.params['name'];
-   this.checkUserLogin();
-    if (BookId != undefined && BookId != null && this.isLoginFailed == false) {
-      this.BookId = BookId;
-      this.JournalId = BookId;
+    const bookId: string | undefined = this.route.snapshot.params['Id'];
+    const name: string = this.route.snapshot.params['name'];
+  
+    this.newJournalTitle = name.replace(/-/g, ' ');
+    this.LoginStatus = this.checkUserLogin();
+    if (!this.storageService.isLoggedIn()) {
+      this.VisitUrl(bookId, name, 'ExternalLogin');
+      return;  
+    }
+  
+   
+  
+    if (bookId !== undefined && this.LoginStatus) {
+      this.BookId = bookId;
+      this.name = name;
+    }
+  
+    if (bookId && !this.isLoginFailed) {
+      this.BookId = bookId;
+      this.JournalId = bookId;
       this.JournalTitle = name.replace(/-/g, ' ');
+  
+      // Fetch required data
+      this.showReviewerData(this.userId);
+      this.showEditorData(this.BookId);
+      this.loadReviewers(this.BookId);
       this.GetJournalDetailsAbout(this.BookId);
       this.showData();
       this.getUserRolesforId();
      
-      this.showReviewerData(this.userId);
-      this.showEditorData(this.BookId);
-      this.loadReviewers(this.BookId);
+    } else { 
+      this.VisitUrl(bookId, this.newJournalTitle, 'ExternalLogin');
     }
-    else { 
-      this.VisitUrl(this.BookId,this.newJournalTitle,'ExternalLogin')
-    }
+  
     this.LoadForm();
   }
+  // ngOnInit(): void {
+  //   let BookId = this.route.snapshot.params['Id'];
+  //   let name = this.newJournalTitle = this.route.snapshot.params['name'];
+
+
+  //   this.LoginStatus=this.checkUserLogin();
+  //   var status=this.storageService.isLoggedIn();
+  //   if (BookId != undefined && this.LoginStatus === true && status==true) {
+  //     this.BookId = BookId;
+  //     this.name = name;
+  //   }
+  //   else if(status==false)
+  //   {
+  //     this.BookId = BookId;
+  //     this.name = name;
+  //     this.LoginStatus=false;
+  //     // this.Logout();
+  //   }
+
+
+  //  this.checkUserLogin();
+  //   if (BookId != undefined && BookId != null && this.isLoginFailed == false) {
+  //     this.BookId = BookId;
+  //     this.JournalId = BookId;
+  //     this.JournalTitle = name.replace(/-/g, ' ');
+  //     // this.GetJournalDetailsAbout(this.BookId);
+  //     // this.showData();
+  //     // this.getUserRolesforId();
+     
+  //     this.showReviewerData(this.userId);
+  //     this.showEditorData(this.BookId);
+  //     this.loadReviewers(this.BookId);
+  //   }
+  //   else { 
+  //     this.VisitUrl(this.BookId,this.newJournalTitle,'ExternalLogin')
+  //   }
+  //   this.LoadForm();
+  // }
   LoadForm() {
     this.scriptUploadForm = this.fb.group({
       journalTitle: [this.JournalTitle],
@@ -894,7 +948,7 @@ showEditorData(journalId: any) {
         this.updatePaginatedDataEditor();
       }
       this.dataShowing = true;
-
+      this.getUserRolesforId();
     },
     error: (error: any) => {
       this.dataShowing = false;

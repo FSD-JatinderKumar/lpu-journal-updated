@@ -37,61 +37,47 @@ export class JournalInnerMenuComponent implements OnInit {
   ngOnInit(): void {
     var BookId = this.route.snapshot.params['Id'];
     var name = this.route.snapshot.params['name'];
-    if (BookId != undefined && BookId != null) {
+    this.LoginStatus=this.checkUserLogin();
+    var status=this.StoragesServices.isLoggedIn();
+    if (BookId != undefined && this.LoginStatus === true && status==true) {
       this.BookId = BookId;
       this.name = name;
-      this.LoginStatus = this.checkUserLogin();
+    }
+    else if(status==false)
+    {
+      this.BookId = BookId;
+      this.name = name;
+      this.LoginStatus=false;
+      // this.Logout();
     }
   }
   checkUserLogin() {
     const GetCookieData = this.cookieService.get('authData');
-    if (GetCookieData) {
-      try {
-        const retrievedCookies = JSON.parse(GetCookieData);
-        this.UserRole = retrievedCookies.userRole?.length > 0 ? retrievedCookies.userRole : 'Internal User';
-        this.user_Email = retrievedCookies.EmailId;
-        this.supervisorName = retrievedCookies.SupervisorName;
-        this.departmentName = retrievedCookies.DepartmentName;
-        this.candidateName = retrievedCookies.CandidateName;
-        return true;
-      } catch (error) {
-        console.error("Error parsing JSON from cookies:", error);
-        return false; // Handle error scenario here
-      }
+    var status=this.StoragesServices.isLoggedIn();
+    if (GetCookieData && status) {
+      return true;
     } else {
       return false;
     }
 
   }
-  // Logout() {
-  //   //authData
-  //   // Delete specific cookies with explicit paths
-  //   this.cookieService.delete('authData', '/');
-  //   this.cookieService.delete('BookData', '/');
-
-  //   this.cookieService.deleteAll('/');
-
-  //   this.AuthSession.clearSession();
-
-  //   this.router.navigateByUrl('/');
-
-  // }
-
   Logout() {
-    // Delete cookies properly
+    // Delete specific cookies
     this.cookieService.delete('authData');
     this.cookieService.delete('BookData');
+  
+    // Ensure all cookies are cleared
     this.cookieService.deleteAll();
   
-    // Clear session storage if used
-    this.AuthSession.clearSession();
-    this.StoragesServices.clean();
+    // Clear session and local storage
     sessionStorage.clear();
     localStorage.clear();
-    this.cookieService.delete('authData');
+  
+    // Ensure session-related services are cleared
     this.AuthSession.clearSession();
     this.StoragesServices.clean();
-    // Reset user variables
+  
+    // Reset user-related variables
     this.UserRole = null;
     this.user_Email = null;
     this.supervisorName = null;
@@ -99,11 +85,41 @@ export class JournalInnerMenuComponent implements OnInit {
     this.candidateName = null;
     this.LoginStatus = false;
   
-    // Navigate to login page instead of reloading
-    this.router.navigate(['/']).then(() => {
+    // Navigate to login page and ensure proper cleanup
+    this.router.navigateByUrl('Home').then(() => {
       setTimeout(() => {
-        window.location.reload();
+        location.reload();
       }, 500);
     });
   }
+  
+  // Logout() {
+  //   // Delete cookies properly
+  //   this.cookieService.delete('authData');
+  //   this.cookieService.delete('BookData');
+  //   this.cookieService.deleteAll();
+  
+  //   // Clear session storage if used
+  //   this.AuthSession.clearSession();
+  //   this.StoragesServices.clean();
+  //   sessionStorage.clear();
+  //   localStorage.clear();
+  //   this.cookieService.delete('authData');
+  //   this.AuthSession.clearSession();
+  //   this.StoragesServices.clean();
+  //   // Reset user variables
+  //   this.UserRole = null;
+  //   this.user_Email = null;
+  //   this.supervisorName = null;
+  //   this.departmentName = null;
+  //   this.candidateName = null;
+  //   this.LoginStatus = false;
+  
+  //   // Navigate to login page instead of reloading
+  //   this.router.navigate(['/']).then(() => {
+  //     setTimeout(() => {
+  //       window.location.reload();
+  //     }, 500);
+  //   });
+  // }
 }

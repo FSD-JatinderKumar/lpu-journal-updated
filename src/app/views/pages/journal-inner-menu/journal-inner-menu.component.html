@@ -75,7 +75,7 @@
                 <li><a (click)="VisitUrl(BookId, name, 'MyManuScript')">My Requests</a></li>
                 </ul>
             </li>
-            <li *ngIf="LoginStatus"><a (click)="Logout()">Logout</a></li>
+            <li *ngIf="LoginStatus=== true;"><a (click)="Logout()">Logout</a></li>
             
             <ng-template #loginRequired>
                 <li>
