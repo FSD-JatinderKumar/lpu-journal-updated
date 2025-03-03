@@ -260,7 +260,7 @@ export class LpujournalbookService {
   GetAllReviewersForJournalId(JournalId:any): Observable<any> {
     let token = this.storageService.getUser();
     let headers = new HttpHeaders()
-    .set('Authorization', 'Bearer ' + this.authToken)
+    .set('Authorization', 'Bearer ' + token)
     return this.http.get(
       // AUTH_API_LOCAL + 'api/LpuJournal/GetAllMenuScriptForUser?Email=' + UserEmail, { headers }
       AUTH_API_LOCAL + 'api/LpuJournal/GetAllReviewersForJournal?Id=' + JournalId, { headers }
@@ -291,7 +291,7 @@ export class LpujournalbookService {
   GetAllJournalEditorDetails(): Observable<any> {
     let token = this.storageService.getUser();
     let headers = new HttpHeaders()
-    .set('Authorization', 'Bearer ' + this.authToken)
+    .set('Authorization', 'Bearer ' + token)
     return this.http.get(
       // AUTH_API_LOCAL + 'api/LpuJournal/GetAllMenuScriptForUser?Email=' + UserEmail, { headers }
       AUTH_API_LOCAL + 'api/LpuJournal/GetAllJournalEditorDetails' , { headers }
