@@ -315,7 +315,7 @@ GetReviewerDetailsForEditors(UserId:any): Observable<any> {
   .set('Authorization', 'Bearer ' + token)
   return this.http.get(
     // AUTH_API_LOCAL + 'api/LpuJournal/GetAllMenuScriptForUser?Email=' + UserEmail, { headers }
-    AUTH_API_LOCALs + 'api/LpuJournal/GetAllReviewersForEditors?UserId=' + UserId, { headers }
+    AUTH_API_LOCAL + 'api/LpuJournal/GetAllReviewersForEditors?UserId=' + UserId, { headers }
   );
 }
 
