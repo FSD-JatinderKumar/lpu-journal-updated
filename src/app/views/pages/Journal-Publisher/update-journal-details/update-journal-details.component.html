@@ -7,7 +7,7 @@
 
       <div class="col-md-12 grid-margin stretch-card">
         <!-- <div class="card accordionColor "> -->
-        <div class="card-body m-5 ">
+        <div class="card-body">
           <h1 class="text-center themeClr"> Update Journal </h1>
         </div>
         <!-- </div> -->
@@ -15,75 +15,74 @@
     </div>
   </div>
 </div>
-<div class="row d-flex p-2 align-items-center justify-content-start">
-
-    <div class="col-sm-2 ms-2">
-        <div class="mb-3 text-begin ">
-            <input [(ngModel)]="searchQueryx" (keyup)="searchx()" id="searchx" type="text" style=" width: 12rem;"
-                class="form-control" placeholder="Type Search Text " aria-label="Search"
-                aria-describedby="basic-addon1" />
-        </div>
+<div class="blockHeight">
+  <div class="row d-flex align-items-center justify-content-start m-3">
+    <div class="col-2 ms-4"> <label class="fw-bolder fs-6 "> Search Journal </label></div>
+    <div class="col-4 ms-2">
+      <div class="mb-3">
+        <input [(ngModel)]="searchQueryx" (keyup)="searchx()" id="searchx" type="text" style=" width: 16rem;"
+          class="form-control" placeholder=" Search Text goes here... " aria-label="Search" aria-describedby="basic-addon1" />
+      </div>
     </div>
-</div>
-<div class="d-flex p-2 align-items-center justify-content-center tableHeight">
+  </div>
+  <div class="d-flex p-2 align-items-center justify-content-center tableHeight">
     <div class="row accordionColor" *ngIf="this.TempAllJournalsDetails.length > 0; else noRecords">
-        <div class="container-fluid">
-            <table id="JournalslDataTableY" class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th class="form-label text-danger">Sr.No</th>
-                        <th class="form-label text-danger">Journal Title</th>
-                        <th class="form-label text-danger">Sub Title</th>
-                        <!-- <th class="form-label text-danger">Published Date</th> -->
+      <div class="container-fluid">
+        <table id="JournalslDataTableY" class="table table-bordered">
+          <thead>
+            <tr>
+              <th class="form-label text-danger">Sr.No</th>
+              <th class="form-label text-danger">Journal Title</th>
+              <th class="form-label text-danger">Sub Title</th>
+              <!-- <th class="form-label text-danger">Published Date</th> -->
 
-                        <th class="form-label text-danger">Image</th>
-                    </tr>
-                </thead>
+              <th class="form-label text-danger">Image</th>
+            </tr>
+          </thead>
 
-                <tbody>
-                    <ng-container *ngFor="let JournalsDataRow of paginatedJournals; let i = index">
-                        <tr>
-                            <td class="form-label text-center">{{ (currentPage - 1) * itemsPerPage + i + 1 }}</td>
-                            <td class="form-label">{{ JournalsDataRow.journalTitle }}</td>
-                            <td class="form-label">
-                                {{
-                                JournalsDataRow.subTitle.split(' ').length > 8
-                                ? JournalsDataRow.subTitle.split(' ').slice(0, 8).join(' ') + '...'
-                                : JournalsDataRow.subTitle
-                                }}
-                            </td>
-                            <!-- <td class="form-label text-center">{{ JournalsDataRow.publishDate | date: 'dd/MM/yyyy' }}
+          <tbody>
+            <ng-container *ngFor="let JournalsDataRow of paginatedJournals; let i = index">
+              <tr>
+                <td class="form-label text-center">{{ (currentPage - 1) * itemsPerPage + i + 1 }}</td>
+                <td class="form-label">{{ JournalsDataRow.journalTitle }}</td>
+                <td class="form-label">
+                  {{
+                  JournalsDataRow.subTitle.split(' ').length > 8
+                  ? JournalsDataRow.subTitle.split(' ').slice(0, 8).join(' ') + '...'
+                  : JournalsDataRow.subTitle
+                  }}
+                </td>
+                <!-- <td class="form-label text-center">{{ JournalsDataRow.publishDate | date: 'dd/MM/yyyy' }}
                             </td> -->
-                            <td class="text-center">
-                                <ng-container *ngIf="JournalsDataRow.imageUrl">
-                                    <button class="btn btn-primary" (click)="onTakeAction(JournalsDataRow)"
-                                        data-bs-toggle="modal" data-bs-target="#UpdateJournalImageModal">
-                                        <i class="bi bi-upload"></i>
-                                    </button>
-                                    <button class="btn btn-dark" (click)="onSelectFile(JournalsDataRow)">
-                                        <i class="bi bi-file-earmark-text"></i>
-                                    </button>
-                                </ng-container>
-                            </td>
-                        </tr>
-                    </ng-container>
-                </tbody>
-            </table>
-        </div>
+                <td class="text-center">
+                  <ng-container *ngIf="JournalsDataRow.imageUrl">
+                    <button class="btn btn-primary" (click)="onTakeAction(JournalsDataRow)" data-bs-toggle="modal"
+                      data-bs-target="#UpdateJournalImageModal">
+                      <i class="bi bi-upload"></i>
+                    </button>
+                    <button class="btn btn-dark" (click)="onSelectFile(JournalsDataRow)">
+                      <i class="bi bi-file-earmark-text"></i>
+                    </button>
+                  </ng-container>
+                </td>
+              </tr>
+            </ng-container>
+          </tbody>
+        </table>
+      </div>
 
-        <div class="d-flex justify-content-start m-3">
-            <button class="btn btn-danger btn-sm" (click)="previousPage()"
-                [disabled]="currentPage === 1">Previous</button>
-            <span class="m-3">Page {{ currentPage }} of {{ totalPages }}</span>
-            <button class="btn btn-danger btn-sm" (click)="nextPage()"
-                [disabled]="currentPage === totalPages">Next</button>
-        </div>
+      <div class="d-flex justify-content-start m-3">
+        <button class="btn btn-danger btn-sm" (click)="previousPage()" [disabled]="currentPage === 1">Previous</button>
+        <span class="m-3">Page {{ currentPage }} of {{ totalPages }}</span>
+        <button class="btn btn-danger btn-sm" (click)="nextPage()" [disabled]="currentPage === totalPages">Next</button>
+      </div>
 
     </div>
 
     <ng-template #noRecords>
-        <p class="fs-2 text-danger text-center">No Data Available.</p>
+      <p class="fs-2 text-danger text-center">No Data Available.</p>
     </ng-template>
+  </div>
 </div>
 
 

@@ -1,9 +1,12 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
+import { AuthService } from 'src/app/_services/auth.service';
 import { LoginSessionService } from 'src/app/_services/login-session.service';
 import { LpujournalbookService } from 'src/app/_services/lpujournalbook.service';
+import { StorageService } from 'src/app/_services/storage.service';
 
 @Component({
   selector: 'app-TopMenuBar',
@@ -23,6 +26,9 @@ export class TopMenuBarComponent implements OnInit {
     private journalWebApiService: LpujournalbookService,
     private AuthSession: LoginSessionService,
     private router: Router, private route: ActivatedRoute,
+    private storageService: StorageService,
+    private authService: AuthService,
+    private fb: FormBuilder,
     private cookieService: CookieService) { }
 
   showSearchForm: boolean = false; show: boolean = true; isSearchOpen: boolean = false;
@@ -53,19 +59,17 @@ VisitPage(Page:any)
   });
 }
   ngOnInit(): void {
-    var BookId = this.route.snapshot.params['Id'];
-    // var name = this.route.snapshot.params['name'];
-    // if (BookId != undefined && BookId != null) {
-    //   this.BookId = BookId;
-    //   this.name = name;
       this.LoginStatus = this.checkUserLogin();
-    //   // this.router.navigateByUrl( '/Home');
-    //   // window.location.reload();
+    
+    // if (!this.storageService.isLoggedIn()) {
+    //   this.goto('');
+    //   return;  
     // }
   }
   checkUserLogin() {
     const GetCookieData = this.cookieService.get('authData');
-    if (GetCookieData) {
+    var status=this.storageService.isLoggedIn();
+    if (GetCookieData && status) {
       try {
         const retrievedCookies = JSON.parse(GetCookieData);
         this.UserRole = retrievedCookies.userRole?.length > 0 ? retrievedCookies.userRole : 'Internal User';
@@ -103,7 +107,7 @@ VisitPage(Page:any)
     this.LoginStatus = false;
   
     // Navigate to login page instead of reloading
-    this.router.navigate(['/ExternalLogin']).then(() => {
+    this.router.navigate(['']).then(() => {
       setTimeout(() => {
         window.location.reload();
       }, 500);

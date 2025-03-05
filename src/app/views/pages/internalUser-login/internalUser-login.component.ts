@@ -69,7 +69,7 @@ export class InternalUserLoginComponent implements OnInit {
   }
 
   formdata = new FormGroup({
-    UserRoleS: new FormControl('Select', Validators.required),
+    // UserRoleS: new FormControl('Select', Validators.required),
     Email: new FormControl('', [Validators.required, Validators.minLength(5)]),
     password: new FormControl('', [Validators.required,Validators.minLength(5),]),
   });
@@ -104,7 +104,7 @@ export class InternalUserLoginComponent implements OnInit {
     var password = DataX.password ?? '';
     var encodeduid = btoa(uid);
     var encodedPassword = btoa(password);
-    var userRoleX: number | null = null;
+    var userRoleX: number | null = 3;
     this.getToken(encodeduid, encodedPassword);
 }
 
@@ -171,7 +171,7 @@ export class InternalUserLoginComponent implements OnInit {
             icon: 'success',
           })
           this.AuthSession.addToSession(this.EmployeeDetails);
-          this.VisitUrl(this.BookId,this.name,'SubmitManuScript')
+          this.router.navigateByUrl('PublisherDashboard')
           } else {
             this.EmployeeDetails = [];
             this.showNoDataFoundMessage = true;

@@ -113,12 +113,12 @@ getPaginatedData(): any[] {
   searchx() {
     // alert(1)
     const query = this.searchQueryx.toLowerCase();
-    this.paginatedJournals = this.AllJournalsDetails.filter(item => {
+    this.TempAllJournalsDetails = this.AllJournalsDetails.filter(item => {
       return Object.values(item).some(val =>
         String(val).toLowerCase().includes(query)
       );
     });
-    
+    this.updatePaginatedData();
   }
 
   onDataChange() {
@@ -234,13 +234,4 @@ getPaginatedData(): any[] {
       };
     }
   }
-
-
-
-
-
-
-
-
-
 }

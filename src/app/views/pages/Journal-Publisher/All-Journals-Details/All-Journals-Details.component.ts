@@ -97,7 +97,7 @@ export class AllJournalsDetailsComponent implements OnInit {
       if (response.item1 && response.item1.length > 0) {
         this.booksData = response.item1;
         this.Journals = this.booksData;
-        console.log(JSON.stringify(this.Journals))
+        // console.log(JSON.stringify(this.Journals))
       }
       else {
         this.Journals = [];

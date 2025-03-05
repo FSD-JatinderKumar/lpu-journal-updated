@@ -141,6 +141,10 @@ const routes: Routes = [
 
       // Publisher Dashboard
       {
+        path:'PublisherLogin',
+        loadChildren: ()=> import('./views/pages/internalUser-login/internalUser-login.module').then(m=>m.InternalUserLoginModule)
+      },
+      {
         path: "PublisherDashboard",
         loadChildren: () => import('./views/pages/Journal-Publisher/Publisher-Dashboard/Publisher-Dashboard.module').then(m=>m.PublisherDashboardModule)
       },

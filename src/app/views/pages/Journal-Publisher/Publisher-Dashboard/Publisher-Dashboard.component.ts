@@ -39,19 +39,22 @@ export class PublisherDashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.serverUrl='https://files.lpu.in/umsweb/Journal/';
-    let BookId  = this.route.snapshot.params['Id'];
-    let name  = this.route.snapshot.params['name'];
     let loginStatus = this.checkUserLogin();
-      if (BookId != undefined && BookId != null ) {
-        this.BookId = BookId;
-        this.JournalId= BookId;
-        this.JournalTitle = name;
-      } 
+    if (!loginStatus) {
+      Swal.fire({
+        title: 'LoginFailed',
+        text: '.',
+        icon: 'error',
+      }).then(() => {
+        this.router.navigateByUrl('');
+      });
+    } 
   }
  
   checkUserLogin(){
     const GetCookieData = this.cookieService.get('authData');
-    if (GetCookieData) {
+    var status=this.storageService.isLoggedIn();
+    if (GetCookieData && status) {
       try {
         const retrievedCookies = JSON.parse(GetCookieData);
         this.userRole = retrievedCookies.userRole?.length > 0 ? retrievedCookies.userRole : 'Guest';
@@ -67,14 +70,9 @@ export class PublisherDashboardComponent implements OnInit {
     } else {
       return false;
     }
-    
   }
-
-
   Reset() {
     window.location.reload();
-
   }
- 
 
 }

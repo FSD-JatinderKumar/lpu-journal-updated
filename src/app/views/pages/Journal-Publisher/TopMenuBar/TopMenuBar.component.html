@@ -10,7 +10,7 @@
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul *ngIf="show" class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item"><a class="nav-link " routerLink="/">Home</a></li>
+                    <li class="nav-item"><a class="nav-link " (click)="VisitPage('PublisherDashboard')">Home</a></li>
                     <!-- <li class="nav-item"><a class="nav-link " (click)="VisitPage('AllJournals')"> Journals </a></li> -->
                     <!--  -->
                     <li class="nav-item dropdown">
@@ -40,8 +40,8 @@
                             Account Setting
                         </a>
                         <ul class="dropdown-menu dropDownWidth" aria-labelledby="AccountDropdown">
-                            <li><a class="dropdown-item" (click)="VisitPage('/')">Change Password </a></li>
-                            <li><a class="dropdown-item" (click)="VisitPage('/')">Logout </a></li>                             
+                            <li><a class="dropdown-item" (click)="VisitPage('PublisherDashboard')">Change Password </a></li>
+                            <li><a class="dropdown-item" (click)="Logout()">Logout </a></li>                             
                         </ul>
                     </li>
                 </ul>
@@ -87,5 +87,20 @@
       
     </div>
   </div>
+  <div class="row mt-2 mb-4 d-flex justify-content-center p-5">
+    <div class="card">
+      <div class="card-body">
+        <div class="row d-flex justify-content-center">
+          <label class="col-3 fw-bolder">User Name
+          </label>
+          <label class="col-3 text-danger fw-bolder  ">{{this.candidateName}} </label>
   
+          <label class="col-3 fw-bolder">Email Id</label>
+          <label class="col-3 text-danger fw-bolder ">
+            {{this.user_Email?.length>0 ? this.user_Email: 'NA' }}
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
   <!-- <router-outlet></router-outlet> -->
