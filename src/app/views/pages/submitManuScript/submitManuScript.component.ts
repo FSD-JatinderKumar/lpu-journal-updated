@@ -84,22 +84,17 @@ export class SubmitManuScriptComponent implements OnInit {
   ngOnInit(): void {
     const bookId: string | undefined = this.route.snapshot.params['Id'];
     const name: string = this.route.snapshot.params['name'];
-  
     this.newJournalTitle = name.replace(/-/g, ' ');
     if (!this.storageService.isLoggedIn()) {
       this.VisitUrl(bookId, name, 'ExternalLogin');
       return;  
     }
-    this.LoginStatus = this.checkUserLogin();
-  
-   
-  
-    if (bookId !== undefined && this.LoginStatus) {
-      this.BookId = bookId;
-      this.name = name;
-    }
+    this.LoginStatus = this.checkUserLogin();  
+     
   
     if (bookId && !this.isLoginFailed) {
+      this.BookId = bookId;
+      this.name = name;
       this.BookId = bookId;
       this.JournalId = bookId;
       this.JournalTitle = name.replace(/-/g, ' ');
@@ -226,7 +221,7 @@ export class SubmitManuScriptComponent implements OnInit {
     //  sessionStorage.clear();
     //  localStorage.clear();   
      
-    // this.VisitUrl(this.BookId,this.newJournalTitle,'ExternalLogin');    
+    this.VisitUrl(this.BookId,this.newJournalTitle,'ExternalLogin');    
   }
   checkUserLogin() {
     // this.userRole = 'Editor in Chief';
@@ -478,7 +473,6 @@ export class SubmitManuScriptComponent implements OnInit {
 
 
   uploadFile() {
-    alert(0)
     const reader = new FileReader();
     const fileName = 'merged-files.zip';
   
@@ -506,7 +500,6 @@ export class SubmitManuScriptComponent implements OnInit {
       this.fileStatus = false;
     }
   
-    // ✅ Ensure `cartItems` exists and is not empty
     if (!Array.isArray(this.cartItems) || this.cartItems.length === 0) {
       Swal.fire({
         title: 'Cart is Empty',
@@ -516,22 +509,18 @@ export class SubmitManuScriptComponent implements OnInit {
       return;
     }
   
-    // ✅ Handle single record case explicitly
     if (this.cartItems.length === 1) {
-      const item = this.cartItems[0]; // Get the single record
+      const item = this.cartItems[0];  
   
       this.AllManuScriptType = item.ManuScriptType || 'NA';
       this.AllSubItemTypes = item.SubItemType === 'Select' ? 'NA' : item.SubItemType;
       this.AllSubmissionTypes = item.SubmissionType || 'NA';
     } else {
-      // ✅ Process multiple records
-      alert(2);
       this.AllManuScriptType = this.cartItems.map(item => item.ManuScriptType || 'NA').join(',');
       this.AllSubItemTypes = this.cartItems.map(item => item.SubItemType === 'Select' ? 'NA' : item.SubItemType).join(',');
       this.AllSubmissionTypes = this.cartItems.map(item => item.SubmissionType || 'NA').join(',');
     }
   
-    // ✅ Create FormData object
     const formData = new FormData();
     formData.append('JournalId', this.JournalId);
     formData.append('JournalTitle', this.JournalTitle);
@@ -639,10 +628,12 @@ ReviewerData: any;
 ReviewerDataColumns: any;
     
 ReviewerdisplayedColumns: string[] = [
-  // 'journalId',
+  // 'journalId',	id,			JournalId,			JournalTitle,			MenuScriptType,			SubmissionType,		FileUrl,			EditorInchief	, CreatedBy , UserId as RequestedBy , UpdatedBy as AssignedBy
   'journalTitle',
   'editorInChief',
   'manuScriptType',
+  'requestedBy',
+  'assignedBy',
   // 'submissionType',
   'fileUrl',
   'journalId'
@@ -653,6 +644,8 @@ ReviewerdisplayedColumnsHeader: string[] = [
   'Journal Title',
   'Editor In Chief',
   'Manu Script',
+  'Requested By',
+  'Assigned By',
   // 'Submission Type',
   'Download File',
   'Action'
@@ -662,6 +655,8 @@ ReviewercolumnHeaders: { [key: string]: string } = {
   journalTitle: 'Journal Title', 
   editorInChief: 'Author Name', 
   manuScriptType: 'Manuscript Type', 
+  requestedBy: 'Requested By',
+  assignedBy: 'Assigned By',
   // submissionType: 'Submitted Script ', 
   fileUrl: 'Document' ,
   journalId: 'Action' 
@@ -670,7 +665,7 @@ ReviewercolumnHeaders: { [key: string]: string } = {
 
 
   showReviewerData(Emailid: any) {
-    this.journalWebApiService.UserWiseAllMenuScript(Emailid).subscribe({
+    this.journalWebApiService.GetMenuScriptForReviewers(Emailid).subscribe({
       next: (dataX: any) => {
         this.dataSource = dataX.item1;
         this.dataLoaded = true;

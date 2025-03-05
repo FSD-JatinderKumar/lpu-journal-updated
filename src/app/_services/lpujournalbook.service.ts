@@ -319,5 +319,13 @@ GetReviewerDetailsForEditors(UserId:any): Observable<any> {
   );
 }
 
-  
+  // 5-march-25
+    GetMenuScriptForReviewers(AssignedToUserEmail:any): Observable<any> {
+      let token = this.storageService.getUser();
+      let headers = new HttpHeaders()
+      .set('Authorization', 'Bearer ' + token)
+      return this.http.get(
+        AUTH_API_LOCALs + 'api/LpuJournal/GetAllMenuScriptForReviewers?Email=' + AssignedToUserEmail, { headers }
+      );
+    }
 }

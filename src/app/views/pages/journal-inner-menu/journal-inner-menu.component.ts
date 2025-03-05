@@ -37,19 +37,41 @@ export class JournalInnerMenuComponent implements OnInit {
   ngOnInit(): void {
     var BookId = this.route.snapshot.params['Id'];
     var name = this.route.snapshot.params['name'];
-    this.LoginStatus=this.checkUserLogin();
-    var status=this.StoragesServices.isLoggedIn();
-    if (BookId != undefined && this.LoginStatus === true && status==true) {
+    this.LoginStatus = this.checkUserLogin();
+    if (!this.LoginStatus) {
+      this.cookieService.delete('authData');
+      this.cookieService.delete('BookData');
+      this.cookieService.deleteAll();
+
+      sessionStorage.clear();
+      localStorage.clear();
+
+      this.AuthSession.clearSession();
+      this.StoragesServices.clean();
+      this.VisitUrl(BookId, name, 'ExternalLogin');
+      return;
+    }
+    else {
       this.BookId = BookId;
       this.name = name;
     }
-    else if(status==false)
-    {
-      this.BookId = BookId;
-      this.name = name;
-      this.LoginStatus=false;
-      // this.Logout();
-    }
+
+
+    // var BookId = this.route.snapshot.params['Id'];
+    // var name = this.route.snapshot.params['name'];
+    // this.LoginStatus=this.checkUserLogin();
+    // var status=this.StoragesServices.isLoggedIn();
+    // if (BookId != undefined && this.LoginStatus === true && status==true) {
+    //   this.BookId = BookId;
+    //   this.name = name;
+    // }
+    // else if(status==false)
+    // {
+    //   this.BookId = BookId;
+    //   this.name = name;
+    //   this.LoginStatus=false;
+    //   // this.Logout();
+    // }
   }
   checkUserLogin() {
     const GetCookieData = this.cookieService.get('authData');

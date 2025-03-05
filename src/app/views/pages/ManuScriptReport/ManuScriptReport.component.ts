@@ -51,29 +51,71 @@ export class ManuScriptReportComponent implements OnInit {
 
   }
 
-  dataLoaded: boolean = false;
-
+  dataLoaded: boolean = false; name: any;
+  isLoginFailed : boolean = false; LoginStatus: boolean = false;
+  newJournalTitle: any;
   VisitUrl(Id: any, name: any, Sufix: any) {
     this.router.navigateByUrl(Id + '/' + name + '/' + Sufix);
   }
-  ngOnInit(): void {
-    this.serverUrl = 'https://files.lpu.in/umsweb/Journal/';
-    let BookId = this.route.snapshot.params['Id'];
-    let name = this.route.snapshot.params['name'];
-    if (!this.storageService.isLoggedIn()) {
-      this.VisitUrl(BookId, name, 'ExternalLogin');
-      return;  
-    }
-    let loginStatus = this.checkUserLogin();
-    if (BookId != undefined && BookId != null) {
-      this.BookId = BookId;
-      this.JournalId = BookId;
-      this.JournalTitle = name;
-      this.JournalTitle = name.replace(/-/g, ' ');
-      this.showData(this.userId);
-    }
-  }
+  // ngOnInit(): void {
 
+  //   const bookId: string | undefined = this.route.snapshot.params['Id'];
+  //   this.serverUrl = 'https://files.lpu.in/umsweb/Journal/';
+  //   let BookId = this.route.snapshot.params['Id'];
+  //   const name: string = this.route.snapshot.params['name'];
+  
+  //   this.newJournalTitle = name.replace(/-/g, ' ');
+  //   if (!this.storageService.isLoggedIn()) {
+  //     this.VisitUrl(bookId, name, 'ExternalLogin');
+  //     return;  
+  //   }
+  //   this.LoginStatus = this.checkUserLogin();  
+     
+  
+  //   if (bookId && !this.isLoginFailed) {
+  //     this.BookId = bookId;
+  //     this.name = name;
+  //     this.BookId = bookId;
+  //     this.JournalId = bookId;
+  //     this.JournalTitle = name.replace(/-/g, ' ');
+  //   }
+
+  //   if (!this.storageService.isLoggedIn()) {
+  //     this.VisitUrl(BookId, name, 'ExternalLogin');
+  //     return;  
+  //   }
+  //   let loginStatus = this.checkUserLogin();
+  //   if (BookId != undefined && BookId != null) {
+  //     this.BookId = BookId;
+  //     this.JournalId = BookId;
+  //     this.JournalTitle = name;
+  //     this.JournalTitle = name.replace(/-/g, ' ');
+  //     this.showData(this.userId);
+  //   }
+  // }
+  ngOnInit(): void {
+    const bookId: string | undefined = this.route.snapshot.params['Id'];
+    const name: string = this.route.snapshot.params['name'];
+  
+    this.serverUrl = 'https://files.lpu.in/umsweb/Journal/';
+    this.newJournalTitle = name.replace(/-/g, ' ');
+  
+    if (!this.storageService.isLoggedIn()) {
+      this.VisitUrl(bookId, name, 'ExternalLogin');
+      return;
+    }
+  
+    this.LoginStatus = this.checkUserLogin();
+  
+    if (bookId && !this.isLoginFailed) {
+      this.BookId = bookId;
+      this.JournalId = bookId;
+      this.JournalTitle = name.replace(/-/g, ' ');
+    }
+  
+    this.showData(this.userId);
+  }
+  
   checkUserLogin() {
     const GetCookieData = this.cookieService.get('authData');
     if (GetCookieData) {
