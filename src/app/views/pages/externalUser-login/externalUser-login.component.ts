@@ -48,9 +48,10 @@ export class ExternalUserLoginComponent implements OnInit {
     this.AuthSession.clearSession();
     this.storageService.clean();
     this.BookId = this.route.snapshot.params['Id'];
-    this.JournalTitle = this.name = this.route.snapshot.params['name'];
+    this.name = this.route.snapshot.params['name'];
     
     this.JournalTitle = this.name.replace(/-/g, ' ');
+
     this.formdata.get('Email')?.valueChanges.subscribe(() => {
       this.formdata.get('Email')?.markAsTouched();
     });
@@ -134,80 +135,80 @@ export class ExternalUserLoginComponent implements OnInit {
   }
 
 
-  AuthoriseUser(Id: any, Key: any): void {
+  // AuthoriseUser(Id: any, Key: any): void {
 
-    this.authService.LoginJournalAccessTemp(Id).subscribe({
-      next: data => {
+  //   this.authService.LoginJournalAccessTemp(Id).subscribe({
+  //     next: data => {
 
-        this.storageService.saveUser(data);
-        this.lpuWebServices.AuthoriseUserDetails(Id, Key, this.BookId).subscribe({
-          next: response => {
-            if (response.item1 && response.item1.length > 0) {
-              this.UserData = response.item1;
-              this.CandidateName = this.EmployeeName = response.item1[0].candidateName;
-              this.UserId = this.EmployeeCode = Id;
-              this.Department = response.item1[0].department;
-              this.DepartmentName = response.item1[0].departmentName;
-              this.Designation = response.item1[0].department;
-              this.EmailId = response.item1[0].emailId;
-              this.MobileNo = response.item1[0].mobileNumber;
-              this.UserRole = response.item1[0].userRole;
-              this.SupervisorName = response.item1[0].supervisorName;
-              this.ProofNumber = btoa(response.item1[0].idProofNumber);
-              this.ProofName = response.item1[0].idProofType;
-              this.SecretKey = btoa(response.item1[0].passwordText);
+  //       this.storageService.saveUser(data);
+  //       this.lpuWebServices.AuthoriseUserDetails(Id, Key, this.BookId).subscribe({
+  //         next: response => {
+  //           if (response.item1 && response.item1.length > 0) {
+  //             this.UserData = response.item1;
+  //             this.CandidateName = this.EmployeeName = response.item1[0].candidateName;
+  //             this.UserId = this.EmployeeCode = Id;
+  //             this.Department = response.item1[0].department;
+  //             this.DepartmentName = response.item1[0].departmentName;
+  //             this.Designation = response.item1[0].department;
+  //             this.EmailId = response.item1[0].emailId;
+  //             this.MobileNo = response.item1[0].mobileNumber;
+  //             this.UserRole = response.item1[0].userRole;
+  //             this.SupervisorName = response.item1[0].supervisorName;
+  //             this.ProofNumber = btoa(response.item1[0].idProofNumber);
+  //             this.ProofName = response.item1[0].idProofType;
+  //             this.SecretKey = btoa(response.item1[0].passwordText);
 
-              this.loadingIndicator = false;
-              this.showNoDataFoundMessage = false;
-              this.isLoginFailed = false;
+  //             this.loadingIndicator = false;
+  //             this.showNoDataFoundMessage = false;
+  //             this.isLoginFailed = false;
 
-              const userCookiesData = {
-                CandidateName: this.CandidateName,
-                UserId: Id,
-                Department: this.Department,
-                DepartmentName: this.DepartmentName,
-                Designation: this.Designation,
-                EmailId: this.EmailId,
-                MobileNo: this.MobileNo,
-                UserRole: this.UserRole,
-                SupervisorName: this.SupervisorName,
-                ProofNumber: this.ProofNumber,
-                ProofName: this.ProofName,
-              };
+  //             const userCookiesData = {
+  //               CandidateName: this.CandidateName,
+  //               UserId: Id,
+  //               Department: this.Department,
+  //               DepartmentName: this.DepartmentName,
+  //               Designation: this.Designation,
+  //               EmailId: this.EmailId,
+  //               MobileNo: this.MobileNo,
+  //               UserRole: this.UserRole,
+  //               SupervisorName: this.SupervisorName,
+  //               ProofNumber: this.ProofNumber,
+  //               ProofName: this.ProofName,
+  //             };
 
-              const UserCookies = JSON.stringify(userCookiesData);
-              this.cookieService.set('authData', UserCookies);
-              swal.fire({
-                title: 'Login Successful',
-                text: 'Login details are Valid!',
-                icon: 'success',
-              });
-              this.AuthSession.addToSession(this.UserData);
-              // console.log(this.BookId+""+this.name)
-              this.VisitUrl(this.BookId, this.name, 'About')
+  //             const UserCookies = JSON.stringify(userCookiesData);
+  //             this.cookieService.set('authData', UserCookies);
+  //             swal.fire({
+  //               title: 'Login Successful',
+  //               text: 'Login details are Valid!',
+  //               icon: 'success',
+  //             });
+  //             this.AuthSession.addToSession(this.UserData);
+  //             // console.log(this.BookId+""+this.name)
+  //             this.VisitUrl(this.BookId, this.name, 'About')
 
-            } else {
-              this.showNoDataFoundMessage = true;
-              swal.fire({
-                title: 'Invalid Login Details ',
-                text: 'Check if you have selected same Journal !',
-                icon: 'warning',
-              });
-            }
-          },
-          error: (err) => {
-            console.log(err);
-          },
-        });
-      },
-      error: err => {
-        this.loadingIndicator = false;
-        this.showNoDataFoundMessage = false;
-        this.isLoginFailed = false;
-      }
-    });
-    this.formdata.reset();
-  }
+  //           } else {
+  //             this.showNoDataFoundMessage = true;
+  //             swal.fire({
+  //               title: 'Invalid Login Details ',
+  //               text: 'Check if you have selected same Journal !',
+  //               icon: 'warning',
+  //             });
+  //           }
+  //         },
+  //         error: (err) => {
+  //           console.log(err);
+  //         },
+  //       });
+  //     },
+  //     error: err => {
+  //       this.loadingIndicator = false;
+  //       this.showNoDataFoundMessage = false;
+  //       this.isLoginFailed = false;
+  //     }
+  //   });
+  //   this.formdata.reset();
+  // }
   //   new Logic to create token 
 
 //   AuthoriseUserNewWay(Id: any, Key: any): void {   
@@ -378,6 +379,7 @@ SetUserData(response: any) {
   }).then((result) => {
     if (result.isConfirmed) {
       this.AuthSession.addToSession(this.UserData);
+      // alert(this.name + " "+this.BookId)
       this.VisitUrl(this.BookId, this.name, 'SubmitManuScript' )
     }
   });
