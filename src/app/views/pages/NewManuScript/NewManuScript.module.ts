@@ -26,18 +26,6 @@ const routes: Routes = [
       FormsModule,
       MaterialModule,
       MatDialogModule
-      // FeatherIconModule,
-      // NgbDropdownModule,
-      // NgbDatepickerModule,
-      // NgApexchartsModule,
-      // NgxDatatableModule,
-      // NgbNavModule,
-      // NgbCollapseModule,
-      // PerfectScrollbarModule,
-      // NgbModule,
-      // ReactiveFormsModule,
-      // NgSelectModule,
-      // MaterialModule
     ],
   
   })

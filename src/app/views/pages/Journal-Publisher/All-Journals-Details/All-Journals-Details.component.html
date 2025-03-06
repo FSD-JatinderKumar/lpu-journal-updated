@@ -2,26 +2,16 @@
 <app-TopMenuBar></app-TopMenuBar>
 
 <div class="vh-150 d-flex p-2 align-items-center justify-content-center">
-  <div class="container-fluid ">
-    <div class="row">
-
-      <div class="col-md-12 grid-margin stretch-card">
-        <!-- <div class="card accordionColor "> -->
-        <div class="card-body m-5 ">
-          <h1 class="text-center themeClr"> All Journals </h1>
-        </div>
-        <!-- </div> -->
-      </div>
-    </div>
+  <div class="card-body m-1 ">
+    <h1 class="text-center themeClr"> All Journals </h1>
   </div>
 </div>
 <div class="d-flex p-5 align-items-center justify-content-center tableHeight">
   <div class="row accordionColor" *ngIf="this.Journals?.length > 0; else noRecords">
-
     <div class="container-fluid">
       <table id="JournalslDataTableY" class="table table-bordered">
-        <thead >
-          <tr >
+        <thead>
+          <tr>
             <th class="form-label text-danger  ">Sr.No</th>
             <th class="form-label text-danger">Journal Title</th>
             <th class="form-label text-danger">Sub Title</th>
@@ -49,9 +39,8 @@
               <td class="form-label">{{ JournalsDataRow.editorName }}</td>
               <td class="text-center">
                 <ng-container *ngIf="JournalsDataRow.imageUrl; else NoSheetDoc">
-                  <a class="btn btn-info" [href]="serverUrl + JournalsDataRow.imageUrl"
-                    target="_blank">
-                    <i class="bi bi-file-earmark-text"></i>  
+                  <a class="btn btn-info" [href]="serverUrl + JournalsDataRow.imageUrl" target="_blank">
+                    <i class="bi bi-file-earmark-text"></i>
                   </a>
                 </ng-container>
                 <ng-template #NoSheetDoc>
@@ -64,7 +53,7 @@
       </table>
     </div>
 
-    <div class="d-flex justify-content-end m-3">
+    <div class="d-flex justify-content-start m-3">
       <button class="btn btn-danger btn-sm" (click)="prevPage()" [disabled]="currentPage === 1">Previous</button>
       <span class="m-3">Page {{ currentPage }} of {{ totalPages }}</span>
       <button class="btn btn-danger btn-sm" (click)="nextPage()" [disabled]="currentPage === totalPages">Next</button>

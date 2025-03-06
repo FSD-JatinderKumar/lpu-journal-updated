@@ -171,6 +171,12 @@ const routes: Routes = [
         path: "EditorDashboard",
         loadChildren: () => import('./views/pages/Journal-Editors/Manuscript-Details/Manuscript-Details.module').then(m=>m.ManuscriptDetailsModule)
       },
+
+      // Recover Password
+      {
+        path: "RecoverPassword",
+        loadChildren: () => import('./views/pages/recover-account/recover-account.module').then(m=>m.RecoverAccountModule),
+      }
     ]
   }
 ];

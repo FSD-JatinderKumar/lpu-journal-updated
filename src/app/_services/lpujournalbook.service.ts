@@ -325,7 +325,32 @@ GetReviewerDetailsForEditors(UserId:any): Observable<any> {
       let headers = new HttpHeaders()
       .set('Authorization', 'Bearer ' + token)
       return this.http.get(
-        AUTH_API_LOCALs + 'api/LpuJournal/GetAllMenuScriptForReviewers?Email=' + AssignedToUserEmail, { headers }
+        AUTH_API_LOCAL + 'api/LpuJournal/GetAllMenuScriptForReviewers?Email=' + AssignedToUserEmail, { headers }
       );
     }
+
+    // 6-march-25
+
+    JournalGetUserDetails(UserEmailId: string) : Observable<any> {
+      let authToken = this.storageService.getUser();
+      let headers = new HttpHeaders()
+    //  .set('Authorization', 'Bearer ' + authToken) // for local API
+      .set('Authorization', 'Bearer ' + authToken)
+      .set('Content-Type', 'application/json');
+    return this.http.get(
+      AUTH_API_LOCALs + 'api/LpuJournal/JournalGetUserDetails?EmailId=' + UserEmailId,
+     {headers}
+    );
+  }
+
+
+  // 6-march-25
+  JournalUpdatePasswordDetails(UpdateUserData: FormData): Observable<any> {
+    let authToken = this.storageService.getUser();
+    let headers = new HttpHeaders()
+      .set('Authorization', 'Bearer ' + authToken)
+    return this.http.post(
+      AUTH_API_LOCALs + 'api/LpuJournal/JournalUpdatePasswordDetails', UpdateUserData, { headers }
+    );
+  }
 }

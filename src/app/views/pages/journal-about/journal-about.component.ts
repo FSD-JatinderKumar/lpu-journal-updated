@@ -68,12 +68,22 @@ export class JournalAboutComponent implements OnInit {
       if (response.item1 && response.item1.length > 0) {
         this.bookData = response.item1[0];
         this.JournalDetails = this.bookData['journalDetails']
-        // console.log(JSON.stringify(this.bookData))
         this.extractDetails();
       }
       else {
         this.bookData = [];
-        // this.router.navigateByUrl('/');
+           
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Something went wrong!',
+          confirmButtonText: 'Ok'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.router.navigateByUrl('/');
+          }
+        });
+        
       }
     });
   }
