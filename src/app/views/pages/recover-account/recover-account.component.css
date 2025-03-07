@@ -25,8 +25,19 @@
     color: red;
   }
   
-  button {
+  .button {
     margin-right: 10px;
     padding: 10px 20px;
   }
   
+  .signupLink{
+    text-decoration: none;
+    color: #0000ee;
+    font-size: larger;
+    font-weight: 500;
+  }
+  .signupLink:hover{
+  text-decoration: underline;
+  font-weight: 600 ;
+  }
+   
