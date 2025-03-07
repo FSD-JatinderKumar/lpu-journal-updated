@@ -65,6 +65,7 @@ import { EditorHeaderModule } from './views/pages/Journal-Editors/Editor-Top-Bar
 import { ManuscriptDetailsModule } from './views/pages/Journal-Editors/Manuscript-Details/Manuscript-Details.module';
 import { EditorHeaderComponent } from './views/pages/Journal-Editors/Editor-Top-Bar/EditorHeader.component';
 import { ManuscriptDetailsComponent } from './views/pages/Journal-Editors/Manuscript-Details/Manuscript-Details.component';
+import { RecoverAccountComponent } from './views/pages/recover-account/recover-account.component';
 
 @NgModule({
   declarations: [
@@ -111,8 +112,8 @@ import { ManuscriptDetailsComponent } from './views/pages/Journal-Editors/Manusc
     UpdateJournalDetailsComponent, 
 
     EditorHeaderComponent, 
-    ManuscriptDetailsComponent
-
+    ManuscriptDetailsComponent,
+    RecoverAccountComponent
     
   ],
   imports: [
@@ -144,7 +145,8 @@ import { ManuscriptDetailsComponent } from './views/pages/Journal-Editors/Manusc
     UpdateJournalDetailsModule, 
 
     EditorHeaderModule,
-    ManuscriptDetailsModule
+    ManuscriptDetailsModule,
+    
   ],
   providers: [],
   bootstrap: [AppComponent]

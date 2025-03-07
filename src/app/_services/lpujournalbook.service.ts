@@ -335,7 +335,7 @@ GetReviewerDetailsForEditors(UserId:any): Observable<any> {
       let authToken = this.storageService.getUser();
       let headers = new HttpHeaders()
     //  .set('Authorization', 'Bearer ' + authToken) // for local API
-      .set('Authorization', 'Bearer ' + authToken)
+      .set('Authorization', 'Bearer ' + this.authToken)
       .set('Content-Type', 'application/json');
     return this.http.get(
       AUTH_API_LOCALs + 'api/LpuJournal/JournalGetUserDetails?EmailId=' + UserEmailId,
@@ -348,7 +348,7 @@ GetReviewerDetailsForEditors(UserId:any): Observable<any> {
   JournalUpdatePasswordDetails(UpdateUserData: FormData): Observable<any> {
     let authToken = this.storageService.getUser();
     let headers = new HttpHeaders()
-      .set('Authorization', 'Bearer ' + authToken)
+      .set('Authorization', 'Bearer ' + this.authToken)
     return this.http.post(
       AUTH_API_LOCALs + 'api/LpuJournal/JournalUpdatePasswordDetails', UpdateUserData, { headers }
     );

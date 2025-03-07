@@ -1,16 +1,33 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Routes, RouterModule } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';  // ✅ Ensure this is here
 import { RecoverAccountComponent } from './recover-account.component';
+import { MaterialModule } from 'src/material.module';
+import { BrowserModule } from '@angular/platform-browser';
+
+import { FormsModule, NgForm } from '@angular/forms';
+const routes: Routes = [
+  {
+    path: '',
+    component: RecoverAccountComponent, 
+  }
+]
 
 @NgModule({
-  declarations: [RecoverAccountComponent],
-  imports: [
-    CommonModule,
-    ReactiveFormsModule  // ✅ This must be present
-  ],
-})
-export class RecoverAccountModule {}
+    imports: [
+      CommonModule,
+      RouterModule.forChild(routes),
+      ReactiveFormsModule
+    ],
+  
+  })
+export class RecoverAccountComponentModule { }
+
+
+
+
+ 
 
 // import { NgModule } from '@angular/core';
 // import { BrowserModule } from '@angular/platform-browser';

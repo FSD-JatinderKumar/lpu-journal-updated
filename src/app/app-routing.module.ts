@@ -174,8 +174,9 @@ const routes: Routes = [
 
       // Recover Password
       {
-        path: "RecoverPassword",
-        loadChildren: () => import('./views/pages/recover-account/recover-account.module').then(m=>m.RecoverAccountModule),
+         path: ":Id/:name/RecoverPasswordReset",
+        // loadChildren: () => import('./views/pages/Journal-Editors/Manuscript-Details/Manuscript-Details.module').then(m=>m.ManuscriptDetailsModule)
+        loadChildren: () => import('./views/pages/recover-account/recover-account.module').then(m=>m.RecoverAccountComponentModule),
       }
     ]
   }
