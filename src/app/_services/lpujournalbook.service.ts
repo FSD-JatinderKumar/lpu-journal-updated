@@ -5,7 +5,7 @@ import { environment } from 'src/environments/environment';
 import { StorageService } from './storage.service';
 const AUTH_API = 'https://projectsapi.lpu.in/';
 //  const AUTH_API = 'https://localhost:7125/';// 'https://projectsapi.lpu.in/';//'https://projectsapi.lpu.in/'; //
-const AUTH_API_LOCAL = 'https://projectsapi.lpu.in/'; //'https://localhost:7125/';
+const AUTH_API_LOCAL = 'https://localhost:7125/'; //'https://localhost:7125/';
 const AUTH_API_LOCALs = 'https://localhost:7125/'; //'https://localhost:7125/';
 
 @Injectable({
@@ -211,7 +211,7 @@ export class LpujournalbookService {
   GetUserRolesforUser(UserEmail:any): Observable<any> {
     let token = this.storageService.getUser();
     let headers = new HttpHeaders()
-    .set('Authorization', 'Bearer ' + token)
+    .set('Authorization', 'Bearer ' + this.authToken)
     return this.http.get(
       // AUTH_API_LOCAL + 'api/LpuJournal/GetAllMenuScriptForUser?Email=' + UserEmail, { headers }
       // AUTH_API+ 'api/LpuJournal/GetUserRoles?Email=' + UserEmail, { headers }

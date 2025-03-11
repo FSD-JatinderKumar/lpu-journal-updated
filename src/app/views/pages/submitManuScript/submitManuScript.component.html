@@ -35,7 +35,7 @@
   <nav>
     <div class="nav nav-tabs mt-4 d-flex justify-content-center" id="nav-tab" role="tablist">
       <button *ngFor="let action of UserRolesArray; let i = index" class="dashboardButton me-5"
-        id="{{ action.id }}-tab" data-bs-toggle="tab" style="padding: 1.15rem 3.5rem;"
+        id="{{ action.id }}-tab" data-bs-toggle="tab" style="padding: 0.15rem 0.5rem;"
         [attr.data-bs-target]="'#' + action.id"   role="tab" [attr.aria-controls]="action.id"
         [class.active]="i === 0" [attr.aria-selected]="i === 0 ? 'true' : 'false'">
         {{ action.label }} Dashboard

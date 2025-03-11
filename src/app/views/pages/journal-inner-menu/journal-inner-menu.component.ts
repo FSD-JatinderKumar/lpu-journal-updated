@@ -42,7 +42,7 @@ export class JournalInnerMenuComponent implements OnInit {
       this.BookId = BookId;
       this.name = name;
     }
-    else if(this.LoginStatus===false)
+    else 
     {
       this.BookId = BookId;
       this.name = name;
@@ -51,7 +51,7 @@ export class JournalInnerMenuComponent implements OnInit {
   checkUserLogin() {
     const GetCookieData = this.cookieService.get('authData');
     var status=this.StoragesServices.isLoggedIn();
-    if (GetCookieData && status) {
+    if (GetCookieData && status==true) {
       return true;
     } else {
       return false;
