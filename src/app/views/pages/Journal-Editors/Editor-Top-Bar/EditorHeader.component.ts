@@ -66,7 +66,14 @@ ngOnInit(): void {
 checkUserLogin() {
   const GetCookieData = this.cookieService.get('authData');
   var status=this.StoragesServices.isLoggedIn();
+  
   if (GetCookieData && status==true) {
+    const retrievedCookies = JSON.parse(GetCookieData);
+    this.UserRole = retrievedCookies.userRole?.length > 0 ? retrievedCookies.userRole : 'Internal User';
+    this.user_Email = retrievedCookies.EmailId;
+    this.supervisorName = retrievedCookies.SupervisorName?.length > 0 ? retrievedCookies.SupervisorName : 'N-A';
+    this.departmentName = retrievedCookies.DepartmentName?.length > 0 ? retrievedCookies.DepartmentName : 'N-A';;
+    this.candidateName = retrievedCookies.CandidateName;
     return true;
   } else {
     return false;
