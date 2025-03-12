@@ -141,7 +141,7 @@ const routes: Routes = [
 
       // Publisher Dashboard
       {
-        path:'PublisherLogin',
+        path:'AdvancedLogin',
         loadChildren: ()=> import('./views/pages/internalUser-login/internalUser-login.module').then(m=>m.InternalUserLoginModule)
       },
       {
@@ -166,18 +166,26 @@ const routes: Routes = [
       },
 
 
-// Editors Dashboard
+// Editors Dashboard 
       {
         path: "EditorDashboard",
         loadChildren: () => import('./views/pages/Journal-Editors/Manuscript-Details/Manuscript-Details.module').then(m=>m.ManuscriptDetailsModule)
       },
+
+      {
+        path: "UpdateKey",
+        loadChildren: () => import('./views/pages/Journal-Editors/Change-Password/Change-Password.module').then(m=>m.ChangePasswordComponentModule)
+      },
+
+
 
       // Recover Password
       {
          path: ":Id/:name/RecoverPasswordReset",
         // loadChildren: () => import('./views/pages/Journal-Editors/Manuscript-Details/Manuscript-Details.module').then(m=>m.ManuscriptDetailsModule)
         loadChildren: () => import('./views/pages/recover-account/recover-account.module').then(m=>m.RecoverAccountComponentModule),
-      }
+      }, 
+
     ]
   }
 ];

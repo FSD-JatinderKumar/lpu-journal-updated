@@ -1,7 +1,7 @@
 
 
-import { FormControl, FormGroup } from '@angular/forms';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Inject, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { AbstractControl, FormControl, FormGroup } from '@angular/forms';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, HostListener, Inject, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 
 import { Router, ActivatedRoute } from '@angular/router';
@@ -41,14 +41,17 @@ export class InternalUserLoginComponent implements OnInit {
   Designation: any;
   EmailId: any;
   MobileNo: any;
-  UserRole: any;
+  UserRole: string = "";  
   SupervisorName: any;
   ProofNumber: any;
   ProofName: any;
   SecretKey: any;
 
+  JournalUserAccountForm!: FormGroup;
+  isForm1Submitted: any;
+
+
   constructor(
-    // private CIFwebService: LpuCIFWebService,
     private storageService: StorageService,
     private authService: AuthService,
     public formBuilder: UntypedFormBuilder,
@@ -66,10 +69,31 @@ export class InternalUserLoginComponent implements OnInit {
 
     this.BookId  = this.route.snapshot.params['Id'];
     this.name  = this.route.snapshot.params['name'];
+
+
+    
+    this.loadForm();
   }
 
+  loadForm(){
+
+    
+    this.formdata = new FormGroup({
+      UserRoles: new FormControl('', Validators.required),
+      Email: new FormControl('', [Validators.required, Validators.minLength(5)]),
+      password: new FormControl('', [Validators.required,Validators.minLength(5),]),
+    });
+
+
+
+    this.JournalUserAccountForm = this.fb.group({
+      EmailId: ['', [Validators.required, Validators.email]],
+      Password: ['', [Validators.required, Validators.minLength(6)]],
+      UserRoles: ['', Validators.required]  
+    });
+  }
   formdata = new FormGroup({
-    // UserRoleS: new FormControl('Select', Validators.required),
+    UserRoles: new FormControl('', Validators.required),
     Email: new FormControl('', [Validators.required, Validators.minLength(5)]),
     password: new FormControl('', [Validators.required,Validators.minLength(5),]),
   });
@@ -80,7 +104,7 @@ export class InternalUserLoginComponent implements OnInit {
     return this.formdata.get('password');
   }
   get userRole() {
-    return this.formdata.get('UserRoleS');
+    return this.formdata.get('UserRoles');
   }
   CheckUserType(event: Event) {
 
@@ -104,7 +128,8 @@ export class InternalUserLoginComponent implements OnInit {
     var password = DataX.password ?? '';
     var encodeduid = btoa(uid);
     var encodedPassword = btoa(password);
-    var userRoleX: number | null = 3;
+    var userRoleX = DataX.UserRoles;
+    this.selectedRole= DataX.UserRoles;
     this.getToken(encodeduid, encodedPassword);
 }
 
@@ -171,15 +196,34 @@ export class InternalUserLoginComponent implements OnInit {
             icon: 'success',
           })
           this.AuthSession.addToSession(this.EmployeeDetails);
-          this.router.navigateByUrl('PublisherDashboard')
+          switch(this.selectedRole)
+          {
+            case '0':
+              this.router.navigateByUrl('EditorDashboard')
+              break;
+            case '1':
+              alert('Under Construction');
+              this.loadForm();
+              break;
+            case '2': 
+                alert('Under Construction');
+                this.loadForm();
+              break;  
+            case '3':
+            this.router.navigateByUrl('PublisherDashboard')
+            break;
+          }
+          
           } else {
             this.EmployeeDetails = [];
             this.showNoDataFoundMessage = true;
             this.isLoginFailed = true;
+            this.loadForm();
           }
         },
         error: err => {
           this.LoginFailed(err);
+          this.loadForm();
         }
       });
 
@@ -188,6 +232,17 @@ export class InternalUserLoginComponent implements OnInit {
   VisitUrl( Id: any, name : any, Sufix : any) {
     this.router.navigateByUrl( Id + '/'+ name +'/'+ Sufix);
   }
+
+  availableRoles = [
+    { value: '0', label: 'Editor Login' },
+    { value: '1', label: 'Author Login' },
+    { value: '2', label: 'Reviewer Login' },
+    { value: '3', label: 'Publisher Login' },
+  ];
+
+  selectedRoles: string[] = [];
+  selectedRole: any;
+  
 }
 
 

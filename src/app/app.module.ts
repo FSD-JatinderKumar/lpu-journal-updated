@@ -66,6 +66,7 @@ import { ManuscriptDetailsModule } from './views/pages/Journal-Editors/Manuscrip
 import { EditorHeaderComponent } from './views/pages/Journal-Editors/Editor-Top-Bar/EditorHeader.component';
 import { ManuscriptDetailsComponent } from './views/pages/Journal-Editors/Manuscript-Details/Manuscript-Details.component';
 import { RecoverAccountComponent } from './views/pages/recover-account/recover-account.component';
+import { ChangePasswordComponent } from './views/pages/Journal-Editors/Change-Password/Change-Password.component';
 
 @NgModule({
   declarations: [
@@ -113,7 +114,8 @@ import { RecoverAccountComponent } from './views/pages/recover-account/recover-a
 
     EditorHeaderComponent, 
     ManuscriptDetailsComponent,
-    RecoverAccountComponent
+    RecoverAccountComponent, 
+    ChangePasswordComponent
     
   ],
   imports: [

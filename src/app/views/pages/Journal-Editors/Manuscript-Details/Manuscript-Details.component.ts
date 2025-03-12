@@ -186,7 +186,7 @@ EditorDataColumns: any;
   }
 
  
-  AssignedById: any; selectedReviewerId: any; selectedJournalId: any;
+  AssignedById: any; selectedReviewerId: any=''; selectedJournalId: any;
   RecordId: any;
   onTakeAction(rowData: any) {
     // console.log(JSON.stringify(rowData))

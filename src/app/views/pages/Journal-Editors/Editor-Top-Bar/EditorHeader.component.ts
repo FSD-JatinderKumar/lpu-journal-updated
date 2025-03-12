@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { LoginSessionService } from 'src/app/_services/login-session.service';
 import { LpujournalbookService } from 'src/app/_services/lpujournalbook.service';
+import { StorageService } from 'src/app/_services/storage.service';
 
 @Component({
   selector: 'app-EditorHeader',
@@ -23,6 +24,7 @@ export class EditorHeaderComponent implements OnInit {
     private journalWebApiService: LpujournalbookService,
     private AuthSession: LoginSessionService,
     private router: Router, private route: ActivatedRoute,
+    private StoragesServices: StorageService,
     private cookieService: CookieService) { }
 
   showSearchForm: boolean = false; show: boolean = true; isSearchOpen: boolean = false;
@@ -53,49 +55,41 @@ VisitPage(Page:any)
     window.location.reload();
   });
 }
-  ngOnInit(): void {
-    var BookId = this.route.snapshot.params['Id'];
-    // var name = this.route.snapshot.params['name'];
-    // if (BookId != undefined && BookId != null) {
-    //   this.BookId = BookId;
-    //   this.name = name;
-      this.LoginStatus = this.checkUserLogin();
-    //   // this.router.navigateByUrl( '/Home');
-    //   // window.location.reload();
-    // }
+
+ngOnInit(): void {
+  
+  this.LoginStatus=this.checkUserLogin();
+  if ( this.LoginStatus !== true ) {
+    this.Logout();
   }
-  checkUserLogin() {
-    const GetCookieData = this.cookieService.get('authData');
-    if (GetCookieData) {
-      try {
-        const retrievedCookies = JSON.parse(GetCookieData);
-        this.UserRole = retrievedCookies.userRole?.length > 0 ? retrievedCookies.userRole : 'Internal User';
-        this.user_Email = retrievedCookies.EmailId;
-        this.supervisorName = retrievedCookies.SupervisorName?.length > 0 ? retrievedCookies.SupervisorName : 'N-A';
-        this.departmentName = retrievedCookies.DepartmentName?.length > 0 ? retrievedCookies.DepartmentName : 'N-A';;
-        this.candidateName = retrievedCookies.CandidateName;
-        return true;
-      } catch (error) {
-        console.error("Error parsing cookies:", error);
-        return false;
-      }
-    } else {
-      return false;
-    }
+}
+checkUserLogin() {
+  const GetCookieData = this.cookieService.get('authData');
+  var status=this.StoragesServices.isLoggedIn();
+  if (GetCookieData && status==true) {
+    return true;
+  } else {
+    return false;
   }
- 
+
+}
+  toggleSearchForm() {
+    this.showSearchForm = !this.showSearchForm;
+    this.show = !this.show;
+  }
+
   Logout() {
-    // Delete cookies properly
     this.cookieService.delete('authData');
     this.cookieService.delete('BookData');
+  
     this.cookieService.deleteAll();
   
-    // Clear session storage if used
-    this.AuthSession.clearSession();
     sessionStorage.clear();
     localStorage.clear();
   
-    // Reset user variables
+    this.AuthSession.clearSession();
+    this.StoragesServices.clean();
+  
     this.UserRole = null;
     this.user_Email = null;
     this.supervisorName = null;
@@ -103,19 +97,11 @@ VisitPage(Page:any)
     this.candidateName = null;
     this.LoginStatus = false;
   
-    // Navigate to login page instead of reloading
-    this.router.navigate(['/ExternalLogin']).then(() => {
+    this.router.navigateByUrl('Home').then(() => {
       setTimeout(() => {
-        window.location.reload();
+        location.reload();
       }, 500);
     });
   }
-  
-
-  toggleSearchForm() {
-    this.showSearchForm = !this.showSearchForm;
-    this.show = !this.show;
-  }
-
 
 }

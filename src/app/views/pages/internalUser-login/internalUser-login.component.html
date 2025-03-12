@@ -28,6 +28,28 @@
                     autocomplete="off" id="secretKey">
                 </div>
               </div>
+              <div class="row">
+                <div class="mb-2 col-md-3">
+                  <label for="UserRole">Login Role</label>
+                </div>
+                <div class="col-md-6 mb-2">
+                  <select 
+                    id="RolesDropdown" 
+                    class="form-select" 
+                    formControlName="UserRoles" 
+                    required>
+                    <option value="" disabled>Select Role</option>
+                    <option *ngFor="let Role of availableRoles" [value]="Role.value">
+                      {{ Role.label }}
+                    </option>
+                  </select>
+              
+                  <div *ngIf="isForm1Submitted && !UserRole" class="invalid-feedback">
+                    Required: Please select at least one UserRole.
+                  </div>
+                </div>
+              </div>
+              
               <div class="row mt-2">
                 <div class=" mb-2  col-md-3"><button type="submit" class="btn btn-primary me-2 mb-2 mb-md-0"
                     [disabled]="formdata.invalid">
