@@ -38,7 +38,7 @@ export class JournalInnerMenuComponent implements OnInit {
     var BookId = this.route.snapshot.params['Id'];
     var name = this.route.snapshot.params['name'];
     this.LoginStatus=this.checkUserLogin();
-    if (BookId != undefined && this.LoginStatus === true ) {
+    if (BookId != undefined && this.LoginStatus==true ) {
       this.BookId = BookId;
       this.name = name;
     }
@@ -82,41 +82,11 @@ export class JournalInnerMenuComponent implements OnInit {
     this.candidateName = null;
     this.LoginStatus = false;
   
-    // Navigate to login page and ensure proper cleanup
     this.router.navigateByUrl('Home').then(() => {
       setTimeout(() => {
         location.reload();
       }, 500);
     });
   }
-  
-  // Logout() {
-  //   // Delete cookies properly
-  //   this.cookieService.delete('authData');
-  //   this.cookieService.delete('BookData');
-  //   this.cookieService.deleteAll();
-  
-  //   // Clear session storage if used
-  //   this.AuthSession.clearSession();
-  //   this.StoragesServices.clean();
-  //   sessionStorage.clear();
-  //   localStorage.clear();
-  //   this.cookieService.delete('authData');
-  //   this.AuthSession.clearSession();
-  //   this.StoragesServices.clean();
-  //   // Reset user variables
-  //   this.UserRole = null;
-  //   this.user_Email = null;
-  //   this.supervisorName = null;
-  //   this.departmentName = null;
-  //   this.candidateName = null;
-  //   this.LoginStatus = false;
-  
-  //   // Navigate to login page instead of reloading
-  //   this.router.navigate(['/']).then(() => {
-  //     setTimeout(() => {
-  //       window.location.reload();
-  //     }, 500);
-  //   });
-  // }
+ 
 }

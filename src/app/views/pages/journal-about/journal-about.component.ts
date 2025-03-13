@@ -31,7 +31,7 @@ interface Book {
 })
 export class JournalAboutComponent implements OnInit {
   data: any[] =[];    BookId: any;  bookData: any;  JournalDetails: any;  detailsArray: any;
-  name: any;
+  name: any; JournalTitle: any;
 
   constructor(
     private journalWebApiService: LpujournalbookService, 
@@ -43,21 +43,21 @@ export class JournalAboutComponent implements OnInit {
     private route: ActivatedRoute,
     private cookieService: CookieService,
   ) { }
-  VisitUrl(Id: any, name: any, Sufix: any) {
-    this.router.navigateByUrl(Id + '/' + name + '/' + Sufix);
+  VisitUrl(Sufix: any) {
+    // this.router.navigateByUrl(this.BookId + '/' + this.name + '/' + Sufix);
+    this.router.navigateByUrl(this.BookId + '/' + this.name + '/' + Sufix).then(() => {
+      window.location.reload();
+    });
   }
   ngOnInit(): void {
     let BookId  = this.route.snapshot.params['Id'];
     let name  = this.route.snapshot.params['name'];
-      if (BookId != undefined && BookId != null) {
-        this.BookId = BookId;
-        this.name= name;
-        const journalCookiesData = {
-          BookId: this.BookId,
-          name: this.name,          
-        };
 
-        this.cookieService.set('BookData', JSON.stringify(journalCookiesData));
+   
+    this.JournalTitle = name.replace(/-/g, ' ');
+      if (BookId != undefined && BookId != null) {
+        this.BookId = this.route.snapshot.params['Id'];
+        this.name = this.route.snapshot.params['name'];
         this.GetJournalDetailsAbout(this.BookId);
         this.GetJournalEditorsDetailsByBookId(this.BookId);
       } 

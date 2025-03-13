@@ -131,7 +131,7 @@ export class ExternalUserLoginComponent implements OnInit {
   VisitUrl(Id: any, name: any, Sufix: any) {
     this.router.navigateByUrl(Id + '/' + name + '/' + Sufix).then(() => {
       window.location.reload();
-    });;
+    });
   }
 
  
@@ -144,8 +144,8 @@ AuthoriseUserNewWay(Id: any, Key: any): void {
       } else {
         this.showNoDataFoundMessage = true;
         swal.fire({
-          text: 'Invalid Login Details',
-          title: 'Check if you have selected the same Journal!',
+          text: 'Check if you have selected the same Journal!',
+          title: 'Invalid Login Details',
           icon: 'warning',
         });
       }
@@ -165,7 +165,7 @@ CreateToken(Id: any, response: any) {
     next: data => {
       this.storageService.saveUser(data);
       this.SetUserData(response);
-      this.getUserRolesforId();  // Ensures user roles are set before redirection
+      this.getUserRolesforId(); 
     },
     error: err => {
       this.loadingIndicator = false;

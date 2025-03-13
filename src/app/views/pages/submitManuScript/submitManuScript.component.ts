@@ -85,72 +85,25 @@ export class SubmitManuScriptComponent implements OnInit {
     const bookId: string | undefined = this.route.snapshot.params['Id'];
     const name: string = this.route.snapshot.params['name'];
     this.newJournalTitle = name.replace(/-/g, ' ');
-    if (!this.storageService.isLoggedIn()) {
-      this.VisitUrl(bookId, name, 'ExternalLogin');
-      return;  
-    }
+
     this.LoginStatus = this.checkUserLogin();  
      
   
     if (bookId && !this.isLoginFailed) {
-      this.BookId = bookId;
-      this.name = name;
-      this.BookId = bookId;
-      this.JournalId = bookId;
+      this.name = name;       this.BookId = bookId;       this.JournalId = bookId;
       this.JournalTitle = name.replace(/-/g, ' ');
-  
-      // Fetch required data
+      
+
       this.showReviewerData(this.userId);
-      this.showEditorData(this.BookId);
-      this.loadReviewers(this.BookId);
-      this.GetJournalDetailsAbout(this.BookId);
-      this.showData();
-      this.getUserRolesforId();
+     
      
     } else { 
-      this.VisitUrl(bookId, this.newJournalTitle, 'ExternalLogin');
+      this.VisitUrl(bookId, name, 'ExternalLogin');
     }
   
     this.LoadForm();
   }
-  // ngOnInit(): void {
-  //   let BookId = this.route.snapshot.params['Id'];
-  //   let name = this.newJournalTitle = this.route.snapshot.params['name'];
-
-
-  //   this.LoginStatus=this.checkUserLogin();
-  //   var status=this.storageService.isLoggedIn();
-  //   if (BookId != undefined && this.LoginStatus === true && status==true) {
-  //     this.BookId = BookId;
-  //     this.name = name;
-  //   }
-  //   else if(status==false)
-  //   {
-  //     this.BookId = BookId;
-  //     this.name = name;
-  //     this.LoginStatus=false;
-  //     // this.Logout();
-  //   }
-
-
-  //  this.checkUserLogin();
-  //   if (BookId != undefined && BookId != null && this.isLoginFailed == false) {
-  //     this.BookId = BookId;
-  //     this.JournalId = BookId;
-  //     this.JournalTitle = name.replace(/-/g, ' ');
-  //     // this.GetJournalDetailsAbout(this.BookId);
-  //     // this.showData();
-  //     // this.getUserRolesforId();
-     
-  //     this.showReviewerData(this.userId);
-  //     this.showEditorData(this.BookId);
-  //     this.loadReviewers(this.BookId);
-  //   }
-  //   else { 
-  //     this.VisitUrl(this.BookId,this.newJournalTitle,'ExternalLogin')
-  //   }
-  //   this.LoadForm();
-  // }
+ 
   LoadForm() {
     this.scriptUploadForm = this.fb.group({
       journalTitle: [this.JournalTitle],
@@ -162,8 +115,6 @@ export class SubmitManuScriptComponent implements OnInit {
       file: [null, Validators.required]
     });
   }
-
-  // new code for user roles 
   UserRolesArray: { value: string; label: string; id: string }[] = [];
 
   getUserRolesforId(): void {
@@ -204,24 +155,7 @@ export class SubmitManuScriptComponent implements OnInit {
     });
   }
   LoginFalied(){
-    // this.isLoginFailed==true;
-    // Swal.fire({
-    //   title: 'Login Falied ',
-    //   text: 'Relogin ',
-    //   icon: 'warning'
-    // });
-    //  // Delete cookies properly
-    //  this.cookieService.delete('authData');
-    //  this.cookieService.delete('BookData');
-    //  this.cookieService.deleteAll();
-   
-    //  // Clear session storage if used
-    //  this.AuthSession.clearSession();
-    //  this.storageService.clean();
-    //  sessionStorage.clear();
-    //  localStorage.clear();   
-     
-    this.VisitUrl(this.BookId,this.newJournalTitle,'ExternalLogin');    
+    this.VisitUrl(this.BookId,this.name,'ExternalLogin');    
   }
   checkUserLogin() {
     // this.userRole = 'Editor in Chief';
@@ -240,7 +174,7 @@ export class SubmitManuScriptComponent implements OnInit {
         this.supervisorName = retrievedCookies.SupervisorName;
         this.departmentName = retrievedCookies.DepartmentName;
         this.candidateName = retrievedCookies.CandidateName;
-        this.isLoginFailed=false;
+        this.isLoginFailed=false;          
       } catch (error) {
        console.log("error")        ;
       }
@@ -255,8 +189,6 @@ export class SubmitManuScriptComponent implements OnInit {
     this.journalWebApiService.GetJournalDetailsforAboutPage(JournalId).subscribe((response) => {
       if (response.item1 && response.item1.length > 0) {
         this.bookData = response.item1[0];
-        // console.log(JSON.stringify(this.bookData))
-        // alert(JSON.stringify(this.bookData))
         this.JournalDetails = this.bookData['journalDetails']
         this.EditorInChief = this.bookData?.editorName
         this.JournalSubTitle = this.bookData?.subTitle;
@@ -265,7 +197,6 @@ export class SubmitManuScriptComponent implements OnInit {
       else {
         this.bookData = [];
         this.LoginFalied();
-        // this.router.navigateByUrl('/');
       }
     });
   }
@@ -277,8 +208,6 @@ export class SubmitManuScriptComponent implements OnInit {
         this.dataSource = dataX.item1;
         this.dataLoaded = true;
         this.booksData = dataX.item1;
-        // alert(JSON.stringify(this.booksData))
-        // console.log(JSON.stringify(this.booksData))
         if (this.booksData.length > 0) {
           this.booksDataColumns = Object.keys(this.booksData[0]);
         }
@@ -532,14 +461,14 @@ export class SubmitManuScriptComponent implements OnInit {
     formData.append('FileUrl', fileName);
     formData.append('File', this.FileData);
   
-    // ✅ Call the API for Email Sending
+    //   Call the API for Email Sending
     this.journalWebApiService.AddNewJournalMenuScriptData(formData).subscribe({
       next: (data) => {
         let result = data.item1[0]['msg'];
         let errorCode = data.item1[0]['returnId'];
   
         if (result === 'OK') {
-          // ✅ Send email after successful upload
+          //   Send email after successful upload
           // this.sendEmailNotification(this.userId);
   
           Swal.fire({
@@ -571,7 +500,7 @@ export class SubmitManuScriptComponent implements OnInit {
     this.scriptUploadForm.reset(); // Reset the form after upload
   }
   
-  // ✅ New function to send an email notification
+  //   New function to send an email notification
   // sendEmailNotification(userId: string) {
   //   const emailPayload = {
   //     userId: userId,
@@ -678,6 +607,11 @@ ReviewercolumnHeaders: { [key: string]: string } = {
           this.updatePaginatedDataReviewer();
         }
         this.dataShowing = true;
+        this.showEditorData(this.BookId);
+        this.loadReviewers(this.BookId);
+        this.GetJournalDetailsAbout(this.BookId);
+        this.showData();
+        this.getUserRolesforId();
 
       },
       error: (error: any) => {

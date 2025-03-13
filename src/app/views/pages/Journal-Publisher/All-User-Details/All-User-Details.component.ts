@@ -17,13 +17,13 @@ import { forkJoin } from 'rxjs'
   styleUrls: ['./All-User-Details.component.scss']
 })
 export class AllUserDetailsComponent implements OnInit {
-  fromDate: any;    UserDataColumns: any;  toDate: any;  pipe = new DatePipe('en-CA');
-  dataSource: any[] = [];   dataX: any;   UserData: any;  dataShowing: any = false;
-  userRole: any;    BookId: any;    JournalId: any;  JournalTitle: any; Role: string='';
-  userId: any;    serverUrl: any;   supervisorName: any;    departmentName: any;
+  fromDate: any; UserDataColumns: any; toDate: any; pipe = new DatePipe('en-CA');
+  dataSource: any[] = []; dataX: any; UserData: any; dataShowing: any = false;
+  userRole: any; BookId: any; JournalId: any; JournalTitle: any; Role: string = '';
+  userId: any; serverUrl: any; supervisorName: any; departmentName: any;
   candidateName: any;
   MenuBar: any;
-    Users: any;
+  Users: any;
   constructor(
     private storageService: StorageService,
     private authService: AuthService,
@@ -31,29 +31,29 @@ export class AllUserDetailsComponent implements OnInit {
     private fb: FormBuilder,
     private router: Router,
     private route: ActivatedRoute, private cookieService: CookieService,
-    private journalWebApiService: LpujournalbookService  
+    private journalWebApiService: LpujournalbookService
   ) {
-    
+
   }
 
   dataLoaded: boolean = false;
 
   ngOnInit(): void {
-    this.serverUrl='https://files.lpu.in/umsweb/Journal/';
-    let Role  = this.route.snapshot.params['Role'];
-    this.MenuBar= this.route.snapshot.params['Menu'];
+    this.serverUrl = 'https://files.lpu.in/umsweb/Journal/';
+    let Role = this.route.snapshot.params['Role'];
+    this.MenuBar = this.route.snapshot.params['Menu'];
     // let name  = this.route.snapshot.params['name'];
     // alert(name+"in Page ")
     let loginStatus = this.checkUserLogin();
     this.getUsersDetails(Role);
-      if (Role != undefined  ) {
-        this.Role = Role;
-        this.JournalTitle = name;
-        this.getUsersDetails(Role);
-      } 
+    if (Role != undefined) {
+      this.Role = Role;
+      this.JournalTitle = name;
+      this.getUsersDetails(Role);
+    }
   }
- 
-  checkUserLogin(){
+
+  checkUserLogin() {
     const GetCookieData = this.cookieService.get('authData');
     if (GetCookieData) {
       try {
@@ -66,19 +66,19 @@ export class AllUserDetailsComponent implements OnInit {
         return true;
       } catch (error) {
         console.error("Error parsing JSON from cookies:", error);
-        return false;  
+        return false;
       }
     } else {
       return false;
     }
-    
+
   }
 
 
   Reset() {
     window.location.reload();
   }
-  getUsersDetails(Role:any): void {
+  getUsersDetails(Role: any): void {
     this.journalWebApiService.GetAllJournalUserDetails(Role).subscribe((response) => {
       if (response.item1 && response.item1.length > 0) {
         this.UserData = response.item1;
@@ -93,9 +93,9 @@ export class AllUserDetailsComponent implements OnInit {
 
   isLoading: boolean[] = [];
   loadingTimeout: any[] = []; // Store timeout references
- 
+
   currentPage = 1;
-  itemsPerPage = 10;
+  itemsPerPage = 15;
 
   get totalPages(): number {
     return Math.ceil(this.Users.length / this.itemsPerPage);
@@ -119,27 +119,27 @@ export class AllUserDetailsComponent implements OnInit {
   }
 
 
-// Define the user role mappings
-userRoleMap: { [key: number]: string } = {
-  0: 'Editors',
-  1: 'Authors',
-  2: 'Reviewers',
-  3: 'Publishers',
-  4: 'Managing Editors',
-  99:'Users'
-};
+  // Define the user role mappings
+  userRoleMap: { [key: number]: string } = {
+    0: 'Editors',
+    1: 'Authors',
+    2: 'Reviewers',
+    3: 'Publishers',
+    4: 'Managing Editors',
+    99: 'Users'
+  };
 
-getUserRoleText(userRoles: number | number[] | null | undefined): string {
-  if (userRoles === null || userRoles === undefined) return 'N/A'; // Ensure 0 is not treated as falsy
+  getUserRoleText(userRoles: number | number[] | null | undefined): string {
+    if (userRoles === null || userRoles === undefined) return 'N/A'; // Ensure 0 is not treated as falsy
 
-  if (typeof userRoles === 'number') {
-    userRoles = [userRoles]; // Convert single number to array
+    if (typeof userRoles === 'number') {
+      userRoles = [userRoles]; // Convert single number to array
+    }
+
+    return userRoles
+      .map(role => this.userRoleMap[role] || `Unknown (${role})`)
+      .join(', ');
   }
-
-  return userRoles
-    .map(role => this.userRoleMap[role] || `Unknown (${role})`)
-    .join(', ');
-}
 
 
 }

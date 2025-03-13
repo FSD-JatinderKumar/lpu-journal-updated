@@ -78,12 +78,16 @@
                 <br/>
               </div>
               <div class="row mb-2 mt-3 d-flex justify-content-center">
-                <div class="col-md-6 text-center">
+                <div class="col-md-4 text-center">
                   <button type="submit" class="loginButton ">Submit</button>
                 </div>
-                <div class="col-md-6">
-                  <!-- <button type="submit" class="loginButton" disabled>Reviewer Login</button> -->
-                  <a (click)="VisitUrl(BookId, name, 'signup')" class="signupLink mb-2">Register Now</a>
+                <div class="col-md-4 text-center">                   
+                  <!-- <a (click)="VisitUrl(BookId, name, 'signup')" class="signupLink mb-2">Register Now</a> -->
+                  <button (click)="VisitUrl(BookId, name, 'signup')" class="loginButton ">Register Now</button>
+                </div>
+                <div class="col-md-4 text-center">
+                  <button (click)="VisitUrl(BookId, name, 'RecoverPasswordReset')" class="loginButton ">Reset Account</button>
+                  <!-- <a (click)="VisitUrl(BookId, name, 'RecoverPasswordReset')" class="signupLink mb-2">Reset Account</a> -->
                 </div>
                 <!-- <div class="col-md-3">
                   <button type="submit" class="loginButton" disabled>Editor Login</button>
@@ -96,9 +100,10 @@
                 <!-- <div class="col-md-4">
                   <button type="submit" class="btn btn-dark mb-2">Submit</button>
                 </div> -->
-                <div class="col-md-12 text-center">
-                  <a (click)="VisitUrl(BookId, name, 'RecoverPasswordReset')" class="signupLink mb-2">Reset Account</a>
-                </div>
+                <!-- <div class="col-md-12 text-center">
+                  <button (click)="VisitUrl(BookId, name, 'RecoverPasswordReset')" class="loginButton ">Reset Account</button> -->
+                  <!-- <a (click)="VisitUrl(BookId, name, 'RecoverPasswordReset')" class="signupLink mb-2">Reset Account</a> -->
+                <!-- </div> -->
               </div>
             </form>
           </div>

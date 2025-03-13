@@ -5,8 +5,8 @@ import { environment } from 'src/environments/environment';
 import { StorageService } from './storage.service';
 const AUTH_API = 'https://projectsapi.lpu.in/';
 //  const AUTH_API = 'https://localhost:7125/';// 'https://projectsapi.lpu.in/';//'https://projectsapi.lpu.in/'; //
-const AUTH_API_LOCAL = 'https://localhost:7125/'; //'https://localhost:7125/';
-const AUTH_API_LOCALs = 'https://localhost:7125/'; //'https://localhost:7125/';
+const AUTH_API_LOCAL = 'https://projectsapi.lpu.in/'; //'https://localhost:7125/';
+const AUTH_API_LOCALs = 'https://projectsapi.lpu.in/'; //'https://localhost:7125/';
 
 @Injectable({
   providedIn: 'root'
@@ -16,6 +16,7 @@ export class LpujournalbookService {
 
   constructor(private http: HttpClient, private storageService: StorageService) { }
   private authToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJMb2dpbk5hbWUiOiJMUFVKb3VybmFsIiwibmJmIjoxNzM5MjU0OTYzLCJleHAiOjE3NzA3OTA5NjMsImlhdCI6MTczOTI1NDk2MywiaXNzIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NzEyNS8iLCJhdWQiOiJodHRwczovL2xvY2FsaG9zdDo3MTI1LyJ9.Ir-NM1QRF4MMr-hSvbMAhwv6Fzyhc3agCmn0TkqtwrM';//
+  
   GetAllBooksDetails(): Observable<any> {
     const httpOptions = {
       headers: new HttpHeaders({
@@ -208,17 +209,25 @@ export class LpujournalbookService {
       AUTH_API + 'api/LpuJournal/GetAllMenuScriptForUser?Email=' + UserEmail, { headers }
     );
   }
+  // GetUserRolesforUser(UserEmail:any): Observable<any> {
+  //   let token = this.storageService.getUser();
+  //   let headers = new HttpHeaders()
+  //   .set('Authorization', 'Bearer ' + this.authToken)
+  //   return this.http.get(
+  //     // AUTH_API_LOCAL + 'api/LpuJournal/GetAllMenuScriptForUser?Email=' + UserEmail, { headers }
+  //     // AUTH_API+ 'api/LpuJournal/GetUserRoles?Email=' + UserEmail, { headers }
+  //     AUTH_API_LOCAL+ 'api/LpuJournal/GetUserRoles?Email=' + UserEmail, { headers }
+  //   );
+  // }
   GetUserRolesforUser(UserEmail:any): Observable<any> {
-    let token = this.storageService.getUser();
-    let headers = new HttpHeaders()
-    .set('Authorization', 'Bearer ' + this.authToken)
-    return this.http.get(
-      // AUTH_API_LOCAL + 'api/LpuJournal/GetAllMenuScriptForUser?Email=' + UserEmail, { headers }
-      // AUTH_API+ 'api/LpuJournal/GetUserRoles?Email=' + UserEmail, { headers }
-      AUTH_API_LOCAL+ 'api/LpuJournal/GetUserRoles?Email=' + UserEmail, { headers }
-    );
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Authorization': `Bearer ${this.authToken}`
+      })
+    };
+    // return this.http.get<any>(`${this.baseUrl}api/LpuJournal/GetBooksMasterData`, httpOptions);
+    return this.http.get<any>(`${this.baseUrl}api/LpuJournal/GetUserRoles?Email=`+ UserEmail, httpOptions);
   }
-
 
  AuthoriseUserDetails(UserEmail: any, secreatKeys: any, JournalId: any): Observable<any> {
   //  var authToken = this.storageService.getUser();
