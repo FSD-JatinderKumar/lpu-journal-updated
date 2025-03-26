@@ -120,7 +120,7 @@ export class SubmitManuScriptComponent implements OnInit {
   getUserRolesforId(): void {
     const roleMapping: Record<string, string> = {
       '0': 'Editor',
-      '1': 'Author',
+      '1': 'Author/ Submit Manuscript',
       '2': 'Reviewer',
       '3': 'Publisher'
     };
@@ -562,7 +562,7 @@ ReviewerdisplayedColumns: string[] = [
   'editorInChief',
   'manuScriptType',
   'requestedBy',
-  'assignedBy',
+  // 'assignedBy',
   // 'submissionType',
   'fileUrl',
   'journalId'
@@ -574,7 +574,7 @@ ReviewerdisplayedColumnsHeader: string[] = [
   'Editor In Chief',
   'Manu Script',
   'Requested By',
-  'Assigned By',
+  // 'Assigned By',
   // 'Submission Type',
   'Download File',
   'Action'
@@ -585,7 +585,7 @@ ReviewercolumnHeaders: { [key: string]: string } = {
   editorInChief: 'Author Name', 
   manuScriptType: 'Manuscript Type', 
   requestedBy: 'Requested By',
-  assignedBy: 'Assigned By',
+  // editorInChief: 'Assigned By',
   // submissionType: 'Submitted Script ', 
   fileUrl: 'Document' ,
   journalId: 'Action' 

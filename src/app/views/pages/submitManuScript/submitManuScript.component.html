@@ -35,7 +35,7 @@
   <nav>
     <div class="nav nav-tabs mt-4 d-flex justify-content-center" id="nav-tab" role="tablist">
       <button *ngFor="let action of UserRolesArray; let i = index" class="dashboardButton me-5"
-        id="{{ action.id }}-tab" data-bs-toggle="tab" style="padding: 0.15rem 0.5rem;"
+        id="{{ action.id }}-tab" data-bs-toggle="tab" style="padding: 0.5rem 0.5rem;"
         [attr.data-bs-target]="'#' + action.id"   role="tab" [attr.aria-controls]="action.id"
         [class.active]="i === 0" [attr.aria-selected]="i === 0 ? 'true' : 'false'">
         {{ action.label }} Dashboard
@@ -50,13 +50,13 @@
       <ng-container [ngSwitch]="action.label">
 
         <!-- Author Dashboard -->
-        <div *ngSwitchCase="'Author'">
+        <div *ngSwitchCase="'Author/ Submit Manuscript'">
 
           <div class="row d-flex p-3 align-items-center justify-content-center ">
             <div class="col-md-12 grid-margin stretch-card">
 
               <div class="text-center">
-                <h2 class="text-center text-danger mb-2"> Author Dashboard </h2>
+                <h2 class="text-center text-danger mb-2"> {{action.label}} Dashboard </h2>
               </div>
               <div class="container  ">
                 <div class="row  mb-3">
@@ -226,7 +226,7 @@
 
           <div class="row ">
             <div class="text-center">
-              <h2 class="text-center text-danger mb-5"> Reviewer Dashboard </h2>
+              <h2 class="text-center text-danger mb-5"> {{action.label}} Dashboard </h2>
             </div>
             <div class="container-fluid table-bordered table-responsive ">
               <div class="row">
@@ -296,7 +296,7 @@
         <!-- Editor Dashboard -->
         <div *ngSwitchCase="'Editor'">
           <div class="text-center">
-            <h2 class="text-center text-danger mb-5"> Editor Dashboard </h2>
+            <h2 class="text-center text-danger mb-5"> {{action.label}}  Dashboard </h2>
           </div>
           <div class="container-fluid table-bordered table-responsive ">
             <div class="row">
@@ -358,7 +358,7 @@
         <!-- Publisher Dashboard -->
         <div *ngSwitchCase="'Publisher'">
           <div class="text-center">
-            <h2 class="text-center text-danger mb-5"> Publisher Dashboard </h2>
+            <h2 class="text-center text-danger mb-5"> {{action.label}}  Dashboard </h2>
           </div>
           <div class="container-fluid table-bordered table-responsive">
             <div class="row justify-content-center">
