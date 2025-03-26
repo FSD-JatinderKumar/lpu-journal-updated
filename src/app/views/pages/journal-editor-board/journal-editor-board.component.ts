@@ -101,8 +101,28 @@ export class JournalEditorBoardComponent implements OnInit {
   GetDataforEditors()
   {
     this.EditorInChief = this.filteredEditors.filter((item: { editorType: string; }) => item.editorType.toLowerCase().includes('editor in chief')); //
-    this.AssociateEditor = this.filteredEditors.filter((item: { editorType: string; }) => item.editorType.toLowerCase().includes('associate editors'));
-    this.ManagingEditor = this.filteredEditors.filter((item: { editorType: string; }) => item.editorType.toLowerCase().includes('managing editor'));
+    //this.AssociateEditor = this.filteredEditors.filter((item: { editorType: string; }) => item.editorType.toLowerCase().includes('associate editors'));
+    this.AssociateEditor = this.filteredEditors
+    .filter((item: { editorType: string }) => 
+      item.editorType.toLowerCase().includes('associate editors')
+    )
+    .sort((a: { designation: string }, b: { designation: string }) => {
+      const importantRoles = ["head", "dean", "associate dean"];
+  
+      const getPriority = (designation: string) => {
+        designation = designation.toLowerCase();
+        if (designation.includes("head")) return 1;
+        if (designation.includes("dean")) return 2;
+        if (designation.includes("associate dean")) return 3;
+        return 4; // Default priority for others
+      };
+  
+      return getPriority(a.designation) - getPriority(b.designation);
+    });
+  
+  console.log("Sorted Associate Editors:", JSON.stringify(this.AssociateEditor));
+  
+  this.ManagingEditor = this.filteredEditors.filter((item: { editorType: string; }) => item.editorType.toLowerCase().includes('managing editor'));
     
     // this.EditorialboardmembersReviews = this.filteredEditors.filter((item: { editorType: string; }) => item.editorType.toLowerCase().includes('reviewers '));
   }
