@@ -22,7 +22,7 @@ export class ExternalUserLoginComponent implements OnInit {
   DepartmentName: any; loadingIndicator: boolean | undefined; CandidateName: any; UserId: any;
   Designation: any; EmailId: any; MobileNo: any; UserRole: any; SupervisorName: any; ProofNumber: any; ProofName: any;
   SecretKey: any; BookId: any; name: any; isForm1Submitted: boolean = false;
-  JournalTitle: any;
+  JournalTitle: any; errorMessage: any;
   UserLoginForm!: FormGroup; formdata: FormGroup;
   Email: any;
   constructor(
@@ -44,6 +44,7 @@ export class ExternalUserLoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.errorMessage='';
     this.cookieService.delete('authData');
     this.AuthSession.clearSession();
     this.storageService.clean();
@@ -143,6 +144,7 @@ AuthoriseUserNewWay(Id: any, Key: any): void {
         this.CreateToken(this.Email, response);
       } else {
         this.showNoDataFoundMessage = true;
+        this.errorMessage='Ensure if your current Journal belongs to your login';
         swal.fire({
           text: 'Check if you have selected the same Journal!',
           title: 'Invalid Login Details',
