@@ -608,6 +608,7 @@ ReviewercolumnHeaders: { [key: string]: string } = {
         }
         this.dataShowing = true;
         this.showEditorData(this.BookId);
+        
         this.loadReviewers(this.BookId);
         this.GetJournalDetailsAbout(this.BookId);
         this.showData();
@@ -968,6 +969,7 @@ EditordisplayedColumnsHeader: string[] = [
 'Download File',
 'Action'
 ];
+
 showEditorData(journalId: any) {
   this.journalWebApiService.GetAllMenuScriptForJournalId(journalId).subscribe({
     next: (dataX: any) => {
@@ -979,6 +981,7 @@ showEditorData(journalId: any) {
         this.EditorDataColumns = Object.keys(this.EditorData[0]);
         this.calculateTotalPagesEditor();
         this.updatePaginatedDataEditor();
+
       }
       this.dataShowing = true;
       this.getUserRolesforId();
@@ -992,7 +995,172 @@ showEditorData(journalId: any) {
       this.dataShowing = true;
     }
   });
+  this.GetallReviewsData(this.BookId);
 }
+
+currentPageReviewerRemarks: number = 1;
+pageSizeReviewerRemarks: number = 10;
+paginatedReviewerRemarks: any[] = [];
+totalPagesReviewerRemarks: number = 1;
+ReviewerRemarksData: any[] = [];
+ReviewerRemarksDataColumns: string[] = [];
+
+// Display headers mapping
+displayedReviewerRemarksColumnHeaders: { [key: string]: string } = {
+  reviewerTerm: 'Term Reviewed',
+  overallRating: 'Overall Rating',
+  commentsForAuthor: 'Comments for Author',
+  commentsforEditor: 'Comments for Editor',
+  transferResponse: 'Transfer Response',
+  newSubjectRating: 'Subject Rating',
+  manuscriptRating: 'Manuscript Rating',
+  manuscriptOrganisedRating: 'Manuscript Organised Rating',
+  journalId: 'Action'
+};
+
+ReviewerRemarksdisplayedColumns: string[] = [
+  'reviewerTerm',
+  'overallRating',
+  'commentsForAuthor',
+  'commentsforEditor',
+  'transferResponse',
+  'newSubjectRating',
+  'manuscriptRating',
+  'manuscriptOrganisedRating',
+  'journalId'
+];
+
+calculateTotalPagesReviewerRemarks() {
+  this.totalPagesReviewerRemarks = Math.ceil(this.ReviewerRemarksData.length / this.pageSizeReviewerRemarks);
+}
+
+updatePaginatedDataReviewerRemarks() {
+  const startIndex = (this.currentPageReviewerRemarks - 1) * this.pageSizeReviewerRemarks;
+  this.paginatedReviewerRemarks = this.ReviewerRemarksData.slice(startIndex, startIndex + this.pageSizeReviewerRemarks);
+}
+
+nextPageReviewerRemarks() {
+  if (this.currentPageReviewerRemarks < this.totalPagesReviewerRemarks) {
+    this.currentPageReviewerRemarks++;
+    this.updatePaginatedDataReviewerRemarks();
+  }
+}
+
+previousPageReviewerRemarks() {
+  if (this.currentPageReviewerRemarks > 1) {
+    this.currentPageReviewerRemarks--;
+    this.updatePaginatedDataReviewerRemarks();
+  }
+}
+
+GetallReviewsData(journalId: any) {
+  this.journalWebApiService.GetAllReviewersRemarkss(journalId).subscribe({
+    next: (dataXY: any) => {
+      this.ReviewerRemarksData = dataXY.item1 || [];
+      console.log("Fetched ReviewerRemarksData:", this.ReviewerRemarksData);
+      
+      if (this.ReviewerRemarksData.length > 0) {
+        this.ReviewerRemarksDataColumns = Object.keys(this.ReviewerRemarksData[0]);
+        this.calculateTotalPagesReviewerRemarks();
+        this.updatePaginatedDataReviewerRemarks();
+      }
+
+      this.dataShowing = true;
+    },
+    error: (error: any) => {
+      console.error('Error fetching data', error);
+      this.dataShowing = false;
+      this.LoginFalied();
+    }
+  });
+}
+
+
+// currentPageReviewerRemarks: number = 1;
+// pageSizeReviewerRemarks: number = 10;
+// paginatedReviewerRemarks: any[] = [];
+// totalPagesReviewerRemarks: number = 1;
+
+// displayedReviewerRemarksColumnHeaders: { [key: string]: string } = { 
+//   reviewerTerm:       'Term Reviewed', 
+//   overallRating:      'Overall Rating', 
+//   commentsForAuthor:  'Comments for Author', 
+//   commentsForEditor:  'Comments for Editor', 
+//   transferResponse:   'Transfer Response', 
+//   newSubjectRating:  'Subject Rating', 
+//   manuscriptRating:  'Manuscript Rating', 
+//   manuscriptOrganisedRating: 'Manuscript Organised Rating', 
+//   // userName: 'Submitted By', 
+//   // submissionType: 'Submitted Script ', 
+//   // fileUrl: 'Document' ,
+//   journalId: 'Action' 
+// }; // Custom header text journalTitle	editorInChief	ManuScriptType	submissionType
+
+//   ReviewerRemarksdisplayedColumns: string[] = [
+//     'Term Reviewed',
+//     'Overall Rating',
+//     'Comments for Author',
+//     'Comments for Editor',
+//     'Transfer Response',
+//     'Subject Rating',
+//     'Manuscript Rating',
+//     'journalId'
+//   ];
+
+
+
+// calculateTotalPagesReviewerRemarks() {
+//   this.totalPagesReviewerRemarks = Math.ceil(this.ReviewerRemarksData.length / this.pageSizeReviewerRemarks);
+// }
+
+// updatePaginatedDataReviewerRemarks() {
+//   const startIndex = (this.currentPageReviewerRemarks - 1) * this.pageSizeReviewerRemarks;
+//   this.paginatedReviewerRemarks = this.ReviewerRemarksData.slice(startIndex, startIndex + this.pageSizeReviewerRemarks);
+// }
+
+// nextPageReviewerRemarks() {
+//   if (this.currentPageReviewerRemarks < this.totalPagesReviewerRemarks) {
+//     this.currentPageReviewerRemarks++;
+//     this.updatePaginatedDataReviewerRemarks();
+//   }
+// }
+
+// previousPageReviewerRemarks() {
+//   if (this.currentPageReviewerRemarks > 1) {
+//     this.currentPageReviewerRemarks--;
+//     this.updatePaginatedDataReviewerRemarks();
+//   }
+// }
+
+// ReviewerRemarksData: any;
+// ReviewerRemarksDataColumns: any;
+
+// GetallReviewsData(journalId: any) {
+//   this.journalWebApiService.GetAllReviewersRemarkss(journalId).subscribe({
+//     next: (dataXY: any) => {
+//       this.dataSource = dataXY.item1;
+//       this.dataLoaded = true;
+//       this.ReviewerRemarksData = dataXY.item1;
+//       console.log("ALL ReviewerRemarksData   Data" + JSON.stringify(this.ReviewerRemarksData))
+//       if (this.ReviewerRemarksData.length > 0) {
+//         this.ReviewerRemarksDataColumns = Object.keys(this.ReviewerRemarksData[0]);
+//         this.calculateTotalPagesReviewerRemarks();
+//         this.updatePaginatedDataReviewerRemarks();
+//       }
+//       this.dataShowing = true;
+//       this.getUserRolesforId();
+//     },
+//     error: (error: any) => {
+//       this.dataShowing = false;
+//       console.error('Error fetching data', error);
+//       this.LoginFalied();
+//     },
+//     complete: () => {
+//       this.dataShowing = true;
+//     }
+//   });
+// }
+
 onSelectFileEditorX(a: any) {
   let aa = a;
   // alert(aa)

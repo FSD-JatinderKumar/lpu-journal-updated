@@ -7,6 +7,7 @@ const AUTH_API = 'https://projectsapi.lpu.in/';
 //  const AUTH_API = 'https://localhost:7125/';// 'https://projectsapi.lpu.in/';//'https://projectsapi.lpu.in/'; //
 const AUTH_API_LOCAL = 'https://projectsapi.lpu.in/'; //'https://localhost:7125/';
 const AUTH_API_LOCALs = 'https://projectsapi.lpu.in/'; //'https://localhost:7125/';
+const AUTH_API_LOCAs = 'https://localhost:7125/';
 
 @Injectable({
   providedIn: 'root'
@@ -362,4 +363,29 @@ GetReviewerDetailsForEditors(UserId:any): Observable<any> {
       AUTH_API_LOCALs + 'api/LpuJournal/JournalUpdatePasswordDetails', UpdateUserData, { headers }
     );
   }
+  // 27-march-25
+  GetAllReviewersRemarks(JournalId: any): Observable<any> {
+    let authToken = this.storageService.getUser();
+    let headers = new HttpHeaders()
+      .set('Authorization', 'Bearer ' + authToken)
+    return this.http.post(
+      AUTH_API_LOCALs + 'api/LpuJournal/GetReviewersRemarks?JournalId=' + JournalId, 
+      { headers }
+    );
+  }
+
+
+
+  
+  GetAllReviewersRemarkss(JournalId:any): Observable<any> {
+    let token = this.storageService.getUser();
+    let headers = new HttpHeaders()
+    .set('Authorization', 'Bearer ' + token)
+    return this.http.get(
+      // AUTH_API_LOCAL + 'api/LpuJournal/GetAllMenuScriptForUser?Email=' + UserEmail, { headers }
+      AUTH_API_LOCAs + 'api/LpuJournal/GetReviewersRemarks?JournalId=' + JournalId, 
+      { headers }
+    );
+  }
+
 }

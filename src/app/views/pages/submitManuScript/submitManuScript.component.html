@@ -298,60 +298,143 @@
           <div class="text-center">
             <h2 class="text-center text-danger mb-5"> {{action.label}}  Dashboard </h2>
           </div>
-          <div class="container-fluid table-bordered table-responsive ">
-            <div class="row">
-              <div class="col-md-12 stretch-card">
-                <div class="card accordionColor ">
-                  <div class="card-body accordionColor " *ngIf="this.EditorData?.length>0; else NoData">
-                    <div class="table-responsive">
-                      <table class="table table-bordered">
-                        <thead>
-                          <tr>
-                            <th *ngFor="let col of EditordisplayedColumns">{{ displayedEditorColumnHeaders[col] }}</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr *ngFor="let row of paginatedEditorData">
-                            <td *ngFor="let col of EditordisplayedColumns">
-                              <ng-container [ngSwitch]="col">
-                                <!-- File URL Case -->
-                                <button *ngSwitchCase="'fileUrl'" class="btn btn-dark btn-sm"
-                                  (click)="onSelectFileEditorX(row[col])">
-                                  <i class="bi bi-file-earmark-text"></i>
-                                </button>
-
-                                <!-- Take Action Button -->
-                                <button *ngSwitchCase="'journalId'" class="btn btn-danger btn-sm"
-                                  (click)="onTakeAction(row)" data-bs-toggle="modal"
-                                  data-bs-target="#assignReviewerModal">
-                                  <i class="bi bi-exclamation-circle"></i>
-                                </button>
-
-                                <span *ngSwitchDefault>{{ row[col] }}</span>
-                              </ng-container>
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-
-                      <!-- Pagination Controls -->
-                      <div class="pagination-controls">
-                        <button (click)="previousPageEditor()" [disabled]="currentPageEditor === 1">Previous</button>
-                        <span> Page {{ currentPageEditor }} of {{ totalPagesEditor }} </span>
-                        <button (click)="nextPageEditor()"
-                          [disabled]="currentPageEditor >= totalPagesEditor">Next</button>
+          <nav>
+            <div class="nav nav-tabs d-flex justify-content-center" id="nav-tab" role="tablist">
+              <!-- Manuscript Tab -->
+              <button class="dashboardButton me-5 active" id="Manuscript-all-tab" data-bs-toggle="tab"
+                data-bs-target="#Manuscript-all" type="button" role="tab" aria-controls="Manuscript-all" aria-selected="true">
+                Manuscript Submitted
+              </button>
+              <!-- Reviewers Tab -->
+              <button class="dashboardButton ms-5" id="Reviewers-all-tab" data-bs-toggle="tab"
+              data-bs-target="#Reviewers-tab" type="button" role="tab" aria-controls="Reviewers-tab" aria-selected="false">
+              Reviewers
+            </button>
+            </div>
+          </nav>
+          
+          <div class="tab-content mt-4" id="nav-tabContent">
+  
+            <!-- Manuscript Tab Content (Initially Active) -->
+            <div class="tab-pane fade show active" id="Manuscript-all" role="tabpanel" aria-labelledby="Manuscript-all-tab">
+              <div class="text-center">
+                <h2 class="text-center text-danger mb-2"> Manuscript Details </h2>
+              </div>
+              <div class="container-fluid table-bordered table-responsive">
+                <div class="row">
+                  <div class="col-md-12 stretch-card">
+                    <div class="card accordionColor">
+                      <div class="card-body accordionColor" *ngIf="EditorData?.length > 0; else NoData">
+                        <div class="table-responsive">
+                          <table class="table table-bordered">
+                            <thead>
+                              <tr>
+                                <th *ngFor="let col of EditordisplayedColumns">
+                                  {{ displayedEditorColumnHeaders[col] }}
+                                </th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr *ngFor="let row of paginatedEditorData">
+                                <td *ngFor="let col of EditordisplayedColumns">
+                                  <ng-container [ngSwitch]="col">
+                                    <button *ngSwitchCase="'fileUrl'" class="btn btn-dark btn-sm" (click)="onSelectFileEditorX(row[col])">
+                                      <i class="bi bi-file-earmark-text"></i>
+                                    </button>
+                                    <button *ngSwitchCase="'journalId'" class="btn btn-danger btn-sm" (click)="onTakeAction(row)"
+                                      data-bs-toggle="modal" data-bs-target="#assignReviewerModal">
+                                      <i class="bi bi-exclamation-circle"></i>
+                                    </button>
+                                    <span *ngSwitchDefault>{{ row[col] }}</span>
+                                  </ng-container>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+          
+                          <!-- Pagination Controls -->
+                          <div class="pagination-controls">
+                            <button (click)="previousPageEditor()" [disabled]="currentPageEditor === 1">Previous</button>
+                            <span> Page {{ currentPageEditor }} of {{ totalPagesEditor }} </span>
+                            <button (click)="nextPageEditor()" [disabled]="currentPageEditor >= totalPagesEditor">Next</button>
+                          </div>
+                        </div>
                       </div>
+                      <ng-template #NoData>
+                        <div class="themeClr">
+                          <h1 class="fs-2 text-center vh-50 p-3 m-4"> No Data Found </h1>
+                        </div>
+                      </ng-template>
                     </div>
-
                   </div>
-                  <ng-template #NoData>
-                    <div class="themeClr">
-                      <h1 class="fs-2 text-center vh-50 p-3 m-4 "> No Data Found </h1>
-                    </div>
-                  </ng-template>
                 </div>
               </div>
             </div>
+          
+            <!--  Reviewers Tab Content (Initially Hidden) -->
+            <div class="tab-pane fade" id="Reviewers-tab" role="tabpanel" aria-labelledby="Reviewers-all-tab">
+              <div class="text-center">
+                <h2 class="text-center text-danger mb-2"> All Reviews   </h2>
+              </div>
+              <div class="container-fluid table-bordered table-responsive">
+                <div class="row">
+                  <div class="col-md-12 stretch-card">
+                    <div class="card accordionColor">
+                      <div class="card-body accordionColor" *ngIf="ReviewerRemarksData.length > 0; else NoData">
+                        <div class="table-responsive">
+                          <table class="table table-bordered">
+                            <thead>
+                              <tr>
+                                <th *ngFor="let col of ReviewerRemarksdisplayedColumns">
+                                  {{ displayedReviewerRemarksColumnHeaders[col] }}
+                                </th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr *ngFor="let row of paginatedReviewerRemarks">
+                                <td *ngFor="let col of ReviewerRemarksdisplayedColumns">
+                                  <ng-container [ngSwitch]="col">
+                                    <button *ngSwitchCase="'fileUrl'" class="btn btn-dark btn-sm" (click)="onSelectFileEditorX(row[col])">
+                                      <i class="bi bi-file-earmark-text"></i>
+                                    </button>
+                                    <button *ngSwitchCase="'journalId'" class="btn btn-danger btn-sm" (click)="onTakeAction(row)"
+                                      data-bs-toggle="modal" data-bs-target="#assignReviewerModal">
+                                      <i class="bi bi-exclamation-circle"></i>
+                                    </button>
+                                    <span *ngSwitchCase="'isApproved'">
+                                      <span [ngClass]="row[col] === 'True' ? 'text-success' : 'text-danger'">
+                                        {{ row[col] === 'True' ? 'Approved' : 'Not Approved' }}
+                                      </span>
+                                    </span>
+                                    <span *ngSwitchCase="'newInformationRating'">
+                                      {{ row[col] !== null ? row[col] : 'N/A' }}
+                                    </span>
+                                    <span *ngSwitchDefault>{{ row[col] }}</span>
+                                  </ng-container>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+          
+                          <!-- Pagination Controls -->
+                          <div class="pagination-controls">
+                            <button (click)="previousPageReviewerRemarks()" [disabled]="currentPageReviewerRemarks === 1">Previous</button>
+                            <span> Page {{ currentPageReviewerRemarks }} of {{ totalPagesReviewerRemarks }} </span>
+                            <button (click)="nextPageReviewerRemarks()" [disabled]="currentPageReviewerRemarks >= totalPagesReviewerRemarks">Next</button>
+                          </div>
+                        </div>
+                      </div>
+                      <ng-template #NoData>
+                        <div class="themeClr">
+                          <h1 class="fs-2 text-center vh-50 p-3 m-4"> No Data Found </h1>
+                        </div>
+                      </ng-template>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          
           </div>
         </div>
 
