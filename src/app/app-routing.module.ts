@@ -171,6 +171,10 @@ const routes: Routes = [
         path: "EditorDashboard",
         loadChildren: () => import('./views/pages/Journal-Editors/Manuscript-Details/Manuscript-Details.module').then(m=>m.ManuscriptDetailsModule)
       },
+      {
+        path: "ReviewersRemarks",
+        loadChildren: () => import('./views/pages/Journal-Editors/ReviewersRemarks-Details/ReviewersRemarks-Details.module').then(m=>m.ReviewersRemarksDetailsModule)
+      },
 
       {
         path: "UpdateKey",

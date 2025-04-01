@@ -67,6 +67,8 @@ import { EditorHeaderComponent } from './views/pages/Journal-Editors/Editor-Top-
 import { ManuscriptDetailsComponent } from './views/pages/Journal-Editors/Manuscript-Details/Manuscript-Details.component';
 import { RecoverAccountComponent } from './views/pages/recover-account/recover-account.component';
 import { ChangePasswordComponent } from './views/pages/Journal-Editors/Change-Password/Change-Password.component';
+import { ReviewersRemarksDetailsModule } from './views/pages/Journal-Editors/ReviewersRemarks-Details/ReviewersRemarks-Details.module';
+import { ReviewersRemarksDetailsComponent } from './views/pages/Journal-Editors/ReviewersRemarks-Details/ReviewersRemarks-Details.component';
 
 @NgModule({
   declarations: [
@@ -114,6 +116,7 @@ import { ChangePasswordComponent } from './views/pages/Journal-Editors/Change-Pa
 
     EditorHeaderComponent, 
     ManuscriptDetailsComponent,
+    ReviewersRemarksDetailsComponent,
     RecoverAccountComponent, 
     ChangePasswordComponent
     
@@ -148,6 +151,7 @@ import { ChangePasswordComponent } from './views/pages/Journal-Editors/Change-Pa
 
     EditorHeaderModule,
     ManuscriptDetailsModule,
+    ReviewersRemarksDetailsModule
     
   ],
   providers: [],
