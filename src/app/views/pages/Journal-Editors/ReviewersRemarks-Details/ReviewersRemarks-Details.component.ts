@@ -40,6 +40,8 @@ export class ReviewersRemarksDetailsComponent implements OnInit {
     // 'Action'
   ];
     Journals: any;
+tableColumns: any;
+pageSize: any;
   constructor(
     private storageService: StorageService,
     private authService: AuthService,
@@ -113,6 +115,8 @@ EditorDataColumns: any;
   
   // Display headers mapping
   displayedReviewerRemarksColumnHeaders: { [key: string]: string } = {
+    'reviewerName':'Reviewer Name',
+    'publicationDate':'Published Date',
     reviewerTerm: 'Term Reviewed',
     overallRating: 'Overall Rating',
     commentsForAuthor: 'Comments for Author',
@@ -125,6 +129,8 @@ EditorDataColumns: any;
   };
   
   ReviewerRemarksdisplayedColumns: string[] = [
+    'reviewerName',
+    'publicationDate',
     'reviewerTerm',
     'overallRating',
     'commentsForAuthor',
@@ -300,6 +306,81 @@ EditorDataColumns: any;
     //   this.reviewerList = reviewers;
     // });
     // this.selectedReviewerId.value='select';
+  }
+Reason: any;
+
+  DisapproveStatus(rowData: any) {
+    alert(rowData.manuscriptId)
+    Swal.fire({
+      title: "Reason for Disapproval",
+      // text: "Disapproval reason",
+      input: 'text',
+      showCancelButton: true
+    }).then((result) => {
+      if (result.value) {
+        this.Reason = result.value;
+        const formData = new FormData();
+        formData.append('Id', rowData.manuscriptId);
+        formData.append('DisapprovalReason', this.Reason);
+        formData.append('Action', 'Disapprove');
+        this.handleStatusChange(formData, 'Disapprove');
+      } else {
+        this.showCancelledSwal();
+      }
+    });
+  }
+
+
+  
+ 
+  ChangeApproveStatus(rowData: any) {
+    alert(rowData.manuscriptId)
+    const formData = new FormData();
+    formData.append('Id', rowData.manuscriptId);
+    formData.append('Action', 'Approve');
+
+    Swal.fire({
+      title: 'Are you sure you want to change the status?',
+      text: 'Kindly confirm if the document is valid!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, accept current changes!',
+      cancelButtonText: 'No, do not change it'
+    }).then((result: any) => {
+      if (result.value) {
+        this.handleStatusChange(formData, 'Approve');
+      } else {
+        this.showCancelledSwal();
+      }
+    });
+  }
+
+  private handleStatusChange(formData: FormData, action: string) {
+    this.journalWebApiService.ApproveDocument(formData).subscribe((data: any) => {
+      if (action === 'Approve' && data.responseData === 'Cancel') {
+        Swal.fire(
+          'No Change!',
+          ' ',
+          'error'
+        );
+      } else {
+        Swal.fire(
+          ' Approved/Disapproved successfully !',
+          '',
+          'success'
+        ).then(() => {
+          window.location.reload();
+        });
+      }
+    });
+  }
+
+  private showCancelledSwal() {
+    Swal.fire(
+      'Cancelled',
+      ' ',
+      'error'
+    );
   }
 
 }

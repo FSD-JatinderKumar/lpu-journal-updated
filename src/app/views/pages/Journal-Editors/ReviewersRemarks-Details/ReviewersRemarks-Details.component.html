@@ -4,7 +4,6 @@
 <div class="vh-150 d-flex p-2 align-items-center justify-content-center">
   <div class="container-fluid ">
     <div class="row">
-
       <div class="col-md-12 grid-margin stretch-card">
         <!-- <div class="card accordionColor "> -->
         <div class="card-body m-5 ">
@@ -16,11 +15,12 @@
   </div>
 </div>
 <div class="d-flex p-2 align-items-center justify-content-center ">
-  <div class="text-center">
-    <h2 class="text-center text-danger mb-2"> All Reviews   </h2>
-  </div>
+
   <div class="container-fluid table-bordered table-responsive">
     <div class="row">
+      <div class="text-center">
+        <h2 class="text-center text-danger mb-2"> All Remarks   </h2>
+      </div>
       <div class="col-md-12 stretch-card">
         <div class="card accordionColor">
           <div class="card-body accordionColor" *ngIf="ReviewerRemarksData.length > 0; else NoData">
@@ -40,14 +40,14 @@
                         <button *ngSwitchCase="'fileUrl'" class="btn btn-dark btn-sm" (click)="onSelectFileEditorX(row[col])">
                           <i class="bi bi-file-earmark-text"></i>
                         </button>
-                        <button *ngSwitchCase="'journalId'" class="btn btn-danger btn-sm" (click)="onTakeAction(row)"
-                          data-bs-toggle="modal" data-bs-target="#assignReviewerModal">
-                          <i class="bi bi-exclamation-circle"></i>
-                        </button>
+                        <span *ngSwitchCase="'journalId'" class="col-md-6"  >
+                          <button class="btn btn-success btn-sm" (click)="ChangeApproveStatus(row)"><i class="bi bi-check-circle"></i></button>
+                          <button class="btn btn-danger btn-sm" (click)="DisapproveStatus(row)"><i class="bi bi-x-circle"></i></button>
+                        </span>
                         <span *ngSwitchCase="'isApproved'">
-                          <span [ngClass]="row[col] === 'True' ? 'text-success' : 'text-danger'">
-                            {{ row[col] === 'True' ? 'Approved' : 'Not Approved' }}
-                          </span>
+                          <span [ngClass]="row[col] === '1' ? 'text-success' : 'text-danger'">
+                            {{ row[col] === '1' ? 'Approved' : 'Not Approved' }}
+                          </span>{{row[col]}}
                         </span>
                         <span *ngSwitchCase="'newInformationRating'">
                           {{ row[col] !== null ? row[col] : 'N/A' }}
@@ -55,11 +55,15 @@
                         <span *ngSwitchDefault>{{ row[col] }}</span>
                       </ng-container>
                     </td>
+                    <!-- <td>
+                      <button class="btn btn-success btn-sm" (click)="ChangeApproveStatus(row)">Approve</button>
+                      <button class="btn btn-danger btn-sm" (click)="DisapproveStatus(row)">Disapprove</button>
+                    </td> -->
                   </tr>
                 </tbody>
               </table>
 
-              <!-- Pagination Controls -->
+              
               <div class="pagination-controls">
                 <button (click)="previousPageReviewerRemarks()" [disabled]="currentPageReviewerRemarks === 1">Previous</button>
                 <span> Page {{ currentPageReviewerRemarks }} of {{ totalPagesReviewerRemarks }} </span>
