@@ -61,14 +61,20 @@ import { AllUserDetailsComponent } from './views/pages/Journal-Publisher/All-Use
 import { NewJournalComponentModule } from './views/pages/Journal-Publisher/NewJournal/NewJournal.module';
 import { UpdateJournalDetailsModule } from './views/pages/Journal-Publisher/update-journal-details/update-journal-details.module';
 import { UpdateJournalDetailsComponent } from './views/pages/Journal-Publisher/update-journal-details/update-journal-details.component';
-import { EditorHeaderModule } from './views/pages/Journal-Editors/Editor-Top-Bar/EditorHeader.moudle';
-import { ManuscriptDetailsModule } from './views/pages/Journal-Editors/Manuscript-Details/Manuscript-Details.module';
-import { EditorHeaderComponent } from './views/pages/Journal-Editors/Editor-Top-Bar/EditorHeader.component';
-import { ManuscriptDetailsComponent } from './views/pages/Journal-Editors/Manuscript-Details/Manuscript-Details.component';
+import { EditorHeaderModule } from './views/pages/Journal-Editors-AdminDashboard/Editor-Top-Bar/EditorHeader.moudle';
+import { ManuscriptDetailsModule } from './views/pages/Journal-Editors-AdminDashboard/Manuscript-Details/Manuscript-Details.module';
+import { EditorHeaderComponent } from './views/pages/Journal-Editors-AdminDashboard/Editor-Top-Bar/EditorHeader.component';
+import { ManuscriptDetailsComponent } from './views/pages/Journal-Editors-AdminDashboard/Manuscript-Details/Manuscript-Details.component';
 import { RecoverAccountComponent } from './views/pages/recover-account/recover-account.component';
-import { ChangePasswordComponent } from './views/pages/Journal-Editors/Change-Password/Change-Password.component';
-import { ReviewersRemarksDetailsModule } from './views/pages/Journal-Editors/ReviewersRemarks-Details/ReviewersRemarks-Details.module';
-import { ReviewersRemarksDetailsComponent } from './views/pages/Journal-Editors/ReviewersRemarks-Details/ReviewersRemarks-Details.component';
+import { ChangePasswordComponent } from './views/pages/Journal-Editors-AdminDashboard/Change-Password/Change-Password.component';
+import { ReviewersRemarksDetailsModule } from './views/pages/Journal-Editors-AdminDashboard/ReviewersRemarks-Details/ReviewersRemarks-Details.module';
+import { ReviewersRemarksDetailsComponent } from './views/pages/Journal-Editors-AdminDashboard/ReviewersRemarks-Details/ReviewersRemarks-Details.component';
+import { ReviewersHeaderComponent } from './views/pages/Journal-Reviewers-AdminDashboard/Reviewers-Top-Bar/ReviewersHeader.component';
+import { ReviewersHeaderModule } from './views/pages/Journal-Reviewers-AdminDashboard/Reviewers-Top-Bar/ReviewersHeader.moudle';
+import { MyManuscriptDetailsModule } from './views/pages/Journal-Reviewers-AdminDashboard/MyManuscript-Details/MyManuscript-Details.module';
+import { MyManuscriptDetailsComponent } from './views/pages/Journal-Reviewers-AdminDashboard/MyManuscript-Details/MyManuscript-Details.component';
+import { MyRemarksDetailsModule } from './views/pages/Journal-Reviewers-AdminDashboard/MyRemarks-Details/MyRemarks-Details.module';
+import { MyRemarksDetailsComponent } from './views/pages/Journal-Reviewers-AdminDashboard/MyRemarks-Details/MyRemarks-Details.component';
 
 @NgModule({
   declarations: [
@@ -118,7 +124,15 @@ import { ReviewersRemarksDetailsComponent } from './views/pages/Journal-Editors/
     ManuscriptDetailsComponent,
     ReviewersRemarksDetailsComponent,
     RecoverAccountComponent, 
-    ChangePasswordComponent
+    ChangePasswordComponent, 
+
+
+
+    ReviewersHeaderComponent,
+    MyManuscriptDetailsComponent,
+    MyRemarksDetailsComponent,
+    
+
     
   ],
   imports: [
@@ -151,7 +165,12 @@ import { ReviewersRemarksDetailsComponent } from './views/pages/Journal-Editors/
 
     EditorHeaderModule,
     ManuscriptDetailsModule,
-    ReviewersRemarksDetailsModule
+    ReviewersRemarksDetailsModule, 
+
+    ReviewersHeaderModule,
+    MyManuscriptDetailsModule,
+    MyRemarksDetailsModule
+    
     
   ],
   providers: [],

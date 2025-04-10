@@ -18,12 +18,12 @@ import { forkJoin } from 'rxjs'
   styleUrls: ['./Manuscript-Details.component.scss']
 })
 export class ManuscriptDetailsComponent implements OnInit {
-  fromDate: any;    booksDataColumns: any;  toDate: any;  pipe = new DatePipe('en-CA');
-  dataSource: any[] = [];   dataX: any;   booksData: any;  dataShowing: any = false;
-  userRole: any;    BookId: any;    JournalId: any;  JournalTitle: any; name: any;
-  userId: any;    serverUrl: any;   supervisorName: any;    departmentName: any;
+  fromDate: any; booksDataColumns: any; toDate: any; pipe = new DatePipe('en-CA');
+  dataSource: any[] = []; dataX: any; booksData: any; dataShowing: any = false;
+  userRole: any; BookId: any; JournalId: any; JournalTitle: any; name: any;
+  userId: any; serverUrl: any; supervisorName: any; departmentName: any;
   candidateName: any;
-    displayedColumns: string[] = [
+  displayedColumns: string[] = [
     // 'journalId',
     'journalTitle',
     'editorInChief',
@@ -39,38 +39,65 @@ export class ManuscriptDetailsComponent implements OnInit {
     'Submission Type',
     // 'Action'
   ];
-    Journals: any;
+  Journals: any;
+  LoginStatus: boolean | undefined;
   constructor(
     private storageService: StorageService,
     private authService: AuthService,
-    private AuthSession: LoginSessionService,
     private fb: FormBuilder,
     private router: Router,
+    private AuthSession: LoginSessionService,
+    private StoragesServices: StorageService,
     private route: ActivatedRoute, private cookieService: CookieService,
-    private journalWebApiService: LpujournalbookService  
+    private journalWebApiService: LpujournalbookService
   ) {
-    
+
   }
 
   dataLoaded: boolean = false;
 
-  ngOnInit(): void {
-    this.serverUrl='https://files.lpu.in/umsweb/Journal/';
-    this.BookId  = '45';// this.route.snapshot.params['Id'];
-    this.name  = this.JournalTitle ='Test Name Journal';//this.route.snapshot.params['name'];
-    let loginStatus = this.checkUserLogin();
-    // this.getBooksDetail();
-    this.showEditorData(this.BookId);
-    this.loadReviewers(this.BookId);
-      if (this.BookId != undefined && this.BookId != null ) {
-        // this.BookId = BookId;
-        // this.JournalId= BookId;
-        // this.JournalTitle = name;
-        // this.getBooksDetail();
-      } 
+  
+  Logout() {
+    this.cookieService.delete('authData');
+    this.cookieService.delete('BookData');
+  
+    this.cookieService.deleteAll();
+  
+    sessionStorage.clear();
+    localStorage.clear();
+  
+    this.AuthSession.clearSession();
+    this.StoragesServices.clean();
+  
+    this.userRole = null;
+    this.supervisorName = null;
+    this.departmentName = null;
+    this.candidateName = null;
+    this.LoginStatus = false;
+  
+    this.router.navigateByUrl('Home').then(() => {
+      setTimeout(() => {
+        location.reload();
+      }, 500);
+    });
   }
- 
-  checkUserLogin(){
+  
+
+  ngOnInit(): void {
+    this.serverUrl = 'https://files.lpu.in/umsweb/Journal/';
+    this.BookId = '45';// this.route.snapshot.params['Id'];
+    this.name = this.JournalTitle = 'Test Name Journal';//this.route.snapshot.params['name'];
+    let loginStatus = this.checkUserLogin();
+    if (loginStatus || this.BookId != undefined || this.BookId != null) {
+      this.showEditorData(this.BookId);
+      this.loadReviewers(this.BookId);
+    }
+    else {
+
+    }
+  }
+
+  checkUserLogin() {
     const GetCookieData = this.cookieService.get('authData');
     if (GetCookieData) {
       try {
@@ -83,17 +110,17 @@ export class ManuscriptDetailsComponent implements OnInit {
         return true;
       } catch (error) {
         console.error("Error parsing JSON from cookies:", error);
-        return false;  
+        return false;
       }
     } else {
       return false;
     }
-    
+
   }
 
-EditorDataColumns: any;
+  EditorDataColumns: any;
   loadingTimeout: any[] = []; // Store timeout references
-  
+
   EditorData: any[] = []; // Typed as array
   isLoading: boolean = false; // Simplified from array to single boolean
   currentPageEditor: number = 1;
@@ -133,10 +160,10 @@ EditorDataColumns: any;
         this.dataSource = dataX.item1;
         this.EditorData = dataX.item1 || [];
         // console.log("Editor Data:", JSON.stringify(this.EditorData));
-        
+
         this.dataLoaded = true;
         this.dataShowing = true;
-        
+
         if (this.EditorData.length > 0) {
           this.calculateTotalPagesEditor();
           this.updatePaginatedDataEditor();
@@ -185,8 +212,8 @@ EditorDataColumns: any;
     }
   }
 
- 
-  AssignedById: any; selectedReviewerId: any=''; selectedJournalId: any;
+
+  AssignedById: any; selectedReviewerId: any = ''; selectedJournalId: any;
   RecordId: any;
   onTakeAction(rowData: any) {
     // console.log(JSON.stringify(rowData))
@@ -203,19 +230,19 @@ EditorDataColumns: any;
 
 
     const formData = new FormData();
-// alert(this.AssignedById +" reviewer Emaild " + this.selectedReviewerId)
+    // alert(this.AssignedById +" reviewer Emaild " + this.selectedReviewerId)
     // Append form data to the FormData object
     formData.append('JournalId', this.selectedJournalId);
     formData.append('AssignedTo', this.selectedReviewerId);
-    formData.append('SubmittedBy',this.AssignedById);
-    formData.append('RecordId',this.RecordId);
-  
-  
+    formData.append('SubmittedBy', this.AssignedById);
+    formData.append('RecordId', this.RecordId);
+
+
     this.journalWebApiService.AssignNewReviewerForJournal(formData).subscribe({
       next: (data) => {
         let result = data.item1[0]['returnData'];
         let errorCode = data.item1[0]['returnId'];
-  
+
         if (result === 'success') {
           Swal.fire({
             title: 'Reviewer Assiged ',
@@ -252,7 +279,7 @@ EditorDataColumns: any;
 
 
   reviewerList: any[] = [];
-  loadReviewers(id:any) {
+  loadReviewers(id: any) {
     // API call to fetch reviewer list
     this.journalWebApiService.GetReviewerDetailsForEditors(this.userId).subscribe({
       next: (dataX: any) => {

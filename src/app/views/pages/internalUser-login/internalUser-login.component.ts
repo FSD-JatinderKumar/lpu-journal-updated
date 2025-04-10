@@ -202,7 +202,8 @@ export class InternalUserLoginComponent implements OnInit {
               this.router.navigateByUrl('EditorDashboard')
               break;
             case '1':
-              alert('Under Construction');
+              // alert('Under Construction');
+              this.router.navigateByUrl('ReviewersDashboard')
               this.loadForm();
               break;
             case '2': 

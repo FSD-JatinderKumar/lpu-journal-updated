@@ -169,24 +169,43 @@ const routes: Routes = [
 // Editors Dashboard 
       {
         path: "EditorDashboard",
-        loadChildren: () => import('./views/pages/Journal-Editors/Manuscript-Details/Manuscript-Details.module').then(m=>m.ManuscriptDetailsModule)
+        loadChildren: () => import('./views/pages/Journal-Editors-AdminDashboard/Manuscript-Details/Manuscript-Details.module').then(m=>m.ManuscriptDetailsModule)
       },
       {
         path: "ReviewersRemarks",
-        loadChildren: () => import('./views/pages/Journal-Editors/ReviewersRemarks-Details/ReviewersRemarks-Details.module').then(m=>m.ReviewersRemarksDetailsModule)
+        loadChildren: () => import('./views/pages/Journal-Editors-AdminDashboard/ReviewersRemarks-Details/ReviewersRemarks-Details.module').then(m=>m.ReviewersRemarksDetailsModule)
       },
 
       {
         path: "UpdateKey",
-        loadChildren: () => import('./views/pages/Journal-Editors/Change-Password/Change-Password.module').then(m=>m.ChangePasswordComponentModule)
+        loadChildren: () => import('./views/pages/Journal-Editors-AdminDashboard/Change-Password/Change-Password.module').then(m=>m.ChangePasswordComponentModule)
+      },
+
+
+      // Reviewers Dashboard 
+      {
+        path: "ReviewersDashboard",
+        loadChildren: () => import('./views/pages/Journal-Reviewers-AdminDashboard/MyManuscript-Details/MyManuscript-Details.module').then(m=>m.MyManuscriptDetailsModule)
+      },
+      {
+        path: "MyReviews",
+        loadChildren: () => import('./views/pages/Journal-Reviewers-AdminDashboard/MyRemarks-Details/MyRemarks-Details.module').then(m=>m.MyRemarksDetailsModule)
       },
 
 
 
       // Recover Password
       {
+        path: ":Id/:name/RecoverPasswordReset",
+        // loadChildren: () => import('./views/pages/Journal-Editors-AdminDashboard/Manuscript-Details/Manuscript-Details.module').then(m=>m.ManuscriptDetailsModule)
+        loadChildren: () => import('./views/pages/recover-account/recover-account.module').then(m=>m.RecoverAccountComponentModule),
+      }, 
+
+
+      // Recover Password
+      {
          path: ":Id/:name/RecoverPasswordReset",
-        // loadChildren: () => import('./views/pages/Journal-Editors/Manuscript-Details/Manuscript-Details.module').then(m=>m.ManuscriptDetailsModule)
+        // loadChildren: () => import('./views/pages/Journal-Editors-AdminDashboard/Manuscript-Details/Manuscript-Details.module').then(m=>m.ManuscriptDetailsModule)
         loadChildren: () => import('./views/pages/recover-account/recover-account.module').then(m=>m.RecoverAccountComponentModule),
       }, 
 
