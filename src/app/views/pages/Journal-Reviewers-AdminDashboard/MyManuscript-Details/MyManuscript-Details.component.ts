@@ -142,7 +142,8 @@ export class MyManuscriptDetailsComponent implements OnInit {
   
   
     showReviewerData(Emailid: any) {
-      this.journalWebApiService.GetMenuScriptForReviewers(Emailid).subscribe({
+      // this.journalWebApiService.GetMenuScriptForReviewers(Emailid).subscribe({
+        this.journalWebApiService.GetAllMenuScriptForJournalId(this.BookId).subscribe({
         next: (dataX: any) => {
           this.dataSource = dataX.item1;
           this.dataLoaded = true;
