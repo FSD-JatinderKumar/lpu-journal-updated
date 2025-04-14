@@ -66,18 +66,12 @@ export class InternalUserLoginComponent implements OnInit {
   ngOnInit(): void {
     this.cookieService.delete('authData');
     this.AuthSession.clearSession();
-
     this.BookId  = this.route.snapshot.params['Id'];
-    this.name  = this.route.snapshot.params['name'];
-
-
-    
+    this.name  = this.route.snapshot.params['name'];    
     this.loadForm();
   }
 
-  loadForm(){
-
-    
+  loadForm(){  
     this.formdata = new FormGroup({
       UserRoles: new FormControl('', Validators.required),
       Email: new FormControl('', [Validators.required, Validators.minLength(5)]),
@@ -114,24 +108,29 @@ export class InternalUserLoginComponent implements OnInit {
       (option) => option.value === selectedValue
     );
   }
-
+  submitted: boolean = false;
   OnSubmit() {
-    var BookId  = this.route.snapshot.params['Id'];
-    var name  = this.route.snapshot.params['name'];
+    this.submitted = true;
+    if (this.formdata.invalid) {
+      return;
+    }
+    if (this.formdata.valid) {
+      var BookId = this.route.snapshot.params['Id'];
+      var name = this.route.snapshot.params['name'];
       if (BookId != undefined && BookId != null) {
         this.BookId = BookId;
         this.name = name;
-      } 
-     
-    var DataX = this.formdata.value;
-    var uid = DataX.Email ?? '';
-    var password = DataX.password ?? '';
-    var encodeduid = btoa(uid);
-    var encodedPassword = btoa(password);
-    var userRoleX = DataX.UserRoles;
-    this.selectedRole= DataX.UserRoles;
-    this.getToken(encodeduid, encodedPassword);
-}
+      }
+
+      var DataX = this.formdata.value;
+      var uid = DataX.Email ?? '';
+      var password = DataX.password ?? '';
+      var encodeduid = btoa(uid);
+      var encodedPassword = btoa(password);      
+      this.selectedRole = DataX.UserRoles;
+      this.getToken(encodeduid, encodedPassword);
+    }
+  }
 
 
   getToken(id: any, key: any) {
@@ -202,16 +201,16 @@ export class InternalUserLoginComponent implements OnInit {
               this.router.navigateByUrl('EditorDashboard')
               break;
             case '1':
-              // alert('Under Construction');
-              this.router.navigateByUrl('ReviewersDashboard')
+              alert('Under Construction');
               this.loadForm();
               break;
             case '2': 
-                alert('Under Construction');
+                this.router.navigateByUrl('ReviewersDashboard')
                 this.loadForm();
               break;  
             case '3':
-            this.router.navigateByUrl('PublisherDashboard')
+            // this.router.navigateByUrl('PublisherDashboard')
+            this.router.navigateByUrl('AllJournals');
             break;
           }
           

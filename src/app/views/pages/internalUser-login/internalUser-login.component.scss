@@ -1,3 +1,22 @@
+.loginButton{
+    padding: 1px 5px;
+    color: #003365;
+    font-weight: normal;
+    font-size: 100%;
+    font-family: verdana, geneva, arial, helvetica, sans-serif;
+    background-color: #cecece;
+    background-image: linear-gradient(#e4e4e4 50%, #cecece 100%);
+    border: 1px solid #cecece;
+    border-radius: 0.35em;
+    box-shadow: 1px 1px 2px #555555;
+    cursor: pointer;
+  }
+  .loginButton:hover{
+    // background-image: linear-gradient(#dedede 50%, #eeeaea 100%);
+    border: 2px solid #777777;
+    cursor: pointer;
+  }
+
 .auth-page {
     .auth-side-wrapper {
       width: 100%;

@@ -15,7 +15,8 @@ import { StorageService } from 'src/app/_services/storage.service';
 export class UpdateJournalDetailsComponent implements OnInit {
 
   AllJournalsDetails: any[] = [];
-  TempAllJournalsDetails: any[] = []; headHtmlData: never[] = []; isInputDisabled: boolean = true; JournalId: any; fileNamesX!: string; searchQueryx: any;
+  TempAllJournalsDetails: any[] = []; headHtmlData: never[] = []; 
+  isInputDisabled: boolean = true; JournalId: any; fileNamesX!: string; searchQueryx: any;
   booksData: any;
   Journals: any;
   Title: any;

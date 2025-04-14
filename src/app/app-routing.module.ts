@@ -10,11 +10,7 @@ const routes: Routes = [
     path: '',
     children: [
 
-      //  // Journal WebAdmin Panel
-       {
-        path:'UpdateJournalsDetails',
-        loadChildren:()=> import('./views/pages/Journal-Publisher/update-journal-details/update-journal-details.module').then(m=> m.UpdateJournalDetailsModule)
-      },
+     
       {
         path:"signup",
         loadChildren: () => import('./views/pages/new-registration-page/new-registration-page.module').then(m => m.NewRegistrationPageModule)
@@ -144,6 +140,11 @@ const routes: Routes = [
         path:'AdvancedLogin',
         loadChildren: ()=> import('./views/pages/internalUser-login/internalUser-login.module').then(m=>m.InternalUserLoginModule)
       },
+       //  // Journal WebAdmin Panel
+       {
+        path:'UpdateJournalsDetails',
+        loadChildren:()=> import('./views/pages/Journal-Publisher/update-journal-details/update-journal-details.module').then(m=> m.UpdateJournalDetailsModule)
+      },
       {
         path: "PublisherDashboard",
         loadChildren: () => import('./views/pages/Journal-Publisher/Publisher-Dashboard/Publisher-Dashboard.module').then(m=>m.PublisherDashboardModule)
@@ -156,10 +157,10 @@ const routes: Routes = [
         path: ":Menu/:Role/AllUsersDetails",
         loadChildren: () => import('./views/pages/Journal-Publisher/All-User-Details/All-User-Details.module').then(m=>m.AllUserDetailsModule)
       },
-      {
-        path: ":Menu/:Role/AllUsersDetails",
-        loadChildren: () => import('./views/pages/Journal-Publisher/All-User-Details/All-User-Details.module').then(m=>m.AllUserDetailsModule)
-      },
+      // {
+      //   path: ":Menu/:Role/AllUsersDetails",
+      //   loadChildren: () => import('./views/pages/Journal-Publisher/All-User-Details/All-User-Details.module').then(m=>m.AllUserDetailsModule)
+      // },
       {
         path: "AllUsersDetails",
         loadChildren: () => import('./views/pages/Journal-Publisher/All-User-Details/All-User-Details.module').then(m=>m.AllUserDetailsModule)
