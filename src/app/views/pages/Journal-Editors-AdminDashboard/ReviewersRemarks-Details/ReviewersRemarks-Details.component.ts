@@ -113,35 +113,38 @@ EditorDataColumns: any;
   ReviewerRemarksData: any[] = [];
   ReviewerRemarksDataColumns: string[] = [];
   
-  // Display headers mapping
-  displayedReviewerRemarksColumnHeaders: { [key: string]: string } = {
-    'reviewerName':'Reviewer Name',
-    'publicationDate':'Published Date',
-    reviewerTerm: 'Term Reviewed',
-    overallRating: 'Overall Rating',
-    commentsForAuthor: 'Comments for Author',
-    commentsforEditor: 'Comments for Editor',
-    transferResponse: 'Transfer Response',
-    newSubjectRating: 'Subject Rating',
-    manuscriptRating: 'Manuscript Rating',
-    manuscriptOrganisedRating: 'Manuscript Organised Rating',
-    journalId: 'Action'
-  };
-  
-  ReviewerRemarksdisplayedColumns: string[] = [
-    'reviewerName',
-    'publicationDate',
-    'reviewerTerm',
-    'overallRating',
-    'commentsForAuthor',
-    'commentsforEditor',
-    'transferResponse',
-    'newSubjectRating',
-    'manuscriptRating',
-    'manuscriptOrganisedRating',
-    'journalId'
-  ];
-  
+    // Display headers mapping
+    displayedReviewerRemarksColumnHeaders: { [key: string]: string } = {
+      // 'reviewerName':'Reviewer Name',
+      // 'publicationDate':'Published Date',
+      reviewerTerm: 'Term Reviewed',
+      overallRating: 'Overall Rating',
+      commentsForAuthor: 'Comments for Author',
+      commentsforEditor: 'Comments for Editor',
+      transferResponse: 'Transfer Response',
+      newSubjectRating: 'Subject Rating',
+      manuscriptRating: 'Manuscript Rating',
+      manuscriptOrganisedRating: 'Manuscript Organised Rating',
+      journalId: 'Action',
+      approvalStatus: 'Status',  
+      fileUrl: 'Manuscript File'
+    };
+    
+    ReviewerRemarksdisplayedColumns: string[] = [
+      // 'reviewerName',
+      // 'publicationDate',
+      'reviewerTerm',
+      'overallRating',
+      'commentsForAuthor',
+      'commentsforEditor',
+      'transferResponse',
+      'newSubjectRating',
+      'manuscriptRating',
+      'manuscriptOrganisedRating',
+      'journalId',
+      'approvalStatus',  
+      'fileUrl'
+    ];
   calculateTotalPagesReviewerRemarks() {
     this.totalPagesReviewerRemarks = Math.ceil(this.ReviewerRemarksData.length / this.pageSizeReviewerRemarks);
   }

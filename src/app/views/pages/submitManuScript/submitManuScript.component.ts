@@ -82,23 +82,23 @@ export class SubmitManuScriptComponent implements OnInit {
   isGuest: boolean= false;  newJournalTitle: any; LoginStatus: any;
   UserRoles: any; name: any;
   ngOnInit(): void {
-    const bookId: string | undefined = this.route.snapshot.params['Id'];
-    const name: string = this.route.snapshot.params['name'];
-    this.newJournalTitle = name.replace(/-/g, ' ');
+    const bookId: any= this.BookId =this.route.snapshot.params['Id'];
+    const name: any =  this.name = this.route.snapshot.params['name'];
+    this.newJournalTitle = name.replace(/-/g, ' '); 
 
     this.LoginStatus = this.checkUserLogin();  
      
-  
+    // alert(bookId+name+'ExternalLogin');
     if (bookId && !this.isLoginFailed) {
-      this.name = name;       this.BookId = bookId;       this.JournalId = bookId;
-      this.JournalTitle = name.replace(/-/g, ' ');
-      
+      this.BookId = bookId;       this.JournalId = bookId;
+      this.JournalTitle = name.replace(/-/g, ' ');     
 
       this.showReviewerData(this.userId);
      
      
     } else { 
-      this.VisitUrl(bookId, name, 'ExternalLogin');
+     
+      this.VisitUrl(this.BookId, this.name , 'ExternalLogin');
     }
   
     this.LoadForm();
@@ -1004,40 +1004,73 @@ paginatedReviewerRemarks: any[] = [];
 totalPagesReviewerRemarks: number = 1;
 ReviewerRemarksData: any[] = [];
 ReviewerRemarksDataColumns: string[] = [];
+searchText: string = '';
+filteredReviewerRemarksData: any[] = []; // 👈 for storing filtered results
 
-// Display headers mapping
-displayedReviewerRemarksColumnHeaders: { [key: string]: string } = {
-  reviewerTerm: 'Term Reviewed',
-  overallRating: 'Overall Rating',
-  commentsForAuthor: 'Comments for Author',
-  commentsforEditor: 'Comments for Editor',
-  transferResponse: 'Transfer Response',
-  newSubjectRating: 'Subject Rating',
-  manuscriptRating: 'Manuscript Rating',
-  manuscriptOrganisedRating: 'Manuscript Organised Rating',
-  journalId: 'Action'
-};
+ 
+  // Display headers mapping
+  displayedReviewerRemarksColumnHeaders: { [key: string]: string } = {
+    // 'reviewerName':'Reviewer Name',
+    // 'publicationDate':'Published Date',
+    reviewerTerm: 'Term Reviewed',
+    overallRating: 'Overall Rating',
+    commentsForAuthor: 'Comments for Author',
+    commentsforEditor: 'Comments for Editor',
+    transferResponse: 'Transfer Response',
+    newSubjectRating: 'Subject Rating',
+    manuscriptRating: 'Manuscript Rating',
+    manuscriptOrganisedRating: 'Manuscript Organised Rating',
+    journalId: 'Action',
+    approvalStatus: 'Status',  
+    fileUrl: 'Manuscript File'
+  };
+  
+  ReviewerRemarksdisplayedColumns: string[] = [
+    // 'reviewerName',
+    // 'publicationDate',
+    'reviewerTerm',
+    'overallRating',
+    'commentsForAuthor',
+    'commentsforEditor',
+    'transferResponse',
+    'newSubjectRating',
+    'manuscriptRating',
+    'manuscriptOrganisedRating',
+    'journalId',
+    'approvalStatus',  
+    'fileUrl'
+  ];
 
-ReviewerRemarksdisplayedColumns: string[] = [
-  'reviewerTerm',
-  'overallRating',
-  'commentsForAuthor',
-  'commentsforEditor',
-  'transferResponse',
-  'newSubjectRating',
-  'manuscriptRating',
-  'manuscriptOrganisedRating',
-  'journalId'
-];
+  calculateTotalPagesReviewerRemarks() {
+    this.totalPagesReviewerRemarks = Math.ceil(this.filteredReviewerRemarksData.length / this.pageSizeReviewerRemarks);
+  }
+  
+  updatePaginatedDataReviewerRemarks() {
+    const startIndex = (this.currentPageReviewerRemarks - 1) * this.pageSizeReviewerRemarks;
+    this.paginatedReviewerRemarks = this.filteredReviewerRemarksData.slice(startIndex, startIndex + this.pageSizeReviewerRemarks);
+  }
 
-calculateTotalPagesReviewerRemarks() {
-  this.totalPagesReviewerRemarks = Math.ceil(this.ReviewerRemarksData.length / this.pageSizeReviewerRemarks);
-}
+  applySearch() {
+    const search = this.searchText.toLowerCase();
+  
+    this.filteredReviewerRemarksData = this.ReviewerRemarksData.filter(row =>
+      Object.values(row).some(val =>
+        val?.toString().toLowerCase().includes(search)
+      )
+    );
+  
+    this.currentPageReviewerRemarks = 1;
+    this.calculateTotalPagesReviewerRemarks();
+    this.updatePaginatedDataReviewerRemarks();
+  }
+// calculateTotalPagesReviewerRemarks() {
+//   this.totalPagesReviewerRemarks = Math.ceil(this.ReviewerRemarksData.length / this.pageSizeReviewerRemarks);
+// }
 
-updatePaginatedDataReviewerRemarks() {
-  const startIndex = (this.currentPageReviewerRemarks - 1) * this.pageSizeReviewerRemarks;
-  this.paginatedReviewerRemarks = this.ReviewerRemarksData.slice(startIndex, startIndex + this.pageSizeReviewerRemarks);
-}
+// updatePaginatedDataReviewerRemarks() {
+//   const startIndex = (this.currentPageReviewerRemarks - 1) * this.pageSizeReviewerRemarks;
+//   this.paginatedReviewerRemarks = this.ReviewerRemarksData.slice(startIndex, startIndex + this.pageSizeReviewerRemarks);
+// }
 
 nextPageReviewerRemarks() {
   if (this.currentPageReviewerRemarks < this.totalPagesReviewerRemarks) {
@@ -1054,26 +1087,100 @@ previousPageReviewerRemarks() {
 }
 
 GetallReviewsData(journalId: any) {
-  this.journalWebApiService.GetAllReviewersRemarkss(journalId).subscribe({
-    next: (dataXY: any) => {
-      this.ReviewerRemarksData = dataXY.item1 || [];
-      console.log("Fetched ReviewerRemarksData:", this.ReviewerRemarksData);
-      
-      if (this.ReviewerRemarksData.length > 0) {
-        this.ReviewerRemarksDataColumns = Object.keys(this.ReviewerRemarksData[0]);
-        this.calculateTotalPagesReviewerRemarks();
-        this.updatePaginatedDataReviewerRemarks();
+    this.journalWebApiService.GetAllReviewersRemarkss(journalId).subscribe({
+      next: (dataXY: any) => {
+        this.ReviewerRemarksData = dataXY.item1 || [];
+        // console.log("Fetched ReviewerRemarksData:", JSON.stringify(this.ReviewerRemarksData));
+        this.filteredReviewerRemarksData = [...this.ReviewerRemarksData];
+        if (this.ReviewerRemarksData.length > 0) {
+          this.ReviewerRemarksDataColumns = Object.keys(this.ReviewerRemarksData[0]);
+          this.calculateTotalPagesReviewerRemarks();
+          this.updatePaginatedDataReviewerRemarks();
+        }
+  
+        this.dataShowing = true;
+      },
+      error: (error: any) => {
+        console.error('Error fetching data', error);
+        this.dataShowing = false;
+        this.LoginFalied();
       }
+    });
+  }
 
-      this.dataShowing = true;
-    },
-    error: (error: any) => {
-      console.error('Error fetching data', error);
-      this.dataShowing = false;
-      this.LoginFalied();
-    }
-  });
-}
+  DisapproveStatus(rowData: any) {
+    alert(rowData.manuscriptId)
+    Swal.fire({
+      title: "Reason for Disapproval",
+      // text: "Disapproval reason",
+      input: 'text',
+      showCancelButton: true
+    }).then((result) => {
+      if (result.value) {
+        this.Reason = result.value;
+        const formData = new FormData();
+        formData.append('Id', rowData.manuscriptId);
+        formData.append('DisapprovalReason', this.Reason);
+        formData.append('Action', 'Disapprove');
+        this.handleStatusChange(formData, 'Disapprove');
+      } else {
+        this.showCancelledSwal();
+      }
+    });
+  }
+
+
+  
+ 
+  ChangeApproveStatus(rowData: any) {
+    alert(rowData.manuscriptId)
+    const formData = new FormData();
+    formData.append('Id', rowData.manuscriptId);
+    formData.append('Action', 'Approve');
+
+    Swal.fire({
+      title: 'Are you sure you want to change the status?',
+      text: 'Kindly confirm if the document is valid!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, accept current changes!',
+      cancelButtonText: 'No, do not change it'
+    }).then((result: any) => {
+      if (result.value) {
+        this.handleStatusChange(formData, 'Approve');
+      } else {
+        this.showCancelledSwal();
+      }
+    });
+  }
+
+  private handleStatusChange(formData: FormData, action: string) {
+    this.journalWebApiService.ApproveDocument(formData).subscribe((data: any) => {
+      if (action === 'Approve' && data.responseData === 'Cancel') {
+        Swal.fire(
+          'No Change!',
+          ' ',
+          'error'
+        );
+      } else {
+        Swal.fire(
+          ' Approved/Disapproved successfully !',
+          '',
+          'success'
+        ).then(() => {
+          window.location.reload();
+        });
+      }
+    });
+  }
+
+  private showCancelledSwal() {
+    Swal.fire(
+      'Cancelled',
+      ' ',
+      'error'
+    );
+  }
 
 
 // currentPageReviewerRemarks: number = 1;

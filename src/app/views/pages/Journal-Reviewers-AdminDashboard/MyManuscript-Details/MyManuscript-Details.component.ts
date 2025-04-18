@@ -45,6 +45,8 @@ export class MyManuscriptDetailsComponent implements OnInit {
   EditorInChief: any;
   JournalSubTitle: any;
   detailsArray: any;
+  user_Email: string ='';
+  LoginStatus: boolean = false;
   constructor(
     private storageService: StorageService,
     private authService: AuthService,
@@ -52,7 +54,9 @@ export class MyManuscriptDetailsComponent implements OnInit {
     private fb: FormBuilder,
     private router: Router,
     private route: ActivatedRoute, private cookieService: CookieService,
-    private journalWebApiService: LpujournalbookService  
+    private journalWebApiService: LpujournalbookService  ,
+
+    private StoragesServices: StorageService,
   ) {
     
   }
@@ -166,7 +170,8 @@ export class MyManuscriptDetailsComponent implements OnInit {
         error: (error: any) => {
           this.dataShowing = false;
           console.error('Error fetching data', error);
-          this.LoginFalied();
+          // this.LoginFalied();
+          this.Logout();
         },
         complete: () => {
           this.dataShowing = true;
@@ -225,7 +230,8 @@ export class MyManuscriptDetailsComponent implements OnInit {
       }
       else {
         this.bookData = [];
-        this.LoginFalied();
+        // this.LoginFalied();
+        this.Logout();
       }
     });
   }
@@ -397,7 +403,8 @@ export class MyManuscriptDetailsComponent implements OnInit {
       error: (error: any) => {
         
         this.dataShowing = false;
-        this.LoginFalied();
+        // this.LoginFalied();
+        this.Logout();
       },
       complete: () => {
         this.dataShowing = true;
@@ -471,28 +478,48 @@ export class MyManuscriptDetailsComponent implements OnInit {
 
   reviewerList: any[] = [];
   loadReviewers(id:any) {
-    // API call to fetch reviewer list
     this.journalWebApiService.GetReviewerDetailsForEditors(this.userId).subscribe({
       next: (dataX: any) => {
         this.dataSource = dataX.item1;
         this.reviewerList = dataX.item1;
-        // console.log("ALL Reviewerlist" + JSON.stringify(this.reviewerList))
 
       },
       error: (error: any) => {
         this.dataShowing = false;
         console.error('Error fetching data', error);
         // this.LoginFalied();
+        this.Logout();
       },
       complete: () => {
         this.dataShowing = true;
-        // console.log('Data fetching complete');
       }
     });
-    // this.journalWebApiService.GetAllReviewersForJournalId(id).subscribe((reviewers) => {
-    //   this.reviewerList = reviewers;
-    // });
-    // this.selectedReviewerId.value='select';
+   
   }
 
+
+  Logout(): void {
+    this.cookieService.delete('authData');
+    this.cookieService.delete('BookData');
+    this.cookieService.deleteAll();
+
+    sessionStorage.clear();
+    localStorage.clear();
+
+    this.AuthSession.clearSession();
+    this.StoragesServices.clean?.();
+
+    this.userRole = '';
+    this.user_Email = '';
+    this.supervisorName = '';
+    this.departmentName = '';
+    this.candidateName = '';
+    this.LoginStatus = false;
+
+    this.router.navigateByUrl('Home').then(() => {
+      setTimeout(() => {
+        location.reload();
+      }, 500);
+    });
+  }
 }

@@ -39,10 +39,22 @@
                         <button *ngSwitchCase="'fileUrl'" class="btn btn-dark btn-sm" (click)="onSelectFileEditorX(row[col])">
                           <i class="bi bi-file-earmark-text"></i>
                         </button>
-                        <span *ngSwitchCase="'journalId'" class="col-md-6"  >
-                          <button class="btn btn-success btn-sm" (click)="ChangeApproveStatus(row)"><i class="bi bi-check-circle"></i></button>
-                          <button class="btn btn-danger btn-sm" (click)="DisapproveStatus(row)"><i class="bi bi-x-circle"></i></button>
+                        <!-- <span *ngSwitchCase="'journalId'" class="col-md-6"  >
+                                <button class="btn btn-success btn-sm" (click)="ChangeApproveStatus(row)"><i class="bi bi-check-circle"></i></button>
+                                <button class="btn btn-danger btn-sm" (click)="DisapproveStatus(row)"><i class="bi bi-x-circle"></i></button>
+                              </span> -->
+                        <span *ngSwitchCase="'journalId'" class="col-md-6">
+                          <button class="btn btn-success btn-sm" (click)="ChangeApproveStatus(row)"
+                            [disabled]="!row.isActionable"
+                            [ngClass]="{'btn-secondary': !row.isActionable, 'btn-success': row.isActionable}">
+                            <i class="bi bi-check-circle"></i>
+                          </button>
+                          <button class="btn btn-danger btn-sm" (click)="DisapproveStatus(row)" [disabled]="!row.isActionable"
+                            [ngClass]="{'btn-secondary': !row.isActionable, 'btn-danger': row.isActionable}">
+                            <i class="bi bi-x-circle"></i>
+                          </button>
                         </span>
+      
                         <span *ngSwitchCase="'isApproved'">
                           <span [ngClass]="row[col] === '1' ? 'text-success' : 'text-danger'">
                             {{ row[col] === '1' ? 'Approved' : 'Not Approved' }}
@@ -51,22 +63,33 @@
                         <span *ngSwitchCase="'newInformationRating'">
                           {{ row[col] !== null ? row[col] : 'N/A' }}
                         </span>
+                        <span *ngSwitchCase="'approvalStatus'">
+                          <span [ngClass]="{
+                                    'text-warning': row.isActionable == null,
+                                    'text-success': row.isActionable == 1,
+                                    'text-danger': row.isActionable == 0
+                                  }">
+                            {{ row.isActionable == null ? 'Pending' : row.isActionable == 1 ? 'Approved' : 'Rejected' }}
+                          </span>
+                        </span>
                         <span *ngSwitchDefault>{{ row[col] }}</span>
                       </ng-container>
                     </td>
                     <!-- <td>
-                      <button class="btn btn-success btn-sm" (click)="ChangeApproveStatus(row)">Approve</button>
-                      <button class="btn btn-danger btn-sm" (click)="DisapproveStatus(row)">Disapprove</button>
-                    </td> -->
+                            <button class="btn btn-success btn-sm" (click)="ChangeApproveStatus(row)">Approve</button>
+                            <button class="btn btn-danger btn-sm" (click)="DisapproveStatus(row)">Disapprove</button>
+                          </td> -->
                   </tr>
                 </tbody>
               </table>
-
-              
+      
+      
               <div class="pagination-controls">
-                <button (click)="previousPageReviewerRemarks()" [disabled]="currentPageReviewerRemarks === 1">Previous</button>
+                <button (click)="previousPageReviewerRemarks()"
+                  [disabled]="currentPageReviewerRemarks === 1">Previous</button>
                 <span> Page {{ currentPageReviewerRemarks }} of {{ totalPagesReviewerRemarks }} </span>
-                <button (click)="nextPageReviewerRemarks()" [disabled]="currentPageReviewerRemarks >= totalPagesReviewerRemarks">Next</button>
+                <button (click)="nextPageReviewerRemarks()"
+                  [disabled]="currentPageReviewerRemarks >= totalPagesReviewerRemarks">Next</button>
               </div>
             </div>
           </div>

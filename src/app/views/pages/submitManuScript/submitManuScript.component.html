@@ -223,67 +223,103 @@
 
         <!-- Reviewer Dashboard -->
         <div *ngSwitchCase="'Reviewer'">
-
+        
           <div class="row ">
             <div class="text-center">
               <h2 class="text-center text-danger mb-5"> {{action.label}} Dashboard </h2>
             </div>
             <div class="container-fluid table-bordered table-responsive ">
               <div class="row">
+                <div class="d-flex justify-content-center mb-2">
+                  <div class="col-md-2"> 
+                  <input
+                    type="text"
+                    class=" form-control w-10"
+                    placeholder="Search Reviewer Remarks..."
+                    [(ngModel)]="searchText"
+                    (input)="applySearch()"
+                  />
+                </div>
+                  <!-- <button class="btn btn-primary" (click)="exportToExcel()">Export to Excel</button> -->
+                </div>
                 <div class="col-md-12 stretch-card">
                   <div class="card accordionColor ">
-                    <div class="card-body accordionColor " *ngIf="this.ReviewerData?.length>0; else NoData">
+                    <!-- <div class="card-body accordionColor " *ngIf="this.ReviewerData?.length>0; else NoData"> -->
+                      <div class="card-body accordionColor " *ngIf="filteredReviewerRemarksData.length > 0; else NoData">
+
                       <div class="table-responsive">
-                        <table class="table  table-hover">
+                        <table class="table table-bordered">
                           <thead>
                             <tr>
-                              <th> Sr.No</th>
-                              <th *ngFor="let col of ReviewerdisplayedColumns">{{ ReviewercolumnHeaders[col] }}</th>
-                              <!-- <th colspan="2"> Accept / Reject</th> -->
+                              <th *ngFor="let col of ReviewerRemarksdisplayedColumns">
+                                {{ displayedReviewerRemarksColumnHeaders[col] }}
+                              </th>
                             </tr>
                           </thead>
                           <tbody>
-                            <tr *ngFor="let row of paginatedReviewerData; let i = index">
-                              <td>{{ i + 1 }}</td>
-                              <td *ngFor="let col of ReviewerdisplayedColumns">
+                            <tr *ngFor="let row of paginatedReviewerRemarks">
+                              <td *ngFor="let col of ReviewerRemarksdisplayedColumns">
                                 <ng-container [ngSwitch]="col">
                                   <button *ngSwitchCase="'fileUrl'" class="btn btn-dark btn-sm"
-                                    (click)="onSelectFileX(row[col])">
-                                    <!-- View File -->
-                                    <i class="bi bi-file-earmark-text "></i>
+                                    (click)="onSelectFileEditorX(row[col])">
+                                    <i class="bi bi-file-earmark-text"></i>
                                   </button>
-
-                                  <button *ngSwitchCase="'journalId'" class="btn btn-danger btn-sm"
-                                    (click)="onTakeAction2(row[col])" data-bs-toggle="modal"
-                                    data-bs-target="#ReviewerModal">
-                                    <!-- Take Action -->
-                                    <i class="bi bi-exclamation-circle"></i>
-                                  </button>
-                                  <span *ngSwitchCase="'manuScriptType'">
-                                    {{row[col]?.length>0? row[col]: 'NA'}}
+                                  <span *ngSwitchCase="'journalId'" class="col-md-6">
+                                    <button class="btn btn-success btn-sm" (click)="ChangeApproveStatus(row)"
+                                      [disabled]="!row.isActionable"
+                                      [ngClass]="{'btn-secondary': !row.isActionable, 'btn-success': row.isActionable}">
+                                      <i class="bi bi-check-circle"></i>
+                                    </button>
+                                    <button class="btn btn-danger btn-sm" (click)="DisapproveStatus(row)"
+                                      [disabled]="!row.isActionable"
+                                      [ngClass]="{'btn-secondary': !row.isActionable, 'btn-danger': row.isActionable}">
+                                      <i class="bi bi-x-circle"></i>
+                                    </button>
                                   </span>
-
+        
+                                  <span *ngSwitchCase="'isApproved'">
+                                    <span [ngClass]="row[col] == '1' ? 'text-success' : 'text-danger'">
+                                      {{ row[col] == '1' ? 'Approved' : 'Not Approved' }}
+                                    </span>{{row[col]}}
+                                  </span>
+                                  <span *ngSwitchCase="'newInformationRating'">
+                                    {{ row[col] !== null ? row[col] : 'N/A' }}
+                                  </span>
+                                  <span *ngSwitchCase="'approvalStatus'">
+                                    <span [ngClass]="{
+                                                                                                          'text-warning': row.isActionable == null,
+                                                                                                          'text-success': row.isActionable == 1,
+                                                                                                          'text-danger': row.isActionable == 0
+                                                                                                        }">
+                                      {{ row.isActionable == null ? 'Pending' : row.isActionable == 1 ? 'Approved' : 'Rejected'
+                                      }}
+                                    </span>
+                                  </span>
                                   <span *ngSwitchDefault>{{ row[col] }}</span>
                                 </ng-container>
                               </td>
-
-
+                              <!-- <td>
+                                                                                                  <button class="btn btn-success btn-sm" (click)="ChangeApproveStatus(row)">Approve</button>
+                                                                                                  <button class="btn btn-danger btn-sm" (click)="DisapproveStatus(row)">Disapprove</button>
+                                                                                                </td> -->
                             </tr>
                           </tbody>
                         </table>
-
+        
+        
                         <div class="pagination-controls">
-                          <button (click)="previousPageReviewer()" class="btn btn-dark btn-sm"
-                            [disabled]="currentPageReviewer == 1">Previous</button>
-                          <span> Page {{ currentPageReviewer }} of {{ totalPagesReviewer }} </span>
-                          <button (click)="nextPageReviewer()" class="btn btn-dark btn-sm"
-                            [disabled]="currentPageReviewer == totalPagesReviewer">Next</button>
+                          <button (click)="previousPageReviewerRemarks()"
+                            [disabled]="currentPageReviewerRemarks === 1">Previous</button>
+                          <span> Page {{ currentPageReviewerRemarks }} of {{ totalPagesReviewerRemarks }} </span>
+                          <button (click)="nextPageReviewerRemarks()"
+                            [disabled]="currentPageReviewerRemarks >= totalPagesReviewerRemarks">Next</button>
                         </div>
                       </div>
                     </div>
+        
                     <ng-template #NoData>
                       <div class="themeClr">
-                        <h1 class="fs-2 text-center vh-50 p-3 m-4 "> No Data Found </h1>
+                        <h1 class="fs-2 text-center vh-50 p-3 m-4 themeClr"> No Data Found </h1>
                       </div>
                     </ng-template>
                   </div>
@@ -397,30 +433,57 @@
                                     <button *ngSwitchCase="'fileUrl'" class="btn btn-dark btn-sm" (click)="onSelectFileEditorX(row[col])">
                                       <i class="bi bi-file-earmark-text"></i>
                                     </button>
-                                    <button *ngSwitchCase="'journalId'" class="btn btn-danger btn-sm" (click)="onTakeAction(row)"
-                                      data-bs-toggle="modal" data-bs-target="#assignReviewerModal">
-                                      <i class="bi bi-exclamation-circle"></i>
-                                    </button>
+                                    <!-- <span *ngSwitchCase="'journalId'" class="col-md-6"  >
+                                            <button class="btn btn-success btn-sm" (click)="ChangeApproveStatus(row)"><i class="bi bi-check-circle"></i></button>
+                                            <button class="btn btn-danger btn-sm" (click)="DisapproveStatus(row)"><i class="bi bi-x-circle"></i></button>
+                                          </span> -->
+                                    <span *ngSwitchCase="'journalId'" class="col-md-6">
+                                      <button class="btn btn-success btn-sm" (click)="ChangeApproveStatus(row)"
+                                        [disabled]="!row.isActionable"
+                                        [ngClass]="{'btn-secondary': !row.isActionable, 'btn-success': row.isActionable}">
+                                        <i class="bi bi-check-circle"></i>
+                                      </button>
+                                      <button class="btn btn-danger btn-sm" (click)="DisapproveStatus(row)" [disabled]="!row.isActionable"
+                                        [ngClass]="{'btn-secondary': !row.isActionable, 'btn-danger': row.isActionable}">
+                                        <i class="bi bi-x-circle"></i>
+                                      </button>
+                                    </span>
+                  
                                     <span *ngSwitchCase="'isApproved'">
-                                      <span [ngClass]="row[col] === 'True' ? 'text-success' : 'text-danger'">
-                                        {{ row[col] === 'True' ? 'Approved' : 'Not Approved' }}
-                                      </span>
+                                      <span [ngClass]="row[col] === '1' ? 'text-success' : 'text-danger'">
+                                        {{ row[col] === '1' ? 'Approved' : 'Not Approved' }}
+                                      </span>{{row[col]}}
                                     </span>
                                     <span *ngSwitchCase="'newInformationRating'">
                                       {{ row[col] !== null ? row[col] : 'N/A' }}
                                     </span>
+                                    <span *ngSwitchCase="'approvalStatus'">
+                                      <span [ngClass]="{
+                                                'text-warning': row.isActionable == null,
+                                                'text-success': row.isActionable == 1,
+                                                'text-danger': row.isActionable == 0
+                                              }">
+                                        {{ row.isActionable == null ? 'Pending' : row.isActionable == 1 ? 'Approved' : 'Rejected' }}
+                                      </span>
+                                    </span>
                                     <span *ngSwitchDefault>{{ row[col] }}</span>
                                   </ng-container>
                                 </td>
+                                <!-- <td>
+                                        <button class="btn btn-success btn-sm" (click)="ChangeApproveStatus(row)">Approve</button>
+                                        <button class="btn btn-danger btn-sm" (click)="DisapproveStatus(row)">Disapprove</button>
+                                      </td> -->
                               </tr>
                             </tbody>
                           </table>
-          
-                          <!-- Pagination Controls -->
+                  
+                  
                           <div class="pagination-controls">
-                            <button (click)="previousPageReviewerRemarks()" [disabled]="currentPageReviewerRemarks === 1">Previous</button>
+                            <button (click)="previousPageReviewerRemarks()"
+                              [disabled]="currentPageReviewerRemarks === 1">Previous</button>
                             <span> Page {{ currentPageReviewerRemarks }} of {{ totalPagesReviewerRemarks }} </span>
-                            <button (click)="nextPageReviewerRemarks()" [disabled]="currentPageReviewerRemarks >= totalPagesReviewerRemarks">Next</button>
+                            <button (click)="nextPageReviewerRemarks()"
+                              [disabled]="currentPageReviewerRemarks >= totalPagesReviewerRemarks">Next</button>
                           </div>
                         </div>
                       </div>

@@ -157,10 +157,6 @@ const routes: Routes = [
         path: ":Menu/:Role/AllUsersDetails",
         loadChildren: () => import('./views/pages/Journal-Publisher/All-User-Details/All-User-Details.module').then(m=>m.AllUserDetailsModule)
       },
-      // {
-      //   path: ":Menu/:Role/AllUsersDetails",
-      //   loadChildren: () => import('./views/pages/Journal-Publisher/All-User-Details/All-User-Details.module').then(m=>m.AllUserDetailsModule)
-      // },
       {
         path: "AllUsersDetails",
         loadChildren: () => import('./views/pages/Journal-Publisher/All-User-Details/All-User-Details.module').then(m=>m.AllUserDetailsModule)

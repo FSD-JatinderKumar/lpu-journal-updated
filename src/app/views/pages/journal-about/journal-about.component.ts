@@ -43,21 +43,27 @@ export class JournalAboutComponent implements OnInit {
     private route: ActivatedRoute,
     private cookieService: CookieService,
   ) { }
-  VisitUrl(Sufix: any) {
-    // this.router.navigateByUrl(this.BookId + '/' + this.name + '/' + Sufix);
-    this.router.navigateByUrl(this.BookId + '/' + this.name + '/' + Sufix).then(() => {
-      window.location.reload();
-    });
+  // VisitUrl(Sufix: any) {
+  //   // this.router.navigateByUrl(this.BookId + '/' + this.name + '/' + Sufix);
+  //   alert(this.BookId+'' +this.name)
+  //   this.router.navigateByUrl(this.BookId + '/' + this.name + '/' + Sufix).then(() => {
+  //     window.location.reload();
+  //   });
+  // }
+
+  
+  VisitUrl(Id: any, name: any, Sufix: any) {
+    // alert(this.BookId + '/' + this.JournalTitle + '/' + Sufix)
+    this.router.navigateByUrl(Id + '/' + name + '/' + Sufix);
   }
   ngOnInit(): void {
     let BookId  = this.route.snapshot.params['Id'];
-    let name  = this.route.snapshot.params['name'];
-
+    this.name =this.JournalTitle =  this.route.snapshot.params['name'];
    
-    this.JournalTitle = name.replace(/-/g, ' ');
+   
       if (BookId != undefined && BookId != null) {
         this.BookId = this.route.snapshot.params['Id'];
-        this.name = this.route.snapshot.params['name'];
+        this.JournalTitle = this.name.replace(/-/g, ' ');
         this.GetJournalDetailsAbout(this.BookId);
         this.GetJournalEditorsDetailsByBookId(this.BookId);
       } 

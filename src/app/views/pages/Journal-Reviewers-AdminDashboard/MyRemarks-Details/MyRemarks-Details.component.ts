@@ -115,8 +115,8 @@ EditorDataColumns: any;
   
   // Display headers mapping
   displayedReviewerRemarksColumnHeaders: { [key: string]: string } = {
-    'reviewerName':'Reviewer Name',
-    'publicationDate':'Published Date',
+    // 'reviewerName':'Reviewer Name',
+    // 'publicationDate':'Published Date',
     reviewerTerm: 'Term Reviewed',
     overallRating: 'Overall Rating',
     commentsForAuthor: 'Comments for Author',
@@ -125,12 +125,14 @@ EditorDataColumns: any;
     newSubjectRating: 'Subject Rating',
     manuscriptRating: 'Manuscript Rating',
     manuscriptOrganisedRating: 'Manuscript Organised Rating',
-    journalId: 'Action'
+    journalId: 'Action',
+    approvalStatus: 'Status',  
+    fileUrl: 'Manuscript File'
   };
   
   ReviewerRemarksdisplayedColumns: string[] = [
-    'reviewerName',
-    'publicationDate',
+    // 'reviewerName',
+    // 'publicationDate',
     'reviewerTerm',
     'overallRating',
     'commentsForAuthor',
@@ -139,7 +141,9 @@ EditorDataColumns: any;
     'newSubjectRating',
     'manuscriptRating',
     'manuscriptOrganisedRating',
-    'journalId'
+    'journalId',
+    'approvalStatus',  
+    'fileUrl'
   ];
   
   calculateTotalPagesReviewerRemarks() {
@@ -187,8 +191,8 @@ EditorDataColumns: any;
     });
   }
   
-  onSelectFileEditorX(fileUrl: string) {
-    window.open('https://files.lpu.in/umsweb/Journal/' + fileUrl, '_blank');
+  onSelectFileEditorX(data:any) {
+    window.open('https://files.lpu.in/umsweb/Journal/' + data, '_blank');
   }
 
   calculateTotalPagesEditor() {

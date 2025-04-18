@@ -45,8 +45,9 @@ export class AllUserDetailsComponent implements OnInit {
     // let name  = this.route.snapshot.params['name'];
     // alert(name+"in Page ")
     let loginStatus = this.checkUserLogin();
+   
     this.getUsersDetails(Role);
-    if (Role != undefined) {
+    if (Role != undefined && loginStatus ) {
       this.Role = Role;
       this.JournalTitle = name;
       this.getUsersDetails(Role);
@@ -54,6 +55,11 @@ export class AllUserDetailsComponent implements OnInit {
   }
 
   checkUserLogin() {
+    var authToken = this.storageService.getUser();
+    if(authToken == 'Token Expired')
+    {
+      return false;
+    }
     const GetCookieData = this.cookieService.get('authData');
     if (GetCookieData) {
       try {
