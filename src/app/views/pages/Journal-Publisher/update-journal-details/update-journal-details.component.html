@@ -106,7 +106,7 @@
                   <label  class="col-sm-  col-form-label">Journal Image:</label>
                   <div class="col-sm- ">
                     <input class="form-control" [(ngModel)]="fileNamesX" type="file" id="File" name="file"
-                      (change)="onFileXSelected($event, this.JournalId)" accept=".png, .jpg, .jpeg" />
+                      (change)="onFileXSelected($event, this.selectedJournalId)" accept=".png, .jpg, .jpeg" />
                     <div *ngIf="isForm1Submitted && form1.file.errors?.required" class="invalid-feedback">
                       Required
                     </div>
@@ -115,8 +115,8 @@
                 <div class="col-sm text-center">
                   <label class="col-sm-  col-form-label">
                     Action Button </label>
-                  <div class="col-sm- "><button type="submit" [disabled]="!fileChosen[this.JournalId]"
-                      class="btn btn-danger btn-sm " (click)="UpdateFileDocument(this.JournalId);">Replace </button>
+                  <div class="col-sm- "><button type="submit" [disabled]="!fileChosen[this.selectedJournalId]"
+                      class="btn btn-danger btn-sm " (click)="UpdateFileDocument(this.selectedJournalId);">Replace </button>
                   </div>
                   <!-- <button type="submit" style="margin-top: 27px;" [disabled]="isInputDisabled" class="btn btn-dark me-2"
                   (click)="UpdateImageData();">Submit</button> -->

@@ -134,7 +134,6 @@ getPaginatedData(): any[] {
   RecordId: any; selectedJournalId: any;
   selectedJournalTitle: any;
   onTakeAction(rowData: any) {
-    // console.log(JSON.stringify(rowData))
     this.selectedJournalId = rowData['id'];
     this.selectedJournalTitle = rowData['journalTitle'];
     this.RecordId = rowData['id'];
@@ -157,7 +156,9 @@ getPaginatedData(): any[] {
               text: data.item1[0]['msg'],
               icon: 'success'
             }).then(() => {
-              window.location.reload();
+              setTimeout(() => {
+                window.location.reload();
+              }, 3500);  
             });
           } else if (result === 'Failed') {
             swal.fire({
@@ -175,7 +176,9 @@ getPaginatedData(): any[] {
           });
         },
         complete: () => {
-          window.location.reload();
+          setTimeout(() => {
+            window.location.reload();
+          }, 3500); // delay of 1.5 seconds
         }
       });
     }
