@@ -130,30 +130,85 @@ export class SubmitManuScriptComponent implements OnInit {
         if (response?.item1?.length > 0) {
           this.UserRolesData = response.item1[0];
   
-          // Ensure userRole exists before splitting
-          const roles = this.UserRolesData?.userRole ? this.UserRolesData.userRole.split(',') : [];
+          let roles = this.UserRolesData?.userRole 
+            ? this.UserRolesData.userRole.split(',').map((r: string) => r.trim())
+            : [];
   
-          this.UserRolesArray = roles.map((role: any) => {
-            const roleKey = String(role); // Ensure role is a string
-            const label = roleMapping[roleKey] || roleKey; // Use mapped label or fallback to role itself
+          // Always include '1' (Author) if it's not already present
+          if (!roles.includes('1')) {
+            roles.push('1');
+          }
+  
+          this.UserRolesArray = roles.map((role: string) => {
+            const roleKey = role;
+            const label = roleMapping[roleKey] || roleKey;
   
             return {
               value: roleKey,
               label,
-              id: label.replace(/\s+/g, '') // Safe to call replace() now
+              id: label.replace(/\s+/g, '')
             };
           });
         } else {
-          this.UserRolesArray = []; // Reset array if no roles found
+          // If no roles found, default to Author role
+          this.UserRolesArray = [{
+            value: '1',
+            label: roleMapping['1'],
+            id: roleMapping['1'].replace(/\s+/g, '')
+          }];
         }
       },
       error: (err) => {
         console.error('Error fetching user roles:', err);
-        this.UserRolesArray = []; // Reset array on error
+  
+        // On error, default to Author role
+        this.UserRolesArray = [{
+          value: '1',
+          label: roleMapping['1'],
+          id: roleMapping['1'].replace(/\s+/g, '')
+        }];
         this.LoginFalied();
       }
     });
   }
+  
+  // getUserRolesforId(): void {
+  //   const roleMapping: Record<string, string> = {
+  //     '0': 'Editor',
+  //     '1': 'Author/ Submit Manuscript',
+  //     '2': 'Reviewer',
+  //     '3': 'Publisher'
+  //   };
+  
+  //   this.journalWebApiService.GetUserRolesforUser(this.userId).subscribe({
+  //     next: (response) => {
+  //       if (response?.item1?.length > 0) {
+  //         this.UserRolesData = response.item1[0];
+  
+  //         // Ensure userRole exists before splitting
+  //         const roles = this.UserRolesData?.userRole ? this.UserRolesData.userRole.split(',') : [];
+  
+  //         this.UserRolesArray = roles.map((role: any) => {
+  //           const roleKey = String(role); // Ensure role is a string
+  //           const label = roleMapping[roleKey] || roleKey; // Use mapped label or fallback to role itself
+  
+  //           return {
+  //             value: roleKey,
+  //             label,
+  //             id: label.replace(/\s+/g, '') // Safe to call replace() now
+  //           };
+  //         });
+  //       } else {
+  //         this.UserRolesArray = []; // Reset array if no roles found
+  //       }
+  //     },
+  //     error: (err) => {
+  //       console.error('Error fetching user roles:', err);
+  //       this.UserRolesArray = []; // Reset array on error
+  //       this.LoginFalied();
+  //     }
+  //   });
+  // }
   LoginFalied(){
     this.VisitUrl(this.BookId,this.name,'ExternalLogin');    
   }

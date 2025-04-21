@@ -13,7 +13,7 @@ export class StorageService {
   }
 
   public saveUser(user: any): void {
-    localStorage.setItem(USER_KEY, user)
+  localStorage.setItem(USER_KEY, user)
    window.sessionStorage.removeItem(USER_KEY);
    window.sessionStorage.setItem(USER_KEY, JSON.stringify(user));
   }
