@@ -177,7 +177,57 @@ CreateToken(Id: any, response: any) {
   });
 }
 
+// SetUserData(response: any) {
+//   this.UserData = response.item1;
+//   this.CandidateName = this.EmployeeName = response.item1[0].candidateName;
+//   this.AccessToken = response.item1[0].email;
+//   this.Department = response.item1[0].department;
+//   this.DepartmentName = response.item1[0].departmentName;
+//   this.Designation = response.item1[0].designation;
+//   this.EmailId = response.item1[0].emailId;
+//   this.MobileNo = response.item1[0].mobileNumber;
+//   this.UserRole = response.item1[0].userRole;
+//   this.SupervisorName = response.item1[0].supervisorName;
+//   this.ProofNumber = btoa(response.item1[0].idProofNumber);
+//   this.ProofName = response.item1[0].idProofType;
+//   this.SecretKey = btoa(response.item1[0].passwordText);
+
+//   this.loadingIndicator = false;
+//   this.showNoDataFoundMessage = false;
+//   this.isLoginFailed = false;
+
+//   const userCookiesData = {
+//     CandidateName: this.CandidateName,
+//     AccessToken: this.AccessToken,
+//     Department: this.Department,
+//     DepartmentName: this.DepartmentName,
+//     Designation: this.Designation,
+//     EmailId: this.EmailId,
+//     MobileNo: this.MobileNo,
+//     UserRole: this.UserRole,
+//     SupervisorName: this.SupervisorName,
+//     ProofNumber: this.ProofNumber,
+//     ProofName: this.ProofName,
+//   };
+
+//   this.cookieService.set('authData', JSON.stringify(userCookiesData));
+
+//   swal.fire({
+//     title: 'Login Successful',
+//     text: '..',
+//     icon: 'success',
+//     confirmButtonText: 'OK'
+//   }).then((result) => {
+//     if (result.isConfirmed) {
+//       this.AuthSession.addToSession(this.UserData);
+//       this.VisitUrl(this.BookId, this.name, 'SubmitManuScript' )
+//     }
+//   });
+// }
+
 SetUserData(response: any) {
+  this.loadingIndicator = true; // show loading at start
+
   this.UserData = response.item1;
   this.CandidateName = this.EmployeeName = response.item1[0].candidateName;
   this.AccessToken = response.item1[0].email;
@@ -192,7 +242,6 @@ SetUserData(response: any) {
   this.ProofName = response.item1[0].idProofType;
   this.SecretKey = btoa(response.item1[0].passwordText);
 
-  this.loadingIndicator = false;
   this.showNoDataFoundMessage = false;
   this.isLoginFailed = false;
 
@@ -212,24 +261,14 @@ SetUserData(response: any) {
 
   this.cookieService.set('authData', JSON.stringify(userCookiesData));
 
-  swal.fire({
-    title: 'Login Successful',
-    text: '..',
-    icon: 'success',
-    confirmButtonText: 'OK'
-  }).then((result) => {
-    if (result.isConfirmed) {
-      this.AuthSession.addToSession(this.UserData);
-      // alert(this.name + " "+this.BookId)
-      this.VisitUrl(this.BookId, this.name, 'SubmitManuScript' )
-    }
-  });
-  // this.AuthSession.addToSession(this.UserData);
-
-  // // Redirect based on user role
-  // // this.RedirectToDashboard();
-  // this.VisitUrl(this.BookId, this.name, 'SubmitManuScript')
+  // Simulate processing delay if needed
+  setTimeout(() => {
+    this.AuthSession.addToSession(this.UserData);
+    this.VisitUrl(this.BookId, this.name, 'SubmitManuScript');
+    this.loadingIndicator = false; // hide loading once done
+  }, 1000);
 }
+
 
 // Function to redirect based on UserRole
 RedirectToDashboard() {
