@@ -11,7 +11,7 @@
               <div class="containera">
                 <div class="about">
                   <div class="pic">
-                    <img [src]="slide.imageUrl"
+                    <img [src]="this.serverUrl+slide.imageUrl"
                          [ngClass]="{'hidden': imageLoadError[i]}" 
                          (error)="handleImageError(i)" 
                          (load)="checkImageLoad($event, i)" />

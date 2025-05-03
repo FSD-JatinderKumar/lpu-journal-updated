@@ -9,107 +9,107 @@
     </h1>
   </div>
 </div>
-  <div *ngIf="!loadingIndicator; else ErrorConnection" class="row w-100 mx-0 auth-page wrapper mt-5">
-    <div class="col-md-12 col-xl-12 mx-auto">
-      <div class="row">
-     
-        <div class="col-md-6 pe-md-0  d-none d-lg-block" [ngStyle]="{ 'background-image': 'url(https://www.lpu.in/journals/assets/images/login-left.png)', 'background-repeat': 'no-repeat',
+<div *ngIf="!loadingIndicator; else ErrorConnection" class="row w-100 mx-0 auth-page wrapper mt-5">
+  <div class="col-md-12 col-xl-12 mx-auto">
+    <div class="row">
+
+      <div class="col-md-6 pe-md-0  d-none d-lg-block" [ngStyle]="{ 'background-image': 'url(https://www.lpu.in/journals/assets/images/login-left.png)', 'background-repeat': 'no-repeat',
                 'background-size': 'contain',
                 'background-position': 'center'}">
-        </div>
-        <div class="col-md-5 ">
-          <div class="auth-form-wrapper px-4 py-5 p-5">
-            <div class="col-md-12 text-center">
-              <h2 class="nobleui-logo d-block mb-2"> User <span>Login Page</span></h2>
+      </div>
+      <div class="col-md-5 ">
+        <div class="auth-form-wrapper px-4 py-5 p-5">
+          <div class="col-md-12 text-center">
+            <h2 class="nobleui-logo d-block mb-2"> User <span>Login Page</span></h2>
+          </div>
+
+          <form class="forms-sample" [formGroup]="formdata" (ngSubmit)="OnSubmit()">
+            <div class="row mb-2 mt-5">
+              <div class="col-md-1">
+                <label for="exampleInputPassword1" class="col-md-4 form-label"> </label>
+              </div>
+              <div class="col-md-4">
+                <label for="exampleInputEmail1" class="col-md-6 form-label">Username</label>
+              </div>
+              <div class="col-md-6">
+                <input type="email" formControlName="Email" placeholder="Enter Email Id " class="col-md-6 form-control"
+                  id="exampleInputEmail1">
+                <div *ngIf="submitted && email?.errors" class="text-danger">
+                  <small *ngIf="email?.errors?.['required']">Email is required.</small>
+                  <small *ngIf="email?.errors?.['email']">Enter a valid email address.</small>
+                </div>
+              </div>
+              <div class="col-md-1">
+                <label for="exampleInputPassword1" class="col-md-4 form-label"> </label>
+              </div>
             </div>
 
-            <form class="forms-sample" [formGroup]="formdata" (ngSubmit)="OnSubmit()">
-              <div class="row mb-2 mt-5">
-                <div class="col-md-1">
-                  <label for="exampleInputPassword1" class="col-md-4 form-label"> </label>
-                </div>
-                <div class="col-md-4">
-                  <label for="exampleInputEmail1" class="col-md-6 form-label">Username</label>
-                </div>
-                <div class="col-md-6">
-                  <input type="email" formControlName="Email" placeholder="Enter Email Id "
-                    class="col-md-6 form-control" id="exampleInputEmail1">
-                  <div *ngIf="submitted && email?.errors" class="text-danger">
-                    <small *ngIf="email?.errors?.['required']">Email is required.</small>
-                    <small *ngIf="email?.errors?.['email']">Enter a valid email address.</small>
-                  </div>
-                </div>
-                <div class="col-md-1">
-                  <label for="exampleInputPassword1" class="col-md-4 form-label"> </label>
+            <div class="row mb-2 mt-3">
+              <div class="col-md-1">
+                <label for="exampleInputPassword1" class="col-md-4 form-label"> </label>
+              </div>
+              <div class="col-md-4">
+                <label for="exampleInputPassword1" class="col-md-6 form-label">Password</label>
+              </div>
+              <div class="col-md-6">
+                <input type="password" formControlName="Password" placeholder="Enter Password"
+                  class="col-md-6 form-control" id="exampleInputPassword1">
+                <div *ngIf="submitted && password?.errors" class="text-danger">
+                  <small *ngIf="password?.errors?.['required']">Password is required.</small>
+                  <small *ngIf="password?.errors?.['minlength']">Password must be at least 6 characters long.</small>
                 </div>
               </div>
+              <div class="col-md-1">
+                <label for="exampleInputPassword1" class="col-md-4 form-label"> </label>
+              </div>
+            </div>
 
-              <div class="row mb-2 mt-3">
-                <div class="col-md-1">
-                  <label for="exampleInputPassword1" class="col-md-4 form-label"> </label>
-                </div>
-                <div class="col-md-4">
-                  <label for="exampleInputPassword1" class="col-md-6 form-label">Password</label>
-                </div>
-                <div class="col-md-6">
-                  <input type="password" formControlName="Password" placeholder="Enter Password"
-                    class="col-md-6 form-control" id="exampleInputPassword1">
-                  <div *ngIf="submitted && password?.errors" class="text-danger">
-                    <small *ngIf="password?.errors?.['required']">Password is required.</small>
-                    <small *ngIf="password?.errors?.['minlength']">Password must be at least 6 characters long.</small>
-                  </div>
-                </div>
-                <div class="col-md-1">
-                  <label for="exampleInputPassword1" class="col-md-4 form-label"> </label>
-                </div>
+            <div class="row mb-2 mt-5 ">
+              <div class="col-md-12 p-2 ms-4 text-center">
+                <span class="fs-5 text-danger">{{ this.errorMessage}} </span>
               </div>
-            
-              <div class="row mb-2 mt-5 ">
-                <div class="col-md-12 p-2 ms-4 text-center">
-                 <span class="fs-5 text-danger" >{{ this.errorMessage}} </span>
-                </div>
-                </div>
-              <div class="row mb-2 mt-3 d-flex justify-content-center">
-                <div class="col-md-4 text-center">
-                  <button type="submit" class="loginButton ">Submit</button>
-                </div>
-                <div class="col-md-4 text-center">                   
-                  <button (click)="VisitUrl(BookId, name, 'signup')" class="loginButton ">Register Now</button>
-                </div>
-                <div class="col-md-4 text-center">
-                  <!-- <button (click)="VisitUrl(BookId, name, 'RecoverPasswordReset')" class="loginButton ">Reset Account</button> -->
-                  <!-- <a (click)="VisitUrl(BookId, name, 'RecoverPasswordReset')" class="signupLink mb-2">Reset Account</a> -->
-                </div>
-                <!-- <div class="col-md-3">
+            </div>
+            <div class="row mb-2 mt-3 d-flex justify-content-center">
+              <div class="col-md-4 text-center">
+                <button type="submit" class="loginButton ">Submit</button>
+              </div>
+              <div class="col-md-4 text-center">
+                <button (click)="VisitUrl(BookId, name, 'signup')" class="loginButton ">Register Now</button>
+              </div>
+              <div class="col-md-4 text-center">
+                <!-- <button (click)="VisitUrl(BookId, name, 'RecoverPasswordReset')" class="loginButton ">Reset Account</button> -->
+                <!-- <a (click)="VisitUrl(BookId, name, 'RecoverPasswordReset')" class="signupLink mb-2">Reset Account</a> -->
+              </div>
+              <!-- <div class="col-md-3">
                   <button type="submit" class="loginButton" disabled>Editor Login</button>
                 </div>
                 <div class="col-md-3">
                   <button type="submit" class="loginButton" disabled>Publisher Login</button>
                 </div> -->
-              </div>
-              <div class="row mb-2 mt-5">
-                <!-- <div class="col-md-4">
+            </div>
+            <div class="row mb-2 mt-5">
+              <!-- <div class="col-md-4">
                   <button type="submit" class="btn btn-dark mb-2">Submit</button>
                 </div> -->
-                <!-- <div class="col-md-12 text-center">
+              <!-- <div class="col-md-12 text-center">
                   <button (click)="VisitUrl(BookId, name, 'RecoverPasswordReset')" class="loginButton ">Reset Account</button> -->
-                  <!-- <a (click)="VisitUrl(BookId, name, 'RecoverPasswordReset')" class="signupLink mb-2">Reset Account</a> -->
-                <!-- </div> -->
-              </div>
-            </form>
-          </div>
+              <!-- <a (click)="VisitUrl(BookId, name, 'RecoverPasswordReset')" class="signupLink mb-2">Reset Account</a> -->
+              <!-- </div> -->
+            </div>
+          </form>
         </div>
       </div>
     </div>
   </div>
-  <ng-template #ErrorConnection >
+</div>
+<ng-template #ErrorConnection>
   <div id="ServerError" class="row w-100 mx-0 auth-page wrapper">
     <div class="col-sm-12" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
-        <div class="d-flex justify-content-center align-item-center">
-            <span class="text-danger fs-3">Loading </span><br />
-            <div class="spinner-grow text-danger tex-center" style=" width: 14rem; height: 14rem;" role="status">
-            </div>
+      <div class="d-flex justify-content-center align-item-center">
+        <span class="text-danger fs-3">Loading </span><br />
+        <div class="spinner-grow text-danger tex-center" style=" width: 14rem; height: 14rem;" role="status">
         </div>
+      </div>
     </div>
-</div>
+  </div>
 </ng-template>

@@ -17,7 +17,7 @@ import { MatSort } from '@angular/material/sort';
 export class JournalPopularByGenreComponent implements OnInit, AfterViewInit {
   totalPage: any;
   totalPagesArray: any = 0; pageSizeOptions: number[] = [6, 12, 18, 24, 30];
-  totalPagess: any = 0;
+  // totalPagess: any = 0;
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
@@ -40,7 +40,7 @@ export class JournalPopularByGenreComponent implements OnInit, AfterViewInit {
     public formBuilder: UntypedFormBuilder,
     private fb: FormBuilder,
     private router: Router,) { }
-
+    serverUrl: any = 'https://files.lpu.in/umsweb/Journal/'; 
   ngOnInit(): void {
     this.getBooksDataWithEditorDetails();
   }
@@ -65,7 +65,7 @@ export class JournalPopularByGenreComponent implements OnInit, AfterViewInit {
     });
   }
   recordsPerPage = 6;
-  currentPage = 1;
+  // currentPage = 1;
 
   get totalPages(): number {
     return Math.ceil(this.booksDataWithEditorInfo.length / this.recordsPerPage);
@@ -120,4 +120,27 @@ export class JournalPopularByGenreComponent implements OnInit, AfterViewInit {
       this.imageLoadError[index] = false;
     }
   }
+
+  currentPage: number = 1;
+  totalPagess: number = 1; // total number of pages
+  
+
+  getPageRange(): number[] {
+    const visiblePages = 5;
+    const half = Math.floor(visiblePages / 2);
+    let start = Math.max(1, this.currentPage - half);
+    let end = start + visiblePages - 1;
+  
+    if (end > this.totalPagess) {
+      end = this.totalPagess;
+      start = Math.max(1, end - visiblePages + 1);
+    }
+  
+    const pages: number[] = [];
+    for (let i = start; i <= end; i++) {
+      pages.push(i);
+    }
+    return pages;
+  }
+  
 }
