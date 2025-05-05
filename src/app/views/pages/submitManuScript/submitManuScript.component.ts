@@ -967,6 +967,7 @@ reviewerList: any[] = [];
 
   columnHeaders: { [key: string]: string } = { 
     journalTitle: 'Journal Title', 
+    'uploadedOn':'Uploaded on',
     editorInChief: 'Author Name', 
     // manuScriptType: 'Manuscript Type', 
     submissionType: 'Submitted Script ', 
@@ -981,6 +982,7 @@ reviewerList: any[] = [];
   displayedEditorColumns: string[] = [
     // 'journalId',
     'journalTitle',
+    'uploadedOn',
     'manuScript',
     'editorInChief',
     'emailId',
@@ -991,6 +993,7 @@ reviewerList: any[] = [];
   ];
   displayedEditorColumnHeaders: { [key: string]: string } = { 
     journalTitle: 'Journal Title', 
+    uploadedOn: 'Uploaded on',
     manuScript: 'Manu Script', 
     editorInChief: 'Author Name', 
     emailId: 'Submitted User Email', 
@@ -1006,7 +1009,8 @@ EditorData: any;
 EditorDataColumns: any;
   
 EditordisplayedColumns: string[] = [
-'journalTitle',
+// 'journalTitle',
+'uploadedOn',
     'manuScript',
     'editorInChief',
     'emailId',
@@ -1016,7 +1020,8 @@ EditordisplayedColumns: string[] = [
 ];
 
 EditordisplayedColumnsHeader: string[] = [
-'Journal Title',
+// 'Journal Title',
+'Uploaded Date',
 'Manu Script',
 'Editor In Chief',
 'User Email Id',
@@ -1031,7 +1036,7 @@ showEditorData(journalId: any) {
       this.dataSource = dataX.item1;
       this.dataLoaded = true;
       this.EditorData = dataX.item1;
-      // console.log("ALL Menuscript   Data" + JSON.stringify(this.EditorData))
+      console.log("ALL Menuscript   Data" + JSON.stringify(this.EditorData))
       if (this.EditorData.length > 0) {
         this.EditorDataColumns = Object.keys(this.EditorData[0]);
         this.calculateTotalPagesEditor();
