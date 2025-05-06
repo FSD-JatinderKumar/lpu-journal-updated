@@ -55,7 +55,7 @@ export class TopMenuBarComponent implements OnInit {
     const GetCookieData = this.cookieService.get('authData');
     const status = this.storageService.isLoggedIn();
 
-    console.log("Cookie Data:", GetCookieData, "Storage login status:", status);
+    // console.log("Cookie Data:", GetCookieData, "Storage login status:", status);
 
     if (GetCookieData && status) {
       try {

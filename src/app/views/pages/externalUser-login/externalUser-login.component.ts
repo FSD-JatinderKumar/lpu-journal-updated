@@ -135,30 +135,78 @@ export class ExternalUserLoginComponent implements OnInit {
     });
   }
 
- 
-AuthoriseUserNewWay(Id: any, Key: any): void {   
+ // old logic for login without login failed message 
+//  Message: any;
+// AuthoriseUserNewWay(Id: any, Key: any): void {   
+//   this.lpuWebServices.AuthoriseUserDetails(Id, Key, this.BookId).subscribe({
+//     next: response => {
+//       if (response.item1 && response.item1.length > 0) {
+//         this.Email = response.item1[0].email;
+//         this.Message = response.item1[0].message;
+//         if(this.Message !='Login Failed'){ this.CreateToken(this.Email, response);
+//       } else {
+//         this.showNoDataFoundMessage = true;
+//         this.errorMessage= response.item1[0].message;//'Ensure if your current Journal belongs to your login';
+//         swal.fire({
+//           text: 'Check if you have selected the same Journal!',
+//           title: 'Invalid Login Details',
+//           icon: 'warning',
+//         });
+//       }
+//     }
+//     },
+//     error: (err) => {
+//       console.log(err);
+//     },
+//   });
+
+//   this.formdata.reset();
+// }
+
+// new logic for login with create token
+
+Message: any;
+
+AuthoriseUserNewWay(Id: any, Key: any): void {
   this.lpuWebServices.AuthoriseUserDetails(Id, Key, this.BookId).subscribe({
-    next: response => {
-      if (response.item1 && response.item1.length > 0) {
-        this.Email = response.item1[0].email;
-        this.CreateToken(this.Email, response);
+    next: (response) => {
+      const userDetails = response?.item1;
+
+      if (userDetails && userDetails.length > 0) {
+        const user = userDetails[0];
+        this.Email = user.email;
+        this.Message = user.message;
+
+        if (this.Message !== 'Login Failed') {
+          this.CreateToken(this.Email, response);
+        } else {
+          this.handleLoginFailure(user.message);
+        }
       } else {
-        this.showNoDataFoundMessage = true;
-        this.errorMessage='Ensure if your current Journal belongs to your login';
-        swal.fire({
-          text: 'Check if you have selected the same Journal!',
-          title: 'Invalid Login Details',
-          icon: 'warning',
-        });
+        this.handleLoginFailure('No user data returned.');
       }
     },
     error: (err) => {
-      console.log(err);
+      console.error('Login error:', err);
+      this.handleLoginFailure('An error occurred during login.');
     },
+    complete: () => {
+      this.formdata.reset();
+    }
   });
-
-  this.formdata.reset();
 }
+
+private handleLoginFailure(message: string): void {
+  this.showNoDataFoundMessage = true;
+  this.errorMessage = message;
+
+  swal.fire({
+    title: 'Invalid Login Details',
+    text: 'Check if you have selected the same Journal!',
+    icon: 'warning',
+  });
+}
+
 
 AccessToken: any;
 

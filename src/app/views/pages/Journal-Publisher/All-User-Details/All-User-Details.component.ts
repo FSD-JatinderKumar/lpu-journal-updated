@@ -89,7 +89,7 @@ export class AllUserDetailsComponent implements OnInit {
       if (response.item1 && response.item1.length > 0) {
         this.UserData = response.item1;
         this.Users = this.UserData;
-        // console.log(JSON.stringify(this.Users))
+        console.log(JSON.stringify(this.Users))
       }
       else {
         this.Users = [];
@@ -145,6 +145,82 @@ export class AllUserDetailsComponent implements OnInit {
     return userRoles
       .map(role => this.userRoleMap[role] || `Unknown (${role})`)
       .join(', ');
+  }
+
+Reason: any;
+
+  DisapproveStatus(rowData: any) {
+    Swal.fire({
+      title: "Reason for Disapproval",
+      // text: "Disapproval reason",
+      input: 'text',
+      showCancelButton: true
+    }).then((result) => {
+      if (result.value) {
+        this.Reason = result.value;
+        const formData = new FormData();
+        formData.append('UserEmailId', rowData.emailId);
+        formData.append('DisapprovalReason', this.Reason);
+        formData.append('Action', 'Disapprove');
+        this.handleStatusChange(formData, 'Disapprove');
+      } else {
+        this.showCancelledSwal();
+      }
+    });
+  }
+
+
+  
+
+  ChangeApproveStatus(rowData: any) {
+    alert(rowData.emailId)
+    const formData = new FormData();
+    formData.append('UserEmailId', rowData.emailId);
+    formData.append('DisapprovalReason', 'Approved ');
+    formData.append('Action', 'Approve');
+
+    Swal.fire({
+      title: 'Are you sure you want to change the status?',
+      text: 'Kindly confirm if the document is valid!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, accept current changes!',
+      cancelButtonText: 'No, do not change it'
+    }).then((result: any) => {
+      if (result.value) {
+        this.handleStatusChange(formData, 'Approve');
+      } else {
+        this.showCancelledSwal();
+      }
+    });
+  }
+
+  private handleStatusChange(formData: FormData, action: string) {
+    this.journalWebApiService.ApproveEditor(formData).subscribe((data: any) => {
+      if (action === 'Approve' && data.responseData === 'Cancel') {
+        Swal.fire(
+          'No Change!',
+          ' ',
+          'error'
+        );
+      } else {
+        Swal.fire(
+          ' Approved/Disapproved successfully !',
+          '',
+          'success'
+        ).then(() => {
+          window.location.reload();
+        });
+      }
+    });
+  }
+
+  private showCancelledSwal() {
+    Swal.fire(
+      'Cancelled',
+      ' ',
+      'error'
+    );
   }
 
 
