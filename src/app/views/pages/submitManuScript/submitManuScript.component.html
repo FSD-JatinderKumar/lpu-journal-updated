@@ -15,29 +15,27 @@
   </div>
 
   <div class="row mt-2 mb-4 d-flex justify-content-center p-5">
-      <div class="card">
-        <div class="card-body">
-          <div class="row d-flex justify-content-around">
-            <label class="col-3"  >User Name
-            </label>
-            <label class="col-3 text-dark  "
-               >{{this.candidateName}} </label>
+    <div class="card">
+      <div class="card-body">
+        <div class="row d-flex justify-content-around">
+          <label class="col-3">User Name
+          </label>
+          <label class="col-3 text-dark  ">{{this.candidateName}} </label>
 
-            <label class="col-3 " >Email Id</label>
-            <label class="col-3 text-dark " style="text-align: right;font-weight: 700;">
-              {{this.userId?.length>0 ? this.userId: 'NA' }}
-            </label>
-          </div>
+          <label class="col-3 ">Email Id</label>
+          <label class="col-3 text-dark " style="text-align: right;font-weight: 700;">
+            {{this.userId?.length>0 ? this.userId: 'NA' }}
+          </label>
         </div>
+      </div>
     </div>
   </div>
 
   <nav>
     <div class="nav nav-tabs mt-4 d-flex justify-content-center" id="nav-tab" role="tablist">
-      <button *ngFor="let action of UserRolesArray; let i = index" class="dashboardButton me-5"
-        id="{{ action.id }}-tab" data-bs-toggle="tab" style="padding: 0.5rem 0.5rem;"
-        [attr.data-bs-target]="'#' + action.id"   role="tab" [attr.aria-controls]="action.id"
-        [class.active]="i === 0" [attr.aria-selected]="i === 0 ? 'true' : 'false'">
+      <button *ngFor="let action of UserRolesArray; let i = index" class="dashboardButton me-5" id="{{ action.id }}-tab"
+        data-bs-toggle="tab" style="padding: 0.5rem 0.5rem;" [attr.data-bs-target]="'#' + action.id" role="tab"
+        [attr.aria-controls]="action.id" [class.active]="i === 0" [attr.aria-selected]="i === 0 ? 'true' : 'false'">
         {{ action.label }} Dashboard
       </button>
     </div>
@@ -223,7 +221,7 @@
 
         <!-- Reviewer Dashboard -->
         <div *ngSwitchCase="'Reviewer'">
-        
+
           <div class="row ">
             <div class="text-center">
               <h2 class="text-center text-danger mb-5"> {{action.label}} Dashboard </h2>
@@ -231,21 +229,16 @@
             <div class="container-fluid table-bordered table-responsive ">
               <div class="row">
                 <div class="d-flex justify-content-center mb-2">
-                  <div class="col-md-2"> 
-                  <input
-                    type="text"
-                    class=" form-control w-10"
-                    placeholder="Search Reviewer Remarks..."
-                    [(ngModel)]="searchText"
-                    (input)="applySearch()"
-                  />
-                </div>
+                  <div class="col-md-2">
+                    <input type="text" class=" form-control w-10" placeholder="Search Reviewer Remarks..."
+                      [(ngModel)]="searchText" (input)="applySearch()" />
+                  </div>
                   <!-- <button class="btn btn-primary" (click)="exportToExcel()">Export to Excel</button> -->
                 </div>
                 <div class="col-md-12 stretch-card">
                   <div class="card accordionColor ">
                     <!-- <div class="card-body accordionColor " *ngIf="this.ReviewerData?.length>0; else NoData"> -->
-                      <div class="card-body accordionColor " *ngIf="filteredReviewerRemarksData.length > 0; else NoData">
+                    <div class="card-body accordionColor " *ngIf="filteredReviewerRemarksData.length > 0; else NoData">
 
                       <div class="table-responsive">
                         <table class="table table-bordered">
@@ -266,10 +259,12 @@
                                   </button>
                                   <span *ngSwitchCase="'journalId'" class="col-md-6">
                                     <ng-container *ngIf="row.isActionable; else NoApp">
-                                      <button class="btn btn-success btn-sm" (click)="ChangeApproveStatus(row)" [ngClass]="'btn-success'">
+                                      <button class="btn btn-success btn-sm" (click)="ChangeApproveStatus(row)"
+                                        [ngClass]="'btn-success'">
                                         <i class="bi bi-check-circle"></i>
                                       </button>
-                                      <button class="btn btn-danger btn-sm" (click)="DisapproveStatus(row)" [ngClass]=" 'btn-danger'">
+                                      <button class="btn btn-danger btn-sm" (click)="DisapproveStatus(row)"
+                                        [ngClass]=" 'btn-danger'">
                                         <i class="bi bi-x-circle"></i>
                                       </button>
                                     </ng-container>
@@ -277,8 +272,8 @@
                                       <span class="text-danger "> <i class="bi bi-x-circle  "></i><br />Action Applied
                                       </span>
                                     </ng-template>
-                                  
-                                  
+
+
                                   </span>
                                   <!-- <span *ngSwitchCase="'journalId'" class="col-md-6">
                                     <button class="btn btn-success btn-sm" (click)="ChangeApproveStatus(row)"
@@ -307,7 +302,8 @@
                                                                                                           'text-success': row.isActionable == 1,
                                                                                                           'text-danger': row.isActionable == 0
                                                                                                         }">
-                                      {{ row.isActionable == null ? 'Pending' : row.isActionable == 1 ? 'Approved' : 'Rejected'
+                                      {{ row.isActionable == null ? 'Pending' : row.isActionable == 1 ? 'Approved' :
+                                      'Rejected'
                                       }}
                                     </span>
                                   </span>
@@ -321,8 +317,8 @@
                             </tr>
                           </tbody>
                         </table>
-        
-        
+
+
                         <div class="pagination-controls">
                           <button (click)="previousPageReviewerRemarks()"
                             [disabled]="currentPageReviewerRemarks === 1">Previous</button>
@@ -332,7 +328,7 @@
                         </div>
                       </div>
                     </div>
-        
+
                     <ng-template #NoData>
                       <div class="themeClr">
                         <h1 class="fs-2 text-center vh-50 p-3 m-4 themeClr"> No Data Found </h1>
@@ -348,27 +344,30 @@
         <!-- Editor Dashboard -->
         <div *ngSwitchCase="'Editor'">
           <div class="text-center">
-            <h2 class="text-center text-danger mb-5"> {{action.label}}  Dashboard </h2>
+            <h2 class="text-center text-danger mb-5"> {{action.label}} Dashboard </h2>
           </div>
           <nav>
             <div class="nav nav-tabs d-flex justify-content-center" id="nav-tab" role="tablist">
               <!-- Manuscript Tab -->
               <button class="dashboardButton me-5 active" id="Manuscript-all-tab" data-bs-toggle="tab"
-                data-bs-target="#Manuscript-all" type="button" role="tab" aria-controls="Manuscript-all" aria-selected="true">
+                data-bs-target="#Manuscript-all" type="button" role="tab" aria-controls="Manuscript-all"
+                aria-selected="true">
                 Manuscript Submitted
               </button>
               <!-- Reviewers Tab -->
               <button class="dashboardButton ms-5" id="Reviewers-all-tab" data-bs-toggle="tab"
-              data-bs-target="#Reviewers-tab" type="button" role="tab" aria-controls="Reviewers-tab" aria-selected="false">
-              Reviewers Remarks
-            </button>
+                data-bs-target="#Reviewers-tab" type="button" role="tab" aria-controls="Reviewers-tab"
+                aria-selected="false">
+                Reviewers Remarks
+              </button>
             </div>
           </nav>
-          
+
           <div class="tab-content mt-4" id="nav-tabContent">
-  
+
             <!-- Manuscript Tab Content (Initially Active) -->
-            <div class="tab-pane fade show active" id="Manuscript-all" role="tabpanel" aria-labelledby="Manuscript-all-tab">
+            <div class="tab-pane fade show active" id="Manuscript-all" role="tabpanel"
+              aria-labelledby="Manuscript-all-tab">
               <div class="text-center">
                 <h2 class="text-center text-danger mb-2"> Manuscript Details </h2>
               </div>
@@ -390,11 +389,13 @@
                               <tr *ngFor="let row of paginatedEditorData">
                                 <td *ngFor="let col of EditordisplayedColumns">
                                   <ng-container [ngSwitch]="col">
-                                    <button *ngSwitchCase="'fileUrl'" class="btn btn-dark btn-sm" (click)="onSelectFileEditorX(row[col])">
+                                    <button *ngSwitchCase="'fileUrl'" class="btn btn-dark btn-sm"
+                                      (click)="onSelectFileEditorX(row[col])">
                                       <i class="bi bi-file-earmark-text"></i>
                                     </button>
-                                    <button *ngSwitchCase="'journalId'" class="btn btn-danger btn-sm" (click)="onTakeAction(row)"
-                                      data-bs-toggle="modal" data-bs-target="#assignReviewerModal">
+                                    <button *ngSwitchCase="'journalId'" class="btn btn-danger btn-sm"
+                                      (click)="onTakeAction(row)" data-bs-toggle="modal"
+                                      data-bs-target="#assignReviewerModal">
                                       <i class="bi bi-exclamation-circle"></i>
                                     </button>
                                     <span *ngSwitchDefault>{{ row[col] }}</span>
@@ -403,12 +404,14 @@
                               </tr>
                             </tbody>
                           </table>
-          
+
                           <!-- Pagination Controls -->
                           <div class="pagination-controls">
-                            <button (click)="previousPageEditor()" [disabled]="currentPageEditor === 1">Previous</button>
+                            <button (click)="previousPageEditor()"
+                              [disabled]="currentPageEditor === 1">Previous</button>
                             <span> Page {{ currentPageEditor }} of {{ totalPagesEditor }} </span>
-                            <button (click)="nextPageEditor()" [disabled]="currentPageEditor >= totalPagesEditor">Next</button>
+                            <button (click)="nextPageEditor()"
+                              [disabled]="currentPageEditor >= totalPagesEditor">Next</button>
                           </div>
                         </div>
                       </div>
@@ -422,11 +425,11 @@
                 </div>
               </div>
             </div>
-          
+
             <!--  Reviewers Tab Content (Initially Hidden) -->
             <div class="tab-pane fade" id="Reviewers-tab" role="tabpanel" aria-labelledby="Reviewers-all-tab">
               <div class="text-center">
-                <h2 class="text-center text-danger mb-2"> All Reviews   </h2>
+                <h2 class="text-center text-danger mb-2"> All Reviews </h2>
               </div>
               <div class="container-fluid table-bordered table-responsive">
                 <div class="row">
@@ -446,16 +449,19 @@
                               <tr *ngFor="let row of paginatedReviewerRemarks">
                                 <td *ngFor="let col of ReviewerRemarksdisplayedColumns">
                                   <ng-container [ngSwitch]="col">
-                                    <button *ngSwitchCase="'fileUrl'" class="btn btn-dark btn-sm" (click)="onSelectFileEditorX(row[col])">
+                                    <button *ngSwitchCase="'fileUrl'" class="btn btn-dark btn-sm"
+                                      (click)="onSelectFileEditorX(row[col])">
                                       <i class="bi bi-file-earmark-text"></i>
                                     </button>
-                                   
+
                                     <span *ngSwitchCase="'journalId'" class="col-md-6">
                                       <ng-container *ngIf="row.isActionable; else NoApp">
-                                        <button class="btn btn-success btn-sm" (click)="ChangeApproveStatus(row)" [ngClass]="'btn-success'">
+                                        <button class="btn btn-success btn-sm" (click)="ChangeApproveStatus(row)"
+                                          [ngClass]="'btn-success'">
                                           <i class="bi bi-check-circle"></i>
                                         </button>
-                                        <button class="btn btn-danger btn-sm" (click)="DisapproveStatus(row)" [ngClass]=" 'btn-danger'">
+                                        <button class="btn btn-danger btn-sm" (click)="DisapproveStatus(row)"
+                                          [ngClass]=" 'btn-danger'">
                                           <i class="bi bi-x-circle"></i>
                                         </button>
                                       </ng-container>
@@ -463,10 +469,10 @@
                                         <span class="text-danger "> <i class="bi bi-x-circle  "></i><br />Action Applied
                                         </span>
                                       </ng-template>
-                                    
-                                    
+
+
                                     </span>
-                  
+
                                     <span *ngSwitchCase="'isApproved'">
                                       <span [ngClass]="row[col] === '1' ? 'text-success' : 'text-danger'">
                                         {{ row[col] === '1' ? 'Approved' : 'Not Approved' }}
@@ -481,7 +487,8 @@
                                                 'text-success': row.isActionable == 1,
                                                 'text-danger': row.isActionable == 0
                                               }">
-                                        {{ row.isActionable == null ? 'Pending' : row.isActionable == 1 ? 'Approved' : 'Rejected' }}
+                                        {{ row.isActionable == null ? 'Pending' : row.isActionable == 1 ? 'Approved' :
+                                        'Rejected' }}
                                       </span>
                                     </span>
                                     <span *ngSwitchDefault>{{ row[col] }}</span>
@@ -494,8 +501,8 @@
                               </tr>
                             </tbody>
                           </table>
-                  
-                  
+
+
                           <div class="pagination-controls">
                             <button (click)="previousPageReviewerRemarks()"
                               [disabled]="currentPageReviewerRemarks === 1">Previous</button>
@@ -515,24 +522,24 @@
                 </div>
               </div>
             </div>
-          
+
           </div>
         </div>
 
         <!-- Publisher Dashboard -->
         <div *ngSwitchCase="'Publisher'">
           <div class="text-center">
-            <h2 class="text-center text-danger mb-5"> {{action.label}}  Dashboard </h2>
+            <h2 class="text-center text-danger mb-5"> {{action.label}} Dashboard </h2>
           </div>
           <div class="container-fluid table-bordered table-responsive">
             <div class="row justify-content-center">
-              <div class="col-md-12"> 
+              <div class="col-md-12">
                 <div class="card accordionColor text-center p-4">
                   <div class="row">
                     <div class="col-12">
                       <h2 class="text-dark m-0 ">
                         <!-- Publisher-specific tools and settings. Manage publication scheduling and final release. -->
-                         Forbidden Access
+                        Forbidden Access
                       </h2>
                     </div>
                   </div>
@@ -545,7 +552,7 @@
               </div>
             </div>
           </div>
-          
+
         </div>
 
         <!-- Default Dashboard (For any unknown role) -->
@@ -559,7 +566,7 @@
                 <div class="card accordionColor ">
                   <div class="card">
                     <div class="card-body">
-        
+
                       <label class="col-md-12 form-label text-danger text-center fs-4 ">
                         Access Denied
                       </label>
@@ -574,7 +581,7 @@
               </div>
             </div>
           </div>
-        
+
         </div>
 
       </ng-container>
@@ -613,17 +620,18 @@
             <label class="form-label">Journal </label>
             <input type="text" class="form-control" [(ngModel)]="JournalTitle" name="journalId" readonly />
           </div>
-        
+
           <div class="mb-3">
             <label for="reviewerDropdown" class="form-label">Select Reviewer:</label>
-            <select id="reviewerDropdown" class="form-select" [(ngModel)]="selectedReviewerId" name="reviewerId" required>
+            <select id="reviewerDropdown" class="form-select" [(ngModel)]="selectedReviewerId" name="reviewerId"
+              required>
               <option value="" disabled>Select Reviewer</option>
               <option *ngFor="let reviewer of reviewerList" [value]="reviewer.emailId">
                 {{ reviewer.candidateName }}
               </option>
             </select>
           </div>
-        
+
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
             <button type="submit" class="btn btn-success" [disabled]="selectedReviewerId === ''">Assign

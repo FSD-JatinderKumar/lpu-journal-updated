@@ -174,10 +174,10 @@ AuthoriseUserNewWay(Id: any, Key: any): void {
 
       if (userDetails && userDetails.length > 0) {
         const user = userDetails[0];
+        
         this.Email = user.email;
         this.Message = user.message;
-
-        if (this.Message !== 'Login Failed') {
+        if (user.userId>0) {
           this.CreateToken(this.Email, response);
         } else {
           this.handleLoginFailure(user.message);

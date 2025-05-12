@@ -514,6 +514,8 @@ export class SubmitManuScriptComponent implements OnInit {
     formData.append('UserId', this.userId);
     formData.append('EditorInchief', this.EditorInChief);
     formData.append('FileUrl', fileName);
+    // formData.append('File', this.generatedFile!, fileName);
+    formData.append('Filex', this.generatedFile!, fileName);
     formData.append('File', this.FileData);
 
     //   Call the API for Email Sending
@@ -536,7 +538,7 @@ export class SubmitManuScriptComponent implements OnInit {
         } else {
           Swal.fire({
             title: 'Some Technical Issue',
-            text: result,
+            // text: 'error',
             icon: 'error',
           }).then(() => {
             window.location.reload();
@@ -1036,7 +1038,7 @@ export class SubmitManuScriptComponent implements OnInit {
         this.dataSource = dataX.item1;
         this.dataLoaded = true;
         this.EditorData = dataX.item1;
-        console.log("ALL Menuscript   Data" + JSON.stringify(this.EditorData))
+        // console.log("ALL Menuscript   Data" + JSON.stringify(this.EditorData))
         if (this.EditorData.length > 0) {
           this.EditorDataColumns = Object.keys(this.EditorData[0]);
           this.calculateTotalPagesEditor();
