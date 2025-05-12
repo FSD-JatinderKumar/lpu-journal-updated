@@ -136,6 +136,7 @@ const routes: Routes = [
 
 
       // Publisher Dashboard
+    
       {
         path:'AdvancedLogin',
         loadChildren: ()=> import('./views/pages/internalUser-login/internalUser-login.module').then(m=>m.InternalUserLoginModule)
@@ -205,6 +206,25 @@ const routes: Routes = [
         // loadChildren: () => import('./views/pages/Journal-Editors-AdminDashboard/Manuscript-Details/Manuscript-Details.module').then(m=>m.ManuscriptDetailsModule)
         loadChildren: () => import('./views/pages/recover-account/recover-account.module').then(m=>m.RecoverAccountComponentModule),
       }, 
+
+
+      // User Editor Dashboard  added on 12-May-25
+      {
+        path:':Id/:name/RolewiseLogin',
+        loadChildren: ()=> import('./views/pages/LoginWithRoles/LoginWithRoles.module').then(m=>m.LoginWithRolesModule)
+      },
+      {
+        path: ":Id/:name/UserED",
+        loadChildren: () => import('./views/pages/RoleWise-Dashboard/EditorDashboard/EDManuscript-Details/EDManuscript-Details.module').then(m=>m.EDManuscriptDetailsModule)
+      },
+      {
+        path: ":Id/:name/UserRRD",
+        loadChildren: () => import('./views/pages/RoleWise-Dashboard/EditorDashboard/EDReviewersRemarks-Details/EDReviewersRemarks-Details.module').then(m=>m.EDReviewersRemarksDetailsModule)
+      },
+      // {
+      //   path: "ReviewersRemarks",
+      //   loadChildren: () => import('./views/pages/Journal-Editors-AdminDashboard/ReviewersRemarks-Details/ReviewersRemarks-Details.module').then(m=>m.ReviewersRemarksDetailsModule)
+      // },
 
     ]
   }

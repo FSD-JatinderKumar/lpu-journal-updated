@@ -75,6 +75,14 @@ import { MyManuscriptDetailsModule } from './views/pages/Journal-Reviewers-Admin
 import { MyManuscriptDetailsComponent } from './views/pages/Journal-Reviewers-AdminDashboard/MyManuscript-Details/MyManuscript-Details.component';
 import { MyRemarksDetailsModule } from './views/pages/Journal-Reviewers-AdminDashboard/MyRemarks-Details/MyRemarks-Details.module';
 import { MyRemarksDetailsComponent } from './views/pages/Journal-Reviewers-AdminDashboard/MyRemarks-Details/MyRemarks-Details.component';
+import { LoginWithRolesModule } from './views/pages/LoginWithRoles/LoginWithRoles.module';
+import { LoginWithRolesComponent } from './views/pages/LoginWithRoles/LoginWithRoles.component';
+import { EDManuscriptDetailsComponent } from './views/pages/RoleWise-Dashboard/EditorDashboard/EDManuscript-Details/EDManuscript-Details.component';
+import { EDEditorHeaderComponent } from './views/pages/RoleWise-Dashboard/EditorDashboard/Editor-Top-Bar/EDEditorHeader.component';
+import { EDReviewersRemarksDetailsComponent } from './views/pages/RoleWise-Dashboard/EditorDashboard/EDReviewersRemarks-Details/EDReviewersRemarks-Details.component';
+import { EDEditorHeaderModule } from './views/pages/RoleWise-Dashboard/EditorDashboard/Editor-Top-Bar/EDEditorHeader.moudle';
+import { EDManuscriptDetailsModule } from './views/pages/RoleWise-Dashboard/EditorDashboard/EDManuscript-Details/EDManuscript-Details.module';
+import { EDReviewersRemarksDetailsModule } from './views/pages/RoleWise-Dashboard/EditorDashboard/EDReviewersRemarks-Details/EDReviewersRemarks-Details.module';
 
 @NgModule({
   declarations: [
@@ -131,6 +139,10 @@ import { MyRemarksDetailsComponent } from './views/pages/Journal-Reviewers-Admin
     ReviewersHeaderComponent,
     MyManuscriptDetailsComponent,
     MyRemarksDetailsComponent,
+    LoginWithRolesComponent, 
+    EDEditorHeaderComponent,
+    EDManuscriptDetailsComponent,
+    EDReviewersRemarksDetailsComponent
     
 
     
@@ -169,7 +181,12 @@ import { MyRemarksDetailsComponent } from './views/pages/Journal-Reviewers-Admin
 
     ReviewersHeaderModule,
     MyManuscriptDetailsModule,
-    MyRemarksDetailsModule
+    MyRemarksDetailsModule, 
+    LoginWithRolesModule, 
+
+    EDEditorHeaderModule,
+    EDManuscriptDetailsModule,
+    EDReviewersRemarksDetailsModule
     
     
   ],
