@@ -23,11 +23,11 @@ export class LoginWithRolesComponent implements OnInit {
   Designation: any; EmailId: any; MobileNo: any; UserRole: any; SupervisorName: any; ProofNumber: any; ProofName: any;
   SecretKey: any; BookId: any; name: any; isForm1Submitted: boolean = false;
   JournalTitle: any; errorMessage: any;
-  UserLoginForm!: FormGroup; 
+  UserLoginForm!: FormGroup;
   Email: any;
 
   JournalUserAccountForm!: FormGroup;
-  
+
 
   constructor(
     public formBuilder: UntypedFormBuilder,
@@ -41,22 +41,22 @@ export class LoginWithRolesComponent implements OnInit {
     private lpuWebServices: LpujournalbookService
 
   ) {
-    
+
   }
 
   ngOnInit(): void {
-    this.errorMessage='';
+    this.errorMessage = '';
     this.cookieService.delete('authData');
     this.AuthSession.clearSession();
     this.storageService.clean();
     this.BookId = this.route.snapshot.params['Id'];
     this.name = this.route.snapshot.params['name'];
-    
+
     this.JournalTitle = this.name.replace(/-/g, ' ');
 
     this.loadForm();
 
-    
+
   }
 
 
@@ -64,13 +64,13 @@ export class LoginWithRolesComponent implements OnInit {
     const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     return emailPattern.test(control.value) ? null : { invalidEmail: true };
   }
-  
-  
-  loadForm(){  
+
+
+  loadForm() {
     this.formdata = new FormGroup({
       UserRoles: new FormControl('', Validators.required),
       Email: new FormControl('', [Validators.required, Validators.minLength(5)]),
-      password: new FormControl('', [Validators.required,Validators.minLength(5),]),
+      password: new FormControl('', [Validators.required, Validators.minLength(5),]),
     });
 
 
@@ -78,13 +78,13 @@ export class LoginWithRolesComponent implements OnInit {
     this.JournalUserAccountForm = this.fb.group({
       EmailId: ['', [Validators.required, Validators.email]],
       Password: ['', [Validators.required, Validators.minLength(6)]],
-      UserRoles: ['', Validators.required]  
+      UserRoles: ['', Validators.required]
     });
   }
   formdata = new FormGroup({
     UserRoles: new FormControl('', Validators.required),
     Email: new FormControl('', [Validators.required, Validators.minLength(5)]),
-    password: new FormControl('', [Validators.required,Validators.minLength(5),]),
+    password: new FormControl('', [Validators.required, Validators.minLength(5),]),
   });
   get email() {
     return this.formdata.get('Email');
@@ -122,7 +122,7 @@ export class LoginWithRolesComponent implements OnInit {
       var uid = DataX.Email ?? '';
       var password = DataX.password ?? '';
       var encodeduid = btoa(uid);
-      var encodedPassword = btoa(password);      
+      var encodedPassword = btoa(password);
       this.selectedRole = DataX.UserRoles;
       if (uid.length > 5 && password.length > 5) {
         this.AuthoriseUserNewWay(uid, password);
@@ -149,143 +149,144 @@ export class LoginWithRolesComponent implements OnInit {
       window.location.reload();
     });
   }
- 
-Message: any;
 
-AuthoriseUserNewWay(Id: any, Key: any): void {
-  this.lpuWebServices.AuthoriseUserDetails(Id, Key, this.BookId).subscribe({
-    next: (response) => {
-      const userDetails = response?.item1;
-      if (userDetails && userDetails.length > 0) {
-        const user = userDetails[0];        
-        this.Email = user.email;
-        this.Message = user.message;
-        if (user.userId>0) {
-          this.CreateToken(this.Email, response);
+  Message: any;
+
+  AuthoriseUserNewWay(Id: any, Key: any): void {
+    this.lpuWebServices.AuthoriseUserDetails(Id, Key, this.BookId).subscribe({
+      next: (response) => {
+        const userDetails = response?.item1;
+        if (userDetails && userDetails.length > 0) {
+          const user = userDetails[0];
+          this.Email = user.email;
+          this.Message = user.message;
+          if (user.userId > 0) {
+            this.CreateToken(this.Email, response);
+          } else {
+            this.handleLoginFailure(user.message);
+          }
         } else {
-          this.handleLoginFailure(user.message);
+          this.handleLoginFailure('No user data returned.');
         }
-      } else {
-        this.handleLoginFailure('No user data returned.');
+      },
+      error: (err) => {
+        console.error('Login error:', err);
+        this.handleLoginFailure('An error occurred during login.');
+      },
+      complete: () => {
+        this.formdata.reset();
       }
-    },
-    error: (err) => {
-      console.error('Login error:', err);
-      this.handleLoginFailure('An error occurred during login.');
-    },
-    complete: () => {
-      this.formdata.reset();
-    }
-  });
-}
+    });
+  }
 
-private handleLoginFailure(message: string): void {
-  this.showNoDataFoundMessage = true;
-  this.errorMessage = message;
+  private handleLoginFailure(message: string): void {
+    this.showNoDataFoundMessage = true;
+    this.errorMessage = message;
 
-  swal.fire({
-    title: 'Invalid Login Details',
-    text: 'Check if you have selected the same Journal!',
-    icon: 'warning',
-  });
-  this.formdata.reset();
-  // this.loadForm();
-}
+    swal.fire({
+      title: 'Invalid Login Details',
+      text: 'Check if you have selected the same Journal!',
+      icon: 'warning',
+    });
+    this.formdata.reset();
+    // this.loadForm();
+  }
 
 
-AccessToken: any;
+  AccessToken: any;
 
-CreateToken(Id: any, response: any) {
-  this.authService.LoginJournalAccessTemp(Id).subscribe({
-    next: data => {
-      this.storageService.saveUser(data);
-      this.SetUserData(response);
-      // this.getUserRolesforId(); 
-    },
-    error: err => {
-      this.loadingIndicator = false;
-      this.showNoDataFoundMessage = false;
-      this.isLoginFailed = false;
-    }
-  });
-}
- 
-SetUserData(response: any) {
-  this.loadingIndicator = true; // show loading at start
+  CreateToken(Id: any, response: any) {
+    this.authService.LoginJournalAccessTemp(Id).subscribe({
+      next: data => {
+        this.storageService.saveUser(data);
+        this.SetUserData(response);
+        // this.getUserRolesforId(); 
+      },
+      error: err => {
+        this.loadingIndicator = false;
+        this.showNoDataFoundMessage = false;
+        this.isLoginFailed = false;
+      }
+    });
+  }
 
-  this.UserData = response.item1;
-  this.CandidateName = this.EmployeeName = response.item1[0].candidateName;
-  this.AccessToken = response.item1[0].email;
-  this.Department = response.item1[0].department;
-  this.DepartmentName = response.item1[0].departmentName;
-  this.Designation = response.item1[0].designation;
-  this.EmailId = response.item1[0].emailId;
-  this.MobileNo = response.item1[0].mobileNumber;
-  this.UserRole = response.item1[0].userRole;
-  this.SupervisorName = response.item1[0].supervisorName;
-  this.ProofNumber = btoa(response.item1[0].idProofNumber);
-  this.ProofName = response.item1[0].idProofType;
-  this.SecretKey = btoa(response.item1[0].passwordText);
+  SetUserData(response: any) {
+    this.loadingIndicator = true; // show loading at start
 
-  this.showNoDataFoundMessage = false;
-  this.isLoginFailed = false;
+    this.UserData = response.item1;
+    this.CandidateName = this.EmployeeName = response.item1[0].candidateName;
+    this.AccessToken = response.item1[0].email;
+    this.Department = response.item1[0].department;
+    this.DepartmentName = response.item1[0].departmentName;
+    this.Designation = response.item1[0].designation;
+    this.EmailId = response.item1[0].emailId;
+    this.MobileNo = response.item1[0].mobileNumber;
+    this.UserRole = response.item1[0].userRole;
+    this.SupervisorName = response.item1[0].supervisorName;
+    this.ProofNumber = btoa(response.item1[0].idProofNumber);
+    this.ProofName = response.item1[0].idProofType;
+    this.SecretKey = btoa(response.item1[0].passwordText);
 
-  const userCookiesData = {
-    CandidateName: this.CandidateName,
-    AccessToken: this.AccessToken,
-    Department: this.Department,
-    DepartmentName: this.DepartmentName,
-    Designation: this.Designation,
-    EmailId: this.EmailId,
-    MobileNo: this.MobileNo,
-    UserRole: this.UserRole,
-    SupervisorName: this.SupervisorName,
-    ProofNumber: this.ProofNumber,
-    ProofName: this.ProofName,
-  };
+    this.showNoDataFoundMessage = false;
+    this.isLoginFailed = false;
 
-  this.cookieService.set('authData', JSON.stringify(userCookiesData));
- 
-  this.loadingIndicator = false; // show loading at start
-  if(this.selectedRole != this.UserRole){    
+    const userCookiesData = {
+      CandidateName: this.CandidateName,
+      AccessToken: this.AccessToken,
+      Department: this.Department,
+      DepartmentName: this.DepartmentName,
+      Designation: this.Designation,
+      EmailId: this.EmailId,
+      MobileNo: this.MobileNo,
+      UserRole: this.UserRole,
+      SupervisorName: this.SupervisorName,
+      ProofNumber: this.ProofNumber,
+      ProofName: this.ProofName,
+    };
+
+    this.cookieService.set('authData', JSON.stringify(userCookiesData));
+
+    this.loadingIndicator = false; // show loading at start
+    if (this.selectedRole != this.UserRole) {
       this.handleLoginFailure("Not Allowed . Forbidden Access !!")
     }
-  switch(this.selectedRole)
-  {
-    case '0':
-     
-        this.AuthSession.addToSession(this.UserData);
-      this.VisitUrl(this.BookId, this.name, 'UserED');
-      
-      // this.router.navigateByUrl('UserED')
-      break;
-    case '1':
-      alert('Under Construction');
-      this.loadForm();
-      break;
-    case '2': 
-        this.router.navigateByUrl('ReviewersDashboard')
-        this.loadForm();
-      break;  
-    case '3':
-    // this.router.navigateByUrl('PublisherDashboard')
-    this.router.navigateByUrl('AllJournals');
-    break;
-  }
-  this.loadForm();
-}
- 
+    else {
+      switch (this.selectedRole) {
+        case '0':
 
-   // new code for user roles 
-   UserRolesData: any;
-   UserRolesArray: { value: string; label: string; id: string }[] = [];
-   editorRole: boolean = false;
-   authorRole: boolean = false;
-   reviewerRole: boolean = false;
-   publisherRole: boolean = false;
-   
- 
-   
+          this.AuthSession.addToSession(this.UserData);
+          this.VisitUrl(this.BookId, this.name, 'UserED');
+
+          // this.router.navigateByUrl('UserED')
+          break;
+        case '1':
+          alert('Under Construction');
+          this.loadForm();
+          break;
+        case '2':
+          this.router.navigateByUrl('ReviewersDashboard')
+          this.loadForm();
+          break;
+        case '3':
+          // this.router.navigateByUrl('PublisherDashboard')
+          this.router.navigateByUrl('AllJournals');
+          break;
+      }
+    }
+    this.loadForm();
+  }
+
+
+  // new code for user roles 
+  UserRolesData: any;
+  UserRolesArray: { value: string; label: string; id: string }[] = [];
+  editorRole: boolean = false;
+  authorRole: boolean = false;
+  reviewerRole: boolean = false;
+  publisherRole: boolean = false;
+
+
+
   availableRoles = [
     { value: '0', label: 'Editor Login' },
     { value: '1', label: 'Author Login' },
