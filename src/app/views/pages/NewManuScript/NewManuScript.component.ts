@@ -17,7 +17,7 @@ import { LoginSessionService } from 'src/app/_services/login-session.service';
 import { CookieService } from 'ngx-cookie-service';
 import { forkJoin } from 'rxjs';
 @Component({
-  selector: 'app-register-page',
+  selector: 'app-NewManuScript-page',
   templateUrl: './NewManuScript.component.html',
   styleUrls: ['./NewManuScript.component.scss']
 })

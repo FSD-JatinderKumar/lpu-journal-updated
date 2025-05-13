@@ -128,7 +128,12 @@ export class LoginWithRolesComponent implements OnInit {
         this.AuthoriseUserNewWay(uid, password);
       }
       else {
-        alert('Invalid Details')
+        swal.fire({
+          title: 'Login Failed',
+          text: 'Login details are Invalid!',
+          icon: 'warning',
+        });
+
       }
 
     }
@@ -166,12 +171,12 @@ export class LoginWithRolesComponent implements OnInit {
             this.handleLoginFailure(user.message);
           }
         } else {
-          this.handleLoginFailure('No user data returned.');
+          this.handleLoginFailure('Invalid User Details.');
         }
       },
       error: (err) => {
         console.error('Login error:', err);
-        this.handleLoginFailure('An error occurred during login.');
+        this.handleLoginFailure('Unauthorised Access .');
       },
       complete: () => {
         this.formdata.reset();
@@ -184,12 +189,12 @@ export class LoginWithRolesComponent implements OnInit {
     this.errorMessage = message;
 
     swal.fire({
-      title: 'Invalid Login Details',
+      title: this.errorMessage,
       text: 'Check if you have selected the same Journal!',
       icon: 'warning',
     });
-    this.formdata.reset();
-    // this.loadForm();
+    // this.formdata.reset();
+    this.loadForm();
   }
 
 
@@ -200,7 +205,7 @@ export class LoginWithRolesComponent implements OnInit {
       next: data => {
         this.storageService.saveUser(data);
         this.SetUserData(response);
-        // this.getUserRolesforId(); 
+        // this.getUserRolesforId();
       },
       error: err => {
         this.loadingIndicator = false;
@@ -212,7 +217,6 @@ export class LoginWithRolesComponent implements OnInit {
 
   SetUserData(response: any) {
     this.loadingIndicator = true; // show loading at start
-
     this.UserData = response.item1;
     this.CandidateName = this.EmployeeName = response.item1[0].candidateName;
     this.AccessToken = response.item1[0].email;
@@ -239,6 +243,7 @@ export class LoginWithRolesComponent implements OnInit {
       EmailId: this.EmailId,
       MobileNo: this.MobileNo,
       UserRole: this.UserRole,
+      SelectedRole: this.selectedRole,
       SupervisorName: this.SupervisorName,
       ProofNumber: this.ProofNumber,
       ProofName: this.ProofName,
@@ -247,29 +252,35 @@ export class LoginWithRolesComponent implements OnInit {
     this.cookieService.set('authData', JSON.stringify(userCookiesData));
 
     this.loadingIndicator = false; // show loading at start
-    if (this.selectedRole != this.UserRole) {
-      this.handleLoginFailure("Not Allowed . Forbidden Access !!")
+    if (!this.UserRole.includes(this.selectedRole)) {
+      this.handleLoginFailure("Not Allowed. Forbidden Access !!")
     }
     else {
+      this.AuthSession.addToSession(this.UserData);
       switch (this.selectedRole) {
         case '0':
-
-          this.AuthSession.addToSession(this.UserData);
           this.VisitUrl(this.BookId, this.name, 'UserED');
-
-          // this.router.navigateByUrl('UserED')
           break;
         case '1':
-          alert('Under Construction');
-          this.loadForm();
+          this.VisitUrl(this.BookId, this.name, 'AuthorDashboard');
+          // swal.fire({
+          //   title: 'System Maintenance',
+          //   text: 'Under Construction!',
+          //   icon: 'warning',
+          // });
+          // this.loadForm();
           break;
         case '2':
-          this.router.navigateByUrl('ReviewersDashboard')
-          this.loadForm();
+          this.VisitUrl(this.BookId, this.name, 'ReviewerDashboard');
           break;
         case '3':
           // this.router.navigateByUrl('PublisherDashboard')
-          this.router.navigateByUrl('AllJournals');
+          swal.fire({
+            title: 'System Maintenance',
+            text: 'Under Construction!',
+            icon: 'warning',
+          });
+          this.loadForm();
           break;
       }
     }
@@ -296,4 +307,57 @@ export class LoginWithRolesComponent implements OnInit {
 
   selectedRoles: string[] = [];
   selectedRole: any;
+
+
+
+  getUserRolesforId(): void {
+    const roleMapping: Record<string, string> = {
+      '0': 'Editor',
+      '1': 'Author',
+      '2': 'Reviewer',
+      '3': 'Publisher'
+    };
+
+    this.lpuWebServices.GetUserRolesforUser(this.EmailId).subscribe({
+      next: (response) => {
+        if (response?.item1?.length > 0) {
+          this.UserRolesData = response.item1[0];
+
+          // Ensure userRole exists before processing
+          const roles = this.UserRolesData?.userRole ? this.UserRolesData.userRole.split(',') : [];
+
+          // Reset role variables
+          this.editorRole = false;
+          this.authorRole = false;
+          this.reviewerRole = false;
+          this.publisherRole = false;
+
+          this.UserRolesArray = roles.map((role: any) => {
+            const roleKey = String(role); // Ensure role is a string
+            const label = roleMapping[roleKey] || roleKey; // Use mapped label or fallback to role itself
+
+            // Set role variables based on user role
+            if (roleKey === '0') this.editorRole = true;
+            if (roleKey === '1') this.authorRole = true;
+            if (roleKey === '2') this.reviewerRole = true;
+            if (roleKey === '3') this.publisherRole = true;
+
+            return {
+              value: roleKey,
+              label,
+              id: label.replace(/\s+/g, '') // Safe to call replace() now
+            };
+          });
+        } else {
+          this.UserRolesArray = []; // Reset array if no roles found
+        }
+      },
+      error: (err) => {
+        console.error('Error fetching user roles:', err);
+        this.UserRolesArray = []; // Reset array on error
+        this.isLoginFailed = true;
+      }
+    });
+  }
+
 }

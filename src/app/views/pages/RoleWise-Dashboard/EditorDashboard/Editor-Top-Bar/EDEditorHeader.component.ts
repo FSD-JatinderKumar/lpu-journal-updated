@@ -29,6 +29,7 @@ export class EDEditorHeaderComponent implements OnInit {
   LoginStatus: boolean = false;
   JournalTitle: any;
   userId: any;
+  selectedRole: any;
   constructor(
     private journalWebApiService: LpujournalbookService,
     private AuthSession: LoginSessionService,
@@ -72,6 +73,7 @@ export class EDEditorHeaderComponent implements OnInit {
         this.supervisorName = retrievedCookies.SupervisorName;
         this.departmentName = retrievedCookies.DepartmentName;
         this.candidateName = retrievedCookies.CandidateName;
+        this.selectedRole = retrievedCookies.SelectedRole;
         return true;
       } catch (error) {
         console.log("error");

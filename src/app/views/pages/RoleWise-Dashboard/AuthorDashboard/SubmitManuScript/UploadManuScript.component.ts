@@ -18,11 +18,11 @@ import { LoginSessionService } from 'src/app/_services/login-session.service';
 import { CookieService } from 'ngx-cookie-service';
 import { forkJoin } from 'rxjs';
 @Component({
-  selector: 'app-submitManuScript-page',
-  templateUrl: './submitManuScript.component.html',
-  styleUrls: ['./submitManuScript.component.scss']
+  selector: 'app-UploadManuScript-page',
+  templateUrl: './UploadManuScript.component.html',
+  styleUrls: ['./UploadManuScript.component.scss']
 })
-export class SubmitManuScriptComponent implements OnInit {
+export class UploadManuScriptComponent implements OnInit {
   emailId: any = ''; candidateName: any; supervisorName: any; mobileNumber: any; instituteName: any;
   departmentName: any; idProofType: any = 'select'; idProofNumber: any; address: any; password: any; confirmPassword: any; userRole: any = 'select';
   cifUserForm!: FormGroup; isForm1Submitted: boolean = false; IdProofFileName: string | null = null; IdProofFile: string | null = null;

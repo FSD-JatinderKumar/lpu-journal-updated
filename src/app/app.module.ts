@@ -83,6 +83,10 @@ import { EDReviewersRemarksDetailsComponent } from './views/pages/RoleWise-Dashb
 import { EDEditorHeaderModule } from './views/pages/RoleWise-Dashboard/EditorDashboard/Editor-Top-Bar/EDEditorHeader.moudle';
 import { EDManuscriptDetailsModule } from './views/pages/RoleWise-Dashboard/EditorDashboard/EDManuscript-Details/EDManuscript-Details.module';
 import { EDReviewersRemarksDetailsModule } from './views/pages/RoleWise-Dashboard/EditorDashboard/EDReviewersRemarks-Details/EDReviewersRemarks-Details.module';
+import { UploadManuScriptComponent } from './views/pages/RoleWise-Dashboard/AuthorDashboard/SubmitManuScript/UploadManuScript.component';
+import { NewManuScript } from './views/pages/RoleWise-Dashboard/AuthorDashboard/NewManuscript/NewManuScript.component';
+import { RDManuscriptDetailsComponent } from './views/pages/RoleWise-Dashboard/ReviewersDashboard/RDManuscript-Details/RDManuscript-Details.component';
+import { RDRemarksDetailsComponent } from './views/pages/RoleWise-Dashboard/ReviewersDashboard/RDRemarksDetails/RDRemarksDetails.component';
 
 @NgModule({
   declarations: [
@@ -142,9 +146,12 @@ import { EDReviewersRemarksDetailsModule } from './views/pages/RoleWise-Dashboar
     LoginWithRolesComponent, 
     EDEditorHeaderComponent,
     EDManuscriptDetailsComponent,
-    EDReviewersRemarksDetailsComponent
-    
+    EDReviewersRemarksDetailsComponent,        
+    UploadManuScriptComponent,
+    NewManuScript, 
 
+    RDManuscriptDetailsComponent,
+    RDRemarksDetailsComponent
     
   ],
   imports: [
@@ -186,7 +193,7 @@ import { EDReviewersRemarksDetailsModule } from './views/pages/RoleWise-Dashboar
 
     EDEditorHeaderModule,
     EDManuscriptDetailsModule,
-    EDReviewersRemarksDetailsModule
+    EDReviewersRemarksDetailsModule,
     
     
   ],

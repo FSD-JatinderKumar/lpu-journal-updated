@@ -226,6 +226,21 @@ const routes: Routes = [
       //   loadChildren: () => import('./views/pages/Journal-Editors-AdminDashboard/ReviewersRemarks-Details/ReviewersRemarks-Details.module').then(m=>m.ReviewersRemarksDetailsModule)
       // },
 
+
+      // User Author Dashboard 
+      {
+        path :":Id/:name/AuthorDashboard",
+        loadChildren:()=> import('./views/pages/RoleWise-Dashboard/AuthorDashboard/NewManuscript/NewManuScript.module').then(m=>m.NewManuScriptModule)
+      },
+      // Reviewers Dashboard 
+      {
+        path :":Id/:name/ReviewerDashboard",
+        loadChildren:()=> import('./views/pages/RoleWise-Dashboard/ReviewersDashboard/RDManuscript-Details/RDManuscript-Details.module').then(m=>m.RDManuscriptDetailsModule)
+      },
+      {
+        path :":Id/:name/ReviewersRemarks",
+        loadChildren:()=> import('./views/pages/RoleWise-Dashboard/ReviewersDashboard/RDRemarksDetails/RDRemarksDetails.module').then(m=>m.RDRemarksDetailsModule)
+      }
     ]
   }
 ];
