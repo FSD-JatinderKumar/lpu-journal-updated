@@ -94,8 +94,6 @@ export class EDManuscriptDetailsComponent implements OnInit {
     this.JournalTitle = name.replace(/-/g, ' ');
 
      
-
-    // alert(bookId+name+'ExternalLogin');
     if (bookId>0 && loginStatus==true) {
       this.BookId = bookId; this.JournalId = bookId;
       this.JournalTitle = name.replace(/-/g, ' ');

@@ -30,6 +30,8 @@ export class EDEditorHeaderComponent implements OnInit {
   JournalTitle: any;
   userId: any;
   selectedRole: any;
+  userRoleText: any;
+
   constructor(
     private journalWebApiService: LpujournalbookService,
     private AuthSession: LoginSessionService,
@@ -38,11 +40,6 @@ export class EDEditorHeaderComponent implements OnInit {
     private StoragesServices: StorageService,
     private cookieService: CookieService
   ) {}
-
-
-  
-
-
 
   VisitUrl(Id: any, name: any, Sufix: any): void {
     this.router.navigateByUrl(`${Id}/${name}/${Sufix}`).then(() => {
@@ -105,8 +102,8 @@ export class EDEditorHeaderComponent implements OnInit {
     this.departmentName = null;
     this.candidateName = null;
     this.LoginStatus = false;
-  
-    this.router.navigateByUrl('Home').then(() => {
+    
+    this.router.navigateByUrl(`${this.BookId}/${this.name}/${'RolewiseLogin'}`).then(() => {
       setTimeout(() => {
         location.reload();
       }, 500);
@@ -120,6 +117,7 @@ export class EDEditorHeaderComponent implements OnInit {
     
     this.JournalTitle = this.name.replace(/-/g, ' ');
     this.LoginStatus = this.checkUserLogin();
+    this.getUserRolesforId();
    
   }
   toggleNavbar(): void {
@@ -133,6 +131,68 @@ export class EDEditorHeaderComponent implements OnInit {
 
   goto(val: any): void {
     this.router.navigateByUrl(val);
+  }
+
+
+  UserRolesData: any;
+  UserRolesArray: { value: string; label: string; id: string }[] = [];
+  editorRole: boolean = false;
+  authorRole: boolean = false;
+  reviewerRole: boolean = false;
+  publisherRole: boolean = false;
+
+
+  availableRoles = [
+    { value: '0', label: 'Editor Login' },
+    { value: '1', label: 'Author Login' },
+    { value: '2', label: 'Reviewer Login' },
+    { value: '3', label: 'Publisher Login' },
+  ];
+
+  selectedRoles: string[] = [];
+
+
+  
+  getUserRolesforId(): void {
+    const roleMapping: Record<string, string> = {
+      '0': 'Editor',
+      '1': 'Author',
+      '2': 'Reviewer',
+      '3': 'Publisher'
+    };
+
+    this.journalWebApiService.GetUserRolesforUser(this.userId).subscribe({
+      next: (response) => {
+        if (response?.item1?.length > 0) {
+          this.UserRolesData = response.item1[0];
+
+          // Ensure userRole exists before processing
+          const roles = this.UserRolesData?.userRole ? this.UserRolesData.userRole.split(',') : [];
+          this.UserRolesArray = roles.map((role: any) => {
+            const roleKey = String(role); // Ensure role is a string
+            const label = roleMapping[roleKey] || roleKey; // Use mapped label or fallback to role itself
+
+            // Set role variables based on user role
+            if (roleKey === '0') this.userRoleText = 'Editor';
+            if (roleKey === '1') this.userRoleText = 'Author';
+            if (roleKey === '2') this.userRoleText = 'Reviewer';
+            if (roleKey === '3') this.userRoleText = 'Publisher';
+
+            return {
+              value: roleKey,
+              label,
+              id: label.replace(/\s+/g, '') // Safe to call replace() now
+            };
+          });
+        } else {
+          this.UserRolesArray = []; // Reset array if no roles found
+        }
+      },
+      error: (err) => {
+        console.error('Error fetching user roles:', err);
+        this.UserRolesArray = []; // Reset array on error
+      }
+    });
   }
 
 } 

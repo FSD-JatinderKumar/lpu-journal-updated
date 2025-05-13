@@ -98,7 +98,7 @@ export class NewManuScript implements OnInit {
 
     } else {
 
-      this.VisitUrl(this.BookId, this.name, 'ExternalLogin');
+      this.VisitUrl(this.BookId, this.name, 'RolewiseLogin');
     }
 
     this.LoadForm();

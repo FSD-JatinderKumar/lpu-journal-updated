@@ -48,9 +48,9 @@
             </li>
 
             <li class="nextdrop" *ngIf="LoginStatus === true; else loginRequired">
-                <label for="drop-2" class="toggle"  onclick="myFunction(this)">ManuScript  </label>
+                <label for="drop-2" class="toggle"  onclick="myFunction(this)">{{this.userRoleText}} Action  </label>
                 <a class="dropa">
-                    Manuscript 
+                    {{this.userRoleText}}
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                          class="bi bi-caret-down-fill" viewBox="0 0 16 16">
                         <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z" />
@@ -61,26 +61,37 @@
                 <ul *ngIf="UserRole.includes(selectedRole) && selectedRole=='0'"> 
                     <li><a class="dropdown-item" (click)="VisitUrl(BookId, name, 'UserED')">All Manuscripts</a></li>
                     <li><a class="dropdown-item" (click)="VisitUrl(BookId, name, 'UserRRD')">All Reviewer's Remarks</a></li>
+                   
                 </ul>
             
-                <ul *ngIf="UserRole.includes(selectedRole) && selectedRole=='1'">
-                    <li><a class="dropdown-item" (click)="VisitUrl(BookId, name, 'AuthorDashboard')">Upload Manuscript</a></li>
-                </ul>
-
-
                 <ul *ngIf="UserRole.includes(selectedRole) && selectedRole=='2'">
-                    <li><a class="dropdown-item" (click)="VisitUrl(BookId, name, 'ReviewerDashboard')">Reviewers Manuscript</a></li>
-                    <li><a class="dropdown-item" (click)="VisitUrl(BookId, name, 'ReviewersRemarks')">Reviewers Remarks</a></li>
+                    <li><a class="dropdown-item" (click)="VisitUrl(BookId, name, 'ReviewerDashboard')"> Manuscript</a></li>
+                    <li><a class="dropdown-item" (click)="VisitUrl(BookId, name, 'ReviewersRemarks')"> Remarks</a></li>
                 </ul>
             </li>
             
+            <li *ngIf="LoginStatus === true">
+                <label for="drop-2" class="toggle"  onclick="myFunction(this)">ManuScript  </label>
+                <a class="dropa">
+                    Manuscript 
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                         class="bi bi-caret-down-fill" viewBox="0 0 16 16">
+                        <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z" />
+                    </svg>
+                </a>
+                <input type="checkbox" id="drop-2" />
+                <ul>
+                    <li><a (click)="VisitUrl(BookId, name, 'MyManuScript')"> Requests</a></li>
+                    <li><a class="dropdown-item" (click)="VisitUrl(BookId, name, 'AuthorDashboard')">Upload New</a></li>
+                </ul>
+            </li>
             <li *ngIf="LoginStatus === true">
                 <a (click)="Logout()">Logout</a>
             </li>
             
             <ng-template #loginRequired>
                 <li>
-                    <a (click)="VisitUrl(BookId, name, 'ExternalLogin')">Login</a>
+                    <a (click)="VisitUrl(BookId, name, 'RolewiseLogin')">Login</a>
                 </li>
             </ng-template>
             
@@ -91,7 +102,7 @@
 </div>
 
 
-<div class="container-fluid  mt-4 ">
+<div class="container-fluid  mt-4 " *ngIf="this.candidateName.length>0 ; ">
     <div class="card">
     <div class="card-body">
         <div class="row d-flex justify-content-center">

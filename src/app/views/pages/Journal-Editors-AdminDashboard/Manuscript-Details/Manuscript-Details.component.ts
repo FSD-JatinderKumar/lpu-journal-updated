@@ -81,41 +81,47 @@ export class ManuscriptDetailsComponent implements OnInit {
       }, 500);
     });
   }
-  
 
   ngOnInit(): void {
     this.serverUrl = 'https://files.lpu.in/umsweb/Journal/';
-    this.BookId = '45';// this.route.snapshot.params['Id'];
-    this.name = this.JournalTitle = 'Test Name Journal';//this.route.snapshot.params['name'];
+    this.BookId = this.route.snapshot.params['Id'];
+    this.name = this.route.snapshot.params['name'];
     let loginStatus = this.checkUserLogin();
-    if (loginStatus || this.BookId != undefined || this.BookId != null) {
+
+    const bookId: any = this.BookId = this.route.snapshot.params['Id'];
+    const name: any = this.name = this.route.snapshot.params['name'];
+    this.JournalTitle = name.replace(/-/g, ' ');
+    if (bookId > 0 && loginStatus == true) {
+      this.BookId = bookId; this.JournalId = bookId;
+      this.JournalTitle = name.replace(/-/g, ' ');
       this.showEditorData(this.BookId);
       this.loadReviewers(this.BookId);
-    }
-    else {
+    } else {
 
+      this.Logout();
     }
+
+
   }
 
-  checkUserLogin() {
+  checkUserLogin(): Boolean | any {
     const GetCookieData = this.cookieService.get('authData');
     if (GetCookieData) {
       try {
         const retrievedCookies = JSON.parse(GetCookieData);
-        this.userRole = retrievedCookies.userRole?.length > 0 ? retrievedCookies.userRole : 'Guest';
+        this.userRole = retrievedCookies.UserRole?.length > 0 ? retrievedCookies.UserRole : -1;
         this.userId = retrievedCookies.EmailId;
+        // let Token = retrievedCookies.AccessToken;
         this.supervisorName = retrievedCookies.SupervisorName;
         this.departmentName = retrievedCookies.DepartmentName;
         this.candidateName = retrievedCookies.CandidateName;
         return true;
       } catch (error) {
-        console.error("Error parsing JSON from cookies:", error);
-        return false;
+        console.log("error");
       }
     } else {
       return false;
     }
-
   }
 
   EditorDataColumns: any;

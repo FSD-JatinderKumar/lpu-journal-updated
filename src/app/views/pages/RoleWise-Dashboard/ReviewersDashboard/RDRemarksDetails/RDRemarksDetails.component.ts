@@ -39,63 +39,107 @@ export class RDRemarksDetailsComponent implements OnInit {
     'Submission Type',
     // 'Action'
   ];
-    Journals: any;
-tableColumns: any;
-pageSize: any;
+  Journals: any;
+  tableColumns: any;
+  pageSize: any;
+
+
+  dataLoaded: boolean = false;
+  LoginFalied() {
+    this.router.navigateByUrl('/');
+  }
+  newJournalTitle: any;
+  LoginStatus: boolean | undefined;
+
   constructor(
     private storageService: StorageService,
     private authService: AuthService,
-    private AuthSession: LoginSessionService,
     private fb: FormBuilder,
     private router: Router,
+    private AuthSession: LoginSessionService,
+    private StoragesServices: StorageService,
     private route: ActivatedRoute, private cookieService: CookieService,
-    private journalWebApiService: LpujournalbookService  
-  ) {
-    
+    private journalWebApiService: LpujournalbookService  ) {
+
   }
 
-  dataLoaded: boolean = false;
-  LoginFalied(){
-    this.router.navigateByUrl('/');
+
+
+  Logout() {
+    this.cookieService.delete('authData');
+    this.cookieService.delete('BookData');
+
+    this.cookieService.deleteAll();
+
+    sessionStorage.clear();
+    localStorage.clear();
+
+    this.AuthSession.clearSession();
+    this.StoragesServices.clean();
+
+    this.userRole = null;
+    this.supervisorName = null;
+    this.departmentName = null;
+    this.candidateName = null;
+    this.LoginStatus = false;
+
+    this.router.navigateByUrl('Home').then(() => {
+      setTimeout(() => {
+        location.reload();
+      }, 500);
+    });
   }
-   
+
   ngOnInit(): void {
-    this.serverUrl='https://files.lpu.in/umsweb/Journal/';
-    this.BookId  = '45';// this.route.snapshot.params['Id'];
-    this.name  = this.JournalTitle ='Test Name Journal';//this.route.snapshot.params['name'];
+
+    this.serverUrl = 'https://files.lpu.in/umsweb/Journal/';
+    this.BookId = this.route.snapshot.params['Id'];
+    this.name = this.route.snapshot.params['name'];
     let loginStatus = this.checkUserLogin();
-    // this.getBooksDetail();
-    this.GetallReviewsData(this.BookId);
-    this.loadReviewers(this.BookId);
-      if (this.BookId != undefined && this.BookId != null ) {
-        // this.BookId = BookId;
-        // this.JournalId= BookId;
-        // this.JournalTitle = name;
-        // this.getBooksDetail();
-      } 
+
+    const bookId: any = this.BookId = this.route.snapshot.params['Id'];
+    const name: any = this.name = this.route.snapshot.params['name'];
+    this.JournalTitle = name.replace(/-/g, ' ');
+
+
+
+    // alert(bookId+name+'ExternalLogin');
+    if (bookId > 0 && loginStatus == true) {
+      this.BookId = bookId; this.JournalId = bookId;
+      this.JournalTitle = name.replace(/-/g, ' ');
+      this.GetallReviewsData(this.BookId);
+      this.loadReviewers(this.BookId);
+    } else {
+
+      this.Logout();
+    }
+
+
   }
- 
-  checkUserLogin(){
+
+  checkUserLogin(): Boolean | any {
     const GetCookieData = this.cookieService.get('authData');
     if (GetCookieData) {
       try {
         const retrievedCookies = JSON.parse(GetCookieData);
-        this.userRole = retrievedCookies.userRole?.length > 0 ? retrievedCookies.userRole : 'Guest';
+        this.userRole = retrievedCookies.UserRole?.length > 0 ? retrievedCookies.UserRole : -1;
         this.userId = retrievedCookies.EmailId;
+        // let Token = retrievedCookies.AccessToken;
         this.supervisorName = retrievedCookies.SupervisorName;
         this.departmentName = retrievedCookies.DepartmentName;
         this.candidateName = retrievedCookies.CandidateName;
         return true;
       } catch (error) {
-        console.error("Error parsing JSON from cookies:", error);
-        return false;  
+        console.log("error");
       }
     } else {
       return false;
     }
-    
   }
 
+ 
+ 
+ 
 EditorDataColumns: any;
   loadingTimeout: any[] = []; // Store timeout references
   
