@@ -8,6 +8,7 @@ import { Validators } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { LoginSessionService } from 'src/app/_services/login-session.service';
 import { LpujournalbookService } from 'src/app/_services/lpujournalbook.service';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-new-registration-page',
@@ -31,6 +32,11 @@ export class NewRegistrationPageComponent implements OnInit {
     private LpuWebService: LpujournalbookService,
     private fb: FormBuilder,    private router: Router,
     private route: ActivatedRoute,
+    private storageService: StorageService,
+    private authService: AuthService,
+    private AuthSession: LoginSessionService,
+    private cookieService: CookieService,
+    private journalWebApiService: LpujournalbookService
   ) {}
 
   ngOnInit(): void {
@@ -40,7 +46,13 @@ export class NewRegistrationPageComponent implements OnInit {
       this.BookId =this.JournalId= BookId;
       this.name = this.JournalTitle= name;
       this.JournalTitle = name.replace(/-/g, ' ');
+      this.GetJournalDetailsAbout(this.BookId);
     }
+   this.LoadForm();
+  }
+
+  LoadForm(){
+
     this.JournalUserAccountForm = this.fb.group({
       CandidateName: ['', Validators.required],
       EmailId: ['', [Validators.required, Validators.email]],
@@ -55,8 +67,6 @@ export class NewRegistrationPageComponent implements OnInit {
       UserRole: [[], Validators.required] // Store multiple selected roles in an array
     });
   }
-
-
   passwordMatchValidator(formGroup: FormGroup): { [key: string]: boolean } | null {
     const password = formGroup.get('Password')?.value;
     const confirmPassword = formGroup.get('ConfirmPassword')?.value;
@@ -148,7 +158,8 @@ export class NewRegistrationPageComponent implements OnInit {
     formData.append("MobileNumber", formValue.CountryCode+" "+ formValue.MobileNumber);
     formData.append("UserEmail", formValue.EmailId);
     formData.append("PasswordText", formValue.Password);
-  
+    formData.append("AuthorEmailId", this.AuthorEmailId);
+      
     // Append multiple selected roles
     formValue.UserRole.forEach((role: string) => {
       formData.append("UserType[]", role);
@@ -201,5 +212,40 @@ export class NewRegistrationPageComponent implements OnInit {
     });
   }
   
+  // Added on 14-5-25
+  bookData: any; JournalDetails: any; detailsArray: any;
+  EditorInChief: any;
+  AuthorEmailId: any;
+  JournalSubTitle: any;
+
+  GetJournalDetailsAbout(JournalId: any): void {
+    this.journalWebApiService.GetJournalDetailsforAboutPage(JournalId).subscribe((response) => {
+      if (response.item1 && response.item1.length > 0) {
+        this.bookData = response.item1[0];
+        // console.info('Bookdata '+JSON.stringify(this.bookData));
+        this.JournalDetails = this.bookData['journalDetails']
+        this.EditorInChief = this.bookData?.editorName;
+        this.AuthorEmailId = this.bookData?.authorEmailId;
+        this.JournalSubTitle = this.bookData?.subTitle;           
+      }
+      else {
+        this.bookData = [];
+        this.LoginFalied();
+      }
+    });
+   
+  }
  
+  LoginFalied() {
+    Swal.fire({
+      title: 'Error Occurred',
+      text: 'Unable to complete the request. Please try again later.',
+      icon: 'error',
+      confirmButtonText: 'OK'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.VisitUrl(this.BookId, this.name, 'ExternalLogin');
+      }
+    });
+  }
 }

@@ -8,7 +8,7 @@ const AUTH_API = 'https://projectsapi.lpu.in/';
 const AUTH_API_LOCAL = 'https://projectsapi.lpu.in/'; //'https://localhost:7125/';
 const AUTH_API_LOCALs = 'https://projectsapi.lpu.in/'; //'https://localhost:7125/';
 const AUTH_API_LOCAs = 'https://projectsapi.lpu.in/';
-// const AUTH_API_LOCAs = 'https://localhost:7125/';
+// const LOCAL_API_URL = 'https://localhost:7125/';
 
 @Injectable({
   providedIn: 'root'
@@ -92,6 +92,7 @@ export class LpujournalbookService {
       })
     };
     return this.http.get<any>(`${this.baseUrl}api/LpuJournal/GetJournalDetailsforAboutPage?JournalId=` + JournalId, httpOptions);
+    // return this.http.get<any>(`${LOCAL_API_URL}api/LpuJournal/GetJournalDetailsforAboutPage?JournalId=` + JournalId, httpOptions);
   }
   GetAllJournalEditorsDetails(): Observable<any> {
     const httpOptions = {
@@ -152,8 +153,8 @@ export class LpujournalbookService {
       .set('Authorization', 'Bearer ' + this.authToken)
     return this.http.post(
       // AUTH_API + 'api/LpuJournal/CreateJournalUserAccount', newUserData, { headers }
-      //AUTH_API + 'api/LpuJournal/CreateJournalUserAccount', newUserData, { headers }
-      AUTH_API_LOCAL + 'api/LpuJournal/CreateJournalUserAccount', newUserData, { headers }
+      AUTH_API + 'api/LpuJournal/CreateJournalUserAccount', newUserData, { headers }
+      // LOCAL_API_URL + 'api/LpuJournal/CreateJournalUserAccount', newUserData, { headers }
     );
   }
 
@@ -201,13 +202,11 @@ export class LpujournalbookService {
     );
   }
 
-  //GetAllMenuScriptForUser?Email=devendra.15673%40lpu.co.in
   UserWiseAllMenuScript(UserEmail: any): Observable<any> {
     let token = this.storageService.getUser();
     let headers = new HttpHeaders()
       .set('Authorization', 'Bearer ' + token)
     return this.http.get(
-      // AUTH_API_LOCAL + 'api/LpuJournal/GetAllMenuScriptForUser?Email=' + UserEmail, { headers }
       AUTH_API + 'api/LpuJournal/GetAllMenuScriptForUser?Email=' + UserEmail, { headers }
     );
   }
@@ -262,7 +261,6 @@ export class LpujournalbookService {
     let headers = new HttpHeaders()
       .set('Authorization', 'Bearer ' + token)
     return this.http.get(
-      // AUTH_API_LOCAL + 'api/LpuJournal/GetAllMenuScriptForUser?Email=' + UserEmail, { headers }
       AUTH_API_LOCAL + 'api/LpuJournal/GetAllMenuScriptForJournal?Id=' + JournalId, { headers }
     );
   }
@@ -273,7 +271,6 @@ export class LpujournalbookService {
     let headers = new HttpHeaders()
       .set('Authorization', 'Bearer ' + this.authToken)
     return this.http.get(
-      // AUTH_API_LOCAL + 'api/LpuJournal/GetAllMenuScriptForUser?Email=' + UserEmail, { headers }
       AUTH_API_LOCAL + 'api/LpuJournal/GetAllReviewersForJournal?Id=' + JournalId, { headers }
     );
   }
@@ -304,7 +301,6 @@ export class LpujournalbookService {
     let headers = new HttpHeaders()
       .set('Authorization', 'Bearer ' + this.authToken)
     return this.http.get(
-      // AUTH_API_LOCAL + 'api/LpuJournal/GetAllMenuScriptForUser?Email=' + UserEmail, { headers }
       AUTH_API_LOCAL + 'api/LpuJournal/GetAllJournalEditorDetails', { headers }
     );
   }
@@ -314,7 +310,6 @@ export class LpujournalbookService {
     let headers = new HttpHeaders()
       .set('Authorization', 'Bearer ' + this.authToken)
     return this.http.get(
-      // AUTH_API_LOCAL + 'api/LpuJournal/GetAllMenuScriptForUser?Email=' + UserEmail, { headers }
       AUTH_API_LOCAL + 'api/LpuJournal/GetAllJournalUserDetails?Role=' + RoleId, { headers }
     );
   }
@@ -325,7 +320,6 @@ export class LpujournalbookService {
     let headers = new HttpHeaders()
       .set('Authorization', 'Bearer ' + token)
     return this.http.get(
-      // AUTH_API_LOCAL + 'api/LpuJournal/GetAllMenuScriptForUser?Email=' + UserEmail, { headers }
       AUTH_API_LOCAL + 'api/LpuJournal/GetAllReviewersForEditors?UserId=' + UserId, { headers }
     );
   }
@@ -383,7 +377,6 @@ export class LpujournalbookService {
     let headers = new HttpHeaders()
       .set('Authorization', 'Bearer ' + token)
     return this.http.get(
-      // AUTH_API_LOCAL + 'api/LpuJournal/GetAllMenuScriptForUser?Email=' + UserEmail, { headers }
       AUTH_API_LOCAs + 'api/LpuJournal/GetReviewersRemarks?JournalId=' + JournalId,
       { headers }
     );
@@ -409,7 +402,6 @@ export class LpujournalbookService {
     let headers = new HttpHeaders()
       .set('Authorization', 'Bearer ' + token)
     return this.http.get(
-      // AUTH_API_LOCAL + 'api/LpuJournal/GetAllMenuScriptForUser?Email=' + UserEmail, { headers }
       AUTH_API_LOCAs + 'api/LpuJournal/GetReviewersRemarks?UserEmail=' + UserEmail,
       { headers }
     );

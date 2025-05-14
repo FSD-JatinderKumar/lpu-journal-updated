@@ -90,6 +90,14 @@
                     <span class="text-dark">{{ this.NewIdForJournal }}</span>
                   </div>
                 </div>
+                <div class="row mb-4">
+                  <div class="col-md-2">
+                    <label for="journalId">Editor Email: </label>
+                  </div>
+                  <div class="col-md-4">
+                    <span class="text-dark">{{ this.AuthorEmailId }}</span>
+                  </div>
+                </div>
 
                 <form [formGroup]="scriptUploadForm" (ngSubmit)="onSubmit()">
                   <div class="row mb-4 d-none">

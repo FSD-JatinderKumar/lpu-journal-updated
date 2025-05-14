@@ -30,6 +30,8 @@ export class SubmitManuScriptComponent implements OnInit {
   fileStatus: boolean = false; fileName: any; errorMessage: any; isLoginFailed: boolean = false; FileData: any; array: any[] = [];
   fileData: File | null = null; JournalId: any = ''; JournalTitle: any = ''; formBuilder: any; form1: any; Description: any;
   JournalSubTitle: any; selectedFiles: File[] = [];
+  AuthorEmailId: any;
+
   ManuScriptTypes = [
     { ManuScriptId: 1, ManuScriptType: 'Research Paper' },
     { ManuScriptId: 2, ManuScriptType: 'Review Paper' },
@@ -94,10 +96,7 @@ export class SubmitManuScriptComponent implements OnInit {
       this.JournalTitle = name.replace(/-/g, ' ');
 
       this.showReviewerData(this.userId);
-
-
     } else {
-
       this.VisitUrl(this.BookId, this.name, 'ExternalLogin');
     }
 
@@ -246,6 +245,7 @@ export class SubmitManuScriptComponent implements OnInit {
         this.bookData = response.item1[0];
         this.JournalDetails = this.bookData['journalDetails']
         this.EditorInChief = this.bookData?.editorName
+        this.AuthorEmailId = this.bookData?.authorEmailId
         this.JournalSubTitle = this.bookData?.subTitle;
         this.extractDetails();
       }
@@ -458,7 +458,7 @@ export class SubmitManuScriptComponent implements OnInit {
 
   uploadFile() {
     const reader = new FileReader();
-    const fileName = 'merged-files.zip';
+    const fileName = this.userId+'Manuscript-Requests-Files.zip';//   'merged-files.zip';
 
     if (this.generatedFile) {
       if (this.generatedFile.size > 54991576) {
@@ -517,6 +517,7 @@ export class SubmitManuScriptComponent implements OnInit {
     // formData.append('File', this.generatedFile!, fileName);
     formData.append('Filex', this.generatedFile!, fileName);
     formData.append('File', this.FileData);
+    formData.append('AuthorEmailId', this.AuthorEmailId);
 
     //   Call the API for Email Sending
     this.journalWebApiService.AddNewJournalMenuScriptData(formData).subscribe({
@@ -995,11 +996,11 @@ export class SubmitManuScriptComponent implements OnInit {
   ];
   displayedEditorColumnHeaders: { [key: string]: string } = {
     journalTitle: 'Journal Title',
-    uploadedOn: 'Uploaded on',
     manuScript: 'Manu Script',
     editorInChief: 'Editor In Chief',
     emailId: 'Submitted User Email',
     userName: 'Correspond Author',
+    uploadedOn: 'Date of Submition',
     submissionType: 'Submitted Script ',
     fileUrl: 'Document',
     journalId: 'Action'
@@ -1012,22 +1013,22 @@ export class SubmitManuScriptComponent implements OnInit {
 
   EditordisplayedColumns: string[] = [
     // 'journalTitle',
-    'uploadedOn',
     'manuScript',
     'editorInChief',
     'emailId',
     'userName',
+    'uploadedOn',
     'fileUrl',
     'journalId'
   ];
 
   EditordisplayedColumnsHeader: string[] = [
     // 'Journal Title',
-    'Uploaded Date',
     'Manu Script',
     'Editor In Chief',
     'User Email Id',
     'User Name',
+    'Uploaded Date',
     'Download File',
     'Action'
   ];
