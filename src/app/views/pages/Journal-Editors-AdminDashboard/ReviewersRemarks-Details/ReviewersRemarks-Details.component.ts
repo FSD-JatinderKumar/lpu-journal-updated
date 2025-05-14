@@ -175,7 +175,7 @@ EditorDataColumns: any;
     this.journalWebApiService.GetAllReviewersRemarkss(journalId).subscribe({
       next: (dataXY: any) => {
         this.ReviewerRemarksData = dataXY.item1 || [];
-        console.log("Fetched ReviewerRemarksData:", this.ReviewerRemarksData);
+        // console.log("Fetched ReviewerRemarksData:", this.ReviewerRemarksData);
         
         if (this.ReviewerRemarksData.length > 0) {
           this.ReviewerRemarksDataColumns = Object.keys(this.ReviewerRemarksData[0]);
