@@ -65,7 +65,7 @@ export class NewRegistrationPageComponent implements OnInit {
       Password: ['', [Validators.required, Validators.minLength(6)]],
       ConfirmPassword: ['', Validators.required],
       UserRole: [[], Validators.required] // Store multiple selected roles in an array
-    });
+    }, { validator: this.passwordMatchValidator });
   }
   passwordMatchValidator(formGroup: FormGroup): { [key: string]: boolean } | null {
     const password = formGroup.get('Password')?.value;
@@ -248,4 +248,12 @@ export class NewRegistrationPageComponent implements OnInit {
       }
     });
   }
+
+
+
+// added on 15-5-25
+
+  showPassword: boolean = false;
+showConfirmPassword: boolean = false;
+
 }

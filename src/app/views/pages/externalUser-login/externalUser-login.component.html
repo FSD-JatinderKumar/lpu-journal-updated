@@ -51,9 +51,24 @@
               <div class="col-md-4">
                 <label for="exampleInputPassword1" class="col-md-6 form-label">Password</label>
               </div>
-              <div class="col-md-6">
-                <input type="password" formControlName="Password" placeholder="Enter Password"
-                  class="col-md-6 form-control" id="exampleInputPassword1">
+              <div class="col-md-6  position-relative">
+                <input
+                [type]="showPassword ? 'text' : 'password'"
+                class="form-control pr-5"
+                placeholder="Enter password"
+                formControlName="password"
+                id="exampleInputPassword1"
+              />
+          
+              <!-- Eye icon inside the input -->
+              <i
+                class="bi"
+                [ngClass]="showPassword ? 'bi-eye-slash fs-4' : 'bi-eye fs-4'"
+                (click)="togglePasswordVisibility()"
+                style="position: absolute; top: 25%; right: 1.51rem; transform: translateY(-30%); cursor: pointer;"
+              ></i>
+                <!-- <input type="password" formControlName="Password" placeholder="Enter Password"
+                  class="col-md-6 form-control" id="exampleInputPassword1"> -->
                 <div *ngIf="submitted && password?.errors" class="text-danger">
                   <small *ngIf="password?.errors?.['required']">Password is required.</small>
                   <small *ngIf="password?.errors?.['minlength']">Password must be at least 6 characters long.</small>

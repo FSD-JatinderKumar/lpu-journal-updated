@@ -137,9 +137,13 @@
                     {{ role.label }}
                   </div>
                 </div>
-
-                <div *ngIf="isForm1Submitted && JournalUserAccountForm.get('UserRole')?.invalid"
-                  class="invalid-feedback">
+                <div
+                  *ngIf="JournalUserAccountForm.get('UserRole')?.invalid && JournalUserAccountForm.get('UserRole')?.touched"
+                  class="text-danger">
+                  Please select a valid UserRole.
+                </div>
+                <div *ngIf="isForm1Submitted && JournalUserAccountForm.get('UserRole')?.invalid && JournalUserAccountForm.get('UserRole')?.touched"
+                class="text-danger" >
                   Required: Please select at least one UserRole.
                 </div>
               </div>
@@ -157,23 +161,70 @@
                   Please enter a valid Address.
                 </div>
               </div>
-
               <div class="col-md-6 mb-3">
                 <label for="Password">Password</label>
-                <input type="password" id="Password" formControlName="Password" class="form-control"
-                  placeholder="Enter Password" [ngClass]="{'is-invalid': isForm1Submitted && form1['Password'].errors}">
-                <div *ngIf="isForm1Submitted && form1['Password'].errors?.['required']" class="invalid-feedback">
-                  Required</div>
+                <div class="input-group">
+                  <input [type]="showPassword ? 'text' : 'password'" id="Password" formControlName="Password"
+                    class="form-control" placeholder="Enter Password"
+                    [ngClass]="{'is-invalid': isForm1Submitted && JournalUserAccountForm.get('Password')?.errors}">
+                  <span class="input-group-text" style="cursor: pointer;" (click)="showPassword = !showPassword">
+                    <i class="bi" [ngClass]="showPassword ? 'bi-eye-slash' : 'bi-eye'"></i>
+                  </span>
+                </div>
+                <div *ngIf="JournalUserAccountForm.get('Password')?.invalid && JournalUserAccountForm.get('Password')?.touched"
+                  class="text-danger">
+                  Please enter a valid Password.
+                </div>
               </div>
-
+              
+              
+              <div class="col-md-6 mb-3">
+                <label for="ConfirmPassword">Confirm Password</label>
+                <div class="input-group">
+                  <input [type]="showConfirmPassword ? 'text' : 'password'" id="ConfirmPassword" formControlName="ConfirmPassword"
+                    class="form-control" placeholder="Confirm Password"
+                    [ngClass]="{'is-invalid': isForm1Submitted && (JournalUserAccountForm.get('ConfirmPassword')?.errors || JournalUserAccountForm.errors?.['mismatch'])}">
+                  <span class="input-group-text" style="cursor: pointer;" (click)="showConfirmPassword = !showConfirmPassword">
+                    <i class="bi" [ngClass]="showConfirmPassword ? 'bi-eye-slash' : 'bi-eye'"></i>
+                  </span>
+                </div>
+                <div *ngIf="JournalUserAccountForm.get('ConfirmPassword')?.invalid && JournalUserAccountForm.get('ConfirmPassword')?.touched"
+                  class="text-danger">
+                  Please confirm your password.
+                </div>
+                <div *ngIf="JournalUserAccountForm.errors?.['mismatch'] && (JournalUserAccountForm.get('ConfirmPassword')?.touched || isForm1Submitted)"
+                  class="text-danger">
+                  Passwords do not match.
+                </div>
+              </div>
+              
+              <!-- <div class="col-md-6 mb-3">
+                <label for="Password">Password</label>
+                <input type="password" id="Password" formControlName="Password" class="form-control" placeholder="Enter Password"
+                  [ngClass]="{'is-invalid': isForm1Submitted && form1['Password'].errors}">
+              
+                <div *ngIf="JournalUserAccountForm.get('Password')?.invalid && JournalUserAccountForm.get('Password')?.touched"
+                  class="text-danger">
+                  Please enter a valid Password.
+                </div>
+              
+              </div>
+              
               <div class="col-md-6 mb-3">
                 <label for="ConfirmPassword">Confirm Password</label>
                 <input type="password" id="ConfirmPassword" formControlName="ConfirmPassword" class="form-control"
-                  placeholder="Confirm Password"
-                  [ngClass]="{'is-invalid': isForm1Submitted && form1['ConfirmPassword'].errors}">
-                <div *ngIf="isForm1Submitted && form1['ConfirmPassword'].errors?.['required']" class="invalid-feedback">
-                  Required</div>
-              </div>
+                  placeholder="Confirm Password" [ngClass]="{'is-invalid': isForm1Submitted && form1['ConfirmPassword'].errors}">
+                <div
+                  *ngIf="JournalUserAccountForm.get('ConfirmPassword')?.invalid && JournalUserAccountForm.get('ConfirmPassword')?.touched"
+                  class="text-danger">
+                  Please Confirm Password.
+                </div>
+                <div
+                  *ngIf="JournalUserAccountForm.errors?.['mismatch'] && (JournalUserAccountForm.get('ConfirmPassword')?.touched || isForm1Submitted)"
+                  class="text-danger">
+                  Passwords do not match.
+                </div>
+              </div> -->
 
               <div class="row">
                 <div class="col-md-4 mb-3">
