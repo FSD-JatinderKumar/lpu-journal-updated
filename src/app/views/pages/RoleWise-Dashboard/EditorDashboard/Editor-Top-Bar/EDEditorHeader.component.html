@@ -46,8 +46,56 @@
                     <li><a (click)="VisitUrl(BookId,name,'Policies/PublicationChargePolicy')">Publication Charge/Waiver Policy</a></li>
                 </ul>
             </li>
-
-            <li class="nextdrop" *ngIf="LoginStatus === true; else loginRequired">
+            <li class="nextdrop" *ngIf="LoginStatus === true && userRoleText !== 'User'">
+                <label for="drop-2" class="toggle" onclick="myFunction(this)">
+                    {{ userRoleText }} Action
+                </label>
+                <a class="dropa">
+                    {{ userRoleText }}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down-fill"
+                        viewBox="0 0 16 16">
+                        <path
+                            d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z" />
+                    </svg>
+                </a>
+                <input type="checkbox" id="drop-2" />
+            
+                <!-- Editor Menu -->
+                <ul *ngIf="userRoleText === 'Editor' ">
+                    <li><a (click)="VisitUrl(BookId, name, 'UserED')">All Manuscripts</a></li>
+                    <li><a (click)="VisitUrl(BookId, name, 'UserRRD')">All Reviewer's Remarks</a></li>
+                </ul>
+            
+                <!-- Reviewer Menu -->
+                <ul *ngIf="userRoleText === 'Reviewer' ">
+                    <li><a (click)="VisitUrl(BookId, name, 'ReviewerDashboard')">Manuscript</a></li>
+                    <li><a (click)="VisitUrl(BookId, name, 'ReviewersRemarks')">Remarks</a></li>
+                </ul>
+            
+                <!-- Publisher Menu -->
+                <ul *ngIf="userRoleText === 'Publisher' ">
+                    <li><a (click)="VisitUrl(BookId, name, 'PublisherPanel')">Publish Section</a></li>
+                </ul>
+            
+                <!-- Super Admin Extra -->
+                <ul *ngIf="userRoleText === 'Super Admin'">
+                    <li><a (click)="VisitUrl(BookId, name, 'UserED')">All Manuscripts</a></li>
+                    <li><a (click)="VisitUrl(BookId, name, 'UserRRD')">All Reviewer's Remarks</a></li>
+                    <li><a (click)="VisitUrl(BookId, name, 'ReviewerDashboard')">Manuscript</a></li>
+                    <li><a (click)="VisitUrl(BookId, name, 'ReviewersRemarks')">Remarks</a></li>
+                    <li><a (click)="VisitUrl(BookId, name, 'PublisherPanel')">Publish Section</a></li>
+                    <li><a (click)="VisitUrl(BookId, name, 'MyManuScript')"> Requests</a></li>
+                    <li><a class="dropdown-item" (click)="VisitUrl(BookId, name, 'AuthorDashboard')">Upload New</a></li>
+                </ul>
+            
+                <!-- Generic User (Limited Access) -->
+                <ul *ngIf="userRoleText === 'User'">
+                    <li><a (click)="VisitUrl(BookId, name, 'MyManuScript')"> Requests</a></li>
+                    <li><a class="dropdown-item" (click)="VisitUrl(BookId, name, 'AuthorDashboard')">Upload New</a></li>
+                </ul>
+            </li>
+              
+            <!-- <li class="nextdrop" *ngIf="LoginStatus === true; else loginRequired">
                 <label for="drop-2" class="toggle"  onclick="myFunction(this)">{{this.userRoleText}} Action  </label>
                 <a class="dropa">
                     {{this.userRoleText}}
@@ -68,9 +116,9 @@
                     <li><a class="dropdown-item" (click)="VisitUrl(BookId, name, 'ReviewerDashboard')"> Manuscript</a></li>
                     <li><a class="dropdown-item" (click)="VisitUrl(BookId, name, 'ReviewersRemarks')"> Remarks</a></li>
                 </ul>
-            </li>
+            </li> -->
             
-            <li *ngIf="LoginStatus === true">
+            <li class="nextdrop" *ngIf="LoginStatus === true">
                 <label for="drop-2" class="toggle"  onclick="myFunction(this)">ManuScript  </label>
                 <a class="dropa">
                     Manuscript 
@@ -81,7 +129,7 @@
                 </a>
                 <input type="checkbox" id="drop-2" />
                 <ul>
-                    <li><a (click)="VisitUrl(BookId, name, 'MyManuScript')"> Requests</a></li>
+                    <li><a (click)="VisitUrl(BookId, name, 'MyManuScript')">View My Manuscripts</a></li>
                     <li><a class="dropdown-item" (click)="VisitUrl(BookId, name, 'AuthorDashboard')">Upload New</a></li>
                 </ul>
             </li>

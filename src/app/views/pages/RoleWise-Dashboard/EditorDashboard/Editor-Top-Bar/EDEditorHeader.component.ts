@@ -153,46 +153,93 @@ export class EDEditorHeaderComponent implements OnInit {
 
 
   
-  getUserRolesforId(): void {
-    const roleMapping: Record<string, string> = {
-      '0': 'Editor',
-      '1': 'Author',
-      '2': 'Reviewer',
-      '3': 'Publisher'
-    };
+  // getUserRolesforId(): void {
+  //   const roleMapping: Record<string, string> = {
+  //     '0': 'Editor',
+  //     '1': 'Author',
+  //     '2': 'Reviewer',
+  //     '3': 'Publisher'
+  //   };
 
+  //   this.journalWebApiService.GetUserRolesforUser(this.userId).subscribe({
+  //     next: (response) => {
+  //       if (response?.item1?.length > 0) {
+  //         this.UserRolesData = response.item1[0];
+
+  //         // Ensure userRole exists before processing
+  //         const roles = this.UserRolesData?.userRole ? this.UserRolesData.userRole.split(',') : [];
+  //         this.UserRolesArray = roles.map((role: any) => {
+  //           const roleKey = String(role); // Ensure role is a string
+  //           const label = roleMapping[roleKey] || roleKey; // Use mapped label or fallback to role itself
+
+  //           // Set role variables based on user role
+  //           if (roleKey === '0') this.userRoleText = 'Editor';
+  //           if (roleKey === '1') this.userRoleText = 'Author';
+  //           if (roleKey === '2') this.userRoleText = 'Reviewer';
+  //           if (roleKey === '3') this.userRoleText = 'Publisher';
+
+  //           return {
+  //             value: roleKey,
+  //             label,
+  //             id: label.replace(/\s+/g, '') // Safe to call replace() now
+  //           };
+  //         });
+  //       } else {
+  //         this.UserRolesArray = []; // Reset array if no roles found
+  //       }
+  //     },
+  //     error: (err) => {
+  //       console.error('Error fetching user roles:', err);
+  //       this.UserRolesArray = []; // Reset array on error
+  //     }
+  //   });
+  // }
+
+
+  getUserRolesforId(): void {
     this.journalWebApiService.GetUserRolesforUser(this.userId).subscribe({
       next: (response) => {
         if (response?.item1?.length > 0) {
           this.UserRolesData = response.item1[0];
-
-          // Ensure userRole exists before processing
-          const roles = this.UserRolesData?.userRole ? this.UserRolesData.userRole.split(',') : [];
-          this.UserRolesArray = roles.map((role: any) => {
-            const roleKey = String(role); // Ensure role is a string
-            const label = roleMapping[roleKey] || roleKey; // Use mapped label or fallback to role itself
-
-            // Set role variables based on user role
-            if (roleKey === '0') this.userRoleText = 'Editor';
-            if (roleKey === '1') this.userRoleText = 'Author';
-            if (roleKey === '2') this.userRoleText = 'Reviewer';
-            if (roleKey === '3') this.userRoleText = 'Publisher';
-
-            return {
-              value: roleKey,
-              label,
-              id: label.replace(/\s+/g, '') // Safe to call replace() now
-            };
-          });
+          const roles = this.UserRolesData?.userRole?.split(',') ?? [];
+  
+          this.UserRole = roles;
+  
+          // Sort and join roles to compare easily
+          const sortedRoles = [...roles].sort().join(',');
+  
+          // Check for Super Admin first (most privileged)
+          // if (sortedRoles === '0,1,2,3' || sortedRoles === '0,2,3') {
+          //   this.userRoleText = 'Super Admin';
+          // }
+          // // Editor
+          // else 
+          if (this.selectedRole ==='0' && sortedRoles.includes(this.selectedRole)  ) {
+            this.userRoleText = 'Editor';
+          }
+          // Reviewer
+          else if (this.selectedRole === '2' && sortedRoles.includes(this.selectedRole)   ) {
+            this.userRoleText = 'Reviewer';
+          }
+          // Publisher
+          else if (this.selectedRole === '3' && sortedRoles.includes(this.selectedRole)  ) {
+            this.userRoleText = 'Publisher';
+          }
+          // Default fallback
+          else if (this.selectedRole ==='1' && sortedRoles.includes(this.selectedRole)   ){
+            this.userRoleText = 'User';
+          }
         } else {
-          this.UserRolesArray = []; // Reset array if no roles found
+          this.UserRole = [];
+          this.userRoleText = '';
         }
       },
       error: (err) => {
         console.error('Error fetching user roles:', err);
-        this.UserRolesArray = []; // Reset array on error
+        this.UserRole = [];
+        this.userRoleText = '';
       }
     });
   }
-
+  
 } 
