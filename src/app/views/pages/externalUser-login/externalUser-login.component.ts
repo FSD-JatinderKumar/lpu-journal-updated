@@ -108,12 +108,7 @@ export class ExternalUserLoginComponent implements OnInit {
       //   this.AuthoriseUser(uid,password, userRoleX);
       // }
       this.submitted = true;
-      if (uid.length > 5 && password.length > 5) {
-        this.AuthoriseUserNewWay(uid, password);
-      }
-      else {
-        alert('Invalid Details')
-      }
+      this.AuthoriseUserNewWay(uid, password);
 
     }
   }
@@ -164,31 +159,25 @@ export class ExternalUserLoginComponent implements OnInit {
 // }
 
 // new logic for login with create token
-
 Message: any;
-
 AuthoriseUserNewWay(Id: any, Key: any): void {
   this.lpuWebServices.AuthoriseUserDetails(Id, Key, this.BookId).subscribe({
     next: (response) => {
       const userDetails = response?.item1;
-
       if (userDetails && userDetails.length > 0) {
-        const user = userDetails[0];
-        
+        const user = userDetails[0];        
         this.Email = user.email;
         this.Message = user.message;
         if (user.userId>0) {
           this.CreateToken(this.Email, response);
-        } else {
-          this.handleLoginFailure(user.message);
-        }
+        }  
       } else {
-        this.handleLoginFailure('No user data returned.');
+        this.handleLoginFailure('Invalid User Details.');
       }
     },
     error: (err) => {
       console.error('Login error:', err);
-      this.handleLoginFailure('An error occurred during login.');
+      this.handleLoginFailure('Unauthorised Access .');
     },
     complete: () => {
       this.formdata.reset();
@@ -196,14 +185,20 @@ AuthoriseUserNewWay(Id: any, Key: any): void {
   });
 }
 
+
 private handleLoginFailure(message: string): void {
   this.showNoDataFoundMessage = true;
   this.errorMessage = message;
-
   swal.fire({
-    title: 'Invalid Login Details',
+    title: this.errorMessage,
     text: 'Check if you have selected the same Journal!',
     icon: 'warning',
+    confirmButtonText: 'OK'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      this.AuthSession.addToSession(this.UserData);
+      this.VisitUrl(this.BookId, this.name, 'ExternalLogin' )
+    }
   });
 }
 
@@ -309,14 +304,18 @@ SetUserData(response: any) {
 
   this.cookieService.set('authData', JSON.stringify(userCookiesData));
 
-  // Simulate processing delay if needed
-  setTimeout(() => {
-    this.AuthSession.addToSession(this.UserData);
-    this.VisitUrl(this.BookId, this.name, 'SubmitManuScript');
-    this.loadingIndicator = false; // hide loading once done
-  }, 1000);
+    swal.fire({
+    title: 'Login Successful',
+    text: '..',
+    icon: 'success',
+    confirmButtonText: 'OK'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      this.AuthSession.addToSession(this.UserData);
+      this.VisitUrl(this.BookId, this.name, 'SubmitManuScript' )
+    }
+  });
 }
-
 
 // Function to redirect based on UserRole
 RedirectToDashboard() {
