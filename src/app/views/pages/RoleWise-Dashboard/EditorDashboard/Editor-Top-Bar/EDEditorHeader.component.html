@@ -46,7 +46,7 @@
                     <li><a (click)="VisitUrl(BookId,name,'Policies/PublicationChargePolicy')">Publication Charge/Waiver Policy</a></li>
                 </ul>
             </li>
-            <li class="nextdrop" *ngIf="LoginStatus === true && userRoleText !== 'User' ; else loginRequired">
+            <li class="nextdrop" *ngIf="LoginStatus === true && selectedRole>=0; else loginRequired">
                 <label for="drop-2" class="toggle" onclick="myFunction(this)">
                     {{ userRoleText }} Action
                 </label>
@@ -90,13 +90,13 @@
             
                 <!-- Generic User (Limited Access) -->
                 <ul *ngIf="userRoleText === 'User'">
-                    <li><a (click)="VisitUrl(BookId, name, 'MyManuScript')"> Requests</a></li>
+                    <li><a (click)="VisitUrl(BookId, name, 'ViewManuscripts')">My Requests</a></li>
                     <li><a class="dropdown-item" (click)="VisitUrl(BookId, name, 'AuthorDashboard')">Upload New</a></li>
                 </ul>
             </li>
         
             
-            <li class="nextdrop" *ngIf="LoginStatus === true">
+            <!-- <li class="nextdrop" *ngIf="LoginStatus === true && userRoleText === 'User'">
                 <label for="drop-2" class="toggle"  onclick="myFunction(this)">ManuScript  </label>
                 <a class="dropa">
                     Manuscript 
@@ -107,10 +107,10 @@
                 </a>
                 <input type="checkbox" id="drop-2" />
                 <ul>
-                    <li><a (click)="VisitUrl(BookId, name, 'MyManuScript')">View My Manuscripts</a></li>
+                    <li><a (click)="VisitUrl(BookId, name, 'ViewManuscripts')">View My Manuscripts</a></li>
                     <li><a class="dropdown-item" (click)="VisitUrl(BookId, name, 'AuthorDashboard')">Upload New</a></li>
                 </ul>
-            </li>
+            </li> -->
             <li *ngIf="LoginStatus === true">
                 <a (click)="Logout()">Logout</a>
             </li>

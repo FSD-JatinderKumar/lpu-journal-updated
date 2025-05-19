@@ -87,6 +87,7 @@ import { UploadManuScriptComponent } from './views/pages/RoleWise-Dashboard/Auth
 import { NewManuScript } from './views/pages/RoleWise-Dashboard/AuthorDashboard/NewManuscript/NewManuScript.component';
 import { RDManuscriptDetailsComponent } from './views/pages/RoleWise-Dashboard/ReviewersDashboard/RDManuscript-Details/RDManuscript-Details.component';
 import { RDRemarksDetailsComponent } from './views/pages/RoleWise-Dashboard/ReviewersDashboard/RDRemarksDetails/RDRemarksDetails.component';
+import { ViewAllManuscripts } from './views/pages/RoleWise-Dashboard/AuthorDashboard/ManuScriptReport/ViewAllManuscripts.component';
 
 @NgModule({
   declarations: [
@@ -151,7 +152,8 @@ import { RDRemarksDetailsComponent } from './views/pages/RoleWise-Dashboard/Revi
     NewManuScript, 
 
     RDManuscriptDetailsComponent,
-    RDRemarksDetailsComponent
+    RDRemarksDetailsComponent, 
+    ViewAllManuscripts
     
   ],
   imports: [

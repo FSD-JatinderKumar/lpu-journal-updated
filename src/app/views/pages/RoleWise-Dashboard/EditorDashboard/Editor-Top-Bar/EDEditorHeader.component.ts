@@ -230,11 +230,7 @@ export class EDEditorHeaderComponent implements OnInit {
           else if (this.selectedRole ==='1' && sortedRoles.includes(this.selectedRole)   ){
             this.userRoleText = 'User';
           }
-        } else {
-          // this.UserRole = [];
-          // alert(this.selectedRole)
-          this.userRoleText = 'User';
-        }
+        } 
       },
       error: (err) => {
         console.error('Error fetching user roles:', err);

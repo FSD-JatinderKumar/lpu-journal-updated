@@ -240,6 +240,10 @@ const routes: Routes = [
       {
         path :":Id/:name/ReviewersRemarks",
         loadChildren:()=> import('./views/pages/RoleWise-Dashboard/ReviewersDashboard/RDRemarksDetails/RDRemarksDetails.module').then(m=>m.RDRemarksDetailsModule)
+      },
+      {
+        path :":Id/:name/ViewManuscripts",
+        loadChildren:()=> import('./views/pages/RoleWise-Dashboard/AuthorDashboard/ManuScriptReport/ViewAllManuscripts.module').then(m=>m.ViewAllManuscriptsModule)
       }
     ]
   }
