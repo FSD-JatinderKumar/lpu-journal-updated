@@ -202,9 +202,10 @@ export class EDEditorHeaderComponent implements OnInit {
         if (response?.item1?.length > 0) {
           this.UserRolesData = response.item1[0];
           const roles = this.UserRolesData?.userRole?.split(',') ?? [];
-  
+          if (this.selectedRole===undefined || this.selectedRole===null ) {
+            this.Logout(); 
+           }
           this.UserRole = roles;
-  
           // Sort and join roles to compare easily
           const sortedRoles = [...roles].sort().join(',');
   
@@ -230,8 +231,9 @@ export class EDEditorHeaderComponent implements OnInit {
             this.userRoleText = 'User';
           }
         } else {
-          this.UserRole = [];
-          this.userRoleText = '';
+          // this.UserRole = [];
+          // alert(this.selectedRole)
+          this.userRoleText = 'User';
         }
       },
       error: (err) => {

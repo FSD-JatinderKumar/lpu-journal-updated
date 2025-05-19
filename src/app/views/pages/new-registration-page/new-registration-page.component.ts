@@ -64,7 +64,8 @@ export class NewRegistrationPageComponent implements OnInit {
       Address: ['', Validators.required],
       Password: ['', [Validators.required, Validators.minLength(6)]],
       ConfirmPassword: ['', Validators.required],
-      UserRole: [[], Validators.required] // Store multiple selected roles in an array
+      UserRole: [null, [this.validateUserRole]]
+ 
     }, { validator: this.passwordMatchValidator });
   }
   passwordMatchValidator(formGroup: FormGroup): { [key: string]: boolean } | null {
@@ -90,10 +91,17 @@ export class NewRegistrationPageComponent implements OnInit {
   selectedRoles: string[] = [];
   dropdownOpen = false;
    // Custom Validator: Ensures at least one role is selected
-   validateUserRole(control: AbstractControl): { [key: string]: any } | null {
-    return control.value && control.value.length > 0 ? null : { required: true };
+  //  validateUserRole(control: AbstractControl): { [key: string]: any } | null {
+  //   return control.value && control.value.length > 0 ? null : { required: true };
+  // }
+  validateUserRole(control: AbstractControl): { [key: string]: any } | null {
+    const value = control.value;
+    if (!value || !Array.isArray(value) || value.length === 0 || value.includes('select')) {
+      return { invalidRole: true };
+    }
+    return null;
   }
-
+  
   toggleDropdown(event: Event) {
     this.dropdownOpen = !this.dropdownOpen;
     event.stopPropagation();
@@ -107,23 +115,44 @@ export class NewRegistrationPageComponent implements OnInit {
     }
   }
 
+  // addRole(event: Event, role: string) {
+  //   if (!this.isSelected(role)) {
+  //     this.selectedRoles.push(role);
+  //     this.JournalUserAccountForm.get('UserRole')?.setValue(this.selectedRoles);
+  //     this.JournalUserAccountForm.get('UserRole')?.updateValueAndValidity();
+  //   }
+  //   this.dropdownOpen = false; // Close dropdown after selection
+  //   event.stopPropagation();
+  // }
+
+  // removeRole(event: Event, role: string) {
+  //   this.selectedRoles = this.selectedRoles.filter(r => r !== role);
+  //   this.JournalUserAccountForm.get('UserRole')?.setValue(this.selectedRoles);
+  //   this.JournalUserAccountForm.get('UserRole')?.updateValueAndValidity();
+  //   event.stopPropagation();
+  // }
+
   addRole(event: Event, role: string) {
     if (!this.isSelected(role)) {
       this.selectedRoles.push(role);
-      this.JournalUserAccountForm.get('UserRole')?.setValue(this.selectedRoles);
-      this.JournalUserAccountForm.get('UserRole')?.updateValueAndValidity();
+      const control = this.JournalUserAccountForm.get('UserRole');
+      control?.setValue(this.selectedRoles);
+      control?.markAsTouched();  
+      control?.updateValueAndValidity();
     }
-    this.dropdownOpen = false; // Close dropdown after selection
+    this.dropdownOpen = false;
     event.stopPropagation();
   }
-
+  
   removeRole(event: Event, role: string) {
     this.selectedRoles = this.selectedRoles.filter(r => r !== role);
-    this.JournalUserAccountForm.get('UserRole')?.setValue(this.selectedRoles);
-    this.JournalUserAccountForm.get('UserRole')?.updateValueAndValidity();
+    const control = this.JournalUserAccountForm.get('UserRole');
+    control?.setValue(this.selectedRoles);
+    control?.markAsTouched();  
+    control?.updateValueAndValidity();
     event.stopPropagation();
   }
-
+  
   isSelected(role: string): boolean {
     return this.selectedRoles.includes(role);
   }
@@ -132,6 +161,20 @@ export class NewRegistrationPageComponent implements OnInit {
     const selectedRole = this.availableRoles.find(r => r.value === role);
     return selectedRole ? selectedRole.label : '';
   }
+
+
+
+  OnReset(): void {
+    this.JournalUserAccountForm.reset();
+    this.isForm1Submitted = false;
+  }
+
+  VisitUrl(Id: any, name: any, Sufix: any) {
+    this.router.navigateByUrl(Id + '/' + name + '/' + Sufix).then(() => {
+      window.location.reload();
+    });
+  }
+  
 
   Onsubmit(): void {
     this.isForm1Submitted = true;
@@ -200,18 +243,6 @@ export class NewRegistrationPageComponent implements OnInit {
   }
    
   }
-
-  OnReset(): void {
-    this.JournalUserAccountForm.reset();
-    this.isForm1Submitted = false;
-  }
-
-  VisitUrl(Id: any, name: any, Sufix: any) {
-    this.router.navigateByUrl(Id + '/' + name + '/' + Sufix).then(() => {
-      window.location.reload();
-    });
-  }
-  
   // Added on 14-5-25
   bookData: any; JournalDetails: any; detailsArray: any;
   EditorInChief: any;

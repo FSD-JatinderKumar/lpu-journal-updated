@@ -1,21 +1,7 @@
 <app-topslider></app-topslider>
 <app-journalmenubar></app-journalmenubar>
 <app-journal-inner-menu></app-journal-inner-menu>
-<!-- <div class="row d-flex justify-content-center mt-2">
-  <div class="col-md-10 text-center">
-    <label class="badge bg-info text-dark fs-4"> Current Journal <span class=" ms-3 text-danger "> {{this.JournalTitle}}</span></label>
-  </div>
-</div> -->
 <div class="row mt-4">
-  <!-- <div class="col-md-12 text-center">
-    <div class="badge bg-dark text-light fs-5 "> Welcome to LPU Journal ® for <br />
-      <div class=" mt-3 text-light fs-3">{{this.JournalTitle}} </div>
-    </div>
-  </div> -->
-  <!-- <div class="row mt-2 text-center">
-    <div class="col-md-12 mt-4 text-dark fs-4"> Journal Title <span class=" ms-3 text-danger ">
-        {{this.JournalTitle}}</span> </div>
-  </div> -->
   <div class="main-heading text-center">
     <h1>
       {{this.JournalTitle}}
@@ -33,10 +19,10 @@
       <div class="col-md-6 pe-md-0  d-none d-lg-block" style="height: 40rem;" [ngStyle]="{ 'background-image': 'url(https://www.lpu.in/journals/assets/images/login-left.png)', 'background-repeat': 'no-repeat',
                 'background-size': 'contain',
                 'background-position': 'center'}">
-        </div>
+      </div>
       <div class="col-md-6 ps-md-0">
         <div class="auth-form-wrapper px-4 py-5 p-5">
-          <h2 class="nobleui-logo d-block mb-2"> User <span>Registration </span> Page</h2>
+          <h2 class="mb-5 mt-4 text-center"> Registration Page</h2>
 
           <form [formGroup]="JournalUserAccountForm" (ngSubmit)="Onsubmit()" class="forms-sample">
             <div class="row">
@@ -105,15 +91,19 @@
               <div class="col-md-6 mb-3">
                 <label for="MobileNumber">Mobile With Country Code</label>
                 <div class="input-group">
-                  <div class="col-md-2 me-3"><input type="text" id="CountryCode" formControlName="CountryCode" class="form-control" placeholder="+1" [ngClass]="{'is-invalid': isForm1Submitted && form1['CountryCode'].errors}">
-                    <div *ngIf="JournalUserAccountForm.get('CountryCode')?.invalid && JournalUserAccountForm.get('CountryCode')?.touched"
-                    class="text-danger"></div>
+                  <div class="col-md-2 me-3"><input type="text" id="CountryCode" formControlName="CountryCode"
+                      class="form-control" placeholder="+1"
+                      [ngClass]="{'is-invalid': isForm1Submitted && form1['CountryCode'].errors}">
+                    <div
+                      *ngIf="JournalUserAccountForm.get('CountryCode')?.invalid && JournalUserAccountForm.get('CountryCode')?.touched"
+                      class="text-danger"></div>
                   </div>
-                  <div class="col-md-9"><input type="number" id="MobileNumber" formControlName="MobileNumber" class="form-control"
-                    placeholder="Enter Mobile No."
-                    [ngClass]="{'is-invalid': isForm1Submitted && form1['MobileNumber'].errors}"></div>
+                  <div class="col-md-9"><input type="number" id="MobileNumber" formControlName="MobileNumber"
+                      class="form-control" placeholder="Enter Mobile No."
+                      [ngClass]="{'is-invalid': isForm1Submitted && form1['MobileNumber'].errors}"></div>
                 </div>
-                <div *ngIf="JournalUserAccountForm.get('MobileNumber')?.invalid && JournalUserAccountForm.get('MobileNumber')?.touched"
+                <div
+                  *ngIf="JournalUserAccountForm.get('MobileNumber')?.invalid && JournalUserAccountForm.get('MobileNumber')?.touched"
                   class="text-danger">
                   Please enter a valid mobile number (with country code).
                 </div>
@@ -121,7 +111,7 @@
               <div class="col-md-6 mb-3  ">
                 <label for="UserRole">Login Role</label>
                 <div class="dropdown-box" (click)="toggleDropdown($event)" tabindex="0">
-                  <div class="selected-items " >
+                  <div class="selected-items ">
                     <span *ngIf="selectedRoles.length === 0" class="selected-role">Select Login Role</span>
                     <span *ngFor="let role of selectedRoles" class="selected-role">
                       {{ getRoleLabel(role) }}
@@ -131,21 +121,28 @@
                   <div class="dropdown-icon">&#9662;</div>
                 </div>
 
-                <div class="dropdown-options" *ngIf="dropdownOpen" >
+                <div class="dropdown-options" *ngIf="dropdownOpen">
                   <div *ngFor="let role of availableRoles" (click)="addRole($event, role.value)"
                     [class.selected]="isSelected(role.value)" [ngClass]="{'disabled-option': isSelected(role.value)}">
                     {{ role.label }}
                   </div>
                 </div>
-                <div
+                <!-- <div
                   *ngIf="JournalUserAccountForm.get('UserRole')?.invalid && JournalUserAccountForm.get('UserRole')?.touched"
                   class="text-danger">
                   Please select a valid UserRole.
-                </div>
-                <div *ngIf="isForm1Submitted && JournalUserAccountForm.get('UserRole')?.invalid && JournalUserAccountForm.get('UserRole')?.touched"
-                class="text-danger" >
-                  Required: Please select at least one UserRole.
-                </div>
+                </div> -->
+                <div *ngIf="
+                (form1['UserRole'].touched || isForm1Submitted) &&
+                form1['UserRole'].errors?.['invalidRole']
+              " class="text-danger">
+                Please select at least one valid user role.
+              </div>
+              
+
+
+
+
               </div>
 
 
@@ -171,33 +168,37 @@
                     <i class="bi" [ngClass]="showPassword ? 'bi-eye-slash' : 'bi-eye'"></i>
                   </span>
                 </div>
-                <div *ngIf="JournalUserAccountForm.get('Password')?.invalid && JournalUserAccountForm.get('Password')?.touched"
+                <div
+                  *ngIf="JournalUserAccountForm.get('Password')?.invalid && JournalUserAccountForm.get('Password')?.touched"
                   class="text-danger">
                   Please enter a valid Password.
                 </div>
               </div>
-              
-              
+
+
               <div class="col-md-6 mb-3">
                 <label for="ConfirmPassword">Confirm Password</label>
                 <div class="input-group">
-                  <input [type]="showConfirmPassword ? 'text' : 'password'" id="ConfirmPassword" formControlName="ConfirmPassword"
-                    class="form-control" placeholder="Confirm Password"
+                  <input [type]="showConfirmPassword ? 'text' : 'password'" id="ConfirmPassword"
+                    formControlName="ConfirmPassword" class="form-control" placeholder="Confirm Password"
                     [ngClass]="{'is-invalid': isForm1Submitted && (JournalUserAccountForm.get('ConfirmPassword')?.errors || JournalUserAccountForm.errors?.['mismatch'])}">
-                  <span class="input-group-text" style="cursor: pointer;" (click)="showConfirmPassword = !showConfirmPassword">
+                  <span class="input-group-text" style="cursor: pointer;"
+                    (click)="showConfirmPassword = !showConfirmPassword">
                     <i class="bi" [ngClass]="showConfirmPassword ? 'bi-eye-slash' : 'bi-eye'"></i>
                   </span>
                 </div>
-                <div *ngIf="JournalUserAccountForm.get('ConfirmPassword')?.invalid && JournalUserAccountForm.get('ConfirmPassword')?.touched"
+                <div
+                  *ngIf="JournalUserAccountForm.get('ConfirmPassword')?.invalid && JournalUserAccountForm.get('ConfirmPassword')?.touched"
                   class="text-danger">
                   Please confirm your password.
                 </div>
-                <div *ngIf="JournalUserAccountForm.errors?.['mismatch'] && (JournalUserAccountForm.get('ConfirmPassword')?.touched || isForm1Submitted)"
+                <div
+                  *ngIf="JournalUserAccountForm.errors?.['mismatch'] && (JournalUserAccountForm.get('ConfirmPassword')?.touched || isForm1Submitted)"
                   class="text-danger">
                   Passwords do not match.
                 </div>
               </div>
-              
+
               <!-- <div class="col-md-6 mb-3">
                 <label for="Password">Password</label>
                 <input type="password" id="Password" formControlName="Password" class="form-control" placeholder="Enter Password"
