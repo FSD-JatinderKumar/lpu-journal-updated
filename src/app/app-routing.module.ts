@@ -232,6 +232,10 @@ const routes: Routes = [
         path :":Id/:name/AuthorDashboard",
         loadChildren:()=> import('./views/pages/RoleWise-Dashboard/AuthorDashboard/NewManuscript/NewManuScript.module').then(m=>m.NewManuScriptModule)
       },
+      {
+        path :":Id/:name/ViewManuscripts",
+        loadChildren:()=> import('./views/pages/RoleWise-Dashboard/AuthorDashboard/ManuScriptReport/ViewAllManuscripts.module').then(m=>m.ViewAllManuscriptsModule)
+      },
       // Reviewers Dashboard 
       {
         path :":Id/:name/ReviewerDashboard",
@@ -241,10 +245,7 @@ const routes: Routes = [
         path :":Id/:name/ReviewersRemarks",
         loadChildren:()=> import('./views/pages/RoleWise-Dashboard/ReviewersDashboard/RDRemarksDetails/RDRemarksDetails.module').then(m=>m.RDRemarksDetailsModule)
       },
-      {
-        path :":Id/:name/ViewManuscripts",
-        loadChildren:()=> import('./views/pages/RoleWise-Dashboard/AuthorDashboard/ManuScriptReport/ViewAllManuscripts.module').then(m=>m.ViewAllManuscriptsModule)
-      }
+      
     ]
   }
 ];
