@@ -411,15 +411,21 @@ export class LpujournalbookService {
     let authToken = this.storageService.getUser();
     let headers = new HttpHeaders()
       .set('Authorization', 'Bearer ' + authToken)
-    //.set('Authorization', 'Bearer ' + this.Localtoken)
     return this.http.post(
       AUTH_API_LOCAs + 'api/LpuJournal/ApproveEditor',
       dataSoft,
       { headers });
-    // // Create an HttpHeaders object with the Authorization header
-    // debugger;
-    // let headers = new HttpHeaders()
-    //   .set('Authorization', 'Bearer ' + this.authToken)
+    
   }
 
+
+  GetManuscriptforReviewer(UserEmail: any): Observable<any> {
+    let token = this.storageService.getUser();
+    let headers = new HttpHeaders()
+      .set('Authorization', 'Bearer ' + token)
+    return this.http.get(
+      'https://localhost:7125/'+ 'api/LpuJournal/GetAllManuscrpitDetailsForReviewer?UserId=' + UserEmail,
+      { headers }
+    );
+  }
 }

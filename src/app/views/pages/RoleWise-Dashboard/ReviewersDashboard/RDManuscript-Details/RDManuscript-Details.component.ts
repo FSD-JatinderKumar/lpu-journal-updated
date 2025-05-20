@@ -169,12 +169,15 @@ export class RDManuscriptDetailsComponent implements OnInit {
   ReviewerdisplayedColumns: string[] = [
     // 'journalId',	id,			JournalId,			JournalTitle,			MenuScriptType,			SubmissionType,		FileUrl,			EditorInchief	, CreatedBy , UserId as RequestedBy , UpdatedBy as AssignedBy
     // "id":173,"journalId":45,"journalTitle":"","manuScript":"","submissionType":"Manuscript,Manuscript,Manuscript","fileUrl":"","filePath":"","editorInChief":"Dr. Abhijeet Pandey","userId":"kunal.kashyap@gmail.com","emailId":"kunal.kashyap@gmail.com","userName":"Mr. Kunal ","uploadedOn":"13 May 2025"}
+
+    // ALL ReviewerData  Data[{"id":113,"journalId":62,"journalTitle":"International Journal of Recent Developments in Sc",
+    // "manuScriptType":null,"submissionType":"Manuscript,Manuscript","fileUrl":"62_230881879_5_2025_merged-files.zip","editorInChief":"Dr. Geeta Arora","createdBy":"drgeeta1612@gmail.com","requestedBy":"drgeeta1612@gmail.com","assignedBy":"drgeeta1612@gmail.com"},{"id":105,"journalId":62,"journalTitle":"International-Journal-of-Recent-Developments-in-Sc","manuScriptType":null,"submissionType":"Manuscript","fileUrl":"62_168457961_6_2025_merged-files.zip","editorInChief":"Dr. Geeta Arora","createdBy":"geetadma@gmail.com","requestedBy":"geetadma@gmail.com","assignedBy":"drgeeta1612@gmail.com"}]
     'journalTitle',
     'editorInChief',
-    'manuScript',
-    'userName',
+    // 'manuScript',
+    // 'requestedBy',
     // 'assignedBy',
-    // 'submissionType',
+    'submissionType',
     'fileUrl',
     'journalId'
   ];
@@ -183,10 +186,10 @@ export class RDManuscriptDetailsComponent implements OnInit {
     // 'journalId',
     'Journal Title',
     'Editor In Chief',
-    'Manu Script',
-    'Requested By',
+    // 'Manu Script',
+    // 'Requested By',
     // 'Assigned By',
-    // 'Submission Type',
+    'Submission Type',
     'Download File',
     'Action'
   ];
@@ -194,10 +197,10 @@ export class RDManuscriptDetailsComponent implements OnInit {
   ReviewercolumnHeaders: { [key: string]: string } = { 
     journalTitle: 'Journal Title', 
     editorInChief: 'Author Name', 
-    manuScript: 'Manuscript Type', 
-    userName: 'Requested By',
+    // manuScript: 'Manuscript Type', 
+    // requestedBy: 'Requested By',
     // editorInChief: 'Assigned By',
-    // submissionType: 'Submitted Script ', 
+    submissionType: 'Submitted Script ', 
     fileUrl: 'Document' ,
     journalId: 'Action' 
   }; // Custom header text journalTitle	editorInChief	ManuScriptType	submissionType
@@ -205,14 +208,14 @@ export class RDManuscriptDetailsComponent implements OnInit {
   
   
     showReviewerData(Emailid: any) {
-      // this.journalWebApiService.GetMenuScriptForReviewers(Emailid).subscribe({
-        this.journalWebApiService.GetAllMenuScriptForJournalId(this.BookId).subscribe({
+      this.journalWebApiService.GetMenuScriptForReviewers(Emailid).subscribe({
+        // this.journalWebApiService.GetAllMenuScriptForJournalId(this.BookId).subscribe({
         next: (dataX: any) => {
           this.dataSource = dataX.item1;
           this.dataLoaded = true;
           this.ReviewerData = dataX.item1;
           // alert("ALL ReviewerData  Data" + JSON.stringify(this.ReviewerData))
-          // console.log("ALL ReviewerData  Data" + JSON.stringify(this.ReviewerData))
+          console.log("ALL ReviewerData  Data" + JSON.stringify(this.ReviewerData))
           if (this.ReviewerData.length > 0) {
             this.ReviewerDataColumns = Object.keys(this.ReviewerData[0]);
             this.calculateTotalPagesReviewer();

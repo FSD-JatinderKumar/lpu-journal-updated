@@ -615,42 +615,46 @@ export class SubmitManuScriptComponent implements OnInit {
   ReviewerData: any;
   ReviewerDataColumns: any;
 
+   
   ReviewerdisplayedColumns: string[] = [
     // 'journalId',	id,			JournalId,			JournalTitle,			MenuScriptType,			SubmissionType,		FileUrl,			EditorInchief	, CreatedBy , UserId as RequestedBy , UpdatedBy as AssignedBy
+    // "id":173,"journalId":45,"journalTitle":"","manuScript":"","submissionType":"Manuscript,Manuscript,Manuscript","fileUrl":"","filePath":"","editorInChief":"Dr. Abhijeet Pandey","userId":"kunal.kashyap@gmail.com","emailId":"kunal.kashyap@gmail.com","userName":"Mr. Kunal ","uploadedOn":"13 May 2025"}
+
+    // ALL ReviewerData  Data[{"id":113,"journalId":62,"journalTitle":"International Journal of Recent Developments in Sc",
+    // "manuScriptType":null,"submissionType":"Manuscript,Manuscript","fileUrl":"62_230881879_5_2025_merged-files.zip","editorInChief":"Dr. Geeta Arora","createdBy":"drgeeta1612@gmail.com","requestedBy":"drgeeta1612@gmail.com","assignedBy":"drgeeta1612@gmail.com"},{"id":105,"journalId":62,"journalTitle":"International-Journal-of-Recent-Developments-in-Sc","manuScriptType":null,"submissionType":"Manuscript","fileUrl":"62_168457961_6_2025_merged-files.zip","editorInChief":"Dr. Geeta Arora","createdBy":"geetadma@gmail.com","requestedBy":"geetadma@gmail.com","assignedBy":"drgeeta1612@gmail.com"}]
     'journalTitle',
     'editorInChief',
-    'manuScriptType',
-    'requestedBy',
+    // 'manuScript',
+    // 'requestedBy',
     // 'assignedBy',
-    // 'submissionType',
+    'submissionType',
     'fileUrl',
     'journalId'
   ];
-
+  
   ReviewerdisplayedColumnsHeader: string[] = [
     // 'journalId',
     'Journal Title',
     'Editor In Chief',
-    'Manu Script',
-    'Requested By',
+    // 'Manu Script',
+    // 'Requested By',
     // 'Assigned By',
-    // 'Submission Type',
+    'Submission Type',
     'Download File',
     'Action'
   ];
-
-  ReviewercolumnHeaders: { [key: string]: string } = {
-    journalTitle: 'Journal Title',
-    editorInChief: 'Author Name',
-    manuScriptType: 'Manuscript Type',
-    requestedBy: 'Requested By',
+  
+  ReviewercolumnHeaders: { [key: string]: string } = { 
+    journalTitle: 'Journal Title', 
+    editorInChief: 'Author Name', 
+    // manuScript: 'Manuscript Type', 
+    // requestedBy: 'Requested By',
     // editorInChief: 'Assigned By',
-    // submissionType: 'Submitted Script ', 
-    fileUrl: 'Document',
-    journalId: 'Action'
+    submissionType: 'Submitted Script ', 
+    fileUrl: 'Document' ,
+    journalId: 'Action' 
   }; // Custom header text journalTitle	editorInChief	ManuScriptType	submissionType
-
-
+  
 
   showReviewerData(Emailid: any) {
     this.journalWebApiService.GetMenuScriptForReviewers(Emailid).subscribe({
