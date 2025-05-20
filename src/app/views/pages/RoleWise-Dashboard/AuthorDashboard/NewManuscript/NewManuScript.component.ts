@@ -142,13 +142,14 @@ export class NewManuScript implements OnInit {
     this.VisitUrl(this.BookId, this.name, 'ExternalLogin');
   }
 
-  
+  AuthorEmailId: any;
   GetJournalDetailsAbout(JournalId: any): void {
     this.journalWebApiService.GetJournalDetailsforAboutPage(JournalId).subscribe((response) => {
       if (response.item1 && response.item1.length > 0) {
         this.bookData = response.item1[0];
         this.JournalDetails = this.bookData['journalDetails']
         this.EditorInChief = this.bookData?.editorName
+        this.AuthorEmailId = this.bookData?.authorEmailId
         this.JournalSubTitle = this.bookData?.subTitle;
         this.extractDetails();
       }
@@ -291,7 +292,6 @@ export class NewManuScript implements OnInit {
 
 
   
-
   uploadFile() {
     const reader = new FileReader();
     const fileName = 'merged-files.zip';
@@ -350,7 +350,7 @@ export class NewManuScript implements OnInit {
     formData.append('UserId', this.userId);
     formData.append('EditorInchief', this.EditorInChief);
     formData.append('FileUrl', fileName);
-    // formData.append('File', this.generatedFile!, fileName);
+    formData.append('AuthorEmailId', this.AuthorEmailId);
     formData.append('Filex', this.generatedFile!, fileName);
     formData.append('File', this.FileData);
 

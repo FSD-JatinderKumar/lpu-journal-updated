@@ -455,8 +455,9 @@ export class SubmitManuScriptComponent implements OnInit {
 
 
 
-
+  IsUploading: boolean= false;
   uploadFile() {
+    this.IsUploading=true;
     const reader = new FileReader();
     const fileName = this.userId+'Manuscript-Requests-Files.zip';//   'merged-files.zip';
 
