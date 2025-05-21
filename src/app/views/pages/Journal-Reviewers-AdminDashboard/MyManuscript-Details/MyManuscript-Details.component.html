@@ -25,14 +25,13 @@
               <table class="table  table-hover">
                 <thead>
                   <tr>
-                    <th> Sr.No</th>
                     <th *ngFor="let col of ReviewerdisplayedColumns">{{ ReviewercolumnHeaders[col] }}</th>
-                    <!-- <th colspan="2"> Accept / Reject</th> -->
                   </tr>
                 </thead>
                 <tbody>
                   <tr *ngFor="let row of paginatedReviewerData; let i = index">
-                    <td>{{ i + 1 }}</td>
+                   
+
                     <td *ngFor="let col of ReviewerdisplayedColumns">
                       <ng-container [ngSwitch]="col">
                         <button *ngSwitchCase="'fileUrl'" class="btn btn-dark btn-sm"

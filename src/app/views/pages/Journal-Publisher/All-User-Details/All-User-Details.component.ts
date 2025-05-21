@@ -89,7 +89,7 @@ export class AllUserDetailsComponent implements OnInit {
       if (response.item1 && response.item1.length > 0) {
         this.UserData = response.item1;
         this.Users = this.UserData;
-        console.log(JSON.stringify(this.Users))
+        // console.log(JSON.stringify(this.Users))
       }
       else {
         this.Users = [];

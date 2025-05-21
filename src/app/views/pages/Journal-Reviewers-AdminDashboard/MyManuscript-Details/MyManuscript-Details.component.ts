@@ -68,42 +68,43 @@ export class MyManuscriptDetailsComponent implements OnInit {
   VisitUrl(Id: any, name: any, Sufix: any) {
     this.router.navigateByUrl(Id + '/' + name + '/' + Sufix);
   }
+
   ngOnInit(): void {
     this.serverUrl='https://files.lpu.in/umsweb/Journal/';
-    this.BookId  = '45';// this.route.snapshot.params['Id'];
-    this.name  = this.JournalTitle ='Test Name Journal';//this.route.snapshot.params['name'];
     let loginStatus = this.checkUserLogin();
-    // this.getBooksDetail();
-    this.showReviewerData(this.userId);
-    this.loadReviewers(this.BookId);
-      if (this.BookId != undefined && this.BookId != null ) {
-        // this.BookId = BookId;
-        // this.JournalId= BookId;
-        // this.JournalTitle = name;
-        // this.getBooksDetail();
-      } 
+      if (loginStatus != false ) {
+        this.showReviewerData("te");
+        this.loadReviewers(-1);
+    } else {
+
+      this.Logout();
+    }
+
+
   }
- 
-  checkUserLogin(){
+
+  checkUserLogin(): Boolean | any {
     const GetCookieData = this.cookieService.get('authData');
     if (GetCookieData) {
       try {
         const retrievedCookies = JSON.parse(GetCookieData);
-        this.userRole = retrievedCookies.userRole?.length > 0 ? retrievedCookies.userRole : 'Guest';
+        this.userRole = retrievedCookies.UserRole?.length > 0 ? retrievedCookies.UserRole : -1;
         this.userId = retrievedCookies.EmailId;
+        // let Token = retrievedCookies.AccessToken;
         this.supervisorName = retrievedCookies.SupervisorName;
         this.departmentName = retrievedCookies.DepartmentName;
         this.candidateName = retrievedCookies.CandidateName;
         return true;
       } catch (error) {
-        console.error("Error parsing JSON from cookies:", error);
-        return false;  
+        console.log("error");
       }
     } else {
       return false;
     }
-    
   }
+
+ 
+
 
   ReviewerData: any;
   ReviewerDataColumns: any;
@@ -147,7 +148,9 @@ export class MyManuscriptDetailsComponent implements OnInit {
   
     showReviewerData(Emailid: any) {
       // this.journalWebApiService.GetMenuScriptForReviewers(Emailid).subscribe({
-        this.journalWebApiService.GetAllMenuScriptForJournalId(this.BookId).subscribe({
+
+        this.journalWebApiService.GetMenuScriptForReviewers(Emailid).subscribe({
+        // this.journalWebApiService.GetAllMenuScriptForJournalId(this.BookId).subscribe({
         next: (dataX: any) => {
           this.dataSource = dataX.item1;
           this.dataLoaded = true;
@@ -163,7 +166,7 @@ export class MyManuscriptDetailsComponent implements OnInit {
           // this.showEditorData(this.BookId);
           
           this.loadReviewers(this.BookId);
-          this.GetJournalDetailsAbout(this.BookId);
+          // this.GetJournalDetailsAbout(this.BookId);
           this.showData();
   
         },
@@ -477,26 +480,40 @@ export class MyManuscriptDetailsComponent implements OnInit {
 
 
   reviewerList: any[] = [];
-  loadReviewers(id:any) {
+  // loadReviewers(id:any) {
+  //   this.journalWebApiService.GetReviewerDetailsForEditors(this.userId).subscribe({
+  //     next: (dataX: any) => {
+  //       this.dataSource = dataX.item1;
+  //       this.reviewerList = dataX.item1;
+
+  //     },
+  //     error: (error: any) => {
+  //       this.dataShowing = false;
+  //       console.error('Error fetching data', error);
+  //       // this.LoginFalied();
+  //       this.Logout();
+  //     },
+  //     complete: () => {
+  //       this.dataShowing = true;
+  //     }
+  //   });
+   
+  // }
+  loadReviewers(id: any) {
     this.journalWebApiService.GetReviewerDetailsForEditors(this.userId).subscribe({
       next: (dataX: any) => {
         this.dataSource = dataX.item1;
         this.reviewerList = dataX.item1;
-
       },
       error: (error: any) => {
         this.dataShowing = false;
         console.error('Error fetching data', error);
-        // this.LoginFalied();
-        this.Logout();
       },
       complete: () => {
         this.dataShowing = true;
       }
     });
-   
   }
-
 
   Logout(): void {
     this.cookieService.delete('authData');

@@ -215,7 +215,7 @@ export class RDManuscriptDetailsComponent implements OnInit {
           this.dataLoaded = true;
           this.ReviewerData = dataX.item1;
           // alert("ALL ReviewerData  Data" + JSON.stringify(this.ReviewerData))
-          console.log("ALL ReviewerData  Data" + JSON.stringify(this.ReviewerData))
+          // console.log("ALL ReviewerData  Data" + JSON.stringify(this.ReviewerData))
           if (this.ReviewerData.length > 0) {
             this.ReviewerDataColumns = Object.keys(this.ReviewerData[0]);
             this.calculateTotalPagesReviewer();
@@ -363,7 +363,11 @@ export class RDManuscriptDetailsComponent implements OnInit {
     ]
   };
 
+
+  ManuscriptMasterId: any;
   onTakeAction2(rowData: any) {
+    this.ManuscriptMasterId= rowData?.['id'];
+    // alert(this.ManuscriptMasterId)
     console.log('Taking action on journal:', JSON.stringify(rowData));
   }
 
@@ -378,9 +382,8 @@ export class RDManuscriptDetailsComponent implements OnInit {
     `);
 
     const formData = new FormData();
-
     // Append form data to the FormData object
-    formData.append('journalId', this.JournalId );
+    formData.append('journalId', this.JournalId);
     formData.append('emailId', this.userId);
     formData.append('reviewerTerm', this.reviewForm.recommendation);
     formData.append('overallRating', this.reviewForm.rating.toString());
@@ -388,14 +391,13 @@ export class RDManuscriptDetailsComponent implements OnInit {
     formData.append('commentsforEditor', this.reviewForm.commentsToEditor);
     formData.append('commentsForAuthor', this.reviewForm.commentsToAuthor);
     formData.append('approvalAction', this.reviewForm.approvalAction);
-  
     formData.append('newSubjectRating', this.reviewForm.questions[0].answer);
     formData.append('newInformationRating', this.reviewForm.questions[1].answer);
     formData.append('newConclusionRating', this.reviewForm.questions[2].answer);
     formData.append('manuscriptRating', this.reviewForm.questions[3].answer);
     formData.append('manuscriptOrganisedRating', this.reviewForm.questions[4].answer);
     formData.append('manuscriptOtherInfoRating', this.reviewForm.questions[5].answer);
-  
+    formData.append('manuscriptMasterId', this.ManuscriptMasterId);
     this.journalWebApiService.NewReviewersRemarks(formData).subscribe({
       next: (data) => {
         let result = data.item1[0]['returnData'];

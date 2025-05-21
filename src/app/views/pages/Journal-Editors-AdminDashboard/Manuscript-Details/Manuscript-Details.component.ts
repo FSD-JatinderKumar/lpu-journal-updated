@@ -87,15 +87,14 @@ export class ManuscriptDetailsComponent implements OnInit {
     this.BookId = this.route.snapshot.params['Id'];
     this.name = this.route.snapshot.params['name'];
     let loginStatus = this.checkUserLogin();
-
     const bookId: any = this.BookId = this.route.snapshot.params['Id'];
     const name: any = this.name = this.route.snapshot.params['name'];
-    this.JournalTitle = name.replace(/-/g, ' ');
-    if (bookId > 0 && loginStatus == true) {
-      this.BookId = bookId; this.JournalId = bookId;
-      this.JournalTitle = name.replace(/-/g, ' ');
-      this.showEditorData(this.BookId);
-      this.loadReviewers(this.BookId);
+    // this.JournalTitle = name.replace(/-/g, ' ');
+    if (loginStatus == true) {
+      // this.BookId = bookId; this.JournalId = bookId;
+      // this.JournalTitle = name.replace(/-/g, ' ');
+      this.showEditorData(-1);
+      this.loadReviewers(-1);
     } else {
 
       this.Logout();
@@ -165,7 +164,7 @@ export class ManuscriptDetailsComponent implements OnInit {
       next: (dataX: any) => {
         this.dataSource = dataX.item1;
         this.EditorData = dataX.item1 || [];
-        // console.log("Editor Data:", JSON.stringify(this.EditorData));
+        console.log("Editor Data:", JSON.stringify(this.EditorData));
 
         this.dataLoaded = true;
         this.dataShowing = true;
@@ -287,7 +286,8 @@ export class ManuscriptDetailsComponent implements OnInit {
   reviewerList: any[] = [];
   loadReviewers(id: any) {
     // API call to fetch reviewer list
-    this.journalWebApiService.GetReviewerDetailsForEditors(this.userId).subscribe({
+    // this.journalWebApiService.GetReviewerDetailsForEditors(this.userId).subscribe({
+    this.journalWebApiService.GetReviewerDetailsForEditors(id).subscribe({
       next: (dataX: any) => {
         this.dataSource = dataX.item1;
         this.reviewerList = dataX.item1;

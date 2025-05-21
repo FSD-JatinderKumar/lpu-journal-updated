@@ -31,16 +31,60 @@
                   </tr>
                 </thead>
                 <tbody>
+
                   <tr *ngFor="let row of paginatedReviewerRemarks">
+                    <td *ngFor="let col of ReviewerRemarksdisplayedColumns">
+                      <ng-container [ngSwitch]="col">
+                        <button *ngSwitchCase="'fileUrl'" class="btn btn-dark btn-sm"
+                          (click)="onSelectFileEditorX(row[col])">
+                          <i class="bi bi-file-earmark-text"></i>
+                        </button>
+                        <span *ngSwitchCase="'journalId'" class="col-md-6">
+                          <ng-container *ngIf="row.isActionable; else NoApp">
+                            <button class="btn btn-success btn-sm" (click)="ChangeApproveStatus(row)"
+                              [ngClass]="'btn-success'">
+                              <i class="bi bi-check-circle"></i>
+                            </button>
+                            <button class="btn btn-danger btn-sm" (click)="DisapproveStatus(row)"
+                              [ngClass]=" 'btn-danger'">
+                              <i class="bi bi-x-circle"></i>
+                            </button>
+                          </ng-container>
+                          <ng-template #NoApp>
+                            <span class="text-danger "> <i class="bi bi-x-circle  "></i><br />Action Applied
+                            </span>
+                          </ng-template>
+
+
+                        </span>
+
+                        <span *ngSwitchCase="'isApproved'">
+                          <span [ngClass]="row[col] == '1' ? 'text-success' : 'text-danger'">
+                            {{ row[col] == '1' ? 'Approved' : 'Not Approved' }}
+                          </span>{{row[col]}}
+                        </span>
+                        <span *ngSwitchCase="'newInformationRating'">
+                          {{ row[col] !== null ? row[col] : 'N/A' }}
+                        </span>
+                        <span *ngSwitchCase="'approvalStatus'">
+                          <span
+                            [ngClass]="{'text-warning': row.isActionable == null,'text-success': row.isActionable == 1,'text-danger': row.isActionable == 0}">
+                            {{ row.isActionable == null ? 'Pending' : row.isActionable == 1 ? 'Approved' :
+                            'Rejected'
+                            }}
+                          </span>
+                        </span>
+                        <span *ngSwitchDefault>{{ row[col] }}</span>
+                      </ng-container>
+                    </td>
+                  </tr>
+                  <!-- <tr *ngFor="let row of paginatedReviewerRemarks">
                     <td *ngFor="let col of ReviewerRemarksdisplayedColumns">
                       <ng-container [ngSwitch]="col">
                         <button *ngSwitchCase="'fileUrl'" class="btn btn-dark btn-sm" (click)="onSelectFileEditorX(row[col])">
                           <i class="bi bi-file-earmark-text"></i>
                         </button>
-                        <!-- <span *ngSwitchCase="'journalId'" class="col-md-6"  >
-                                <button class="btn btn-success btn-sm" (click)="ChangeApproveStatus(row)"><i class="bi bi-check-circle"></i></button>
-                                <button class="btn btn-danger btn-sm" (click)="DisapproveStatus(row)"><i class="bi bi-x-circle"></i></button>
-                              </span> -->
+                        
                         <span *ngSwitchCase="'journalId'" class="col-md-6">
                           <button class="btn btn-success btn-sm" (click)="ChangeApproveStatus(row)"
                             [disabled]="!row.isActionable"
@@ -73,11 +117,8 @@
                         <span *ngSwitchDefault>{{ row[col] }}</span>
                       </ng-container>
                     </td>
-                    <!-- <td>
-                            <button class="btn btn-success btn-sm" (click)="ChangeApproveStatus(row)">Approve</button>
-                            <button class="btn btn-danger btn-sm" (click)="DisapproveStatus(row)">Disapprove</button>
-                          </td> -->
-                  </tr>
+                    
+                  </tr> -->
                 </tbody>
               </table>
       

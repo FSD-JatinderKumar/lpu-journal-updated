@@ -58,7 +58,7 @@
                         </ng-template>
                       </td>
                       <td class="form-label">
-                        <ng-container *ngIf="UsersDataRow.isActive=='0' && UsersDataRow.isApproved=='0' || UsersDataRow.isActive=='False' && UsersDataRow.isApproved=='False' || UsersDataRow.isApproved==null; else NoApp">
+                        <ng-container *ngIf="UsersDataRow.isActive=='0' || UsersDataRow.isApproved=='0' || UsersDataRow.isActive=='False' || UsersDataRow.isApproved=='False' || UsersDataRow.isApproved==null; else NoApp">
                           <button class="btn btn-success btn-sm me-2" (click)="ChangeApproveStatus(UsersDataRow)" [ngClass]="'btn-success'">
                             <i class="bi bi-check-circle"></i>
                           </button>
