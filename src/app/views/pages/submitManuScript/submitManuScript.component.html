@@ -363,6 +363,22 @@
                                     <i class="bi bi-file-earmark-text"></i>
                                   </button>
                                   <span *ngSwitchCase="'journalId'" class="col-md-6">
+                                    <ng-container *ngIf="row.isActionable !== undefined">
+                                      <div *ngIf="row.isActionable === null; else actionApplied">
+                                        <button class="btn btn-success btn-sm" (click)="ChangeApproveStatus(row)">
+                                          <i class="bi bi-check-circle"></i>
+                                        </button>
+                                        <button class="btn btn-danger btn-sm" (click)="DisapproveStatus(row)">
+                                          <i class="bi bi-x-circle"></i>
+                                        </button>
+                                      </div>
+                                      <ng-template #actionApplied>
+                                        <span class="text-danger "> <i class="bi bi-x-circle  "><br/></i></span>
+                                      </ng-template>
+                                    </ng-container>
+                                  </span>
+                                  
+                                  <!-- <span *ngSwitchCase="'journalId'" class="col-md-6">
                                     <ng-container *ngIf="row.isActionable; else NoApp">
                                       <button class="btn btn-success btn-sm" (click)="ChangeApproveStatus(row)"
                                         [ngClass]="'btn-success'">
@@ -379,7 +395,7 @@
                                     </ng-template>
         
         
-                                  </span>
+                                  </span> -->
         
                                   <span *ngSwitchCase="'isApproved'">
                                     <span [ngClass]="row[col] == '1' ? 'text-success' : 'text-danger'">
@@ -533,8 +549,23 @@
                                       (click)="onSelectFileEditorX(row[col])">
                                       <i class="bi bi-file-earmark-text"></i>
                                     </button>
-        
                                     <span *ngSwitchCase="'journalId'" class="col-md-6">
+                                      <ng-container *ngIf="row.isActionable !== undefined">
+                                        <div *ngIf="row.isActionable === null; else actionApplied">
+                                          <button class="btn btn-success btn-sm" (click)="ChangeApproveStatus(row)">
+                                            <i class="bi bi-check-circle"></i>
+                                          </button>
+                                          <button class="btn btn-danger btn-sm" (click)="DisapproveStatus(row)">
+                                            <i class="bi bi-x-circle"></i>
+                                          </button>
+                                        </div>
+                                        <ng-template #actionApplied>
+                                          <span class="text-danger "> <i class="bi bi-x-circle  "><br/></i></span>
+                                        </ng-template>
+                                      </ng-container>
+                                    </span>
+                                    
+                                    <!-- <span *ngSwitchCase="'journalId'" class="col-md-6">
                                       <ng-container *ngIf="row.isActionable; else NoApp">
                                         <button class="btn btn-success btn-sm" (click)="ChangeApproveStatus(row)"
                                           [ngClass]="'btn-success'">
@@ -551,7 +582,7 @@
                                       </ng-template>
         
         
-                                    </span>
+                                    </span> -->
         
                                     <span *ngSwitchCase="'isApproved'">
                                       <span [ngClass]="row[col] === '1' ? 'text-success' : 'text-danger'">

@@ -141,10 +141,10 @@ export class EDManuscriptDetailsComponent implements OnInit {
 
   // Simplified and corrected column definitions
   displayedEditorColumns: string[] = [
-    'journalTitle',
+    // 'journalTitle',
     'manuScript',
     'editorInChief',
-    'emailId',
+    // 'emailId',
     'userName',
     'submissionType',
     'fileUrl',
@@ -152,10 +152,10 @@ export class EDManuscriptDetailsComponent implements OnInit {
   ];
 
   displayedEditorColumnHeaders: { [key: string]: string } = {
-    journalTitle: 'Journal Title',
+    // journalTitle: 'Journal Title',
     manuScript: 'Manuscript',
     editorInChief: 'Author Name',
-    emailId: 'Submitted User Email',
+    // emailId: 'Submitted User Email',
     userName: 'Submitted By',
     submissionType: 'Submission Type',
     fileUrl: 'File Download',

@@ -366,8 +366,7 @@ export class RDManuscriptDetailsComponent implements OnInit {
 
   ManuscriptMasterId: any;
   onTakeAction2(rowData: any) {
-    this.ManuscriptMasterId= rowData?.['id'];
-    // alert(this.ManuscriptMasterId)
+    this.ManuscriptMasterId= rowData;
     console.log('Taking action on journal:', JSON.stringify(rowData));
   }
 

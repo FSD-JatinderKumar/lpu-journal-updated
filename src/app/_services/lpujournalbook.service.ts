@@ -328,8 +328,8 @@ export class LpujournalbookService {
     let headers = new HttpHeaders()
       .set('Authorization', 'Bearer ' + token)
     return this.http.get(
-      // this.baseUrl + 'api/LpuJournal/GetAllMenuScriptForReviewers?Email=' + AssignedToUserEmail, { headers }
       this.baseUrl + 'api/LpuJournal/GetAllMenuScriptForReviewers?Email=' + AssignedToUserEmail, { headers }
+      // LOCAL_API_URL + 'api/LpuJournal/GetAllMenuScriptForReviewers?Email=' + AssignedToUserEmail, { headers }
     );
   }
 

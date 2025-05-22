@@ -51,7 +51,6 @@ export class LoginWithRolesComponent implements OnInit {
     this.storageService.clean();
     this.BookId = this.route.snapshot.params['Id'];
     this.name = this.route.snapshot.params['name'];
-
     this.JournalTitle = this.name.replace(/-/g, ' ');
 
     this.loadForm();
@@ -124,17 +123,8 @@ export class LoginWithRolesComponent implements OnInit {
       var encodeduid = btoa(uid);
       var encodedPassword = btoa(password);
       this.selectedRole = DataX.UserRoles;
-      if (uid.length > 5 && password.length > 5) {
-        this.AuthoriseUserNewWay(uid, password);
-      }
-      else {
-        swal.fire({
-          title: 'Login Failed',
-          text: 'Login details are Invalid!',
-          icon: 'warning',
-        });
-
-      }
+      this.AuthoriseUserNewWay(uid, password);
+     
 
     }
   }
@@ -194,7 +184,7 @@ export class LoginWithRolesComponent implements OnInit {
       icon: 'warning',
     });
     // this.formdata.reset();
-    this.loadForm();
+    // this.loadForm();
   }
 
 
@@ -276,7 +266,7 @@ export class LoginWithRolesComponent implements OnInit {
         case '3':
           // this.router.navigateByUrl('PublisherDashboard')
           swal.fire({
-            title: 'System Maintenance',
+            title: 'Forbidden Access',
             // text: '-!',
             icon: 'warning',
           });
