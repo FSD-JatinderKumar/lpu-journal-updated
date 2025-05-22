@@ -212,12 +212,7 @@ export class SubmitManuScriptComponent implements OnInit {
     this.VisitUrl(this.BookId, this.name, 'ExternalLogin');
   }
   checkUserLogin() {
-    // this.userRole = 'Editor in Chief';
-    // this.userId = 'testcase.user3@gmail.com';
-    // this.supervisorName = 'Test case';
-    // this.departmentName = 'Test Department';
-    // this.candidateName = 'Test User Kumar';
-    // return true;
+   
     const GetCookieData = this.cookieService.get('authData');
     if (GetCookieData) {
       try {

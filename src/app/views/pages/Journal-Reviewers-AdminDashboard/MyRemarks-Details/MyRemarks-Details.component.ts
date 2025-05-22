@@ -18,12 +18,12 @@ import { forkJoin } from 'rxjs'
   styleUrls: ['./MyRemarks-Details.component.scss']
 })
 export class MyRemarksDetailsComponent implements OnInit {
-  fromDate: any;    booksDataColumns: any;  toDate: any;  pipe = new DatePipe('en-CA');
-  dataSource: any[] = [];   dataX: any;   booksData: any;  dataShowing: any = false;
-  userRole: any;    BookId: any;    JournalId: any;  JournalTitle: any; name: any;
-  userId: any;    serverUrl: any;   supervisorName: any;    departmentName: any;
+  fromDate: any; booksDataColumns: any; toDate: any; pipe = new DatePipe('en-CA');
+  dataSource: any[] = []; dataX: any; booksData: any; dataShowing: any = false;
+  userRole: any; BookId: any; JournalId: any; JournalTitle: any = ''; name: any;
+  userId: any; serverUrl: any; supervisorName: any; departmentName: any;
   candidateName: any;
-    displayedColumns: string[] = [
+  displayedColumns: string[] = [
     // 'journalId',
     'journalTitle',
     'editorInChief',
@@ -39,66 +39,111 @@ export class MyRemarksDetailsComponent implements OnInit {
     'Submission Type',
     // 'Action'
   ];
-    Journals: any;
-tableColumns: any;
-pageSize: any;
+  Journals: any;
+  tableColumns: any;
+  pageSize: any;
   constructor(
     private storageService: StorageService,
     private authService: AuthService,
     private AuthSession: LoginSessionService,
     private fb: FormBuilder,
     private router: Router,
+    private StoragesServices: StorageService,
     private route: ActivatedRoute, private cookieService: CookieService,
-    private journalWebApiService: LpujournalbookService  
-  ) {
-    
-  }
+    private journalWebApiService: LpujournalbookService
+  ) { }
 
   dataLoaded: boolean = false;
-  LoginFalied(){
+  LoginFalied() {
     this.router.navigateByUrl('/');
   }
-   
+
   ngOnInit(): void {
-    this.serverUrl='https://files.lpu.in/umsweb/Journal/';
-    this.BookId  = '45';// this.route.snapshot.params['Id'];
-    this.name  = this.JournalTitle ='Test Name Journal';//this.route.snapshot.params['name'];
+    this.serverUrl = 'https://files.lpu.in/umsweb/Journal/';
     let loginStatus = this.checkUserLogin();
-    // this.getBooksDetail();
-    this.GetallReviewsData(this.BookId);
-    this.loadReviewers(this.BookId);
-      if (this.BookId != undefined && this.BookId != null ) {
-        // this.BookId = BookId;
-        // this.JournalId= BookId;
-        // this.JournalTitle = name;
-        // this.getBooksDetail();
-      } 
+
+    if (loginStatus == true) {
+      this.loadJournals();
+    } else {
+      this.Logout();
+    }
   }
- 
-  checkUserLogin(){
+
+  reviewerList: any[] = [];
+  loadReviewers(id: any) {
+    // API call to fetch reviewer list
+    // this.journalWebApiService.GetReviewerDetailsForEditors(this.userId).subscribe({
+    this.journalWebApiService.GetReviewerDetailsForEditors(id).subscribe({
+      next: (dataX: any) => {
+        this.dataSource = dataX.item1;
+        this.reviewerList = dataX.item1;
+
+      },
+      error: (error: any) => {
+        this.dataShowing = false;
+        console.error('Error fetching data', error);        
+      },
+      complete: () => {
+        this.dataShowing = true;
+      }
+    });
+  }
+
+  journalListsData: any[] = [];
+  loadJournals() {
+    this.journalWebApiService.GetAllBooksDetails().subscribe({
+      next: (dataX: any) => {
+        this.dataSource = dataX.item1;
+        this.journalListsData = dataX.item1;
+        // console.info(JSON.stringify(this.journalListsData))
+      },
+      error: (error: any) => {
+        this.dataShowing = false;
+        console.error('Error fetching data', error);
+        // this.LoginFalied();
+      },
+      complete: () => {
+        this.dataShowing = true; 
+      }
+    });
+
+  }
+  currentJournalId: any;
+  currentJournalTitle: any;
+  setJournalId() {
+    // Find the journal object based on the selected ID
+    let idx = this.journalListsData.find(
+      journal => journal.id == this.JournalTitle
+    );
+    this.currentJournalId = idx.id;
+    this.currentJournalTitle = idx.journalTitle;
+    // alert(JSON.stringify(idx))
+    this.GetallReviewsData(this.currentJournalId);
+    this.loadReviewers(this.currentJournalId);
+  }
+  checkUserLogin(): Boolean | any {
     const GetCookieData = this.cookieService.get('authData');
     if (GetCookieData) {
       try {
         const retrievedCookies = JSON.parse(GetCookieData);
-        this.userRole = retrievedCookies.userRole?.length > 0 ? retrievedCookies.userRole : 'Guest';
+        this.userRole = retrievedCookies.UserRole?.length > 0 ? retrievedCookies.UserRole : -1;
         this.userId = retrievedCookies.EmailId;
+        // let Token = retrievedCookies.AccessToken;
         this.supervisorName = retrievedCookies.SupervisorName;
         this.departmentName = retrievedCookies.DepartmentName;
         this.candidateName = retrievedCookies.CandidateName;
         return true;
       } catch (error) {
-        console.error("Error parsing JSON from cookies:", error);
-        return false;  
+        console.log("error");
       }
     } else {
       return false;
     }
-    
   }
 
-EditorDataColumns: any;
+  EditorDataColumns: any;
   loadingTimeout: any[] = []; // Store timeout references
-  
+
   EditorData: any[] = []; // Typed as array
   isLoading: boolean = false; // Simplified from array to single boolean
   currentPageEditor: number = 1;
@@ -112,7 +157,7 @@ EditorDataColumns: any;
   totalPagesReviewerRemarks: number = 1;
   ReviewerRemarksData: any[] = [];
   ReviewerRemarksDataColumns: string[] = [];
-  
+
   // Display headers mapping
   displayedReviewerRemarksColumnHeaders: { [key: string]: string } = {
     // 'reviewerName':'Reviewer Name',
@@ -126,10 +171,10 @@ EditorDataColumns: any;
     manuscriptRating: 'Manuscript Rating',
     manuscriptOrganisedRating: 'Manuscript Organised Rating',
     journalId: 'Action',
-    approvalStatus: 'Status',  
+    approvalStatus: 'Status',
     fileUrl: 'Manuscript File'
   };
-  
+
   ReviewerRemarksdisplayedColumns: string[] = [
     // 'reviewerName',
     // 'publicationDate',
@@ -142,45 +187,45 @@ EditorDataColumns: any;
     'manuscriptRating',
     'manuscriptOrganisedRating',
     'journalId',
-    'approvalStatus',  
+    'approvalStatus',
     'fileUrl'
   ];
-  
+
   calculateTotalPagesReviewerRemarks() {
     this.totalPagesReviewerRemarks = Math.ceil(this.ReviewerRemarksData.length / this.pageSizeReviewerRemarks);
   }
-  
+
   updatePaginatedDataReviewerRemarks() {
     const startIndex = (this.currentPageReviewerRemarks - 1) * this.pageSizeReviewerRemarks;
     this.paginatedReviewerRemarks = this.ReviewerRemarksData.slice(startIndex, startIndex + this.pageSizeReviewerRemarks);
   }
-  
+
   nextPageReviewerRemarks() {
     if (this.currentPageReviewerRemarks < this.totalPagesReviewerRemarks) {
       this.currentPageReviewerRemarks++;
       this.updatePaginatedDataReviewerRemarks();
     }
   }
-  
+
   previousPageReviewerRemarks() {
     if (this.currentPageReviewerRemarks > 1) {
       this.currentPageReviewerRemarks--;
       this.updatePaginatedDataReviewerRemarks();
     }
   }
-  
+
   GetallReviewsData(journalId: any) {
     this.journalWebApiService.GetAllReviewersRemarkss(journalId).subscribe({
       next: (dataXY: any) => {
         this.ReviewerRemarksData = dataXY.item1 || [];
         console.log("Fetched ReviewerRemarksData:", this.ReviewerRemarksData);
-        
+
         if (this.ReviewerRemarksData.length > 0) {
           this.ReviewerRemarksDataColumns = Object.keys(this.ReviewerRemarksData[0]);
           this.calculateTotalPagesReviewerRemarks();
           this.updatePaginatedDataReviewerRemarks();
         }
-  
+
         this.dataShowing = true;
       },
       error: (error: any) => {
@@ -190,8 +235,8 @@ EditorDataColumns: any;
       }
     });
   }
-  
-  onSelectFileEditorX(data:any) {
+
+  onSelectFileEditorX(data: any) {
     window.open('https://files.lpu.in/umsweb/Journal/' + data, '_blank');
   }
 
@@ -220,8 +265,8 @@ EditorDataColumns: any;
     }
   }
 
- 
-  AssignedById: any; selectedReviewerId: any=''; selectedJournalId: any;
+
+  AssignedById: any; selectedReviewerId: any = ''; selectedJournalId: any;
   RecordId: any;
   onTakeAction(rowData: any) {
     // console.log(JSON.stringify(rowData))
@@ -238,19 +283,19 @@ EditorDataColumns: any;
 
 
     const formData = new FormData();
-// alert(this.AssignedById +" reviewer Emaild " + this.selectedReviewerId)
+    // alert(this.AssignedById +" reviewer Emaild " + this.selectedReviewerId)
     // Append form data to the FormData object
     formData.append('JournalId', this.selectedJournalId);
     formData.append('AssignedTo', this.selectedReviewerId);
-    formData.append('SubmittedBy',this.AssignedById);
-    formData.append('RecordId',this.RecordId);
-  
-  
+    formData.append('SubmittedBy', this.AssignedById);
+    formData.append('RecordId', this.RecordId);
+
+
     this.journalWebApiService.AssignNewReviewerForJournal(formData).subscribe({
       next: (data) => {
         let result = data.item1[0]['returnData'];
         let errorCode = data.item1[0]['returnId'];
-  
+
         if (result === 'success') {
           Swal.fire({
             title: 'Reviewer Assiged ',
@@ -286,32 +331,7 @@ EditorDataColumns: any;
   }
 
 
-  reviewerList: any[] = [];
-  loadReviewers(id:any) {
-    // API call to fetch reviewer list
-    this.journalWebApiService.GetReviewerDetailsForEditors(this.userId).subscribe({
-      next: (dataX: any) => {
-        this.dataSource = dataX.item1;
-        this.reviewerList = dataX.item1;
-        // console.log("ALL Reviewerlist" + JSON.stringify(this.reviewerList))
-
-      },
-      error: (error: any) => {
-        this.dataShowing = false;
-        console.error('Error fetching data', error);
-        // this.LoginFalied();
-      },
-      complete: () => {
-        this.dataShowing = true;
-        // console.log('Data fetching complete');
-      }
-    });
-    // this.journalWebApiService.GetAllReviewersForJournalId(id).subscribe((reviewers) => {
-    //   this.reviewerList = reviewers;
-    // });
-    // this.selectedReviewerId.value='select';
-  }
-Reason: any;
+  Reason: any;
 
   DisapproveStatus(rowData: any) {
     alert(rowData.manuscriptId)
@@ -335,8 +355,8 @@ Reason: any;
   }
 
 
-  
- 
+
+
   ChangeApproveStatus(rowData: any) {
     alert(rowData.manuscriptId)
     const formData = new FormData();
@@ -385,6 +405,30 @@ Reason: any;
       ' ',
       'error'
     );
+  }
+  
+  Logout() {
+    this.cookieService.delete('authData');
+    this.cookieService.delete('BookData');
+  
+    this.cookieService.deleteAll();
+  
+    sessionStorage.clear();
+    localStorage.clear();
+  
+    this.AuthSession.clearSession();
+    this.StoragesServices.clean();
+  
+    this.userRole = null;
+    this.supervisorName = null;
+    this.departmentName = null;
+    this.candidateName = null;
+  
+    this.router.navigateByUrl('Home').then(() => {
+      setTimeout(() => {
+        location.reload();
+      }, 500);
+    });
   }
 
 }

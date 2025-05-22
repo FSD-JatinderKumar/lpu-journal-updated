@@ -20,7 +20,7 @@ import { forkJoin } from 'rxjs'
 export class ManuscriptDetailsComponent implements OnInit {
   fromDate: any; booksDataColumns: any; toDate: any; pipe = new DatePipe('en-CA');
   dataSource: any[] = []; dataX: any; booksData: any; dataShowing: any = false;
-  userRole: any; BookId: any; JournalId: any; JournalTitle: any; name: any;
+  userRole: any; BookId: any; JournalId: any; JournalTitle: any =''; name: any;
   userId: any; serverUrl: any; supervisorName: any; departmentName: any;
   candidateName: any;
   displayedColumns: string[] = [
@@ -83,26 +83,28 @@ export class ManuscriptDetailsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.serverUrl = 'https://files.lpu.in/umsweb/Journal/';
-    this.BookId = this.route.snapshot.params['Id'];
-    this.name = this.route.snapshot.params['name'];
+    this.serverUrl = 'https://files.lpu.in/umsweb/Journal/';     
     let loginStatus = this.checkUserLogin();
-    const bookId: any = this.BookId = this.route.snapshot.params['Id'];
-    const name: any = this.name = this.route.snapshot.params['name'];
-    // this.JournalTitle = name.replace(/-/g, ' ');
-    if (loginStatus == true) {
-      // this.BookId = bookId; this.JournalId = bookId;
-      // this.JournalTitle = name.replace(/-/g, ' ');
-      this.showEditorData(-1);
-      this.loadReviewers(-1);
+    
+    if (loginStatus == true) {    
+      this.loadJournals();      
     } else {
-
       this.Logout();
     }
-
-
   }
-
+currentJournalId: any;
+currentJournalTitle: any;
+  setJournalId() {
+    // Find the journal object based on the selected ID
+    let idx = this.journalListsData.find(
+      journal => journal.id == this.JournalTitle
+    );
+    this.currentJournalId= idx.id;
+    this.currentJournalTitle= idx.journalTitle;
+    // alert(JSON.stringify(idx))
+    this.showEditorData(this.currentJournalId);
+    this.loadReviewers(this.currentJournalId);
+  }
   checkUserLogin(): Boolean | any {
     const GetCookieData = this.cookieService.get('authData');
     if (GetCookieData) {
@@ -291,8 +293,7 @@ export class ManuscriptDetailsComponent implements OnInit {
       next: (dataX: any) => {
         this.dataSource = dataX.item1;
         this.reviewerList = dataX.item1;
-        // console.log("ALL Reviewerlist" + JSON.stringify(this.reviewerList))
-
+        
       },
       error: (error: any) => {
         this.dataShowing = false;
@@ -301,13 +302,31 @@ export class ManuscriptDetailsComponent implements OnInit {
       },
       complete: () => {
         this.dataShowing = true;
-        // console.log('Data fetching complete');
+      
       }
     });
-    // this.journalWebApiService.GetAllReviewersForJournalId(id).subscribe((reviewers) => {
-    //   this.reviewerList = reviewers;
-    // });
-    // this.selectedReviewerId.value='select';
+   
+  }
+
+  journalListsData: any[] = [];
+  loadJournals() { 
+    this.journalWebApiService.GetAllBooksDetails().subscribe({
+      next: (dataX: any) => {
+        this.dataSource = dataX.item1;
+        this.journalListsData = dataX.item1;
+        // console.info(JSON.stringify(this.journalListsData))
+      },
+      error: (error: any) => {
+        this.dataShowing = false;
+        console.error('Error fetching data', error);
+        // this.LoginFalied();
+      },
+      complete: () => {
+        this.dataShowing = true;
+      
+      }
+    });
+   
   }
 
 }

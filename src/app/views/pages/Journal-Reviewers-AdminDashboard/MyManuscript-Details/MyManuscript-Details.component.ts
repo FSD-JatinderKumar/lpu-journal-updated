@@ -20,7 +20,7 @@ import { forkJoin } from 'rxjs'
 export class MyManuscriptDetailsComponent implements OnInit {
   fromDate: any;    booksDataColumns: any;  toDate: any;  pipe = new DatePipe('en-CA');
   dataSource: any[] = [];   dataX: any;   booksData: any;  dataShowing: any = false;
-  userRole: any;    BookId: any;    JournalId: any;  JournalTitle: any; name: any;
+  userRole: any;    BookId: any;    JournalId: any;  JournalTitle: any=''; name: any;
   userId: any;    serverUrl: any;   supervisorName: any;    departmentName: any;
   candidateName: any;
     displayedColumns: string[] = [
@@ -73,14 +73,43 @@ export class MyManuscriptDetailsComponent implements OnInit {
     this.serverUrl='https://files.lpu.in/umsweb/Journal/';
     let loginStatus = this.checkUserLogin();
       if (loginStatus != false ) {
-        this.showReviewerData("te");
-        this.loadReviewers(-1);
+      this.loadJournals();
     } else {
-
       this.Logout();
     }
+  }
 
-
+  
+  journalListsData: any[] = [];
+  loadJournals() { 
+    this.journalWebApiService.GetAllBooksDetails().subscribe({
+      next: (dataX: any) => {
+        this.dataSource = dataX.item1;
+        this.journalListsData = dataX.item1;
+        // console.info(JSON.stringify(this.journalListsData))
+      },
+      error: (error: any) => {
+        this.dataShowing = false;
+        console.error('Error fetching data', error);
+        // this.LoginFalied();
+      },
+      complete: () => {
+        this.dataShowing = true;
+      }
+    });   
+  }
+  currentJournalId: any;
+currentJournalTitle: any;
+  setJournalId() {
+    // Find the journal object based on the selected ID
+    let idx = this.journalListsData.find(
+      journal => journal.id == this.JournalTitle
+    );
+    this.currentJournalId= idx.id;
+    this.currentJournalTitle= idx.journalTitle;
+    // alert(JSON.stringify(idx))
+    this.showReviewerData(this.currentJournalId);
+    this.loadReviewers(this.currentJournalId);
   }
 
   checkUserLogin(): Boolean | any {
@@ -110,12 +139,12 @@ export class MyManuscriptDetailsComponent implements OnInit {
   ReviewerDataColumns: any;
       
   ReviewerdisplayedColumns: string[] = [
-    // 'journalId',	id,			JournalId,			JournalTitle,			MenuScriptType,			SubmissionType,		FileUrl,			EditorInchief	, CreatedBy , UserId as RequestedBy , UpdatedBy as AssignedBy
+    // ALL ReviewerData  Data[{userName":"Geetanjali Singh","uploadedOn":"09 Apr 2025"}]
+    // 'journalId',	id,			journalTitle,	manuScript,	submissionType,	MenuScriptType,fileUrl,filePath,editorInChief,userId,emailId, userName			SubmissionType,		FileUrl,			EditorInchief	, CreatedBy , UserId as RequestedBy , UpdatedBy as AssignedBy
     'journalTitle',
     'editorInChief',
-    'manuScriptType',
-    'requestedBy',
-    // 'assignedBy',
+    'manuScript',
+    'userName',
     // 'submissionType',
     'fileUrl',
     'journalId'
@@ -127,7 +156,6 @@ export class MyManuscriptDetailsComponent implements OnInit {
     'Editor In Chief',
     'Manu Script',
     'Requested By',
-    // 'Assigned By',
     // 'Submission Type',
     'Download File',
     'Action'
@@ -136,21 +164,19 @@ export class MyManuscriptDetailsComponent implements OnInit {
   ReviewercolumnHeaders: { [key: string]: string } = { 
     journalTitle: 'Journal Title', 
     editorInChief: 'Author Name', 
-    manuScriptType: 'Manuscript Type', 
-    requestedBy: 'Requested By',
-    // editorInChief: 'Assigned By',
-    // submissionType: 'Submitted Script ', 
+    manuScript: 'Manuscript Type', 
+    userName: 'Requested By',
     fileUrl: 'Document' ,
     journalId: 'Action' 
   }; // Custom header text journalTitle	editorInChief	ManuScriptType	submissionType
   
   
   
-    showReviewerData(Emailid: any) {
+    showReviewerData(Id: any) {
       // this.journalWebApiService.GetMenuScriptForReviewers(Emailid).subscribe({
 
-        this.journalWebApiService.GetMenuScriptForReviewers(Emailid).subscribe({
-        // this.journalWebApiService.GetAllMenuScriptForJournalId(this.BookId).subscribe({
+        // this.journalWebApiService.GetMenuScriptForReviewers(Id).subscribe({
+        this.journalWebApiService.GetAllMenuScriptForJournalId(Id).subscribe({
         next: (dataX: any) => {
           this.dataSource = dataX.item1;
           this.dataLoaded = true;

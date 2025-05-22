@@ -1,6 +1,7 @@
 <app-topslider></app-topslider>
 <app-ReviewersHeader></app-ReviewersHeader>
 
+
 <div class="vh-150 d-flex p-2 align-items-center justify-content-center">
   <div class="container-fluid ">
     <div class="row">
@@ -10,7 +11,22 @@
         <div class="card-body m-5 ">
           <h1 class="text-center themeClr"> All Manuscript Details </h1>
         </div>
-        <!-- </div> -->
+        <div class="container-fluid d-flex justify-content-center">
+          <div class="row">
+            <div class="col-md-4 mb-3">
+              <label class="form-label fs-3">Select Journal for Action </label>
+            </div>
+              <div class="col-md-4 mb-3">
+                <select id="reviewerDropdown" class="form-select" [(ngModel)]="JournalTitle" name="journalId" required
+                  (change)="setJournalId()">
+                  <option value="" disabled>Select Journal</option>
+                  <option *ngFor="let journalLists of journalListsData" [value]="journalLists.id">
+                    {{ journalLists.journalTitle }}
+                  </option>
+                </select>
+              </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
