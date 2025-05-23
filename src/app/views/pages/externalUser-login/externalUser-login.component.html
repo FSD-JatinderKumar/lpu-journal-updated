@@ -19,10 +19,12 @@
       </div>
       <div class="col-md-5 ">
         <div class="auth-form-wrapper px-4 py-5 p-5">
-          <div class="col-md-12 text-center">
-            <h2 class="nobleui-logo d-block mb-2"> User <span>Login Page</span></h2>
+          <!-- <div class="col-md-12 text-center main-heading">
+            <h2 class="nobleui-logo d-block mb-2 "> LPU e-Journals <span>Login Page</span></h2>
+          </div> -->
+          <div class="text-center mb-5 main-heading">
+            <h1 class="d-block mb-4"> LPU e-Journals <span>Login Page</span></h1>
           </div>
-
           <form class="forms-sample" [formGroup]="formdata" (ngSubmit)="OnSubmit()">
             <div class="row mb-2 mt-5">
               <div class="col-md-1">
@@ -85,31 +87,19 @@
               </div>
             </div>
             <div class="row mb-2 mt-3 d-flex justify-content-center">
-              <div class="col-md-4 text-center">
-                <button type="submit" class="loginButton ">Login</button>
+              <div class="col-md-3 text-center">
+                <button type="submit"   class="btn btn-danger " [disabled]="formdata.invalid">Login</button>
               </div>
               <div class="col-md-4 text-center">
-                <button (click)="VisitUrl(BookId, name, 'signup')" class="loginButton ">Register Now</button>
+                <button (click)="VisitUrl(BookId, name, 'signup')" class="btn btn-outline-danger">Register Now</button>
               </div>
-              <div class="col-md-4 text-center">
-                <!-- <button (click)="VisitUrl(BookId, name, 'RecoverPasswordReset')" class="loginButton ">Reset Account</button> -->
-                <!-- <a (click)="VisitUrl(BookId, name, 'RecoverPasswordReset')" class="signupLink mb-2">Reset Account</a> -->
+              <div class="col-md-5 text-start">
+                <button type="button" (click)="VisitUrl(BookId, name, 'ForgotPassword')" class="btn btn-outline-danger ">
+                  Forgot Password
+                </button>
               </div>
-              <!-- <div class="col-md-3">
-                  <button type="submit" class="loginButton" disabled>Editor Login</button>
-                </div>
-                <div class="col-md-3">
-                  <button type="submit" class="loginButton" disabled>Publisher Login</button>
-                </div> -->
             </div>
             <div class="row mb-2 mt-5">
-              <!-- <div class="col-md-4">
-                  <button type="submit" class="btn btn-dark mb-2">Submit</button>
-                </div> -->
-              <!-- <div class="col-md-12 text-center">
-                  <button (click)="VisitUrl(BookId, name, 'RecoverPasswordReset')" class="loginButton ">Reset Account</button> -->
-              <!-- <a (click)="VisitUrl(BookId, name, 'RecoverPasswordReset')" class="signupLink mb-2">Reset Account</a> -->
-              <!-- </div> -->
             </div>
           </form>
         </div>

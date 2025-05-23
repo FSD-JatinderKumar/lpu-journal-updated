@@ -2,8 +2,7 @@
 <app-journalmenubar></app-journalmenubar>
 <app-EDEditorHeader></app-EDEditorHeader>
 <div class="row d-flex p-3 align-items-center justify-content-center ">
-    <div class="col-md-12 grid-margin stretch-card">
-
+    <div class="col-md-12 grid-margin stretch-card blockHeight">
         <div class="text-center">
             <h2 class="text-center text-danger mb-2"> Author Dashboard </h2>
         </div>
@@ -110,11 +109,11 @@
                     <div class="col-md-2">
                         <label for="file" class="form-label">Upload File:</label>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <input type="file" id="File" name="File" formControlName="file" class="form-control"
                             style="width: auto;" (change)="onFileSelected($event)" accept="*.*" />
                     </div>
-                    <div class="col-md-6 text-start text-danger"> If file size > 20 MB kindly send additional file
+                    <div class="col-md-6 text-start text-danger "> If file size > 20 MB kindly send additional file
                         to Editor In Chief</div>
                 </div>
 
@@ -176,5 +175,16 @@
                 </table>
             </div>
         </div>
+    </div>
+</div>
+
+<div id="Loaders" *ngIf="isLoading==true">
+    <div class="col-sm-12" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+        <div class="d-flex justify-content-center align-item-center">
+            <span class="text-danger fs-3">Loading </span><br />
+            <div class="spinner-grow text-danger tex-center" style=" width: 14rem; height: 14rem;" role="status">
+            </div>
+        </div>
+        <p>Please wait, uploading your manuscript...</p>
     </div>
 </div>

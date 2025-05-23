@@ -289,15 +289,16 @@ export class NewManuScript implements OnInit {
       saveAs(content, 'merged-files.zip');
     });
   }
-
-
-  
+isLoading: any=false;
   uploadFile() {
+    this.isLoading = true; // Show loader
+  
     const reader = new FileReader();
     const fileName = 'merged-files.zip';
-
+  
     if (this.generatedFile) {
       if (this.generatedFile.size > 54991576) {
+        this.isLoading = false;
         Swal.fire({
           title: 'File size exceeds 50MB. Please upload a smaller file.',
           text: 'Invalid File size',
@@ -307,7 +308,7 @@ export class NewManuScript implements OnInit {
         this.fileStatus = false;
         return;
       }
-
+  
       reader.readAsDataURL(this.generatedFile);
       reader.onload = () => {
         const result = reader.result as string;
@@ -319,8 +320,9 @@ export class NewManuScript implements OnInit {
       this.fileData = null;
       this.fileStatus = false;
     }
-
+  
     if (!Array.isArray(this.cartItems) || this.cartItems.length === 0) {
+      this.isLoading = false;
       Swal.fire({
         title: 'Cart is Empty',
         text: 'Please add at least one manuscript before uploading.',
@@ -328,10 +330,10 @@ export class NewManuScript implements OnInit {
       });
       return;
     }
-
+  
+    // Prepare submission data
     if (this.cartItems.length === 1) {
       const item = this.cartItems[0];
-
       this.AllManuScriptType = item.ManuScriptType || 'NA';
       this.AllSubItemTypes = item.SubItemType === 'Select' ? 'NA' : item.SubItemType;
       this.AllSubmissionTypes = item.SubmissionType || 'NA';
@@ -340,7 +342,7 @@ export class NewManuScript implements OnInit {
       this.AllSubItemTypes = this.cartItems.map(item => item.SubItemType === 'Select' ? 'NA' : item.SubItemType).join(',');
       this.AllSubmissionTypes = this.cartItems.map(item => item.SubmissionType || 'NA').join(',');
     }
-
+  
     const formData = new FormData();
     formData.append('JournalId', this.JournalId);
     formData.append('JournalTitle', this.JournalTitle);
@@ -353,17 +355,15 @@ export class NewManuScript implements OnInit {
     formData.append('AuthorEmailId', this.AuthorEmailId);
     formData.append('Filex', this.generatedFile!, fileName);
     formData.append('File', this.FileData);
-
-    //   Call the API for Email Sending
+  
     this.journalWebApiService.AddNewJournalMenuScriptData(formData).subscribe({
       next: (data) => {
+        this.isLoading = false;
+  
         let result = data.item1[0]['msg'];
         let errorCode = data.item1[0]['returnId'];
-
+  
         if (result === 'OK') {
-          //   Send email after successful upload
-          // this.sendEmailNotification(this.userId);
-
           Swal.fire({
             title: 'Manuscripts Uploaded Successfully',
             text: 'Your manuscripts have been saved successfully.',
@@ -374,7 +374,6 @@ export class NewManuScript implements OnInit {
         } else {
           Swal.fire({
             title: 'Some Technical Issue',
-            // text: 'error',
             icon: 'error',
           }).then(() => {
             window.location.reload();
@@ -382,6 +381,8 @@ export class NewManuScript implements OnInit {
         }
       },
       error: (err) => {
+        this.isLoading = false;
+  
         Swal.fire({
           title: 'Error Occurred',
           text: 'Unable to complete the request. Please try again later.',
@@ -389,9 +390,112 @@ export class NewManuScript implements OnInit {
         });
       }
     });
-
+  
     this.ManuScriptUploadForm.reset(); // Reset the form after upload
   }
+  
+
+  
+  // uploadFile() {
+  //   const reader = new FileReader();
+  //   const fileName = 'merged-files.zip';
+
+  //   if (this.generatedFile) {
+  //     if (this.generatedFile.size > 54991576) {
+  //       Swal.fire({
+  //         title: 'File size exceeds 50MB. Please upload a smaller file.',
+  //         text: 'Invalid File size',
+  //         icon: 'warning'
+  //       });
+  //       this.fileData = null;
+  //       this.fileStatus = false;
+  //       return;
+  //     }
+
+  //     reader.readAsDataURL(this.generatedFile);
+  //     reader.onload = () => {
+  //       const result = reader.result as string;
+  //       const resultArray = result.split(',');
+  //       this.FileData = resultArray[1];
+  //       this.fileStatus = true;
+  //     };
+  //   } else {
+  //     this.fileData = null;
+  //     this.fileStatus = false;
+  //   }
+
+  //   if (!Array.isArray(this.cartItems) || this.cartItems.length === 0) {
+  //     Swal.fire({
+  //       title: 'Cart is Empty',
+  //       text: 'Please add at least one manuscript before uploading.',
+  //       icon: 'warning'
+  //     });
+  //     return;
+  //   }
+
+  //   if (this.cartItems.length === 1) {
+  //     const item = this.cartItems[0];
+
+  //     this.AllManuScriptType = item.ManuScriptType || 'NA';
+  //     this.AllSubItemTypes = item.SubItemType === 'Select' ? 'NA' : item.SubItemType;
+  //     this.AllSubmissionTypes = item.SubmissionType || 'NA';
+  //   } else {
+  //     this.AllManuScriptType = this.cartItems.map(item => item.ManuScriptType || 'NA').join(',');
+  //     this.AllSubItemTypes = this.cartItems.map(item => item.SubItemType === 'Select' ? 'NA' : item.SubItemType).join(',');
+  //     this.AllSubmissionTypes = this.cartItems.map(item => item.SubmissionType || 'NA').join(',');
+  //   }
+
+  //   const formData = new FormData();
+  //   formData.append('JournalId', this.JournalId);
+  //   formData.append('JournalTitle', this.JournalTitle);
+  //   formData.append('ManuScriptType', this.AllManuScriptType);
+  //   formData.append('SubmissionType', this.AllSubmissionTypes);
+  //   formData.append('SubItemType', this.AllSubItemTypes);
+  //   formData.append('UserId', this.userId);
+  //   formData.append('EditorInchief', this.EditorInChief);
+  //   formData.append('FileUrl', fileName);
+  //   formData.append('AuthorEmailId', this.AuthorEmailId);
+  //   formData.append('Filex', this.generatedFile!, fileName);
+  //   formData.append('File', this.FileData);
+
+  //   //   Call the API for Email Sending
+  //   this.journalWebApiService.AddNewJournalMenuScriptData(formData).subscribe({
+  //     next: (data) => {
+  //       let result = data.item1[0]['msg'];
+  //       let errorCode = data.item1[0]['returnId'];
+
+  //       if (result === 'OK') {
+  //         //   Send email after successful upload
+  //         // this.sendEmailNotification(this.userId);
+
+  //         Swal.fire({
+  //           title: 'Manuscripts Uploaded Successfully',
+  //           text: 'Your manuscripts have been saved successfully.',
+  //           icon: 'success',
+  //         }).then(() => {
+  //           window.location.reload();
+  //         });
+  //       } else {
+  //         Swal.fire({
+  //           title: 'Some Technical Issue',
+  //           // text: 'error',
+  //           icon: 'error',
+  //         }).then(() => {
+  //           window.location.reload();
+  //         });
+  //       }
+  //     },
+  //     error: (err) => {
+  //       Swal.fire({
+  //         title: 'Error Occurred',
+  //         text: 'Unable to complete the request. Please try again later.',
+  //         icon: 'error',
+  //       });
+  //     }
+  //   });
+
+  //   this.ManuScriptUploadForm.reset(); // Reset the form after upload
+  // }
   
   showReviewerData(Emailid: any) {
     this.journalWebApiService.GetMenuScriptForReviewers(Emailid).subscribe({

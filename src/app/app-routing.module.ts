@@ -200,12 +200,12 @@ const routes: Routes = [
       }, 
 
 
-      // Recover Password
-      {
-         path: ":Id/:name/RecoverPasswordReset",
-        // loadChildren: () => import('./views/pages/Journal-Editors-AdminDashboard/Manuscript-Details/Manuscript-Details.module').then(m=>m.ManuscriptDetailsModule)
-        loadChildren: () => import('./views/pages/recover-account/recover-account.module').then(m=>m.RecoverAccountComponentModule),
-      }, 
+      // // Recover Password
+      // {
+      //    path: ":Id/:name/RecoverPasswordReset",
+      //   // loadChildren: () => import('./views/pages/Journal-Editors-AdminDashboard/Manuscript-Details/Manuscript-Details.module').then(m=>m.ManuscriptDetailsModule)
+      //   loadChildren: () => import('./views/pages/recover-account/recover-account.module').then(m=>m.RecoverAccountComponentModule),
+      // }, 
 
 
       // User Editor Dashboard  added on 12-May-25
@@ -244,6 +244,10 @@ const routes: Routes = [
       {
         path :":Id/:name/ReviewersRemarks",
         loadChildren:()=> import('./views/pages/RoleWise-Dashboard/ReviewersDashboard/RDRemarksDetails/RDRemarksDetails.module').then(m=>m.RDRemarksDetailsModule)
+      },
+      {
+        path :":Id/:name/ForgotPassword",
+        loadChildren: () => import('./views/pages/recover-account/recover-account.module').then(m=>m.RecoverAccountComponentModule),
       },
       
     ]

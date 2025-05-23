@@ -26,8 +26,7 @@ export class RecoverAccountComponent implements OnInit {
   errorMessage: string = '';
   userDetails: any = null; // User details fetched from API
   UserId: any;
-  currentStep = 1;  // ✅ Use only currentStep
-
+  currentStep = 1;   
   constructor(
     private storageService: StorageService,
     private authService: AuthService,
@@ -84,29 +83,57 @@ export class RecoverAccountComponent implements OnInit {
       this.currentStep++;
     }
   }
-
-  
+ 
   // Step 1: Check user email
   checkEmail() {
+    this.errorMessage ='';
     const email = this.emailFormGroup.get('email')?.value;
-      this.journalWebApiService.JournalGetUserDetails(email).subscribe(
+  
+    if (!email) {
+      swal.fire({
+        title: 'Please enter a valid email address',
+        icon: 'warning'
+      });
+      return;
+    }
+  
+    this.journalWebApiService.JournalGetUserDetails(email).subscribe(
       (response: any) => {
-        if (response.item1 && response.item1.length > 0 ) {
+        if (response?.item1?.length > 0) {
+          const user = response.item1[0];
           this.userDetails = response.item1;
           this.idProofType = 'Mobile Number';
-          this.idProofNumber = this.userDetails[0].mobileNumber;
-          this.nextStep();  
-          this.currentStep=2;
+          this.idProofNumber = user.mobileNumber;
+  
+          if (this.idProofNumber?.length > 0) {
+            
+            this.nextStep(); // Proceed to Step 2
+            this.currentStep=2;
+          } else {
+            this.showUserNotFound();
+          }
         } else {
-          this.errorMessage = 'No user found or account is locked';
+          this.showUserNotFound();  
         }
       },
       (error) => {
-        this.errorMessage = 'An error occurred while fetching the user details';
+        console.error('API error:', error);
+        this.showUserNotFound(); // Handle API error
       }
     );
   }
-
+  
+  private showUserNotFound() {
+    this.errorMessage = 'No user found or account is locked';
+    swal.fire({
+      title: this.errorMessage,
+      icon: 'error'
+    }).then(() => {
+      this.emailFormGroup.reset();
+      this.currentStep = 1;
+    });
+  }
+  
   // Step 2: Verify ID proof number
   verifyIdProof() {
     const enteredIdProofNumber = this.idProofFormGroup.get('idProofNumber')?.value;

@@ -4,10 +4,10 @@
 <div class="container-fluid  p-0 mt-3">
   <div class="row">
     <div class="col-md-12 grid-margin stretch-card">
-      <div class="card-body">
+      <div class="card-body main-heading">   
         <h1 class="mb-4 text-center">Lpu e-Journals </h1>
         <br />
-        <h2 class="mb-2 text-center"> Password Reset Page </h2>
+        <h1 class="mb-2 text-center main-heading "> Password Reset Page </h1>
       </div>
     </div>
   </div>
@@ -17,10 +17,10 @@
     
     <div class="row ">
       <div class="col-md-12 grid-margin stretch-card">
-          <div class="card-body">
+          <div class="card-body main-heading">
             <!-- Step 1: Email Form -->
             <div *ngIf="currentStep == 1" class="container">
-              <h3>Provide Your Email</h3>
+              <h3 class="main-heading">Your Registered Email</h3>
               <form [formGroup]="emailFormGroup" novalidate>
                 <input
                   type="email"
@@ -33,7 +33,11 @@
                   <small *ngIf="emailFormGroup.get('email')?.hasError('required')">Email is required.</small>
                   <small *ngIf="emailFormGroup.get('email')?.hasError('email')">Enter a valid email.</small>
                 </div>
-                <button class="col-sm-2 mt-4" type="button" (click)="checkEmail()" [disabled]="emailFormGroup.invalid">Next</button>
+                <!-- <button class="col-sm-2 mt-4" class="btn btn-outline-danger" type="button" (click)="checkEmail()" [disabled]="emailFormGroup.invalid">Next</button> -->
+                <button  class="btn btn-outline-danger mt-4" type="button" (click)="checkEmail()" [disabled]="emailFormGroup.invalid">Next</button>
+
+
+                <p *ngIf="errorMessage" class="error text-danger fs-5 p-4 fw-bolder">{{ errorMessage }}</p>
               </form>
               <!-- <div *ngIf="currentStep === 1">
                 <h3>Provide Your Email</h3>
@@ -53,10 +57,11 @@
                   *ngIf="idProofFormGroup.get('idProofNumber')?.touched && idProofFormGroup.get('idProofNumber')?.invalid">
                   <small>ID Proof Number is required.</small>
                 </div>
-                <div class="row d-flex justify-content-between mt-4 mb-2 ">
-                  <button class="col-2 me-4 " type="button" (click)="previousStep()">Back</button>
-                  <button class="col-2 me-4 " (click)="verifyIdProof()"
-                    [disabled]="idProofFormGroup.invalid">Next</button>
+                <div class="row d-flex justify-content-between mt-4 mb-4 ">
+                  <button  class="btn btn-outline-danger col-2 m-4" type="button" (click)="previousStep()">Back</button>
+                  <button class="btn btn-outline-danger  col-2 m-4" (click)="verifyIdProof()" [disabled]="idProofFormGroup.invalid">Next</button>
+                  <!-- <button class="col-2 me-4 " type="button" (click)="previousStep()">Back</button> -->
+                  <!-- <button class="col-2 me-4 " (click)="verifyIdProof()" [disabled]="idProofFormGroup.invalid">Next</button> -->
                 </div>
                 <p *ngIf="errorMessage" class="error text-danger fs-5 p-4 fw-bolder">{{ errorMessage }}</p>
               </form>
