@@ -526,7 +526,7 @@ currentJournalTitle: any;
    
   // }
   loadReviewers(id: any) {
-    this.journalWebApiService.GetReviewerDetailsForEditors(this.userId).subscribe({
+    this.journalWebApiService.GetReviewerDetailsForEditors(id).subscribe({
       next: (dataX: any) => {
         this.dataSource = dataX.item1;
         this.reviewerList = dataX.item1;

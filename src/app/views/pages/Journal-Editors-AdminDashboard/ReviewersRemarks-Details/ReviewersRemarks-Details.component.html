@@ -116,7 +116,7 @@
                                 <button class="btn btn-danger btn-sm" (click)="DisapproveStatus(row)"><i class="bi bi-x-circle"></i></button>
                               </span> -->
                         <span *ngSwitchCase="'journalId'" class="col-md-6">
-                          <div *ngIf="row.isActionable==true || row.isActionable==false ; else NA">
+                          <div *ngIf="row.isActionable==null ; else NA">
                             <button class="btn btn-success btn-sm" (click)="ChangeApproveStatus(row)"
                               [ngClass]="{'btn-secondary': !row.isActionable, 'btn-success': row.isActionable}">
                               <i class="bi bi-check-circle"></i>
@@ -127,7 +127,7 @@
                             </button>
                           </div>
                           <ng-template #NA>
-
+                            <span class="text-danger"><i class="bi bi-x-circle"></i> Action Applied </span>
                           </ng-template>
                         </span>
 

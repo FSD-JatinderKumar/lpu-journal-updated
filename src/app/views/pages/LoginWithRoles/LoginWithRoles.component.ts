@@ -25,6 +25,7 @@ export class LoginWithRolesComponent implements OnInit {
   JournalTitle: any; errorMessage: any;
   UserLoginForm!: FormGroup;
   Email: any;
+  selectedRole: any='-1';
 
   JournalUserAccountForm!: FormGroup;
 
@@ -296,7 +297,7 @@ export class LoginWithRolesComponent implements OnInit {
   ];
 
   selectedRoles: string[] = [];
-  selectedRole: any;
+ 
 
 
 

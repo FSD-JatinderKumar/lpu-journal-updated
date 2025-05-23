@@ -166,7 +166,7 @@ currentJournalTitle: any;
       next: (dataX: any) => {
         this.dataSource = dataX.item1;
         this.EditorData = dataX.item1 || [];
-        console.log("Editor Data:", JSON.stringify(this.EditorData));
+        // console.log("Editor Data:", JSON.stringify(this.EditorData));
 
         this.dataLoaded = true;
         this.dataShowing = true;
@@ -221,12 +221,15 @@ currentJournalTitle: any;
 
 
   AssignedById: any; selectedReviewerId: any = ''; selectedJournalId: any;
-  RecordId: any;
+  RecordId: any; 
+  // added on 22-5-25
+  SubmittedbyUserId: any; ManuscriptType: any;   submissionType: any;
   onTakeAction(rowData: any) {
     // console.log(JSON.stringify(rowData))
     this.selectedJournalId = rowData['journalId'];
     this.AssignedById = rowData['emailId'];
     this.RecordId = rowData['id'];
+    this.ManuscriptType=rowData['manuScript']
   }
   assignReviewer() {
     if (!this.selectedReviewerId) {
@@ -243,6 +246,9 @@ currentJournalTitle: any;
     formData.append('AssignedTo', this.selectedReviewerId);
     formData.append('SubmittedBy', this.AssignedById);
     formData.append('RecordId', this.RecordId);
+    formData.append('JournalTitle', this.currentJournalTitle);
+    formData.append('Manuscript', this.ManuscriptType);
+    formData.append('SubmissionType', this.submissionType);
 
 
     this.journalWebApiService.AssignNewReviewerForJournal(formData).subscribe({

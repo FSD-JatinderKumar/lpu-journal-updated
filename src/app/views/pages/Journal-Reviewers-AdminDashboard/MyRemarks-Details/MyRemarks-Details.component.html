@@ -58,7 +58,7 @@
                         </button>
 
                         <span *ngSwitchCase="'journalId'" class="col-md-6">
-                          <ng-container *ngIf="row.isActionable; else NoApp">
+                          <ng-container *ngIf="row.isActionable==null; else NoApp">
                             <button class="btn btn-success btn-sm" (click)="ChangeApproveStatus(row)"
                               [ngClass]="'btn-success'">
                               <i class="bi bi-check-circle"></i>

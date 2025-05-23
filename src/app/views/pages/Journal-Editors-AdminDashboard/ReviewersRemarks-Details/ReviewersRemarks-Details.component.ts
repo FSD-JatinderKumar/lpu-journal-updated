@@ -314,7 +314,7 @@ EditorDataColumns: any;
   reviewerList: any[] = [];
   loadReviewers(id:any) {
     // API call to fetch reviewer list
-    this.journalWebApiService.GetReviewerDetailsForEditors('tes').subscribe({
+    this.journalWebApiService.GetReviewerDetailsForEditors(id).subscribe({
       next: (dataX: any) => {
         this.dataSource = dataX.item1;
         this.reviewerList = dataX.item1;
