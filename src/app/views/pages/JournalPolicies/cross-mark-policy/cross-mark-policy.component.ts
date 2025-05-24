@@ -7,7 +7,7 @@ import { ActivatedRoute } from '@angular/router';
 @Component({
   selector: 'app-cross-mark-policy',
   templateUrl: './cross-mark-policy.component.html',
-  styleUrls: ['./cross-mark-policy.component.scss']
+  standalone: false,styleUrls: ['./cross-mark-policy.component.scss']
 })
 export class CrossMarkPolicyComponent implements OnInit {
   BookId: any; name: any;

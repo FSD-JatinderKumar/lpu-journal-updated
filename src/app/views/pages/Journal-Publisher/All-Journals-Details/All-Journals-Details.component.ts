@@ -14,7 +14,7 @@ import { forkJoin } from 'rxjs'
 @Component({
   selector: 'app-All-Journals-Details',
   templateUrl: './All-Journals-Details.component.html',
-  styleUrls: ['./All-Journals-Details.component.scss']
+  standalone: false,styleUrls: ['./All-Journals-Details.component.scss']
 })
 
 export class AllJournalsDetailsComponent implements OnInit {

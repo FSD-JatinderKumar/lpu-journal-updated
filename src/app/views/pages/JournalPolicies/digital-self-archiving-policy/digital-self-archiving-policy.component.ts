@@ -7,7 +7,7 @@ import { ActivatedRoute } from '@angular/router';
 @Component({
   selector: 'app-digital-self-archiving-policy',
   templateUrl: './digital-self-archiving-policy.component.html',
-  styleUrls: ['./digital-self-archiving-policy.component.scss']
+  standalone: false,styleUrls: ['./digital-self-archiving-policy.component.scss']
 })
 export class DigitalSelfArchivingPolicyComponent implements OnInit {
   BookId: any; name: any;

@@ -15,7 +15,7 @@ import { forkJoin } from 'rxjs'
 @Component({
   selector: 'app-RDManuscript-Details',
   templateUrl: './RDManuscript-Details.component.html',
-  styleUrls: ['./RDManuscript-Details.component.scss']
+  styleUrls: ['./RDManuscript-Details.component.scss'],standalone: false
 })
 export class RDManuscriptDetailsComponent implements OnInit {
   fromDate: any;    booksDataColumns: any;  toDate: any;  pipe = new DatePipe('en-CA');

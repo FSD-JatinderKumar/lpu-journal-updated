@@ -15,7 +15,7 @@ import { forkJoin } from 'rxjs'
 @Component({
   selector: 'app-EDReviewersRemarks-Details',
   templateUrl: './EDReviewersRemarks-Details.component.html',
-  styleUrls: ['./EDReviewersRemarks-Details.component.scss']
+  styleUrls: ['./EDReviewersRemarks-Details.component.scss'],standalone: false
 })
 export class EDReviewersRemarksDetailsComponent implements OnInit {
   fromDate: any;    booksDataColumns: any;  toDate: any;  pipe = new DatePipe('en-CA');

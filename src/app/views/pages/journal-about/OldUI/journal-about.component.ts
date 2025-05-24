@@ -41,7 +41,7 @@ interface Book {
 @Component({
   selector: 'app-journal-about',
   templateUrl: './journal-about.component.html',
-  styleUrls: ['./journal-about.component.scss']
+  standalone: false,styleUrls: ['./journal-about.component.scss']
 })
 export class JournalAboutComponent implements OnInit {
   data: any[] =[];

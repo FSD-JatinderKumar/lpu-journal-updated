@@ -6,7 +6,7 @@ import { LpujournalbookService } from 'src/app/_services/lpujournalbook.service'
 @Component({
   selector: 'app-journalhome',
   templateUrl: './journalhome.component.html',
-  styleUrls: ['./journalhome.component.scss']
+  standalone: false,styleUrls: ['./journalhome.component.scss']
 })
 export class JournalhomeComponent {
   booksData: any; ServerConnection: any;

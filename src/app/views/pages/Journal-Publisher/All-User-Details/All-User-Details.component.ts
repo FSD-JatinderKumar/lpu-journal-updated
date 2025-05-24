@@ -14,7 +14,7 @@ import { forkJoin } from 'rxjs'
 @Component({
   selector: 'app-All-User-Details',
   templateUrl: './All-User-Details.component.html',
-  styleUrls: ['./All-User-Details.component.scss']
+  standalone: false,styleUrls: ['./All-User-Details.component.scss']
 })
 export class AllUserDetailsComponent implements OnInit {
   fromDate: any; UserDataColumns: any; toDate: any; pipe = new DatePipe('en-CA');

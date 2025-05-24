@@ -5,7 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 @Component({
   selector: 'app-peer-review-policy',
   templateUrl: './peer-review-policy.component.html',
-  styleUrls: ['./peer-review-policy.component.scss']
+  standalone: false,styleUrls: ['./peer-review-policy.component.scss']
 })
 export class PeerReviewPolicyComponent implements OnInit {
   BookId: any; name: any;

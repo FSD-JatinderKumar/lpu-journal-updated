@@ -14,7 +14,7 @@ import { forkJoin } from 'rxjs'
 @Component({
   selector: 'app-ViewAllManuscripts',
   templateUrl: './ViewAllManuscripts.component.html',
-  styleUrls: ['./ViewAllManuscripts.component.scss']
+  styleUrls: ['./ViewAllManuscripts.component.scss'],standalone: false
 })
 export class ViewAllManuscripts implements OnInit {
   fromDate: any; booksDataColumns: any; toDate: any; pipe = new DatePipe('en-CA');

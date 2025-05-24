@@ -181,7 +181,7 @@ import Swal from 'sweetalert2';
 @Component({
   selector: 'app-EDEditorHeader',
   templateUrl: './EDEditorHeader.component.html',
-  styleUrls: ['./EDEditorHeader.component.scss']
+  styleUrls: ['./EDEditorHeader.component.scss'],standalone: false
 })
 export class EDEditorHeaderComponent implements OnInit {
   isDisabled: boolean = true;

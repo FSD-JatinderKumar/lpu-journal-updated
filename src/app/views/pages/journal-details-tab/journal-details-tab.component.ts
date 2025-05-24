@@ -6,7 +6,7 @@ import { ActivatedRoute } from '@angular/router';
 @Component({
   selector: 'app-journal-details-tab',
   templateUrl: './journal-details-tab.component.html',
-  styleUrls: ['./journal-details-tab.component.scss']
+  styleUrls: ['./journal-details-tab.component.scss'],standalone: false
 })
 export class JournalDetailsTabComponent implements OnInit {
   @Input() items: any ;

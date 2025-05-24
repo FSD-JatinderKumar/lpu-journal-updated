@@ -7,7 +7,7 @@ import { LpujournalbookService } from 'src/app/_services/lpujournalbook.service'
 @Component({
   selector: 'app-ManuScript-workflow',
   templateUrl: './MenuScript-workflow.component.html',
-  styleUrls: ['./MenuScript-workflow.component.scss']
+  standalone: false,styleUrls: ['./MenuScript-workflow.component.scss']
 })
 export class ManuScriptWorkflowComponent implements OnInit {
   BookId: any;

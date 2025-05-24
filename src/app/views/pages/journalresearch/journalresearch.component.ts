@@ -5,7 +5,7 @@ import { LpujournalbookService } from 'src/app/_services/lpujournalbook.service'
 @Component({
   selector: 'app-journalresearch',
   templateUrl: './journalresearch.component.html',
-  styleUrls: ['./journalresearch.component.scss']
+  standalone: false,styleUrls: ['./journalresearch.component.scss']
 })
 export class JournalresearchComponent {
   BookId: any;

@@ -14,7 +14,7 @@ import { LpujournalbookService } from 'src/app/_services/lpujournalbook.service'
 @Component({
   selector: 'app-journal-popular-by-genre',
   templateUrl: './journal-popular-by-genre.component.html',
-  styleUrls: ['./journal-popular-by-genre.component.scss']
+  standalone: false,styleUrls: ['./journal-popular-by-genre.component.scss']
 })
 export class JournalPopularByGenreComponent implements OnInit, AfterViewInit {
 

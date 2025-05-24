@@ -20,7 +20,7 @@ import { forkJoin } from 'rxjs';
 @Component({
   selector: 'app-UploadManuScript-page',
   templateUrl: './UploadManuScript.component.html',
-  styleUrls: ['./UploadManuScript.component.scss']
+  styleUrls: ['./UploadManuScript.component.scss'],standalone: false
 })
 export class UploadManuScriptComponent implements OnInit {
   emailId: any = ''; candidateName: any; supervisorName: any; mobileNumber: any; instituteName: any;

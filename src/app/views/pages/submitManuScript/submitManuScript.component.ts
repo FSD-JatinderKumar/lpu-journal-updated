@@ -20,7 +20,7 @@ import { forkJoin } from 'rxjs';
 @Component({
   selector: 'app-submitManuScript-page',
   templateUrl: './submitManuScript.component.html',
-  styleUrls: ['./submitManuScript.component.scss']
+  standalone: false,styleUrls: ['./submitManuScript.component.scss']
 })
 export class SubmitManuScriptComponent implements OnInit {
   emailId: any = ''; candidateName: any; supervisorName: any; mobileNumber: any; instituteName: any;

@@ -8,7 +8,7 @@ import { StorageService } from 'src/app/_services/storage.service';
 @Component({
   selector: 'app-journalhome',
   templateUrl: './journalhome.component.html',
-  styleUrls: ['./journalhome.component.scss']
+  styleUrls: ['./journalhome.component.scss'],standalone: false
 })
 export class JournalhomeComponent implements OnInit {
 

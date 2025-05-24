@@ -15,7 +15,7 @@ import { forkJoin } from 'rxjs'
 @Component({
   selector: 'app-EDManuscript-Details',
   templateUrl: './EDManuscript-Details.component.html',
-  styleUrls: ['./EDManuscript-Details.component.scss']
+  styleUrls: ['./EDManuscript-Details.component.scss'],standalone: false
 })
 export class EDManuscriptDetailsComponent implements OnInit {
   fromDate: any; booksDataColumns: any; toDate: any; pipe = new DatePipe('en-CA');

@@ -26,7 +26,7 @@ interface SchoolDivision {
 @Component({
   selector: 'app-content',
   templateUrl: './NewJournal.component.html',
-  styleUrls: ['./NewJournal.component.scss']
+  standalone: false,styleUrls: ['./NewJournal.component.scss']
 })
 export class NewJournalComponent implements OnInit {
   @ViewChild('viewDescModal')

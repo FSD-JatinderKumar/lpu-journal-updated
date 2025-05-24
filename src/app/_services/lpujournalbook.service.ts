@@ -227,16 +227,30 @@ export class LpujournalbookService {
   }
 
   AuthoriseUserDetails(UserEmail: any, secreatKeys: any, JournalId: any): Observable<any> {
-    //  var authToken = this.storageService.getUser();
     let headers = new HttpHeaders()
       .set('Authorization', 'Bearer ' + this.authToken)
       .set('Content-Type', 'application/json');
-    return this.http.get(
-      this.baseUrl + 'api/LpuJournal/GetUserDetailsIdWise?Email=' + UserEmail + '&PasswordText=' + secreatKeys + '&JournalId=' + JournalId,
-      // AUTH_API + 'api/LpuJournal/GetUserDetailsIdWise?Email=' + UserEmail + '&PasswordText=' + secreatKeys ,
-      { headers }
-    );
+  
+    const url = this.baseUrl + 'api/LpuJournal/GetUserDetailsIdWise' +
+      '?Email=' + encodeURIComponent(UserEmail) +
+      '&PasswordText=' + encodeURIComponent(secreatKeys) +
+      '&JournalId=' + encodeURIComponent(JournalId);
+  
+    return this.http.get(url, { headers });
   }
+  
+
+  // AuthoriseUserDetails(UserEmail: any, secreatKeys: any, JournalId: any): Observable<any> {
+  //   //  var authToken = this.storageService.getUser();
+  //   let headers = new HttpHeaders()
+  //     .set('Authorization', 'Bearer ' + this.authToken)
+  //     .set('Content-Type', 'application/json');
+  //   return this.http.get(
+  //     // this.baseUrl + 'api/LpuJournal/GetUserDetailsIdWise?Email=' + UserEmail + '&PasswordText=' + secreatKeys + '&JournalId=' + JournalId,
+  //     LOCAL_API_URL + 'api/LpuJournal/GetUserDetailsIdWise?Email=' + UserEmail + '&PasswordText=' + secreatKeys + '&JournalId=' + JournalId,
+  //     { headers }
+  //   );
+  // }
 
   //  13-feb-25
   NewReviewersRemarks(newReviewersRemarks: FormData): Observable<any> {
@@ -355,6 +369,7 @@ export class LpujournalbookService {
       .set('Authorization', 'Bearer ' + this.authToken)
     return this.http.post(
       this.baseUrl + 'api/LpuJournal/JournalUpdatePasswordDetails', UpdateUserData, { headers }
+      // LOCAL_API_URL + 'api/LpuJournal/JournalUpdatePasswordDetails', UpdateUserData, { headers }
     );
   }
   // 27-march-25

@@ -7,7 +7,7 @@ import { ActivatedRoute } from '@angular/router';
 @Component({
   selector: 'app-copyrightand-licensingpolicy',
   templateUrl: './copyrightand-licensingpolicy.component.html',
-  styleUrls: ['./copyrightand-licensingpolicy.component.scss']
+  standalone: false,styleUrls: ['./copyrightand-licensingpolicy.component.scss']
 })
 export class CopyrightandLicensingpolicyComponent implements OnInit {
   BookId: any; name: any;

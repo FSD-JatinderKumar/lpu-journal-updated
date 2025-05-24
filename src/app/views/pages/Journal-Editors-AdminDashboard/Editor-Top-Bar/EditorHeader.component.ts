@@ -9,7 +9,7 @@ import { StorageService } from 'src/app/_services/storage.service';
 @Component({
   selector: 'app-EditorHeader',
   templateUrl: './EditorHeader.component.html',
-  styleUrls: ['./EditorHeader.component.scss']
+  styleUrls: ['./EditorHeader.component.scss'],standalone: false
 })
 export class EditorHeaderComponent implements OnInit {
   isDisabled: boolean = true;

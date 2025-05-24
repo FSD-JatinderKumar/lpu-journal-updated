@@ -7,7 +7,7 @@ import { LpujournalbookService } from 'src/app/_services/lpujournalbook.service'
 @Component({
   selector: 'app-publication-charge-policy',
   templateUrl: './publication-charge-policy.component.html',
-  styleUrls: ['./publication-charge-policy.component.scss']
+  standalone: false,styleUrls: ['./publication-charge-policy.component.scss']
 })
 export class PublicationChargePolicyComponent implements OnInit {
   BookId: any; name: any;

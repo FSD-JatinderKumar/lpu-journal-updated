@@ -7,7 +7,7 @@ import { ActivatedRoute } from '@angular/router';
 @Component({
   selector: 'app-corection-retraction-policy',
   templateUrl: './corection-retraction-policy.component.html',
-  styleUrls: ['./corection-retraction-policy.component.scss']
+  standalone: false,styleUrls: ['./corection-retraction-policy.component.scss']
 })
 export class CorectionRetractionPolicyComponent implements OnInit {
   BookId: any; name: any;

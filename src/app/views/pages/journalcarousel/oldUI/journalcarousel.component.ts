@@ -6,7 +6,7 @@ import { LpujournalbookService } from 'src/app/_services/lpujournalbook.service'
 @Component({
   selector: 'app-journalcarousel',
   templateUrl: './journalcarousel.component.html',
-  styleUrls: ['./journalcarousel.component.scss']
+  standalone: false,styleUrls: ['./journalcarousel.component.scss']
 })
 export class JournalcarouselComponent {
   slides: any;

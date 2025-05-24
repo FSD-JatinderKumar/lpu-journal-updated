@@ -6,7 +6,7 @@ import { LpujournalbookService } from 'src/app/_services/lpujournalbook.service'
 @Component({
   selector: 'app-journal-details-tab',
   templateUrl: './journal-details-tab.component.html',
-  styleUrls: ['./journal-details-tab.component.scss']
+  standalone: false,styleUrls: ['./journal-details-tab.component.scss']
 })
 export class JournalDetailsTabComponent implements OnInit {
   @Input() items: any[] = [];

@@ -14,7 +14,8 @@ import { forkJoin } from 'rxjs'
 @Component({
   selector: 'app-ManuScriptReport',
   templateUrl: './ManuScriptReport.component.html',
-  styleUrls: ['./ManuScriptReport.component.scss']
+  styleUrls: ['./ManuScriptReport.component.scss'],
+  standalone: false
 })
 export class ManuScriptReportComponent implements OnInit {
   fromDate: any; booksDataColumns: any; toDate: any; pipe = new DatePipe('en-CA');

@@ -10,7 +10,7 @@ import { StorageService } from 'src/app/_services/storage.service';
 @Component({
   selector: 'app-ReviewersHeader',
   templateUrl: './ReviewersHeader.component.html',
-  styleUrls: ['./ReviewersHeader.component.scss']
+  standalone: false,styleUrls: ['./ReviewersHeader.component.scss']
 })
 export class ReviewersHeaderComponent implements OnInit {
   isDisabled: boolean = true;

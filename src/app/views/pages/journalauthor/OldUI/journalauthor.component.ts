@@ -7,7 +7,7 @@ import { LpujournalbookService } from 'src/app/_services/lpujournalbook.service'
 @Component({
   selector: 'app-journalauthor',
   templateUrl: './journalauthor.component.html',
-  styleUrls: ['./journalauthor.component.scss']
+  standalone: false,styleUrls: ['./journalauthor.component.scss']
 })
 export class JournalauthorComponent {
   authorDetails: any;

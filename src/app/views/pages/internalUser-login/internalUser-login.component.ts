@@ -20,7 +20,8 @@ import { MouDocumentsService } from 'src/app/_services/mou-documents.service';
 @Component({
   selector: 'app-internalUser-login',
   templateUrl: './internalUser-login.component.html',
-  styleUrls: ['./internalUser-login.component.scss']
+  styleUrls: ['./internalUser-login.component.scss'],
+  standalone: false
 })
 export class InternalUserLoginComponent implements OnInit {
 

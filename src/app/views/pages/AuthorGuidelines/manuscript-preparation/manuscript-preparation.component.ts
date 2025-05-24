@@ -7,7 +7,7 @@ import { LpujournalbookService } from 'src/app/_services/lpujournalbook.service'
 @Component({
   selector: 'app-ManuScript-preparation',
   templateUrl: './manuScript-preparation.component.html',
-  styleUrls: ['./manuScript-preparation.component.scss']
+  standalone: false,styleUrls: ['./manuScript-preparation.component.scss']
 })
 export class ManuScriptPreparationComponent implements OnInit {
   BookId: any;

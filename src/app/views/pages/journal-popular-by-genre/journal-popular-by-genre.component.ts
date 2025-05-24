@@ -12,7 +12,7 @@ import { MatSort } from '@angular/material/sort';
 @Component({
   selector: 'app-journal-popular-by-genre',
   templateUrl: './journal-popular-by-genre.component.html',
-  styleUrls: ['./journal-popular-by-genre.component.scss']
+  standalone: false,styleUrls: ['./journal-popular-by-genre.component.scss']
 })
 export class JournalPopularByGenreComponent implements OnInit, AfterViewInit {
   totalPage: any;

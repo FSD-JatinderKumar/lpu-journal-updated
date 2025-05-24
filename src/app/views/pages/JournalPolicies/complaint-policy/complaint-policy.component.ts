@@ -6,7 +6,7 @@ import { ActivatedRoute } from '@angular/router';
 @Component({
   selector: 'app-complaint-policy',
   templateUrl: './complaint-policy.component.html',
-  styleUrls: ['./complaint-policy.component.scss']
+  standalone: false,styleUrls: ['./complaint-policy.component.scss']
 })
 export class ComplaintPolicyComponent implements OnInit {
   BookId: any; name: any;

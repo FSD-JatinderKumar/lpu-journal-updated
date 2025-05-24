@@ -12,389 +12,209 @@ import { StorageService } from 'src/app/_services/storage.service';
 import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
 import { CookieService } from 'ngx-cookie-service';
 import { LoginSessionService } from 'src/app/_services/login-session.service';
-import Swal from 'sweetalert2';
+import swal from 'sweetalert2';
 import { MouDocumentsService } from 'src/app/_services/mou-documents.service';
+import { LpujournalbookService } from 'src/app/_services/lpujournalbook.service';
+import { HttpClient } from '@angular/common/http';
 
 
 
 @Component({
   selector: 'app-ForgotPassword',
   templateUrl: './ForgotPassword.component.html',
-  styleUrls: ['./ForgotPassword.component.scss']
+  styleUrls: ['./ForgotPassword.component.scss'],standalone: false
 })
 export class ForgotPasswordComponent implements OnInit {
 
-  registrationNumber: any; BookId: any; name: any;
-  EmployeeDetails: any[] = [];
-  regdId: any;
-  DriveDropDown: any;
-  showNoDataFoundMessage: boolean | undefined;
-  UserData: any;
-  isLoginFailed: boolean | undefined;
-  EmployeeName: any;
-  EmployeeCode: any;
-  Department: any;
-  DepartmentName: any;
-  loadingIndicator: boolean | undefined;
-  CandidateName: any;
+  emailFormGroup: FormGroup;
+  BookId: any; name: any; JournalTitle:any; JournalId: any;
+  idProofType: string = '';
+  idProofNumber: string = '';
+  errorMessage: string = '';
+  userDetails: any = null; // User details fetched from API
   UserId: any;
-  Designation: any;
-  EmailId: any;
-  MobileNo: any;
-  UserRole: string = "";  
-  SupervisorName: any;
-  ProofNumber: any;
-  ProofName: any;
-  SecretKey: any;
-
-  JournalUserAccountForm!: FormGroup;
-  isForm1Submitted: any;
-  JournalTitle: any;
-
+  currentStep = 1;   
+  formdata: any; consentFormGroup!: FormGroup;  verifiedEmail: any;
   constructor(
     private storageService: StorageService,
     private authService: AuthService,
-    public formBuilder: UntypedFormBuilder,
-    private fb: FormBuilder,
     private AuthSession: LoginSessionService,
     private router: Router,
     private route: ActivatedRoute,
     private cookieService: CookieService,
-    private mouDocumentsService: MouDocumentsService
-  ) {}
-
-  ngOnInit(): void {
-    this.cookieService.delete('authData');
-    this.AuthSession.clearSession();
-    this.BookId  = this.route.snapshot.params['Id'];
-    this.name  = this.route.snapshot.params['name'];    
-    this.loadForm();
-    this.name = this.route.snapshot.params['name'];
-    this.JournalTitle = this.name.replace(/-/g, ' ');
-
-  }
-
-  loadForm(){  
-    this.formdata = new FormGroup({
-      UserRoles: new FormControl('', Validators.required),
-      Email: new FormControl('', [Validators.required, Validators.minLength(5)]),
-      password: new FormControl('', [Validators.required,Validators.minLength(5),]),
+    private journalWebApiService: LpujournalbookService,
+    private fb: FormBuilder,
+    private http: HttpClient
+  ) {
+    // Step 1: Email form
+    this.emailFormGroup = this.fb.group({
+      email: ['', [Validators.required, Validators.email]]
     });
 
-
-
-    this.JournalUserAccountForm = this.fb.group({
-      EmailId: ['', [Validators.required, Validators.email]],
-      Password: ['', [Validators.required, Validators.minLength(6)]],
-      UserRoles: ['', Validators.required]  
+    // Step 2: Consent Form 
+    this.consentFormGroup = this.fb.group({
+      consent: [false, Validators.requiredTrue]
     });
   }
-  formdata = new FormGroup({
-    UserRoles: new FormControl('', Validators.required),
-    Email: new FormControl('', [Validators.required, Validators.minLength(5)]),
-    password: new FormControl('', [Validators.required,Validators.minLength(5),]),
-  });
-  get email() {
-    return this.formdata.get('Email');
+  VisitUrl(Id: any, name: any, Sufix: any) {
+    this.router.navigateByUrl(Id + '/' + name + '/' + Sufix).then(() => {
+      window.location.reload();
+    });;
   }
-  get passwordText() {
-    return this.formdata.get('password');
-  }
-  get userRole() {
-    return this.formdata.get('UserRoles');
-  }
-  CheckUserType(event: Event) {
 
-    const selectElement = event.target as HTMLSelectElement;
-    const selectedValue = selectElement.value;
-    const UserRole = Array.from(selectElement.options).findIndex(
-      (option) => option.value === selectedValue
-    );
+
+  ngOnInit() {
+    var BookId = this.route.snapshot.params['Id'];
+    var name = this.route.snapshot.params['name'];
+    if (BookId != undefined && BookId != null) {
+      this.BookId =this.JournalId= BookId;
+      this.name = this.JournalTitle= name;
+      this.JournalTitle = name.replace(/-/g, ' ');
+    }
+    this.currentStep = 1;   
   }
-  submitted: boolean = false;
-  OnSubmit() {
-    this.submitted = true;
-    if (this.formdata.invalid) {
+
+  previousStep() {
+    if (this.currentStep > 1) {
+      this.currentStep--;
+    }
+  }
+
+  nextStep() {
+    if (this.currentStep < 3) {
+      this.currentStep++;
+    }
+  }
+ 
+  // Step 1: Check user email
+  checkEmail() {
+    this.errorMessage ='';
+    const email = this.emailFormGroup.get('email')?.value;
+  
+    if (!email) {
+      swal.fire({
+        title: 'Please enter a valid email address',
+        icon: 'warning'
+      });
       return;
     }
-    if (this.formdata.valid) {
-      var BookId = this.route.snapshot.params['Id'];
-      var name = this.route.snapshot.params['name'];
-      if (BookId != undefined && BookId != null) {
-        this.BookId = BookId;
-        this.name = name;
-      }
-
-      var DataX = this.formdata.value;
-      var uid = DataX.Email ?? '';
-      var password = DataX.password ?? '';
-      this.selectedRole = DataX.UserRoles;
-      this.getToken(uid, this.selectedRole);
-    }
-  }
-
-
-  getToken(id: any, key: any) {
-    this.cookieService.delete('authData');
-    this.AuthSession.clearSession();
-    this.authService.loginInternalUser(atob(id), atob(key)).subscribe({
-      next: data => {
-        this.storageService.saveUser(data.token);
-        this.GetEmployeeDetails();
+  
+    this.journalWebApiService.JournalGetUserDetails(email).subscribe(
+      (response: any) => {
+        if (response?.item1?.length > 0) {
+          const user = response.item1[0];
+          this.userDetails = response.item1;
+          this.idProofType = 'Mobile Number';
+          this.idProofNumber = user.mobileNumber;
+          this.verifiedEmail= email;
+          if (this.idProofNumber?.length > 0) {
+            
+            this.nextStep(); // Proceed to Step 2
+            this.currentStep=2;
+          } else {
+            this.showUserNotFound();
+          }
+        } else {
+          this.showUserNotFound();  
+        }
       },
-      error: _err => {
-        this.LoginFailed(_err);
+      (error) => {
+        console.error('API error:', error);
+        this.showUserNotFound(); // Handle API error
       }
+    );
+  }
+  
+  private showUserNotFound() {
+    this.errorMessage = 'No user found or account is locked';
+    swal.fire({
+      title: this.errorMessage,
+      icon: 'error'
+    }).then(() => {
+      this.emailFormGroup.reset();
+      this.currentStep = 1;
     });
   }
-  LoginFailed(_NewError: any) {
-    this.isLoginFailed = true;
-    Swal.fire({
-      title: 'Login Failed',
-      text: 'Login details are Invalid!',
-      icon: 'warning',
-    })
-  }
-  GetEmployeeDetails() {
-      this.mouDocumentsService.GetEmployeeDetails().subscribe({
-        next: response => {
-          if (response.item1.length > 0) {
-            this.EmployeeDetails = response.item1;
-            // console.log(JSON.stringify(this.EmployeeDetails));
-            this.CandidateName = this.EmployeeName = response.item1[0].employeeName;
-            this.UserId = this.EmployeeCode = response.item1[0].employeeCode;
-            this.Department = response.item1[0].department;
-            this.DepartmentName = response.item1[0].departmentName;
-            this.Designation = response.item1[0].department;
-            this.EmailId = response.item1[0].email;
-            this.MobileNo = response.item1[0].contactNo;
-            this.SupervisorName = response.item1[0].department; // Assuming supervisorName is in response.item1[0]
-
-            this.loadingIndicator = false;
-            this.showNoDataFoundMessage = false;
-            this.isLoginFailed = false;
-            var DataX = this.formdata.value;
-            var SecretKey = DataX.password ?? '';
-            const userCookiesData = {
-              CandidateName: this.CandidateName,
-              UserId: this.UserId,
-              Department: this.Department,
-              DepartmentName: this.DepartmentName,
-              Designation: this.Designation,
-              EmailId: this.EmailId,
-              MobileNo: this.MobileNo,
-              UserRole: this.UserRole,
-              SupervisorName: this.SupervisorName,
-              ProofNumber:this.MobileNo,
-              ProofName: 'Mobile ',
-              PasswordText: SecretKey,
-            };
-            this.cookieService.set('authData', JSON.stringify(userCookiesData));
-
-          Swal.fire({
-            text: 'Login details are Valid!',
-            icon: 'success',
-          })
-          this.AuthSession.addToSession(this.EmployeeDetails);
-          switch(this.selectedRole)
-          {
-            case '0':
-              this.router.navigateByUrl('EditorDashboard')
-              break;
-            case '1':
-              alert('Under Construction');
-              this.loadForm();
-              break;
-            case '2': 
-                this.router.navigateByUrl('ReviewersDashboard')
-                this.loadForm();
-              break;  
-            case '3':
-            // this.router.navigateByUrl('PublisherDashboard')
-            this.router.navigateByUrl('AllJournals');
-            break;
-          }
-          
-          } else {
-            this.EmployeeDetails = [];
-            this.showNoDataFoundMessage = true;
-            this.isLoginFailed = true;
-            this.loadForm();
-          }
-        },
-        error: err => {
-          this.LoginFailed(err);
-          this.loadForm();
-        }
-      });
-
-    this.formdata.reset();
-  }
-  VisitUrl( Id: any, name : any, Sufix : any) {
-    this.router.navigateByUrl( Id + '/'+ name +'/'+ Sufix);
-  }
-
-  availableRoles = [
-    { value: '0', label: 'Editor Login' },
-    { value: '1', label: 'Author Login' },
-    { value: '2', label: 'Reviewer Login' },
-    { value: '3', label: 'Publisher Login' },
-  ];
-
-  selectedRoles: string[] = [];
-  selectedRole: any;
   
-}
+  // Step 2: Verify ID proof number
+  verifyIdProof() {
+     
+  }
+  resetPassword() {
+    const newPassword = this.generateRandomPassword();
+    this.EmailresetPassword(newPassword);
+    // this.http.post('/api/send-reset-password', {
+    //   email: this.verifiedEmail,
+    //   newPassword
+    // }).subscribe({
+    //   next: () => {
+    //     this.errorMessage = '';
+    //     alert('A new password has been sent to your email.');
+    //     this.currentStep = 1; // or redirect to login
+    //   },
+    //   error: () => this.errorMessage = 'Failed to send password email. Try again later.'
+    // });
+  }
 
 
-//   registrationNumber: any;
-//   regdId: any;
-//   DriveDropDown: any;
-//   showNoDataFoundMessage: boolean | undefined;
-//   UserData: any;
-//   isLoginFailed: boolean | undefined;
-//   EmployeeDetails: any;
-//   EmployeeName: any;
-//   EmployeeCode: any;
-//   Department: any;
-//   DepartmentName: any;
-//   loadingIndicator: boolean | undefined;
-//   CandidateName: any;
-//   UserId: any;
-//   Designation: any;
-//   EmailId: any;
-//   MobileNo: any;
-//   UserRole: any;
-//   SupervisorName: any;
-//   BookId: any;
-//   name: any;
-  
-
-//   constructor(
+  generateRandomPassword(): string {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$!';
+    return Array.from({ length: 10 }, () => chars[Math.floor(Math.random() * chars.length)]).join('');
+  }
     
-//     private storageService: StorageService,
-//     private authService: AuthService,
-//     public formBuilder: UntypedFormBuilder,
-//     private fb: FormBuilder,
-//     private AuthSession: LoginSessionService,
-//     private router: Router, private route: ActivatedRoute,
-//     private cookieService: CookieService,
-//     private mouDocumentsService: MouDocumentsService,
-//   ) { }
-
-//   ngOnInit(): void {
-//     let BookId = this.route.snapshot.params['Id'];
-//     let name = this.route.snapshot.params['name'];
-//     // console.log("Value of Book Id = " + BookId)
-//     if (BookId != undefined && BookId != null) {
-//       this.BookId = BookId;
-//       this.name = name;
-//     }
-//   }
-
-
-//   formdata = new FormGroup({
-//     Email: new FormControl('', [Validators.required, Validators.minLength(5)]),
-//     password: new FormControl('', [Validators.required, Validators.minLength(5)]),
-//   })
-//   get email() {
-//     return this.formdata.get('Email');
-//   }
-//   get passwordText() {
-//     return this.formdata.get('password')
-//   }
-
-//   OnSubmit() {
-//     var DataX = this.formdata.value;
-//     var uid = DataX.Email ?? '';
-//     var password = DataX.password ?? '';
-//     var encodeduid = btoa(uid);
-//     var encodedPassword = btoa(password);
-//     var userRoleX: number | null = null;
-//     this.getToken(encodeduid, encodedPassword);
-
-// }
-
-
-//   getToken(id: any, key: any) {
-//     this.cookieService.delete('authData');
-//     this.AuthSession.clearSession();
-//     this.authService.loginInternalUser(atob(id), atob(key)).subscribe({
-//       next: data => {
-//         this.storageService.saveUser(data.token);
-//         this.GetEmployeeDetails();
-//       },
-//       error: _err => {
-//         this.LoginFailed(_err);
-//       }
-//     });
-//   }
-//   LoginFailed(_NewError: any) {
-//     this.isLoginFailed = true;
-//     Swal.fire({
-//       title: 'Login Failed',
-//       text: 'Login details are Invalid!',
-//       icon: 'warning',
-//     })
-//   }
-//   GetEmployeeDetails() {
-//       this.mouDocumentsService.GetEmployeeDetails().subscribe({
-//         next: response => {
-//           if (response.item1.length > 0) {
-//             this.EmployeeDetails = response.item1;
-//             // console.log(JSON.stringify(this.EmployeeDetails));
-//             this.CandidateName = this.EmployeeName = response.item1[0].employeeName;
-//             this.UserId = this.EmployeeCode = response.item1[0].employeeCode;
-//             this.Department = response.item1[0].department;
-//             this.DepartmentName = response.item1[0].departmentName;
-//             this.Designation = response.item1[0].department;
-//             this.EmailId = response.item1[0].email;
-//             this.MobileNo = response.item1[0].contactNo;
-//             this.SupervisorName = response.item1[0].department; // Assuming supervisorName is in response.item1[0]
-
-//             this.loadingIndicator = false;
-//             this.showNoDataFoundMessage = false;
-//             this.isLoginFailed = false;
-//             var DataX = this.formdata.value;
-//             var SecretKey = DataX.password ?? '';
-//             const userCookiesData = {
-//               CandidateName: this.CandidateName,
-//               UserId: this.UserId,
-//               Department: this.Department,
-//               DepartmentName: this.DepartmentName,
-//               Designation: this.Designation,
-//               EmailId: this.EmailId,
-//               MobileNo: this.MobileNo,
-//               UserRole: this.UserRole,
-//               SupervisorName: this.SupervisorName,
-//               ProofNumber:this.MobileNo,
-//               ProofName: 'Mobile ',
-//               PasswordText: SecretKey,
-//             };
-//             // alert(0);
-//             // Stringify and store the object in cookies
-//             this.cookieService.set('authData', JSON.stringify(userCookiesData));
-
-//           Swal.fire({
-//             // title: 'Data ' + JSON.stringify(this.EmployeeDetails),
-//             text: 'Login details are Valid!',
-//             icon: 'success',
-//           })
-//           this.AuthSession.addToSession(this.EmployeeDetails);
-//           //  console.log(" Session Data = "+ JSON.stringify(this.AuthSession.getSession()));
-//           this.router.navigate(['Home']);
-//           } else {
-//             this.EmployeeDetails = [];
-//             this.showNoDataFoundMessage = true;
-//             this.isLoginFailed = true;
-//           }
-//         },
-//         error: err => {
-//           this.LoginFailed(err);
-//         }
-//       });
-
-//     this.formdata.reset();
-//   }
-
-// }
+  // // Step 3: Reset password
+  EmailresetPassword(NewPassword:any) {
+   
+        this.UserId = this.emailFormGroup.get('email')?.value;
+      const formData = new FormData();
+        formData.append('UserId', this.verifiedEmail);
+        formData.append('Password', NewPassword);
+        // formData.forEach((value, key) => {
+        //   console.log(`${key}: ${value}`);
+        // });
+        this.journalWebApiService.JournalUpdatePasswordDetails(formData).subscribe({
+          next: (data: any) => {
+            const result = data.item1[0]['msg'];
+            if (result === 'Success') {
+              swal.fire({
+                title: 'Password is rest, Check Email!',
+                text: '.',
+                icon: 'success'
+              }).then(() => {
+                this.router.navigateByUrl(this.BookId + '/' + this.name + '/' + 'ExternalLogin');
+              });
+            } else if (result === 'Failed') {
+              swal.fire({
+                title: 'Unable to Update Details Try Again Later ',
+                icon: 'error'
+              }).then(() => {
+                window.location.reload();
+              });
+            } else {
+              swal.fire({
+                title: 'Something Went Wrong, Try again later',
+                icon: 'error'
+              }).then(() => {
+                window.location.reload();
+              });
+            }
+          },
+          error: (error: any) => {
+            swal.fire({
+              title: 'Error',
+              text: 'Failed to Update.',
+              icon: 'error'
+            }).then(() => {
+              window.location.reload();
+            });
+          },
+          complete: () => {
+          }
+        });
+    
+  }
+  clearContents(){    
+    this.emailFormGroup.reset();
+    this.consentFormGroup.reset();
+  }
+}

@@ -14,7 +14,7 @@ import { forkJoin } from 'rxjs'
 @Component({
   selector: 'app-Publisher-Dashboard',
   templateUrl: './Publisher-Dashboard.component.html',
-  styleUrls: ['./Publisher-Dashboard.component.scss']
+  standalone: false,styleUrls: ['./Publisher-Dashboard.component.scss']
 })
 export class PublisherDashboardComponent implements OnInit {
   fromDate: any;    booksDataColumns: any;  toDate: any;  pipe = new DatePipe('en-CA');

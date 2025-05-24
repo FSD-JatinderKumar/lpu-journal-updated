@@ -7,7 +7,7 @@ import { LpujournalbookService } from 'src/app/_services/lpujournalbook.service'
 @Component({
   selector: 'app-journal-editor-board',
   templateUrl: './journal-editor-board.component.html',
-  styleUrls: ['./journal-editor-board.component.scss']
+  standalone: false,styleUrls: ['./journal-editor-board.component.scss']
 })
 export class JournalEditorBoardComponent implements OnInit {
   BookId: any; name: any;

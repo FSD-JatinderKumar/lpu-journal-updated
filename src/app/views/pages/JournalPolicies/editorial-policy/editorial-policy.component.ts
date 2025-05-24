@@ -7,7 +7,7 @@ import { ActivatedRoute } from '@angular/router';
 @Component({
   selector: 'app-editorial-policy',
   templateUrl: './editorial-policy.component.html',
-  styleUrls: ['./editorial-policy.component.scss']
+  standalone: false,styleUrls: ['./editorial-policy.component.scss']
 })
 export class EditorialPolicyComponent implements OnInit {
   BookId: any; name: any;

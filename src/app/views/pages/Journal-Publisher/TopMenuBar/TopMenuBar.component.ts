@@ -11,7 +11,7 @@ import { StorageService } from 'src/app/_services/storage.service';
 @Component({
   selector: 'app-TopMenuBar',
   templateUrl: './TopMenuBar.component.html',
-  styleUrls: ['./TopMenuBar.component.scss']
+  standalone: false,styleUrls: ['./TopMenuBar.component.scss']
 })
 
 export class TopMenuBarComponent implements OnInit {

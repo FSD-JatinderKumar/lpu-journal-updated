@@ -13,7 +13,8 @@ import { CookieService } from 'ngx-cookie-service';
 @Component({
   selector: 'app-new-registration-page',
   templateUrl: './new-registration-page.component.html',
-  styleUrls: ['./new-registration-page.component.scss']
+  styleUrls: ['./new-registration-page.component.scss'],
+  standalone: false
 })
 export class NewRegistrationPageComponent implements OnInit {
   emailId: any = '';  candidateName: any; supervisorName: any;mobileNumber: any;     instituteName: any;

@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'app-journalmenubar',
   templateUrl: './journalmenubar.component.html',
-  styleUrls: ['./journalmenubar.component.scss']
+  standalone: false,styleUrls: ['./journalmenubar.component.scss']
 })
 export class JournalmenubarComponent {
 

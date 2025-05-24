@@ -247,7 +247,8 @@ const routes: Routes = [
       },
       {
         path :":Id/:name/ForgotPassword",
-        loadChildren: () => import('./views/pages/recover-account/recover-account.module').then(m=>m.RecoverAccountComponentModule),
+        // loadChildren: () => import('./views/pages/recover-account/recover-account.module').then(m=>m.RecoverAccountComponentModule),
+        loadChildren: () => import('./views/pages/ForgotPassword/ForgotPassword.module').then(m=>m.ForgotPasswordModule),
       },
       
     ]

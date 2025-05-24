@@ -8,7 +8,7 @@ import { LpujournalbookService } from 'src/app/_services/lpujournalbook.service'
 @Component({
   selector: 'app-journalmenubar',
   templateUrl: './journalmenubar.component.html',
-  styleUrls: ['./journalmenubar.component.scss']
+  standalone: false,styleUrls: ['./journalmenubar.component.scss']
 })
 export class JournalmenubarComponent implements OnInit {
   isDisabled: any = true;

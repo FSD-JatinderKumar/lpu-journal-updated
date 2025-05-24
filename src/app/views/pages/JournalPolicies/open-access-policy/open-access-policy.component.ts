@@ -7,7 +7,7 @@ import { ActivatedRoute } from '@angular/router';
 @Component({
   selector: 'app-open-access-policy',
   templateUrl: './open-access-policy.component.html',
-  styleUrls: ['./open-access-policy.component.scss']
+  standalone: false,styleUrls: ['./open-access-policy.component.scss']
 })
 export class OpenAccessPolicyComponent implements OnInit {
   BookId: any; name: any;

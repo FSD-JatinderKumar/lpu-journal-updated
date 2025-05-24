@@ -14,7 +14,8 @@ import { StorageService } from 'src/app/_services/storage.service';
 @Component({
   selector: 'LoginWithRoles-page',
   templateUrl: './LoginWithRoles.component.html',
-  styleUrls: ['./LoginWithRoles.component.scss'],
+  styleUrls: ['./LoginWithRoles.component.scss'],standalone: false
+  
 })
 export class LoginWithRolesComponent implements OnInit {
   registrationNumber: any; EmployeeDetails: any[] = []; regdId: any; DriveDropDown: any; showNoDataFoundMessage: boolean | undefined;

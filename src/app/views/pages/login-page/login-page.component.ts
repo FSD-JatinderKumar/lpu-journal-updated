@@ -18,7 +18,7 @@ import { MouDocumentsService } from 'src/app/_services/mou-documents.service';
 @Component({
   selector: 'app-login-page',
   templateUrl: './login-page.component.html',
-  styleUrls: ['./login-page.component.scss'],
+  standalone: false,styleUrls: ['./login-page.component.scss'],
 })
 export class LoginPageComponent implements OnInit {
   registrationNumber: any;

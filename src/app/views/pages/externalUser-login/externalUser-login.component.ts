@@ -15,6 +15,7 @@ import { StorageService } from 'src/app/_services/storage.service';
   selector: 'app-login-page',
   templateUrl: './externalUser-login.component.html',
   styleUrls: ['./externalUser-login.component.scss'],
+  standalone: false
 })
 export class ExternalUserLoginComponent implements OnInit {
   registrationNumber: any; EmployeeDetails: any[] = []; regdId: any; DriveDropDown: any; showNoDataFoundMessage: boolean | undefined;

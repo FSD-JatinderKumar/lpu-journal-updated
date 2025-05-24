@@ -7,7 +7,7 @@ import { ActivatedRoute } from '@angular/router';
 @Component({
   selector: 'app-interest-confilict-policy',
   templateUrl: './interest-confilict-policy.component.html',
-  styleUrls: ['./interest-confilict-policy.component.scss']
+  standalone: false,styleUrls: ['./interest-confilict-policy.component.scss']
 })
 export class InterestConfilictPolicyComponent implements OnInit {
   BookId: any; name: any;

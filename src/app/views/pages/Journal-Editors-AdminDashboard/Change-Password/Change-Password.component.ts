@@ -14,7 +14,7 @@ import { CookieService } from 'ngx-cookie-service';
 @Component({
   selector: 'app-Change-Password',
   templateUrl: './Change-Password.component.html',
-  styleUrls: ['./Change-Password.component.scss']
+  standalone: false,styleUrls: ['./Change-Password.component.scss']
 })
 export class ChangePasswordComponent implements OnInit {
   emailFormGroup: FormGroup;

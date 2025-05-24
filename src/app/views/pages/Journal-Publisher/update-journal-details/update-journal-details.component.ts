@@ -10,7 +10,7 @@ import { StorageService } from 'src/app/_services/storage.service';
 @Component({
   selector: 'app-update-journal-details',
   templateUrl: './update-journal-details.component.html',
-  styleUrls: ['./update-journal-details.component.scss']
+  standalone: false,styleUrls: ['./update-journal-details.component.scss']
 })
 export class UpdateJournalDetailsComponent implements OnInit {
 

@@ -15,7 +15,7 @@ import { forkJoin } from 'rxjs'
 @Component({
   selector: 'app-MyRemarks-Details',
   templateUrl: './MyRemarks-Details.component.html',
-  styleUrls: ['./MyRemarks-Details.component.scss']
+  standalone: false,styleUrls: ['./MyRemarks-Details.component.scss']
 })
 export class MyRemarksDetailsComponent implements OnInit {
   fromDate: any; booksDataColumns: any; toDate: any; pipe = new DatePipe('en-CA');

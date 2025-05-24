@@ -6,7 +6,7 @@ import { JournalfooterComponent } from '../journalfooter/journalfooter.component
 @Component({
   selector: 'app-contactus',
   templateUrl: './contactus.component.html',
-  styleUrls: ['./contactus.component.scss']
+  standalone: false,styleUrls: ['./contactus.component.scss']
 })
 export class ContactusComponent {
 

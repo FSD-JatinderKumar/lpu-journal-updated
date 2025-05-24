@@ -20,7 +20,7 @@ import { forkJoin } from 'rxjs';
 @Component({
   selector: 'app-NewManuScript',
   templateUrl: './NewManuScript.component.html',
-  styleUrls: ['./NewManuScript.component.scss']  
+  styleUrls: ['./NewManuScript.component.scss']  ,standalone: false
 })
 export class NewManuScript implements OnInit {
   emailId: any = ''; candidateName: any; supervisorName: any; mobileNumber: any; instituteName: any;

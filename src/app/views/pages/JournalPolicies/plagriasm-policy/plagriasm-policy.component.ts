@@ -7,7 +7,7 @@ import { LpujournalbookService } from 'src/app/_services/lpujournalbook.service'
 @Component({
   selector: 'app-plagriasm-policy',
   templateUrl: './plagriasm-policy.component.html',
-  styleUrls: ['./plagriasm-policy.component.scss']
+  standalone: false,styleUrls: ['./plagriasm-policy.component.scss']
 })
 export class PlagriasmPolicyComponent implements OnInit {
   BookId: any; name: any;
