@@ -272,7 +272,8 @@ export class LpujournalbookService {
       .set('Authorization', 'Bearer ' + token)
     return this.http.get(
       // AUTH_API_LOCAL + 'api/LpuJournal/GetAllMenuScriptForJournal?Id=' + JournalId, { headers }
-      this.baseUrl + 'api/LpuJournal/GetAllMenuScriptForJournal?Id=' + JournalId, { headers }
+      // this.baseUrl + 'api/LpuJournal/GetAllMenuScriptForJournal?Id=' + JournalId, { headers }
+      LOCAL_API_URL + 'api/LpuJournal/GetAllMenuScriptForJournal?Id=' + JournalId, { headers }
     );
   }
 

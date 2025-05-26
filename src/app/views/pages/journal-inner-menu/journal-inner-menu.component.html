@@ -53,15 +53,6 @@
                     <li><a (click)="VisitUrl(BookId,name,'Policies/PublicationChargePolicy')">Publication Charge/Waiver Policy</a></li>
                 </ul>
             </li>
-            <!-- <li ><a >Current Issues</a></li> -->
-            <!-- <li><a [ngStyle]="{'pointer-events': isDisabled ? 'none' : 'auto', 'color': isDisabled ? 'gray' : 'inherit'}">Current Issues</a></li> -->
-            <!-- <li><a (click)="VisitUrl('JournalAbout',BookId,name)">Current Issues</a></li> -->
-            <!-- <li><a [ngStyle]="{'pointer-events': isDisabled ? 'none' : 'auto', 'color': isDisabled ? 'gray' : 'inherit'}">Archives</a></li> -->
-            <!-- <li><a (click)="VisitUrl('JournalAbout',BookId,name)">Archives</a></li> -->
-            <!-- <li><a [ngStyle]="{'pointer-events': isDisabled ? 'none' : 'auto', 'color': isDisabled ? 'gray' : 'inherit'}" >Call For Papers</a></li> -->
-            <!-- <li><a (click)="VisitUrl('JournalAbout',BookId,name)">Call For Papers</a></li> -->
-            <!-- <li><a >Submit Manuscript</a></li> -->
-
 
             <li class="nextdrop" *ngIf="LoginStatus === true; else loginRequired">
                 <label for="drop-2" class="toggle" onclick="PlusMinusFunction(this)">ManuScript</label>
@@ -75,7 +66,19 @@
                 <li><a (click)="VisitUrl(BookId, name, 'MyManuScript')">My Requests</a></li>
                 </ul>
             </li>
-            <li *ngIf="LoginStatus=== true;"><a (click)="Logout()">Logout</a></li>
+            <li class="nextdrop" *ngIf="LoginStatus === true;">
+                <label for="drop-2" class="toggle" onclick="PlusMinusFunction(this)">Account Settings</label>
+                <a class="dropa">Account Settings <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                        fill="currentColor" class="bi bi-caret-down-fill" viewBox="0 0 16 16">
+                        <path  d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z" />
+                    </svg></a>
+                <input type="checkbox" id="drop-2" />
+                <ul>
+                <li><a (click)="VisitUrl(BookId, name, 'RecoverPasswordReset')">Change Password </a></li>
+                <li><a (click)="Logout()">Logout</a></li>
+                </ul>
+            </li>
+            <!-- <li *ngIf="LoginStatus=== true;"><a (click)="Logout()">Logout</a></li> -->
             
             <ng-template #loginRequired>
                 <li>

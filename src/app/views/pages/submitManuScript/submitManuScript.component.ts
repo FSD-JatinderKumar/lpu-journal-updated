@@ -20,7 +20,8 @@ import { forkJoin } from 'rxjs';
 @Component({
   selector: 'app-submitManuScript-page',
   templateUrl: './submitManuScript.component.html',
-  standalone: false,styleUrls: ['./submitManuScript.component.scss']
+  standalone: false,
+  styleUrls: ['./submitManuScript.component.scss']
 })
 export class SubmitManuScriptComponent implements OnInit {
   emailId: any = ''; candidateName: any; supervisorName: any; mobileNumber: any; instituteName: any;
@@ -1006,7 +1007,8 @@ export class SubmitManuScriptComponent implements OnInit {
     uploadedOn: 'Date of Submition',
     submissionType: 'Submitted Script ',
     fileUrl: 'Document',
-    journalId: 'Action'
+    reviewerAssigned:'Action',
+    // journalId: 'Action'
   }; // Custom header text journalTitle	editorInChief	ManuScriptType	submissionType
 
 
@@ -1022,7 +1024,8 @@ export class SubmitManuScriptComponent implements OnInit {
     'userName',
     'uploadedOn',
     'fileUrl',
-    'journalId'
+    'reviewerAssigned',
+    // 'journalId',
   ];
 
   EditordisplayedColumnsHeader: string[] = [

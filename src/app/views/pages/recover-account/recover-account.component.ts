@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from 'src/app/_services/auth.service';
 import { StorageService } from 'src/app/_services/storage.service';
@@ -27,6 +27,13 @@ export class RecoverAccountComponent implements OnInit {
   userDetails: any = null; // User details fetched from API
   UserId: any;
   currentStep = 1;   
+  userRole: any;
+  userId: any;
+  supervisorName: any;
+  departmentName: any;
+  candidateName: any;
+  isLoginFailed: boolean =false;
+  isLoading: boolean = false;
   constructor(
     private storageService: StorageService,
     private authService: AuthService,
@@ -40,7 +47,7 @@ export class RecoverAccountComponent implements OnInit {
   ) {
     // Step 1: Email form
     this.emailFormGroup = this.fb.group({
-      email: ['', [Validators.required, Validators.email]]
+      email: new FormControl({ value: this.userId, disabled: true }, [Validators.required, Validators.email])
     });
 
     // Step 2: ID Proof form
@@ -49,21 +56,40 @@ export class RecoverAccountComponent implements OnInit {
     });
 
     // Step 3: Password reset form
-    this.resetPasswordFormGroup = this.fb.group({
-      password: ['', [Validators.required, Validators.minLength(8)]],
-      confirmPassword: ['', [Validators.required, Validators.minLength(8)]]
-    });
+    // this.resetPasswordFormGroup = this.fb.group({
+    //   password: ['', [Validators.required, Validators.minLength(8)]],
+    //   confirmPassword: ['', [Validators.required, Validators.minLength(8)]]
+    // });
+
+
+    this.resetPasswordFormGroup = this.fb.group(
+      {
+        password: ['', [Validators.required, Validators.minLength(8)]],
+        confirmPassword: ['', Validators.required]
+      },
+      { validators: this.passwordsMatchValidator }
+    );
   }
+
+
+  passwordsMatchValidator(group: AbstractControl): { [key: string]: any } | null {
+    const password = group.get('password')?.value;
+    const confirmPassword = group.get('confirmPassword')?.value;
+    return password === confirmPassword ? null : { mismatch: true };
+  }
+
+  
   VisitUrl(Id: any, name: any, Sufix: any) {
     this.router.navigateByUrl(Id + '/' + name + '/' + Sufix).then(() => {
       window.location.reload();
     });;
   }
-
+ 
 
   ngOnInit() {
     var BookId = this.route.snapshot.params['Id'];
     var name = this.route.snapshot.params['name'];
+    this.checkUserLogin();
     if (BookId != undefined && BookId != null) {
       this.BookId =this.JournalId= BookId;
       this.name = this.JournalTitle= name;
@@ -86,6 +112,8 @@ export class RecoverAccountComponent implements OnInit {
  
   // Step 1: Check user email
   checkEmail() {
+   
+    // alert( this.emailFormGroup.get('email')?.value)
     this.errorMessage ='';
     const email = this.emailFormGroup.get('email')?.value;
   
@@ -123,8 +151,34 @@ export class RecoverAccountComponent implements OnInit {
     );
   }
   
+  checkUserLogin() {
+   
+    const GetCookieData = this.cookieService.get('authData');
+    if (GetCookieData) {
+      try {
+        const retrievedCookies = JSON.parse(GetCookieData);
+        this.userRole = retrievedCookies.UserRole?.length > 0 ? retrievedCookies.UserRole : -1;
+        this.userId = retrievedCookies.EmailId;
+        let Token = retrievedCookies.AccessToken;
+        this.supervisorName = retrievedCookies.SupervisorName;
+        this.departmentName = retrievedCookies.DepartmentName;
+        this.candidateName = retrievedCookies.CandidateName;
+        this.isLoginFailed = false;
+      } catch (error) {
+        console.log("error");
+      }
+    } else {
+      this.isLoginFailed = true;
+      this.LoginFalied();
+    }
+
+  }
+  LoginFalied() {
+    this.VisitUrl(this.BookId, this.name, 'ExternalLogin');
+  }
+
   private showUserNotFound() {
-    this.errorMessage = 'No user found or account is locked';
+    this.errorMessage = 'Password change for this Account is disabled ';
     swal.fire({
       title: this.errorMessage,
       icon: 'error'
@@ -148,6 +202,8 @@ export class RecoverAccountComponent implements OnInit {
 
   // Step 3: Reset password
   resetPassword() {
+   
+
     const { password, confirmPassword } = this.resetPasswordFormGroup.value;
     if (password === confirmPassword) {
       // alert('Password reset successful!');
@@ -155,12 +211,11 @@ export class RecoverAccountComponent implements OnInit {
       const formData = new FormData();
         formData.append('UserId', this.UserId);
         formData.append('Password', password);
-        // formData.forEach((value, key) => {
-        //   console.log(`${key}: ${value}`);
-        // });
+        this.isLoading=true;
         this.journalWebApiService.JournalUpdatePasswordDetails(formData).subscribe({
           next: (data: any) => {
             const result = data.item1[0]['msg'];
+            this.isLoading = false;
             if (result === 'Success') {
               swal.fire({
                 title: 'Details Updated Successfully!',
@@ -202,6 +257,7 @@ export class RecoverAccountComponent implements OnInit {
     } else {
       this.errorMessage = 'Passwords do not match';
     }
+   
   }
   clearContents(){    
     this.idProofFormGroup.reset();

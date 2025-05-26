@@ -18,25 +18,15 @@ const routes: Routes = [
 ]
 
 @NgModule({
+  
     imports: [
       CommonModule,
       RouterModule.forChild(routes),     
       MatPaginatorModule,
       FormsModule,
       MaterialModule,
-      MatDialogModule
-      // FeatherIconModule,
-      // NgbDropdownModule,
-      // NgbDatepickerModule,
-      // NgApexchartsModule,
-      // NgxDatatableModule,
-      // NgbNavModule,
-      // NgbCollapseModule,
-      // PerfectScrollbarModule,
-      // NgbModule,
-      // ReactiveFormsModule,
-      // NgSelectModule,
-      // MaterialModule
+      MatDialogModule,
+      ReactiveFormsModule
     ],
   
   })

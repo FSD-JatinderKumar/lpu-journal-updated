@@ -89,6 +89,7 @@ import { RDManuscriptDetailsComponent } from './views/pages/RoleWise-Dashboard/R
 import { RDRemarksDetailsComponent } from './views/pages/RoleWise-Dashboard/ReviewersDashboard/RDRemarksDetails/RDRemarksDetails.component';
 import { ViewAllManuscripts } from './views/pages/RoleWise-Dashboard/AuthorDashboard/ManuScriptReport/ViewAllManuscripts.component';
 import { ForgotPasswordComponent } from './views/pages/ForgotPassword/ForgotPassword.component';
+import { submitManuScriptComponentModule } from './views/pages/submitManuScript/submitManuScript.module';
 
 @NgModule({
   declarations: [
@@ -156,7 +157,8 @@ import { ForgotPasswordComponent } from './views/pages/ForgotPassword/ForgotPass
     RDRemarksDetailsComponent, 
     ViewAllManuscripts,
 
-    ForgotPasswordComponent
+    ForgotPasswordComponent,
+    
     
   ],
   imports: [
@@ -199,7 +201,7 @@ import { ForgotPasswordComponent } from './views/pages/ForgotPassword/ForgotPass
     EDEditorHeaderModule,
     EDManuscriptDetailsModule,
     EDReviewersRemarksDetailsModule,
-    
+    submitManuScriptComponentModule,
     
   ],
   providers: [],
