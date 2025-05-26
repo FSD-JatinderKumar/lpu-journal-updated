@@ -444,4 +444,16 @@ export class LpujournalbookService {
       { headers }
     );
   }
+
+
+  AssignExternalReviewerForJournal(AssignnewReviewer: FormData): Observable<any> {
+    let token = this.storageService.getUser();
+    let headers = new HttpHeaders()
+      .set('Authorization', 'Bearer ' + token)
+      .set('Accept', '*/*',);
+    return this.http.post(
+      // LOCAL_API_URL + 'api/LpuJournal/AssignReviewerForJournal', AssignnewReviewer, { headers }
+      LOCAL_API_URL+ 'api/LpuJournal/CreateJournalUserAccountForExternalReviewer', AssignnewReviewer, { headers }
+    );
+  }
 }

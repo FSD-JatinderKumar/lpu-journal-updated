@@ -4,7 +4,7 @@ import * as mammoth from 'mammoth';
 import * as JSZip from 'jszip';
 import { saveAs } from 'file-saver';
 import jsPDF from 'jspdf';
-import { AbstractControl, FormControl, FormGroup, UntypedFormGroup, ValidatorFn } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, NgForm, UntypedFormGroup, ValidatorFn } from '@angular/forms';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Inject, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -908,15 +908,30 @@ export class SubmitManuScriptComponent implements OnInit {
     this.AssignedById = rowData['emailId'];
     this.RecordId = rowData['id'];
   }
-  assignReviewer() {
+
+  markAllFieldsTouched(form: NgForm) {
+    Object.values(form.controls).forEach(control => {
+      control.markAsTouched();
+    });
+  }
+  
+  reviewerType: 'internal' | 'external' = 'internal';
+// selectedReviewerId: string = '';
+externalReviewer = {
+  name: '',
+  email: '',
+  contact: ''
+};
+
+assignReviewer() {
+  const formData = new FormData();
+
+  if (this.reviewerType === 'internal') {
     if (!this.selectedReviewerId) {
-      alert('Please select a reviewer.');
+      alert('Please select an internal reviewer.');
       return;
     }
-    // AssignNewReviewerForJournal
 
-
-    const formData = new FormData();
     // alert(this.AssignedById +" reviewer Emaild " + this.selectedReviewerId)
     // Append form data to the FormData object
     formData.append('JournalId', this.selectedJournalId);
@@ -924,45 +939,165 @@ export class SubmitManuScriptComponent implements OnInit {
     formData.append('SubmittedBy', this.AssignedById);
     formData.append('RecordId', this.RecordId);
 
+    this.assignInternalReviewer(formData);
 
-    this.journalWebApiService.AssignNewReviewerForJournal(formData).subscribe({
-      next: (data) => {
-        let result = data.item1[0]['returnData'];
-        let errorCode = data.item1[0]['returnId'];
+  } else if (this.reviewerType === 'external') {
+    const { name, email, contact } = this.externalReviewer;
 
-        if (result === 'success') {
-          Swal.fire({
-            title: 'Reviewer Assiged ',
-            text: data.item1[0]['msg'],
-            icon: 'success',
-          }).then(() => {
-            window.location.reload();
-          });
-        } else {
-          Swal.fire({
-            title: 'Some Technical Issue',
-            text: result,
-            icon: 'error',
-          }).then(() => {
-            window.location.reload();
-          });
-        }
-      },
-      error: (err) => {
+    if (!name || !email || !contact) {
+      alert('Please fill all external reviewer details.');
+      return;
+    }
+
+    formData.append('JournalTitle', this.JournalTitle);
+    formData.append('JournalId', this.selectedJournalId);
+    formData.append('AssignedTo', email); // Use email as unique ID    
+    formData.append('RecordId', this.RecordId);
+    formData.append('CandidateName', name);
+    formData.append('UserEmail', email);
+    formData.append('MobileNumber', contact);
+    formData.append('UserType', '2');
+    formData.append('PasswordText', contact);
+    formData.append('SubmittedBy', this.AssignedById);
+    formData.append('AuthorEmailId', this.AuthorEmailId);
+    
+    this.assignExternalReviewer(formData);
+  }
+
+}
+
+
+assignInternalReviewer(data:any){
+
+  this.journalWebApiService.AssignNewReviewerForJournal(data).subscribe({
+    next: (data) => {
+      let result = data.item1[0]['returnData'];
+      let errorCode = data.item1[0]['returnId'];
+
+      if (result === 'success') {
         Swal.fire({
-          title: 'Error Occurred',
-          text: 'Unable to complete the request. Please try again later.',
+          title: 'Reviewer Assiged ',
+          text: data.item1[0]['msg'],
+          icon: 'success',
+        }).then(() => {
+          window.location.reload();
+        });
+      } else {
+        Swal.fire({
+          title: 'Some Technical Issue',
+          text: result,
           icon: 'error',
+        }).then(() => {
+          window.location.reload();
         });
       }
-    });
+    },
+    error: (err) => {
+      Swal.fire({
+        title: 'Error Occurred',
+        text: 'Unable to complete the request. Please try again later.',
+        icon: 'error',
+      });
+    }
+  });
 
-    alert(`Journal ID: ${this.selectedJournalId} assigned to Reviewer ID: ${this.selectedReviewerId}`);
+  alert(`Journal ID: ${this.selectedJournalId} assigned to Reviewer ID: ${this.selectedReviewerId}`);
 
-    // Close modal after success
-    let modal = bootstrap.Modal.getInstance(document.getElementById('assignReviewerModal'));
-    modal.hide();
-  }
+  // Close modal after success
+  let modal = bootstrap.Modal.getInstance(document.getElementById('assignReviewerModal'));
+  modal.hide();
+}
+
+assignExternalReviewer(data:any){
+  
+  this.journalWebApiService.AssignExternalReviewerForJournal(data).subscribe({
+    next: (data) => {
+      let result = data.item1[0]['returnData'];
+      let errorCode = data.item1[0]['returnId'];
+
+      if (result === 'success') {
+        Swal.fire({
+          title: 'Reviewer Assigned',
+          text: data.item1[0]['msg'],
+          icon: 'success',
+        }).then(() => window.location.reload());
+      } else {
+        Swal.fire({
+          title: 'Some Technical Issue',
+          text: result,
+          icon: 'error',
+        }).then(() => window.location.reload());
+      }
+    },
+    error: () => {
+      Swal.fire({
+        title: 'Error Occurred',
+        text: 'Unable to complete the request. Please try again later.',
+        icon: 'error',
+      });
+    }
+  });
+
+  // Close modal
+  const modal = bootstrap.Modal.getInstance(document.getElementById('assignReviewerModal'));
+  modal?.hide();
+}
+
+  // assignReviewer() {
+  //   if (!this.selectedReviewerId) {
+  //     alert('Please select a reviewer.');
+  //     return;
+  //   }
+  //   // AssignNewReviewerForJournal
+
+
+  //   const formData = new FormData();
+  //   // alert(this.AssignedById +" reviewer Emaild " + this.selectedReviewerId)
+  //   // Append form data to the FormData object
+  //   formData.append('JournalId', this.selectedJournalId);
+  //   formData.append('AssignedTo', this.selectedReviewerId);
+  //   formData.append('SubmittedBy', this.AssignedById);
+  //   formData.append('RecordId', this.RecordId);
+
+
+  //   this.journalWebApiService.AssignNewReviewerForJournal(formData).subscribe({
+  //     next: (data) => {
+  //       let result = data.item1[0]['returnData'];
+  //       let errorCode = data.item1[0]['returnId'];
+
+  //       if (result === 'success') {
+  //         Swal.fire({
+  //           title: 'Reviewer Assiged ',
+  //           text: data.item1[0]['msg'],
+  //           icon: 'success',
+  //         }).then(() => {
+  //           window.location.reload();
+  //         });
+  //       } else {
+  //         Swal.fire({
+  //           title: 'Some Technical Issue',
+  //           text: result,
+  //           icon: 'error',
+  //         }).then(() => {
+  //           window.location.reload();
+  //         });
+  //       }
+  //     },
+  //     error: (err) => {
+  //       Swal.fire({
+  //         title: 'Error Occurred',
+  //         text: 'Unable to complete the request. Please try again later.',
+  //         icon: 'error',
+  //       });
+  //     }
+  //   });
+
+  //   alert(`Journal ID: ${this.selectedJournalId} assigned to Reviewer ID: ${this.selectedReviewerId}`);
+
+  //   // Close modal after success
+  //   let modal = bootstrap.Modal.getInstance(document.getElementById('assignReviewerModal'));
+  //   modal.hide();
+  // }
 
 
 
