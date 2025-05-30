@@ -11,97 +11,98 @@
 </div>
 <div *ngIf="!loadingIndicator; else ErrorConnection" class="row w-100 mx-0 auth-page wrapper mt-5">
   <div class="col-md-12 col-xl-12 mx-auto">
-    <div class="row">
+    <div *ngIf="isLoading" class="fullscreen-loader">
+      <div class="loader-content">
+        <span class="text-danger fs-3">Processing...</span><br />
+        <div class="spinner-grow text-danger" style="width: 16rem; height: 16rem;" role="status"></div>
+      </div>
+    </div>
 
-      <div class="col-md-6 pe-md-0  d-none d-lg-block" [ngStyle]="{ 'background-image': 'url(https://www.lpu.in/journals/assets/images/login-left.png)', 'background-repeat': 'no-repeat',
+    <!-- Main Content (hidden when loading) -->
+    <div class="container-fluid" *ngIf="!isLoading">
+      <div class="row">
+
+        <div class="col-md-6 pe-md-0  d-none d-lg-block" [ngStyle]="{ 'background-image': 'url(https://www.lpu.in/journals/assets/images/login-left.png)', 'background-repeat': 'no-repeat',
                 'background-size': 'contain',
                 'background-position': 'center'}">
-      </div>
-      <div class="col-md-5 ">
-        <div class="auth-form-wrapper px-4 py-5 p-5">
-          <!-- <div class="col-md-12 text-center main-heading">
-            <h2 class="nobleui-logo d-block mb-2 "> LPU e-Journals <span>Login Page</span></h2>
-          </div> -->
-          <div class="text-center mb-5 main-heading">
-            <h1 class="d-block mb-4"> LPU e-Journals <span>Login Page</span></h1>
-          </div>
-          <form class="forms-sample" [formGroup]="formdata" (ngSubmit)="OnSubmit()">
-            <div class="row mb-2 mt-5">
-              <div class="col-md-1">
-                <label for="exampleInputPassword1" class="col-md-4 form-label"> </label>
-              </div>
-              <div class="col-md-4">
-                <label for="exampleInputEmail1" class="col-md-6 form-label">Username</label>
-              </div>
-              <div class="col-md-6">
-                <input type="email" formControlName="Email" placeholder="Enter Email Id " class="col-md-6 form-control"
-                  id="exampleInputEmail1">
-                <div *ngIf="submitted && email?.errors" class="text-danger">
-                  <small *ngIf="email?.errors?.['required']">Email is required.</small>
-                  <small *ngIf="email?.errors?.['email']">Enter a valid email address.</small>
+        </div>
+        <div class="col-md-5 ">
+          <div class="auth-form-wrapper px-4 py-5 p-5">
+            <div class="text-center mb-5 main-heading">
+              <h1 class="d-block mb-4"> LPU e-Journals <span>Login Page</span></h1>
+            </div>
+            <form class="forms-sample" [formGroup]="formdata" (ngSubmit)="OnSubmit()">
+              <div class="row mb-2 mt-5">
+                <div class="col-md-1">
+                  <label for="exampleInputPassword1" class="col-md-4 form-label"> </label>
+                </div>
+                <div class="col-md-4">
+                  <label for="exampleInputEmail1" class="col-md-6 form-label">Username</label>
+                </div>
+                <div class="col-md-6">
+                  <input type="email" formControlName="Email" placeholder="Enter Email Id "
+                    class="col-md-6 form-control" id="exampleInputEmail1">
+                  <div *ngIf="submitted && email?.errors" class="text-danger">
+                    <small *ngIf="email?.errors?.['required']">Email is required.</small>
+                    <small *ngIf="email?.errors?.['email']">Enter a valid email address.</small>
+                  </div>
+                </div>
+                <div class="col-md-1">
+                  <label for="exampleInputPassword1" class="col-md-4 form-label"> </label>
                 </div>
               </div>
-              <div class="col-md-1">
-                <label for="exampleInputPassword1" class="col-md-4 form-label"> </label>
-              </div>
-            </div>
 
-            <div class="row mb-2 mt-3">
-              <div class="col-md-1">
-                <label for="exampleInputPassword1" class="col-md-4 form-label"> </label>
-              </div>
-              <div class="col-md-4">
-                <label for="exampleInputPassword1" class="col-md-6 form-label">Password</label>
-              </div>
-              <div class="col-md-6  position-relative">
-                <input
-                [type]="showPassword ? 'text' : 'password'"
-                class="form-control pr-5"
-                placeholder="Enter password"
-                formControlName="Password"
-                id="exampleInputPassword1"
-              />
-          
-              <!-- Eye icon inside the input -->
-              <i
-                class="bi"
-                [ngClass]="showPassword ? 'bi-eye-slash fs-4' : 'bi-eye fs-4'"
-                (click)="togglePasswordVisibility()"
-                style="position: absolute; top: 25%; right: 1.51rem; transform: translateY(-30%); cursor: pointer;"
-              ></i>
-                <!-- <input type="password" formControlName="Password" placeholder="Enter Password"
+              <div class="row mb-2 mt-3">
+                <div class="col-md-1">
+                  <label for="exampleInputPassword1" class="col-md-4 form-label"> </label>
+                </div>
+                <div class="col-md-4">
+                  <label for="exampleInputPassword1" class="col-md-6 form-label">Password</label>
+                </div>
+                <div class="col-md-6  position-relative">
+                  <input [type]="showPassword ? 'text' : 'password'" class="form-control pr-5"
+                    placeholder="Enter password" formControlName="Password" id="exampleInputPassword1" />
+
+                  <!-- Eye icon inside the input -->
+                  <i class="bi" [ngClass]="showPassword ? 'bi-eye-slash fs-4' : 'bi-eye fs-4'"
+                    (click)="togglePasswordVisibility()"
+                    style="position: absolute; top: 25%; right: 1.51rem; transform: translateY(-30%); cursor: pointer;"></i>
+                  <!-- <input type="password" formControlName="Password" placeholder="Enter Password"
                   class="col-md-6 form-control" id="exampleInputPassword1"> -->
-                <div *ngIf="submitted && password?.errors" class="text-danger">
-                  <small *ngIf="password?.errors?.['required']">Password is required.</small>
-                  <small *ngIf="password?.errors?.['minlength']">Password must be at least 6 characters long.</small>
+                  <div *ngIf="submitted && password?.errors" class="text-danger">
+                    <small *ngIf="password?.errors?.['required']">Password is required.</small>
+                    <small *ngIf="password?.errors?.['minlength']">Password must be at least 6 characters long.</small>
+                  </div>
+                </div>
+                <div class="col-md-1">
+                  <label for="exampleInputPassword1" class="col-md-4 form-label"> </label>
                 </div>
               </div>
-              <div class="col-md-1">
-                <label for="exampleInputPassword1" class="col-md-4 form-label"> </label>
-              </div>
-            </div>
 
-            <div class="row mb-2 mt-5 ">
-              <div class="col-md-12 p-2 ms-4 text-center">
-                <span class="fs-5 text-danger">{{ this.errorMessage}} </span>
+              <div class="row mb-2 mt-5 ">
+                <div class="col-md-12 p-2 ms-4 text-center">
+                  <span class="fs-5 text-danger">{{ this.errorMessage}} </span>
+                </div>
               </div>
-            </div>
-            <div class="row mb-2 mt-3 d-flex justify-content-center">
-              <div class="col-md-3 text-center">
-                <button type="submit"   class="btn btn-danger " [disabled]="formdata.invalid">Login</button>
+              <div class="row mb-2 mt-3 d-flex justify-content-center">
+                <div class="col-md-3 text-center">
+                  <button type="submit" class="btn btn-danger " [disabled]="formdata.invalid">Login</button>
+                </div>
+                <div class="col-md-4 text-center">
+                  <button (click)="VisitUrl(BookId, name, 'signup')" class="btn btn-outline-danger">Register
+                    Now</button>
+                </div>
+                <div class="col-md-5 text-start">
+                  <button type="button" (click)="VisitUrl(BookId, name, 'ForgotPassword')"
+                    class="btn btn-outline-danger ">
+                    Forgot Password
+                  </button>
+                </div>
               </div>
-              <div class="col-md-4 text-center">
-                <button (click)="VisitUrl(BookId, name, 'signup')" class="btn btn-outline-danger">Register Now</button>
+              <div class="row mb-2 mt-5">
               </div>
-              <div class="col-md-5 text-start">
-                <button type="button" (click)="VisitUrl(BookId, name, 'ForgotPassword')" class="btn btn-outline-danger ">
-                  Forgot Password
-                </button>
-              </div>
-            </div>
-            <div class="row mb-2 mt-5">
-            </div>
-          </form>
+            </form>
+          </div>
         </div>
       </div>
     </div>

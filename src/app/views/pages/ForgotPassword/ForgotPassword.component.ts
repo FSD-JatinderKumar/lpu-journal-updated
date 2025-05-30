@@ -16,6 +16,7 @@ import swal from 'sweetalert2';
 import { MouDocumentsService } from 'src/app/_services/mou-documents.service';
 import { LpujournalbookService } from 'src/app/_services/lpujournalbook.service';
 import { HttpClient } from '@angular/common/http';
+import { finalize } from 'rxjs';
 
 
 
@@ -136,24 +137,12 @@ export class ForgotPasswordComponent implements OnInit {
     });
   }
   
-  // Step 2: Verify ID proof number
   verifyIdProof() {
      
   }
   resetPassword() {
     const newPassword = this.generateRandomPassword();
     this.EmailresetPassword(newPassword);
-    // this.http.post('/api/send-reset-password', {
-    //   email: this.verifiedEmail,
-    //   newPassword
-    // }).subscribe({
-    //   next: () => {
-    //     this.errorMessage = '';
-    //     alert('A new password has been sent to your email.');
-    //     this.currentStep = 1; // or redirect to login
-    //   },
-    //   error: () => this.errorMessage = 'Failed to send password email. Try again later.'
-    // });
   }
 
 
@@ -163,58 +152,66 @@ export class ForgotPasswordComponent implements OnInit {
   }
     
   // // Step 3: Reset password
-  EmailresetPassword(NewPassword:any) {
-   
-        this.UserId = this.emailFormGroup.get('email')?.value;
-      const formData = new FormData();
-        formData.append('UserId', this.verifiedEmail);
-        formData.append('Password', NewPassword);
-        // formData.forEach((value, key) => {
-        //   console.log(`${key}: ${value}`);
-        // });
-        this.journalWebApiService.JournalUpdatePasswordDetails(formData).subscribe({
-          next: (data: any) => {
-            const result = data.item1[0]['msg'];
-            if (result === 'Success') {
-              swal.fire({
-                title: 'Password is rest, Check Email!',
-                text: '.',
-                icon: 'success'
-              }).then(() => {
-                this.router.navigateByUrl(this.BookId + '/' + this.name + '/' + 'ExternalLogin');
-              });
-            } else if (result === 'Failed') {
-              swal.fire({
-                title: 'Unable to Update Details Try Again Later ',
-                icon: 'error'
-              }).then(() => {
-                window.location.reload();
-              });
-            } else {
-              swal.fire({
-                title: 'Something Went Wrong, Try again later',
-                icon: 'error'
-              }).then(() => {
-                window.location.reload();
-              });
-            }
-          },
-          error: (error: any) => {
+
+  EmailresetPassword(NewPassword: any) {
+    this.isLoading = true;
+    const minLoadingTime = 2500; // 2.5 seconds
+    const startTime = Date.now();
+  
+    this.UserId = this.emailFormGroup.get('email')?.value;
+    const formData = new FormData();
+    formData.append('UserId', this.verifiedEmail); // Or use this.UserId
+    formData.append('Password', NewPassword);
+  
+    this.journalWebApiService.JournalUpdatePasswordDetails(formData)
+      .pipe(
+        finalize(() => {
+          const elapsed = Date.now() - startTime;
+          const remaining = Math.max(minLoadingTime - elapsed, 0);
+          setTimeout(() => {
+            this.isLoading = false;
+          }, remaining);
+        })
+      )
+      .subscribe({
+        next: (data: any) => {
+          const result = data.item1[0]['msg'];
+          if (result === 'Success') {
             swal.fire({
-              title: 'Error',
-              text: 'Failed to Update.',
+              title: 'Password is reset, Check Email!',
+              text: '.',
+              icon: 'success'
+            }).then(() => {
+              this.router.navigateByUrl(`${this.BookId}/${this.name}/ExternalLogin`);
+            });
+          } else {
+            swal.fire({
+              title: 'Unable to Update Details. Try Again Later.',
               icon: 'error'
             }).then(() => {
               window.location.reload();
             });
-          },
-          complete: () => {
           }
-        });
-    
+        },
+        error: (error: any) => {
+          swal.fire({
+            title: 'Error',
+            text: 'Failed to Update.',
+            icon: 'error'
+          }).then(() => {
+            window.location.reload();
+          });
+        }
+      });
   }
+  
   clearContents(){    
     this.emailFormGroup.reset();
     this.consentFormGroup.reset();
   }
+
+
+  // add logic on 30-May-25
+
+  isLoading: boolean= false;
 }
