@@ -178,6 +178,14 @@ const routes: Routes = [
         path: "UpdateKey",
         loadChildren: () => import('./views/pages/Journal-Editors-AdminDashboard/Change-Password/Change-Password.module').then(m=>m.ChangePasswordComponentModule)
       },
+      {
+        path:"NewVolume",
+        loadChildren:() => import('./views/pages/Journal-Editors-AdminDashboard/AddNewVolumeIssue/NewJournalVolumeIssues/NewJournalVolumeIssues.module').then(m=>m.NewJournalVolumeIssuesModule)
+      },
+      {
+        path:"AllVolumesIssues",
+        loadChildren:() => import('./views/pages/Journal-Editors-AdminDashboard/ViewAllJournalIssues/ViewAllJournalIssues.module').then(m=>m.ViewAllJournalIssuesModule)
+      },
 
 
       // Reviewers Dashboard 

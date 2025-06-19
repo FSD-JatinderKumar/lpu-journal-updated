@@ -22,7 +22,7 @@ export class LpujournalbookService {
       })
     };
     // return this.http.get<any>(`${this.baseUrl}api/LpuJournal/GetBooksMasterData`, httpOptions);
-    return this.http.get<any>(`${this.baseUrl}api/LpuJournal/GetAllJournalData`, httpOptions);
+    return this.http.get<any>(`${LOCAL_API_URL}api/LpuJournal/GetAllJournalData`, httpOptions);
   }
 
   GetBooksDataWithEditorDetails(): Observable<any> {
@@ -445,7 +445,6 @@ export class LpujournalbookService {
     );
   }
 
-
   AssignExternalReviewerForJournal(AssignnewReviewer: FormData): Observable<any> {
     let token = this.storageService.getUser();
     let headers = new HttpHeaders()
@@ -454,6 +453,27 @@ export class LpujournalbookService {
     return this.http.post(
       // LOCAL_API_URL + 'api/LpuJournal/AssignReviewerForJournal', AssignnewReviewer, { headers }
       this.baseUrl + 'api/LpuJournal/CreateJournalUserAccountForExternalReviewer', AssignnewReviewer, { headers }
+    );
+  }
+  AddNewIssuesDetails(NewIssueData: FormData): Observable<any> {
+    let token = this.storageService.getUser();
+    let headers = new HttpHeaders()
+      .set('Authorization', 'Bearer ' + token)
+      .set('Accept', '*/*',);
+    return this.http.post(
+      // LOCAL_API_URL + 'api/LpuJournal/AssignReviewerForJournal', AssignnewReviewer, { headers }
+      LOCAL_API_URL + 'api/LpuJournal/AddNewJournalIssueData', NewIssueData, { headers }
+    );
+  }
+
+  GetJournalIssues(JournalId: any): Observable<any> {
+    let token = this.storageService.getUser();
+    let headers = new HttpHeaders()
+      .set('Authorization', 'Bearer ' + token)
+    return this.http.get(
+      // 'https://localhost:7125/'+ 'api/LpuJournal/GetAllManuscrpitDetailsForReviewer?UserId=' + UserEmail,
+      LOCAL_API_URL  + 'api/LpuJournal/GetJournalIssuesDetails?JournalId=' + JournalId,
+      { headers }
     );
   }
 }

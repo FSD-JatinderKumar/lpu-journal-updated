@@ -90,6 +90,8 @@ import { RDRemarksDetailsComponent } from './views/pages/RoleWise-Dashboard/Revi
 import { ViewAllManuscripts } from './views/pages/RoleWise-Dashboard/AuthorDashboard/ManuScriptReport/ViewAllManuscripts.component';
 import { ForgotPasswordComponent } from './views/pages/ForgotPassword/ForgotPassword.component';
 import { submitManuScriptComponentModule } from './views/pages/submitManuScript/submitManuScript.module';
+import { NewJournalVolumeIssuesComponent } from './views/pages/Journal-Editors-AdminDashboard/AddNewVolumeIssue/NewJournalVolumeIssues/NewJournalVolumeIssues.component';
+import { ViewAllJournalIssuesComponent } from './views/pages/Journal-Editors-AdminDashboard/ViewAllJournalIssues/ViewAllJournalIssues.component';
 
 @NgModule({
   declarations: [
@@ -158,6 +160,8 @@ import { submitManuScriptComponentModule } from './views/pages/submitManuScript/
     ViewAllManuscripts,
 
     ForgotPasswordComponent,
+    NewJournalVolumeIssuesComponent, 
+    ViewAllJournalIssuesComponent
     
     
   ],
@@ -202,6 +206,7 @@ import { submitManuScriptComponentModule } from './views/pages/submitManuScript/
     EDManuscriptDetailsModule,
     EDReviewersRemarksDetailsModule,
     submitManuScriptComponentModule,
+    
     
   ],
   providers: [],
