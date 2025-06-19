@@ -493,14 +493,17 @@
                                       <i class="bi bi-file-earmark-text"></i>
                                     </button>
                                     <span *ngSwitchCase="'reviewerAssigned'">
-                                      <button *ngIf="row[col]!=null; else NA" class="btn btn-danger btn-sm" (click)="onTakeAction(row)"
+                                      <button *ngIf="row[col]==null; else NA" class="btn btn-danger btn-sm" (click)="onTakeAction(row)"
                                         data-bs-toggle="modal" data-bs-target="#assignReviewerModal">
                                         <i class="bi bi-exclamation-circle"></i>
                                       </button>
                                     </span>
                                     <ng-template #NA>
                                       <div class="themeClr">
-                                        <span class=" "> Current Reviewer {{row[col]}} </span>
+                                        <span class="text-success "> 
+                                          Reviewer Assigned 
+                                          <!-- Current Reviewer <br/>{{row[col]}}  -->
+                                        </span>
                                       </div>
                                     </ng-template>
                                     <span *ngSwitchDefault>{{ row[col] }}</span>

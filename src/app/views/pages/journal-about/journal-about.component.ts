@@ -114,7 +114,9 @@ export class JournalAboutComponent implements OnInit {
     // console.log("Details: " + JSON.stringify(this.detailsArray));
   }
   AssociateEditor: any;
+  AssistantEditor: any;
   ManagingEditor: any;
+  AssistantEditors: any;
   EditorInChief: any;
   EditorialboardmembersNational: any;
   EditorialboardmembersReviews: any;
@@ -129,6 +131,7 @@ export class JournalAboutComponent implements OnInit {
       this.GetDataforEditors();
       this.EditorialboardmembersNational = this.filteredEditors.filter((item: { editorType: string; }) => item.editorType.toLowerCase().includes('editorial board members national'));
       this.EditorialboardmembersInterNational = this.filteredEditors.filter((item: { editorType: string; }) => item.editorType.toLowerCase().includes('editorial board members international'));
+      this.AssistantEditor = this.filteredEditors.filter((item: { editorType: string; }) => item.editorType.toLowerCase().includes('Assistant Editor'));
 
       // console.log(JSON.stringify(this.EditorialboardmembersNational))
       // console.log(JSON.stringify(this.EditorialboardmembersInterNational))
@@ -145,12 +148,39 @@ export class JournalAboutComponent implements OnInit {
      
     });
   }
-
+  // GetDataforEditors() {
+  //   const targetId = 255; // change this to the specific ID you want
+  //   this.EditorInChief = this.filteredEditors.filter((item: { editorType: string; }) =>
+  //     item.editorType.toLowerCase().includes('editor in chief')
+  //   );
+  //   this.AssociateEditor = this.filteredEditors.filter((item: { editorType: string; }) =>
+  //     item.editorType.toLowerCase().includes('associate editors')
+  //   );
+  //   this.ManagingEditor = this.filteredEditors.find((item: { editorType: string; id: number; }) =>
+  //     item.editorType.toLowerCase().includes('managing editor') && item.id === targetId
+  //   );
+  //   console.log("Managing Editor:", this.ManagingEditor);
+  
+  //   this.AssistantEditors = this.filteredEditors.filter((item: { editorType: string; }) =>
+  //     item.editorType.toLowerCase().includes('assistant editor')
+  //   );
+  // }
+  ManagingEditorNames: any;
   GetDataforEditors()
   {
     this.EditorInChief = this.filteredEditors.filter((item: { editorType: string; }) => item.editorType.toLowerCase().includes('editor in chief')); //
     this.AssociateEditor = this.filteredEditors.filter((item: { editorType: string; }) => item.editorType.toLowerCase().includes('associate editors'));
     this.ManagingEditor = this.filteredEditors.filter((item: { editorType: string; }) => item.editorType.toLowerCase().includes('managing editor'));
+ 
+    // this.ManagingEditorNames = this.ManagingEditor.map((editor: { editorName: any; }) => editor.editorName).join('<br/> ');
+    this.ManagingEditorNames = this.ManagingEditor.map(
+      (editor: { editorName: any }, index: number) => {
+        const color = index % 2 === 0 ? 'EditorColor1' : 'EditorColor2'; // Alternate colors
+        return `<span style="color: ${color}">${editor.editorName}</span>`;
+      }
+    ).join('<br/>');
+    
+    this.AssistantEditors = this.filteredEditors.filter((item: { editorType: string; }) => item.editorType.toLowerCase().includes('assistant editor'));
     // this.EditorialboardmembersReviews = this.filteredEditors.filter((item: { editorType: string; }) => item.editorType.toLowerCase().includes('reviewers '));
   }
 

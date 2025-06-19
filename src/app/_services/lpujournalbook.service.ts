@@ -272,8 +272,8 @@ export class LpujournalbookService {
       .set('Authorization', 'Bearer ' + token)
     return this.http.get(
       // AUTH_API_LOCAL + 'api/LpuJournal/GetAllMenuScriptForJournal?Id=' + JournalId, { headers }
-      // this.baseUrl + 'api/LpuJournal/GetAllMenuScriptForJournal?Id=' + JournalId, { headers }
-      LOCAL_API_URL + 'api/LpuJournal/GetAllMenuScriptForJournal?Id=' + JournalId, { headers }
+      this.baseUrl + 'api/LpuJournal/GetAllMenuScriptForJournal?Id=' + JournalId, { headers }
+      // LOCAL_API_URL + 'api/LpuJournal/GetAllMenuScriptForJournal?Id=' + JournalId, { headers }
     );
   }
 
@@ -453,7 +453,7 @@ export class LpujournalbookService {
       .set('Accept', '*/*',);
     return this.http.post(
       // LOCAL_API_URL + 'api/LpuJournal/AssignReviewerForJournal', AssignnewReviewer, { headers }
-      LOCAL_API_URL+ 'api/LpuJournal/CreateJournalUserAccountForExternalReviewer', AssignnewReviewer, { headers }
+      this.baseUrl + 'api/LpuJournal/CreateJournalUserAccountForExternalReviewer', AssignnewReviewer, { headers }
     );
   }
 }

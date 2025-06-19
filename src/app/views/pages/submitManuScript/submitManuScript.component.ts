@@ -116,99 +116,7 @@ export class SubmitManuScriptComponent implements OnInit {
     });
   }
   UserRolesArray: { value: string; label: string; id: string }[] = [];
-
-  getUserRolesforId(): void {
-    const roleMapping: Record<string, string> = {
-      '0': 'Editor',
-      '1': 'Author/ Submit Manuscript',
-      '2': 'Reviewer',
-      '3': 'Publisher'
-    };
-
-    this.journalWebApiService.GetUserRolesforUser(this.userId).subscribe({
-      next: (response) => {
-        if (response?.item1?.length > 0) {
-          this.UserRolesData = response.item1[0];
-
-          let roles = this.UserRolesData?.userRole
-            ? this.UserRolesData.userRole.split(',').map((r: string) => r.trim())
-            : [];
-
-          // Always include '1' (Author) if it's not already present
-          if (!roles.includes('1')) {
-            roles.push('1');
-          }
-
-          this.UserRolesArray = roles.map((role: string) => {
-            const roleKey = role;
-            const label = roleMapping[roleKey] || roleKey;
-
-            return {
-              value: roleKey,
-              label,
-              id: label.replace(/\s+/g, '')
-            };
-          });
-        } else {
-          // If no roles found, default to Author role
-          this.UserRolesArray = [{
-            value: '1',
-            label: roleMapping['1'],
-            id: roleMapping['1'].replace(/\s+/g, '')
-          }];
-        }
-      },
-      error: (err) => {
-        console.error('Error fetching user roles:', err);
-
-        // On error, default to Author role
-        this.UserRolesArray = [{
-          value: '1',
-          label: roleMapping['1'],
-          id: roleMapping['1'].replace(/\s+/g, '')
-        }];
-        this.LoginFalied();
-      }
-    });
-  }
-
-  // getUserRolesforId(): void {
-  //   const roleMapping: Record<string, string> = {
-  //     '0': 'Editor',
-  //     '1': 'Author/ Submit Manuscript',
-  //     '2': 'Reviewer',
-  //     '3': 'Publisher'
-  //   };
-
-  //   this.journalWebApiService.GetUserRolesforUser(this.userId).subscribe({
-  //     next: (response) => {
-  //       if (response?.item1?.length > 0) {
-  //         this.UserRolesData = response.item1[0];
-
-  //         // Ensure userRole exists before splitting
-  //         const roles = this.UserRolesData?.userRole ? this.UserRolesData.userRole.split(',') : [];
-
-  //         this.UserRolesArray = roles.map((role: any) => {
-  //           const roleKey = String(role); // Ensure role is a string
-  //           const label = roleMapping[roleKey] || roleKey; // Use mapped label or fallback to role itself
-
-  //           return {
-  //             value: roleKey,
-  //             label,
-  //             id: label.replace(/\s+/g, '') // Safe to call replace() now
-  //           };
-  //         });
-  //       } else {
-  //         this.UserRolesArray = []; // Reset array if no roles found
-  //       }
-  //     },
-  //     error: (err) => {
-  //       console.error('Error fetching user roles:', err);
-  //       this.UserRolesArray = []; // Reset array on error
-  //       this.LoginFalied();
-  //     }
-  //   });
-  // }
+ 
   LoginFalied() {
     this.VisitUrl(this.BookId, this.name, 'ExternalLogin');
   }
@@ -235,46 +143,6 @@ export class SubmitManuScriptComponent implements OnInit {
 
   }
 
-  GetJournalDetailsAbout(JournalId: any): void {
-    this.journalWebApiService.GetJournalDetailsforAboutPage(JournalId).subscribe((response) => {
-      if (response.item1 && response.item1.length > 0) {
-        this.bookData = response.item1[0];
-        this.JournalDetails = this.bookData['journalDetails']
-        this.EditorInChief = this.bookData?.editorName
-        this.AuthorEmailId = this.bookData?.authorEmailId
-        this.JournalSubTitle = this.bookData?.subTitle;
-        this.extractDetails();
-      }
-      else {
-        this.bookData = [];
-        this.LoginFalied();
-      }
-    });
-  }
-
-
-  showData() {
-    this.journalWebApiService.GetAllBooksDetails().subscribe({
-      next: (dataX: any) => {
-        this.dataSource = dataX.item1;
-        this.dataLoaded = true;
-        this.booksData = dataX.item1;
-        if (this.booksData.length > 0) {
-          this.booksDataColumns = Object.keys(this.booksData[0]);
-        }
-        this.dataShowing = true;
-
-      },
-      error: (error: any) => {
-
-        this.dataShowing = false;
-        this.LoginFalied();
-      },
-      complete: () => {
-        this.dataShowing = true;
-      }
-    });
-  }
 
   onFileSelected(event: any): void {
     const reader = new FileReader();
@@ -362,95 +230,6 @@ export class SubmitManuScriptComponent implements OnInit {
   AllSubItemTypes: any;
   AllSubmissionTypes: any;
   selectedOption: string = 'zip';
-  // uploadFile() {
-  //   const reader = new FileReader();
-  //   const fileName = 'merged-files.zip';
-  //     if (this.generatedFile) {
-  //       if (this.generatedFile.size > 54991576) {
-  //         Swal.fire({
-  //           title: 'File size exceeds 50MB. Please upload a smaller file.',
-  //           text: 'Invalid File size',
-  //           icon: 'warning'
-  //         });
-  //         this.fileData = null;
-  //         this.fileStatus = false;
-  //         return;
-  //       }
-
-  //       reader.readAsDataURL(this.generatedFile);
-  //       reader.onload = () => {
-  //         const result = reader.result as string;
-  //         const resultArray = result.split(',');
-  //         this.FileData = resultArray[1];
-  //         this.fileStatus = true;
-  //       };
-  //     } else {
-  //       this.fileData = null;
-  //       this.fileStatus = false;
-  //     }
-  //   // Initialize the variables as empty strings
-  //   this.AllManuScriptType = "";        this.AllSubItemTypes = "";    this.AllSubmissionTypes = "";  
-  //   // Populate the variables with concatenated values
-  //   this.cartItems.forEach(item => {
-  //     this.AllManuScriptType += item.ManuScriptType + ',';
-  //     this.AllSubItemTypes += item.SubItemType=='Select'? 'NA' :item.SubItemType + ',';
-  //     this.AllSubmissionTypes += item.SubmissionType + ',';
-  //   });
-
-  //   // Remove the trailing comma (optional for cleaner data)
-  //   this.AllManuScriptType = this.AllManuScriptType.replace(/,$/, '');
-  //   this.AllSubItemTypes = this.AllSubItemTypes.replace(/,$/, '');
-  //   this.AllSubmissionTypes = this.AllSubmissionTypes.replace(/,$/, '');
-
-  //   // Create the FormData object
-  //   const formData = new FormData();
-  //   formData.append('JournalId', this.JournalId);
-  //   formData.append('JournalTitle', this.JournalTitle);
-  //   formData.append('ManuScriptType', this.AllManuScriptType);
-  //   formData.append('SubmissionType', this.AllSubmissionTypes);
-  //   formData.append('SubItemType', this.AllSubItemTypes);
-  //   formData.append('UserId', this.userId);
-  //   formData.append('EditorInchief', this.EditorInChief);
-  //   formData.append('FileUrl', fileName);
-  //   formData.append('File', this.FileData);
-
-  //   // Call the API
-  //   this.journalWebApiService.AddNewJournalMenuScriptData(formData).subscribe({
-  //     next: (data) => {
-  //       let result = data.item1[0]['msg'];
-  //       let errorCode = data.item1[0]['returnId'];
-
-  //       if (result === 'OK') {
-  //         Swal.fire({
-  //           title: 'Manuscripts are Uploaded and Saved Successfully',
-  //           text: data.item1[0]['msg'],
-  //           icon: 'success',
-  //         }).then(() => {
-  //           window.location.reload();
-  //         });
-  //       } else {
-  //         Swal.fire({
-  //           title: 'Some Technical Issue',
-  //           text: result,
-  //           icon: 'error',
-  //         }).then(() => {
-  //           window.location.reload();
-  //         });
-  //       }
-  //     },
-  //     error: (err) => {
-  //       Swal.fire({
-  //         title: 'Error Occurred',
-  //         text: 'Unable to complete the request. Please try again later.',
-  //         icon: 'error',
-  //       });
-  //     }
-  //   });
-  //   this.scriptUploadForm.reset();  // Reset the form after adding
-  // }
-
-
-
   IsUploading: boolean= false;
   uploadFile() {
     this.IsUploading=true;
@@ -555,21 +334,6 @@ export class SubmitManuScriptComponent implements OnInit {
     this.scriptUploadForm.reset(); // Reset the form after upload
   }
 
-  //   New function to send an email notification
-  // sendEmailNotification(userId: string) {
-  //   const emailPayload = {
-  //     userId: userId,
-  //     subject: 'Manuscript Upload Confirmation',
-  //     body: 'Your manuscripts have been uploaded successfully.'
-  //   };
-
-  //   this.journalWebApiService.sendEmail(emailPayload).subscribe({
-  //     next: () => console.log('Email sent successfully'),
-  //     error: (err) => console.error('Error sending email', err)
-  //   });
-  // }
-
-
   generatedFile: Blob | null = null; // Store generated file data
 
   generateZip() {
@@ -613,11 +377,6 @@ export class SubmitManuScriptComponent implements OnInit {
 
    
   ReviewerdisplayedColumns: string[] = [
-    // 'journalId',	id,			JournalId,			JournalTitle,			MenuScriptType,			SubmissionType,		FileUrl,			EditorInchief	, CreatedBy , UserId as RequestedBy , UpdatedBy as AssignedBy
-    // "id":173,"journalId":45,"journalTitle":"","manuScript":"","submissionType":"Manuscript,Manuscript,Manuscript","fileUrl":"","filePath":"","editorInChief":"Dr. Abhijeet Pandey","userId":"kunal.kashyap@gmail.com","emailId":"kunal.kashyap@gmail.com","userName":"Mr. Kunal ","uploadedOn":"13 May 2025"}
-
-    // ALL ReviewerData  Data[{"id":113,"journalId":62,"journalTitle":"International Journal of Recent Developments in Sc",
-    // "manuScriptType":null,"submissionType":"Manuscript,Manuscript","fileUrl":"62_230881879_5_2025_merged-files.zip","editorInChief":"Dr. Geeta Arora","createdBy":"drgeeta1612@gmail.com","requestedBy":"drgeeta1612@gmail.com","assignedBy":"drgeeta1612@gmail.com"},{"id":105,"journalId":62,"journalTitle":"International-Journal-of-Recent-Developments-in-Sc","manuScriptType":null,"submissionType":"Manuscript","fileUrl":"62_168457961_6_2025_merged-files.zip","editorInChief":"Dr. Geeta Arora","createdBy":"geetadma@gmail.com","requestedBy":"geetadma@gmail.com","assignedBy":"drgeeta1612@gmail.com"}]
     'journalTitle',
     'editorInChief',
     // 'manuScript',
@@ -649,7 +408,7 @@ export class SubmitManuScriptComponent implements OnInit {
     submissionType: 'Submitted Script ', 
     fileUrl: 'Document' ,
     journalId: 'Action' 
-  }; // Custom header text journalTitle	editorInChief	ManuScriptType	submissionType
+  }; 
   
 
   showReviewerData(Emailid: any) {
@@ -685,6 +444,153 @@ export class SubmitManuScriptComponent implements OnInit {
       }
     });
   }
+
+  showEditorData(journalId: any) {
+    this.journalWebApiService.GetAllMenuScriptForJournalId(journalId).subscribe({
+      next: (dataX: any) => {
+        this.dataSource = dataX.item1;
+        this.dataLoaded = true;
+        this.EditorData = dataX.item1;
+        console.log("ALL Menuscript   Data" + JSON.stringify(this.EditorData))
+        if (this.EditorData.length > 0) {
+          this.EditorDataColumns = Object.keys(this.EditorData[0]);
+          this.calculateTotalPagesEditor();
+          this.updatePaginatedDataEditor();
+
+        }
+        this.dataShowing = true;
+      },
+      error: (error: any) => {
+        this.dataShowing = false;
+        console.error('Error fetching data', error);
+        this.LoginFalied();
+      },
+      complete: () => {
+        this.dataShowing = true;
+      }
+    });
+    this.GetallReviewsData(this.BookId);
+  }
+
+  loadReviewers(id: any) {
+    // API call to fetch reviewer list
+    this.journalWebApiService.GetReviewerDetailsForEditors(this.userId).subscribe({
+      next: (dataX: any) => {
+        this.dataSource = dataX.item1;
+        this.reviewerList = dataX.item1;
+        // console.log("ALL Reviewerlist" + JSON.stringify(this.reviewerList))
+
+      },
+      error: (error: any) => {
+        this.dataShowing = false;
+        console.error('Error fetching data', error);
+        this.LoginFalied();
+      },
+      complete: () => {
+        this.dataShowing = true;
+      }
+    });
+  }
+  
+  GetJournalDetailsAbout(JournalId: any): void {
+    this.journalWebApiService.GetJournalDetailsforAboutPage(JournalId).subscribe((response) => {
+      if (response.item1 && response.item1.length > 0) {
+        this.bookData = response.item1[0];
+        this.JournalDetails = this.bookData['journalDetails']
+        this.EditorInChief = this.bookData?.editorName
+        this.AuthorEmailId = this.bookData?.authorEmailId
+        this.JournalSubTitle = this.bookData?.subTitle;
+        this.extractDetails();
+      }
+      else {
+        this.bookData = [];
+        this.LoginFalied();
+      }
+    });
+  }
+
+  
+  showData() {
+    this.journalWebApiService.GetAllBooksDetails().subscribe({
+      next: (dataX: any) => {
+        this.dataSource = dataX.item1;
+        this.dataLoaded = true;
+        this.booksData = dataX.item1;
+        if (this.booksData.length > 0) {
+          this.booksDataColumns = Object.keys(this.booksData[0]);
+        }
+        this.dataShowing = true;
+
+      },
+      error: (error: any) => {
+
+        this.dataShowing = false;
+        this.LoginFalied();
+      },
+      complete: () => {
+        this.dataShowing = true;
+      }
+    });
+  }
+
+  
+  getUserRolesforId(): void {
+    const roleMapping: Record<string, string> = {
+      '0': 'Editor',
+      '1': 'Author/ Submit Manuscript',
+      '2': 'Reviewer',
+      '3': 'Publisher'
+    };
+
+    this.journalWebApiService.GetUserRolesforUser(this.userId).subscribe({
+      next: (response) => {
+        if (response?.item1?.length > 0) {
+          this.UserRolesData = response.item1[0];
+
+          let roles = this.UserRolesData?.userRole
+            ? this.UserRolesData.userRole.split(',').map((r: string) => r.trim())
+            : [];
+
+          // Always include '1' (Author) if it's not already present
+          if (!roles.includes('1')) {
+            roles.push('1');
+          }
+
+          this.UserRolesArray = roles.map((role: string) => {
+            const roleKey = role;
+            const label = roleMapping[roleKey] || roleKey;
+
+            return {
+              value: roleKey,
+              label,
+              id: label.replace(/\s+/g, '')
+            };
+          });
+        } else {
+          // If no roles found, default to Author role
+          this.UserRolesArray = [{
+            value: '1',
+            label: roleMapping['1'],
+            id: roleMapping['1'].replace(/\s+/g, '')
+          }];
+        }
+      },
+      error: (err) => {
+        console.error('Error fetching user roles:', err);
+
+        // On error, default to Author role
+        this.UserRolesArray = [{
+          value: '1',
+          label: roleMapping['1'],
+          id: roleMapping['1'].replace(/\s+/g, '')
+        }];
+        this.LoginFalied();
+      }
+    });
+  }
+
+
+
   onSelectFileX(a: any) {
     let aa = a;
     window.open('https://files.lpu.in/umsweb/Journal/' + aa, '_blank');
@@ -876,30 +782,7 @@ export class SubmitManuScriptComponent implements OnInit {
   selectedJournalId: any;
   selectedReviewerId: string = '';
   reviewerList: any[] = [];
-  loadReviewers(id: any) {
-    // API call to fetch reviewer list
-    this.journalWebApiService.GetReviewerDetailsForEditors(this.userId).subscribe({
-      next: (dataX: any) => {
-        this.dataSource = dataX.item1;
-        this.reviewerList = dataX.item1;
-        // console.log("ALL Reviewerlist" + JSON.stringify(this.reviewerList))
-
-      },
-      error: (error: any) => {
-        this.dataShowing = false;
-        console.error('Error fetching data', error);
-        this.LoginFalied();
-      },
-      complete: () => {
-        this.dataShowing = true;
-        // console.log('Data fetching complete');
-      }
-    });
-    // this.journalWebApiService.GetAllReviewersForJournalId(id).subscribe((reviewers) => {
-    //   this.reviewerList = reviewers;
-    // });
-    // this.selectedReviewerId.value='select';
-  }
+ 
   AssignedById: any;
   RecordId: any;
   onTakeAction(rowData: any) {
@@ -1043,67 +926,6 @@ assignExternalReviewer(data:any){
   modal?.hide();
 }
 
-  // assignReviewer() {
-  //   if (!this.selectedReviewerId) {
-  //     alert('Please select a reviewer.');
-  //     return;
-  //   }
-  //   // AssignNewReviewerForJournal
-
-
-  //   const formData = new FormData();
-  //   // alert(this.AssignedById +" reviewer Emaild " + this.selectedReviewerId)
-  //   // Append form data to the FormData object
-  //   formData.append('JournalId', this.selectedJournalId);
-  //   formData.append('AssignedTo', this.selectedReviewerId);
-  //   formData.append('SubmittedBy', this.AssignedById);
-  //   formData.append('RecordId', this.RecordId);
-
-
-  //   this.journalWebApiService.AssignNewReviewerForJournal(formData).subscribe({
-  //     next: (data) => {
-  //       let result = data.item1[0]['returnData'];
-  //       let errorCode = data.item1[0]['returnId'];
-
-  //       if (result === 'success') {
-  //         Swal.fire({
-  //           title: 'Reviewer Assiged ',
-  //           text: data.item1[0]['msg'],
-  //           icon: 'success',
-  //         }).then(() => {
-  //           window.location.reload();
-  //         });
-  //       } else {
-  //         Swal.fire({
-  //           title: 'Some Technical Issue',
-  //           text: result,
-  //           icon: 'error',
-  //         }).then(() => {
-  //           window.location.reload();
-  //         });
-  //       }
-  //     },
-  //     error: (err) => {
-  //       Swal.fire({
-  //         title: 'Error Occurred',
-  //         text: 'Unable to complete the request. Please try again later.',
-  //         icon: 'error',
-  //       });
-  //     }
-  //   });
-
-  //   alert(`Journal ID: ${this.selectedJournalId} assigned to Reviewer ID: ${this.selectedReviewerId}`);
-
-  //   // Close modal after success
-  //   let modal = bootstrap.Modal.getInstance(document.getElementById('assignReviewerModal'));
-  //   modal.hide();
-  // }
-
-
-
-
-
-  // 
 
   //  Editors login action Data grid start 
 
@@ -1115,7 +937,7 @@ assignExternalReviewer(data:any){
     submissionType: 'Submitted Script ',
     fileUrl: 'File Download',
     journalId: 'Action'
-  }; // Custom header text journalTitle	editorInChief	ManuScriptType	submissionType
+  }; 
 
 
 
@@ -1131,20 +953,20 @@ assignExternalReviewer(data:any){
     'userName',
     'submissionType',
     'fileUrl',
-    'journalId'
+    // 'journalId'
   ];
   displayedEditorColumnHeaders: { [key: string]: string } = {
     journalTitle: 'Journal Title',
     manuScript: 'Manu Script',
     editorInChief: 'Editor In Chief',
-    emailId: 'Submitted User Email',
+    emailId: 'Submitted by',
     userName: 'Correspond Author',
     uploadedOn: 'Date of Submition',
     submissionType: 'Submitted Script ',
     fileUrl: 'Document',
     reviewerAssigned:'Action',
-    // journalId: 'Action'
-  }; // Custom header text journalTitle	editorInChief	ManuScriptType	submissionType
+    // journalId: 'Actions'
+  }; 
 
 
 
@@ -1174,33 +996,6 @@ assignExternalReviewer(data:any){
     'Action'
   ];
 
-  showEditorData(journalId: any) {
-    this.journalWebApiService.GetAllMenuScriptForJournalId(journalId).subscribe({
-      next: (dataX: any) => {
-        this.dataSource = dataX.item1;
-        this.dataLoaded = true;
-        this.EditorData = dataX.item1;
-        // console.log("ALL Menuscript   Data" + JSON.stringify(this.EditorData))
-        if (this.EditorData.length > 0) {
-          this.EditorDataColumns = Object.keys(this.EditorData[0]);
-          this.calculateTotalPagesEditor();
-          this.updatePaginatedDataEditor();
-
-        }
-        this.dataShowing = true;
-        this.getUserRolesforId();
-      },
-      error: (error: any) => {
-        this.dataShowing = false;
-        console.error('Error fetching data', error);
-        this.LoginFalied();
-      },
-      complete: () => {
-        this.dataShowing = true;
-      }
-    });
-    this.GetallReviewsData(this.BookId);
-  }
 
   currentPageReviewerRemarks: number = 1;
   pageSizeReviewerRemarks: number = 10;
@@ -1267,15 +1062,7 @@ assignExternalReviewer(data:any){
     this.calculateTotalPagesReviewerRemarks();
     this.updatePaginatedDataReviewerRemarks();
   }
-  // calculateTotalPagesReviewerRemarks() {
-  //   this.totalPagesReviewerRemarks = Math.ceil(this.ReviewerRemarksData.length / this.pageSizeReviewerRemarks);
-  // }
-
-  // updatePaginatedDataReviewerRemarks() {
-  //   const startIndex = (this.currentPageReviewerRemarks - 1) * this.pageSizeReviewerRemarks;
-  //   this.paginatedReviewerRemarks = this.ReviewerRemarksData.slice(startIndex, startIndex + this.pageSizeReviewerRemarks);
-  // }
-
+   
   nextPageReviewerRemarks() {
     if (this.currentPageReviewerRemarks < this.totalPagesReviewerRemarks) {
       this.currentPageReviewerRemarks++;
@@ -1386,92 +1173,6 @@ assignExternalReviewer(data:any){
     );
   }
 
-
-  // currentPageReviewerRemarks: number = 1;
-  // pageSizeReviewerRemarks: number = 10;
-  // paginatedReviewerRemarks: any[] = [];
-  // totalPagesReviewerRemarks: number = 1;
-
-  // displayedReviewerRemarksColumnHeaders: { [key: string]: string } = { 
-  //   reviewerTerm:       'Term Reviewed', 
-  //   overallRating:      'Overall Rating', 
-  //   commentsForAuthor:  'Comments for Author', 
-  //   commentsForEditor:  'Comments for Editor', 
-  //   transferResponse:   'Transfer Response', 
-  //   newSubjectRating:  'Subject Rating', 
-  //   manuscriptRating:  'Manuscript Rating', 
-  //   manuscriptOrganisedRating: 'Manuscript Organised Rating', 
-  //   // userName: 'Submitted By', 
-  //   // submissionType: 'Submitted Script ', 
-  //   // fileUrl: 'Document' ,
-  //   journalId: 'Action' 
-  // }; // Custom header text journalTitle	editorInChief	ManuScriptType	submissionType
-
-  //   ReviewerRemarksdisplayedColumns: string[] = [
-  //     'Term Reviewed',
-  //     'Overall Rating',
-  //     'Comments for Author',
-  //     'Comments for Editor',
-  //     'Transfer Response',
-  //     'Subject Rating',
-  //     'Manuscript Rating',
-  //     'journalId'
-  //   ];
-
-
-
-  // calculateTotalPagesReviewerRemarks() {
-  //   this.totalPagesReviewerRemarks = Math.ceil(this.ReviewerRemarksData.length / this.pageSizeReviewerRemarks);
-  // }
-
-  // updatePaginatedDataReviewerRemarks() {
-  //   const startIndex = (this.currentPageReviewerRemarks - 1) * this.pageSizeReviewerRemarks;
-  //   this.paginatedReviewerRemarks = this.ReviewerRemarksData.slice(startIndex, startIndex + this.pageSizeReviewerRemarks);
-  // }
-
-  // nextPageReviewerRemarks() {
-  //   if (this.currentPageReviewerRemarks < this.totalPagesReviewerRemarks) {
-  //     this.currentPageReviewerRemarks++;
-  //     this.updatePaginatedDataReviewerRemarks();
-  //   }
-  // }
-
-  // previousPageReviewerRemarks() {
-  //   if (this.currentPageReviewerRemarks > 1) {
-  //     this.currentPageReviewerRemarks--;
-  //     this.updatePaginatedDataReviewerRemarks();
-  //   }
-  // }
-
-  // ReviewerRemarksData: any;
-  // ReviewerRemarksDataColumns: any;
-
-  // GetallReviewsData(journalId: any) {
-  //   this.journalWebApiService.GetAllReviewersRemarkss(journalId).subscribe({
-  //     next: (dataXY: any) => {
-  //       this.dataSource = dataXY.item1;
-  //       this.dataLoaded = true;
-  //       this.ReviewerRemarksData = dataXY.item1;
-  //       console.log("ALL ReviewerRemarksData   Data" + JSON.stringify(this.ReviewerRemarksData))
-  //       if (this.ReviewerRemarksData.length > 0) {
-  //         this.ReviewerRemarksDataColumns = Object.keys(this.ReviewerRemarksData[0]);
-  //         this.calculateTotalPagesReviewerRemarks();
-  //         this.updatePaginatedDataReviewerRemarks();
-  //       }
-  //       this.dataShowing = true;
-  //       this.getUserRolesforId();
-  //     },
-  //     error: (error: any) => {
-  //       this.dataShowing = false;
-  //       console.error('Error fetching data', error);
-  //       this.LoginFalied();
-  //     },
-  //     complete: () => {
-  //       this.dataShowing = true;
-  //     }
-  //   });
-  // }
-
   onSelectFileEditorX(a: any) {
     let aa = a;
     // alert(aa)
@@ -1507,7 +1208,6 @@ assignExternalReviewer(data:any){
       this.updatePaginatedDataEditor();
     }
   }
-
   // Added on 24-feb-25
 
   NewIdForJournal: any;
@@ -1517,7 +1217,6 @@ assignExternalReviewer(data:any){
     this.detailsArray = items.map((item: { split: (arg0: string) => { (): any; new(): any; map: { (arg0: (part: any) => any): [any, any]; new(): any; }; }; }) => {
       const [key, value] = item.split(':').map(part => part.trim());
 
-      // Handle specific cases for abbreviations to avoid unwanted spacing
       let formattedKey;
       if (key === 'Journal Id') {
         // alert(value+"== Journal New Id")
@@ -1529,10 +1228,6 @@ assignExternalReviewer(data:any){
 
       return { key: formattedKey, value };
     });
-
-    // console.log("Details: " + JSON.stringify(this.detailsArray));
   }
-
-
 }
 
