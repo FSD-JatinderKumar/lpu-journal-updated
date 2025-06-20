@@ -92,6 +92,7 @@ import { ForgotPasswordComponent } from './views/pages/ForgotPassword/ForgotPass
 import { submitManuScriptComponentModule } from './views/pages/submitManuScript/submitManuScript.module';
 import { NewJournalVolumeIssuesComponent } from './views/pages/Journal-Editors-AdminDashboard/AddNewVolumeIssue/NewJournalVolumeIssues/NewJournalVolumeIssues.component';
 import { ViewAllJournalIssuesComponent } from './views/pages/Journal-Editors-AdminDashboard/ViewAllJournalIssues/ViewAllJournalIssues.component';
+import { JournalIssuesDetailsComponent } from './views/pages/JournalIssuesDetails/JournalIssuesDetails.component';
 
 @NgModule({
   declarations: [
@@ -161,7 +162,8 @@ import { ViewAllJournalIssuesComponent } from './views/pages/Journal-Editors-Adm
 
     ForgotPasswordComponent,
     NewJournalVolumeIssuesComponent, 
-    ViewAllJournalIssuesComponent
+    ViewAllJournalIssuesComponent, 
+    JournalIssuesDetailsComponent
     
     
   ],

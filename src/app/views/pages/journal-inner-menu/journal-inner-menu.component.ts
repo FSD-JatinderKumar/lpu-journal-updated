@@ -5,9 +5,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { LoginSessionService } from 'src/app/_services/login-session.service';
 import { LpujournalbookService } from 'src/app/_services/lpujournalbook.service';
 import { StorageService } from 'src/app/_services/storage.service';
- 
 import Swal from 'sweetalert2';
-// import swal from 'sweetalert2';
 @Component({
   selector: 'app-journal-inner-menu',
   templateUrl: './journal-inner-menu.component.html',
@@ -37,10 +35,11 @@ export class JournalInnerMenuComponent implements OnInit {
   ngOnInit(): void {
     var BookId = this.route.snapshot.params['Id'];
     var name = this.route.snapshot.params['name'];
+    this.GetAllIssues(BookId);  
     this.LoginStatus=this.checkUserLogin();
-    if (BookId != undefined && this.LoginStatus==true ) {
+    if (BookId != undefined && this.LoginStatus==true ) {        
       this.BookId = BookId;
-      this.name = name;
+      this.name = name; 
     }
     else 
     {
@@ -56,7 +55,6 @@ export class JournalInnerMenuComponent implements OnInit {
     } else {
       return false;
     }
-
   }
   Logout() {
     // Delete specific cookies
@@ -89,4 +87,17 @@ export class JournalInnerMenuComponent implements OnInit {
     });
   }
  
+ 
+  JournalIssues: any[] = [];
+  GetAllIssues(JournalId: any) {
+    this.journalWebApiService.GetJournalIssues(JournalId).subscribe({
+      next: (dataX: any) => {
+        this.JournalIssues = dataX.item1 || [];
+      },
+      error: (error: any) => {
+        console.error('Error fetching journal issues', error);
+      }
+    });
+  }
+
 }

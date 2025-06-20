@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, catchError, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { StorageService } from './storage.service';
-const AUTH_API = 'https://projectsapi.lpu.in/';
+const AUTH_API = 'https://localhost:7125/';//'https://projectsapi.lpu.in/';
 const LOCAL_API_URL = 'https://localhost:7125/';
 
 @Injectable({
@@ -89,6 +89,18 @@ export class LpujournalbookService {
     };
     return this.http.get<any>(`${this.baseUrl}api/LpuJournal/GetJournalDetailsforAboutPage?JournalId=` + JournalId, httpOptions);
     // return this.http.get<any>(`${LOCAL_API_URL}api/LpuJournal/GetJournalDetailsforAboutPage?JournalId=` + JournalId, httpOptions);
+  }
+
+  GetJournalIssues(JournalId: any): Observable<any> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Authorization': `Bearer ${this.authToken}`
+      })
+    };
+    return this.http.get<any>(`${this.baseUrl}api/LpuJournal/GetJournalIssuesDetails?JournalId=` + JournalId, httpOptions);
+    // return this.http.get<any>(`${LOCAL_API_URL}api/LpuJournal/GetJournalDetailsforAboutPage?JournalId=` + JournalId, httpOptions);
+
+   
   }
   GetAllJournalEditorsDetails(): Observable<any> {
     const httpOptions = {
@@ -466,14 +478,14 @@ export class LpujournalbookService {
     );
   }
 
-  GetJournalIssues(JournalId: any): Observable<any> {
-    let token = this.storageService.getUser();
-    let headers = new HttpHeaders()
-      .set('Authorization', 'Bearer ' + token)
-    return this.http.get(
-      // 'https://localhost:7125/'+ 'api/LpuJournal/GetAllManuscrpitDetailsForReviewer?UserId=' + UserEmail,
-      LOCAL_API_URL  + 'api/LpuJournal/GetJournalIssuesDetails?JournalId=' + JournalId,
-      { headers }
-    );
-  }
+  // GetJournalIssues(JournalId: any): Observable<any> {
+  //   let token = this.storageService.getUser();
+  //   let headers = new HttpHeaders()
+  //     .set('Authorization', 'Bearer ' + token)
+  //   return this.http.get(
+  //     // 'https://localhost:7125/'+ 'api/LpuJournal/GetAllManuscrpitDetailsForReviewer?UserId=' + UserEmail,
+  //     LOCAL_API_URL  + 'api/LpuJournal/GetJournalIssuesDetails?JournalId=' + JournalId,
+  //     { headers }
+  //   );
+  // }
 }

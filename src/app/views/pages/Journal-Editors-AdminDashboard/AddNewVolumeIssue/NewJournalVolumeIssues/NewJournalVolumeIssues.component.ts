@@ -347,10 +347,10 @@ export class NewJournalVolumeIssuesComponent implements OnInit {
     formData.append('IssueFileData', this.IssueFileData);
     formData.append('IssueDescription', formValue.IssueDescription);
 
-    console.log('Submitting Form Data:');
-    formData.forEach((value, key) => {
-      console.log(key + ':', value);
-    });
+    // console.log('Submitting Form Data:');
+    // formData.forEach((value, key) => {
+    //   console.log(key + ':', value);
+    // });
 
     this.journalWebApiService.AddNewIssuesDetails(formData)
       .pipe(

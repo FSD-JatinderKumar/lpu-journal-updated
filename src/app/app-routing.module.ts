@@ -9,8 +9,6 @@ const routes: Routes = [
   {
     path: '',
     children: [
-
-     
       {
         path:"signup",
         loadChildren: () => import('./views/pages/new-registration-page/new-registration-page.module').then(m => m.NewRegistrationPageModule)
@@ -59,6 +57,11 @@ const routes: Routes = [
         path: ':Id/:name/About',
         // component:JournalAboutComponent,
         loadChildren: () => import('./views/pages/journal-about/journal-about.component.mdoule').then(m => m.JournalAboutComponentModule)
+      },
+      {
+        path: ':Id/:name/GetIssues',
+        // component:JournalAboutComponent,
+        loadChildren: () => import('./views/pages/JournalIssuesDetails/JournalIssuesDetails.module').then(m => m.JournalIssuesDetailsModule)
       },
       {
         path: ":Id/:name/EditorialBoard",

@@ -82,7 +82,7 @@ export class JournalEditorBoardComponent implements OnInit {
       this.EditorialboardmembersNational = this.filteredEditors.filter((item: { editorType: string; }) => item.editorType.toLowerCase().includes('editorial board members national'));
       this.EditorialboardmembersInterNational = this.filteredEditors.filter((item: { editorType: string; }) => item.editorType.toLowerCase().includes('editorial board members international'));
 
-      console.log(JSON.stringify(this.filteredEditors))
+      // console.log(JSON.stringify(this.filteredEditors))
       // console.log(JSON.stringify(this.EditorialboardmembersInterNational))
       }
       else {
