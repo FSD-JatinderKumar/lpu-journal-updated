@@ -19,18 +19,25 @@
                         <li>Volume: <span Class="EditorColor1">{{bookData?.volume == null ? 'NA': bookData.volume }}</span></li>
                         <li>Year: <span Class="EditorColor1">{{ bookData?.publishDate ? (bookData.publishDate | date:'yyyy') : 'NA' }}</span>
                         </li>
-                        <li >Editor in chief: <span Class="EditorColor1">{{bookData?.editorName}}</span></li>
+                        <!-- <li >Editor in chief: <span Class="EditorColor1">{{bookData?.editorName}}</span></li> -->
+                        <li *ngIf="EditorInChief && EditorInChief.length">
+                            <span>EditorInChief:
+                                <span *ngFor="let editor of EditorInChief; let i = index">
+                                    <span [ngClass]="i % 2 === 0 ? 'EditorColor1' : 'EditorColor2'">
+                                        {{ editor.editorName }}<span *ngIf="i < EditorInChief.length - 1">, </span>
+                                    </span>
+                                </span>
+                            </span>
+                        </li>
                         <li *ngIf="ManagingEditor && ManagingEditor.length">
                             <span>Managing Editors:
-                              <span *ngFor="let editor of ManagingEditor; let i = index">
-                                <span [ngClass]="i % 2 === 0 ? 'EditorColor1' : 'EditorColor2'">
-                                  {{ editor.editorName }}<span *ngIf="i < ManagingEditor.length - 1">, </span>
+                                <span *ngFor="let editor of ManagingEditor; let i = index">
+                                    <span [ngClass]="i % 2 === 0 ? 'EditorColor1' : 'EditorColor2'">
+                                        {{ editor.editorName }}<span *ngIf="i < ManagingEditor.length - 1">, </span>
+                                    </span>
                                 </span>
-                              </span>
                             </span>
-                          </li>
-                          
-                        <!-- <li><span *ngIf="this.ManagingEditor?.length>0;">Managing Editor: <span>{{this.ManagingEditor}}</span></span></li> -->
+                        </li>
                     </ul>
                     <p>{{bookData?.subTitle}} </p>
                 </div>

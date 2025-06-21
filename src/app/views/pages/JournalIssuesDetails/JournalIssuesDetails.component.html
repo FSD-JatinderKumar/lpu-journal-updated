@@ -6,9 +6,7 @@
     <div class="row">
       <div class="col-md-12 mb-3">
         <div class="main-heading">
-          <h1>
-            {{this.journalTitle}}
-          </h1>
+          <h1>{{ this.journalTitle }}</h1>
         </div>
         <div class="sub-heading">
           <h3>All Published Volumes & Issues</h3>
@@ -28,30 +26,24 @@
       <p>There are no published issues for this journal yet.</p>
     </div>
 
-    <div class="accordion accordion-flush editorial-accordian " id="issuesAccordion">
+    <div class="accordion accordion-flush editorial-accordian" id="issuesAccordion">
       <ng-container *ngIf="!isLoading && this.groupedIssuesByYear.length > 0; else noIssuesFound">
-    
-        <div class="accordion-item mb-3 " *ngFor="let yearGroup of groupedIssuesByYear; let yearIndex = index">
+        <div class="accordion-item mb-3" *ngFor="let yearGroup of groupedIssuesByYear; let yearIndex = index">
           <h2 class="accordion-header" [id]="'heading-' + yearIndex">
-            <button class="accordion-button collapsed accordionColor py-3" type="button"
-              data-bs-toggle="collapse"
-              [attr.data-bs-target]="'#collapse-' + yearIndex"
-              aria-expanded="false"
-              [attr.aria-controls]="'collapse-' + yearIndex"
-              (click)="toggleAccordion('year-' + yearIndex)">
+            <button class="accordion-button collapsed accordionColor py-3" type="button" data-bs-toggle="collapse"
+              [attr.data-bs-target]="'#collapse-' + yearIndex" aria-expanded="false"
+              [attr.aria-controls]="'collapse-' + yearIndex" (click)="toggleAccordion('year-' + yearIndex)">
               <span class="fw-bold">Published Year: {{ yearGroup.year }}</span>
             </button>
           </h2>
           <div [id]="'collapse-' + yearIndex" class="accordion-collapse collapse"
-            [class.show]="activeAccordionId === 'year-' + yearIndex"
-            [attr.aria-labelledby]="'heading-' + yearIndex"
+            [class.show]="activeAccordionId === 'year-' + yearIndex" [attr.aria-labelledby]="'heading-' + yearIndex"
             data-bs-parent="#issuesAccordion">
             <div class="accordion-body accordionColor pt-3">
-    
               <div class="row" *ngFor="let issuePair of yearGroup.issues">
                 <div class="col-md-6" *ngFor="let issue of issuePair">
                   <div class="card mb-4 shadow-sm border-0">
-                    <div class="card-body">
+                    <div class="card-body ">
                       <h5>
                         <span class="badge bg-danger me-2">Vol. {{ issue.volume || 'N/A' }}</span>
                         <span *ngIf="issue.issueTitle; else noTitle">{{ issue.issueTitle | titlecase }}</span>
@@ -59,7 +51,7 @@
                       </h5>
                       <p class="text-muted mb-1"><strong>Published:</strong> {{ formatDate(issue.publishDate) }}</p>
                       <p>{{ issue.issueDescription || 'No description available' }}</p>
-    
+
                       <div class="d-flex align-items-center mt-3">
                         <i class="bi bi-journal-text fs-4 text-primary me-3"></i>
                         <div>
@@ -67,7 +59,7 @@
                           <small class="text-muted">Journal ID: {{ issue.journalId }}</small>
                         </div>
                       </div>
-    
+
                       <div class="text-center mt-3">
                         <i class="bi bi-file-earmark-pdf fs-1 text-danger cursor-pointer"
                           (click)="downloadIssue(issue.issueFileName)"></i>
@@ -76,18 +68,17 @@
                   </div>
                 </div>
               </div>
-    
             </div>
           </div>
         </div>
-    
       </ng-container>
-    
+
       <ng-template #noIssuesFound>
         <p class="fs-4 text-danger text-center my-4">No Record Found!</p>
       </ng-template>
     </div>
-    
+  </div>
+</section>
     <!-- <div class="accordion accordion-flush editorial-accordian" id="issuesAccordion">
       <div *ngIf="!isLoading && issues.length > 0; else noIssuesFound">
         <div class="accordion-item mb-3" *ngFor="let issue of issues; let i = index" [id]="'issue-' + i">
@@ -187,9 +178,8 @@
                 <div class="card-body text-center d-flex flex-column justify-content-center">
                   <i class="bi bi-file-earmark-pdf fs-1 text-danger mb-3" (click)="downloadIssue(issue.issueFileName)"></i>
                    <span class="main-heading"> 
-                    <h6 class="mb-1">{{ issue.journalTitle }}</h6></span> 
-                  <!-- <h5 class="fs-5"> {{this.journalTitle}}</h5> -->
-    <!-- -->
+                    <h6 class="mb-1">{{ issue.journalTitle }}</h6></span> -->
+                   
     <!--<p class="text-muted mb-4">{{ issue.issueFileName }}</p> -->
     <!-- <button class="btn btn-primary" (click)="downloadIssue(issue.issueFileName)">
                     <i class="bi bi-download me-2"></i> Download Issue
@@ -204,8 +194,8 @@
   </div> -->
 
 
-  </div>
-</section>
+  <!-- </div>
+</section> -->
 
 
 <!-- 

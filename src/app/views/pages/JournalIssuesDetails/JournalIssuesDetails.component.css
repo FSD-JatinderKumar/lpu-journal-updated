@@ -1,5 +1,5 @@
 /* Accordion styling */
-.blockHeight{
+/* .blockHeight{
   height: 100rem;
 }
 
@@ -43,12 +43,31 @@
   border-radius: 8px;
   transition: transform 0.2s;
   height: 20rem;
+  background: #fdf8ec;
 }
 
 .card:hover {
   transform: translateY(-2px);
+} */
+.accordion-body {
+  padding: 1rem; /* Adjust padding as needed */
+}
+.accordionColor{
+  background-color: #FDFFF7 !important;
+}
+.accordion-item {
+  margin-bottom: 1rem; /* Space between accordion items */
 }
 
+.blockHeight {
+  min-height: calc(100vh - 200px); /* Adjust based on your footer height */
+  /* Ensure the container has enough height to accommodate the footer */
+}
+
+footer {
+  /* Ensure your footer has a fixed height */
+  height: 100px; /* Adjust this value based on your footer's actual height */
+}
 /* .tableHeight{
     margin-bottom: 45rem;
 }
