@@ -3,8 +3,8 @@ import { Injectable } from '@angular/core';
 import { Observable, catchError, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { StorageService } from './storage.service';
-const AUTH_API = 'https://localhost:7125/';//'https://projectsapi.lpu.in/';
-const LOCAL_API_URL = 'https://localhost:7125/';
+const AUTH_API = 'https://projectsapi.lpu.in/';//'https://projectsapi.lpu.in/';
+const LOCAL_API_URL = 'https://projectsapi.lpu.in/';//'https://localhost:7125/';
 
 @Injectable({
   providedIn: 'root'

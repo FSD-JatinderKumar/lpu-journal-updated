@@ -1,6 +1,6 @@
 /* Accordion styling */
 .blockHeight{
-  height: 80rem;
+  height: 100rem;
 }
 
 .accordion-item {
@@ -22,7 +22,7 @@
 
 .accordion-button:not(.collapsed) {
   background-color: rgba(13, 110, 253, 0.1);
-  color: #0d6efd;
+  color: #e47200;
 }
 
 .accordion-button:focus {
@@ -42,6 +42,7 @@
 .card {
   border-radius: 8px;
   transition: transform 0.2s;
+  height: 20rem;
 }
 
 .card:hover {

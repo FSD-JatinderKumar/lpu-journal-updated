@@ -26,12 +26,20 @@ export class JournalInnerMenuComponent implements OnInit {
     private StoragesServices: StorageService,
 
     private router: Router, private route: ActivatedRoute,
-    private cookieService: CookieService) { }
+    private cookieService: CookieService) {this.router.onSameUrlNavigation = 'ignore'; }
 
+    VisitUrls(event: Event, Id: any, name: any, Sufix: any) {
+      event.preventDefault();  // This is the key line to prevent blink
+      this.router.navigateByUrl(Id + '/' + name + '/' + Sufix);
+    }
+    
   VisitUrl(Id: any, name: any, Sufix: any) {
     this.router.navigateByUrl(Id + '/' + name + '/' + Sufix);
   }
-
+  navigateToIssues(event: MouseEvent, bookId: string, name: string): void {
+    event.preventDefault(); // Prevent default anchor behavior
+    this.router.navigate(['/your-route', { bookId, name, action: 'GetIssues' }]); // Adjust the route as needed
+  }
   ngOnInit(): void {
     var BookId = this.route.snapshot.params['Id'];
     var name = this.route.snapshot.params['name'];

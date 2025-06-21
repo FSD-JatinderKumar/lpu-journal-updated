@@ -15,7 +15,8 @@ export class JournalIssuesDetailsComponent implements OnInit {
   journalTitle: string = '';
   issues: any[] = [];
   isLoading: boolean = true;
-  serverUrl: string = 'http://172.19.2.52/umsweb/webftp/Journal/';
+  serverUrl: string = 'https://files.lpu.in/umsweb/Journal/';//'http://172.19.2.52/umsweb/webftp/Journal/';
+  // this.serverUrl = 'https://files.lpu.in/umsweb/Journal/';
   activeAccordionId: string | null = null;
 
   constructor(
@@ -41,6 +42,7 @@ export class JournalIssuesDetailsComponent implements OnInit {
           this.activeAccordionId = `issue-0`; // Open first accordion item by default
         }
         this.isLoading = false;
+        this.groupIssuesByYear(this.issues);
       },
       error: (error) => {
         console.error('Error loading issues:', error);
@@ -60,6 +62,33 @@ export class JournalIssuesDetailsComponent implements OnInit {
   formatDate(dateString: string): string {
     if (!dateString) return 'Not specified';
     return new Date(dateString).toLocaleDateString();
+  }
+  groupedIssuesByYear: { year: string, issues: any[][] }[] = [];
+
+  groupIssuesByYear(issues: any[]) {
+    const grouped: { [key: string]: any[] } = {};
+
+    for (const issue of issues) {
+      const year = new Date(issue.publishDate).getFullYear().toString();
+      if (!grouped[year]) {
+        grouped[year] = [];
+      }
+      grouped[year].push(issue);
+    }
+
+    // Convert to array and chunk into pairs of 2
+    this.groupedIssuesByYear = Object.entries(grouped).map(([year, issues]) => ({
+      year,
+      issues: this.chunkArray(issues, 2)
+    }));
+  }
+
+  chunkArray(arr: any[], chunkSize: number): any[][] {
+    const result = [];
+    for (let i = 0; i < arr.length; i += chunkSize) {
+      result.push(arr.slice(i, i + chunkSize));
+    }
+    return result;
   }
 }
 
