@@ -32,6 +32,14 @@ export class JournalIssuesDetailsComponent implements OnInit {
       this.loadIssues();
     }
   }
+  formatIssueTitle(title: string): string {
+    if (!title) return '';
+    const words = title.split(' ');
+    if (words.length > 5) {
+        return words.slice(0, 5).join(' ') + '...';
+    }
+    return title;
+}
 
   loadIssues() {
     this.isLoading = true;

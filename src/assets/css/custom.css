@@ -163,7 +163,10 @@ section {
 .popular-genre-section .tab-content .popular-genre-content {
   color: #000;
   background-color: #f1f2f4;
-  margin-top: 65px;
+  /* margin-top: 65px;
+   */
+   margin: 1.2rem ;
+   margin-bottom: 3.2rem;
 }
 
 .popular-genre-section .tab-content .popular-genre-content .popular-genre-img {
