@@ -630,42 +630,43 @@ export class SubmitManuScriptComponent implements OnInit {
 
 
   reviewForm = {
-    recommendation: 'Minor Revisions',
+    recommendation: '',
     rating: 0,
     commentsToEditor: '',
     commentsToAuthor: '',
-    transferAuthorization: 'No',
-    approvalAction: 'Select',
+    transferAuthorization: '',
+    approvalAction: '',
+
     questions: [
       {
         text: 'The subject addressed in this article is worthy of investigation',
         options: ['Strongly disagree', 'Disagree', 'Neutral', 'Agree', 'Strongly agree'],
-        answer: 'Agree'
+        answer: ''
       },
       {
         text: 'The information presented is new',
         options: ['Strongly disagree', 'Disagree', 'Neutral', 'Agree', 'Strongly agree'],
-        answer: 'Agree'
+        answer: ''
       },
       {
         text: 'The conclusions are supported by the data',
         options: ['Strongly disagree', 'Disagree', 'Neutral', 'Agree', 'Strongly agree'],
-        answer: 'Agree'
+        answer: ''
       },
       {
         text: 'The manuscript is appropriate for the journal',
         options: ['Strongly disagree', 'Disagree', 'Neutral', 'Agree', 'Strongly agree'],
-        answer: 'Agree'
+        answer: ''
       },
       {
         text: 'Organization of the manuscript is appropriate',
         options: ['Strongly disagree', 'Disagree', 'Neutral', 'Agree', 'Strongly agree'],
-        answer: 'Agree'
+        answer: ''
       },
       {
         text: 'Figures, tables, and supplementary data are appropriate',
         options: ['Strongly disagree', 'Disagree', 'Neutral', 'Agree', 'Strongly agree'],
-        answer: 'Agree'
+        answer: ''
       },
 
     ]

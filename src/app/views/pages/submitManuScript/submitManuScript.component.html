@@ -871,118 +871,176 @@
 <!-- Reviewers Modal -->
  <!-- Reviewers Modal -->
   <!-- New form added on 23-June-25 -->
-<div class="modal fade" id="ReviewerModal" tabindex="-1" aria-labelledby="ReviewerModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-xl modal-dialog-centered">
-    <div class="modal-content custom-modal">
-      <div class="modal-header bg-light">
-        <h5 class="modal-title fw-bold" id="ReviewerModalLabel">Reviewer Submission Form</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <form (ngSubmit)="submitReviewerForm()">
-          <!-- Section 1: Basic Review Information -->
-          <div class="card mb-4">
-            <div class="card-header bg-light">
-              <h6 class="mb-0">Review Details</h6>
-            </div>
-            <div class="card-body">
-              <div class="row g-3">
-                <div class="col-md-6">
-                  <label for="recommendation" class="form-label">Reviewer Recommendation</label>
-                  <select class="form-select" id="recommendation" [(ngModel)]="reviewForm.recommendation" name="recommendation" required>
-                    <option value="" disabled selected>Select recommendation</option>
-                    <option value="Minor Revisions">Minor Revisions</option>
-                    <option value="Major Revisions">Major Revisions</option>
-                  </select>
-                </div>
-                <div class="col-md-6">
-                  <label for="rating" class="form-label">Manuscript Rating (1-10)</label>
-                  <input type="number" class="form-control" id="rating" min="1" max="10" [(ngModel)]="reviewForm.rating" name="rating" required />
-                </div>
+  <div class="modal fade" id="ReviewerModal" tabindex="-1" aria-labelledby="ReviewerModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header bg-light py-2">
+          <h5 class="modal-title fs-6 fw-bold" id="ReviewerModalLabel">Reviewer Submission Form {{ this.ManuscriptMasterId }}</h5>
+          <button type="button" class="btn-close btn-sm" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-2">
+          <form (ngSubmit)="submitReviewerForm()">
+            <!-- Section 1: Basic Review Information -->
+            <div class="card mb-2">
+              <div class="card-header bg-light py-1 px-2">
+                <h6 class="mb-0 fs-6">Review Details</h6>
               </div>
-            </div>
-          </div>
-
-          <!-- Section 2: Transfer and Comments -->
-          <div class="card mb-4">
-            <div class="card-header bg-light">
-              <h6 class="mb-0">Editor Communication</h6>
-            </div>
-            <div class="card-body">
-              <div class="row g-3">
-                <div class="col-md-6">
-                  <label for="transferAuthorization" class="form-label">Transfer Authorization</label>
-                  <select class="form-select" id="transferAuthorization" [(ngModel)]="reviewForm.transferAuthorization" name="transferAuthorization" required>
-                    <option value="" disabled selected>Select authorization</option>
-                    <option value="Yes">Yes</option>
-                    <option value="No">No</option>
-                  </select>
-                </div>
-                <div class="col-md-6">
-                  <label for="commentsToEditor" class="form-label">Confidential Comments to Editor</label>
-                  <textarea class="form-control" id="commentsToEditor" [(ngModel)]="reviewForm.commentsToEditor" name="commentsToEditor" rows="3"></textarea>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Section 3: Review Questions (now with dropdowns) -->
-          <div class="card mb-4">
-            <div class="card-header bg-light">
-              <h6 class="mb-0">Review Questions</h6>
-            </div>
-            <div class="card-body">
-              <div class="row g-3">
-                <div class="col-md-6" *ngFor="let question of reviewForm.questions; let i = index">
-                  <label [for]="'question' + i" class="form-label">{{ question.text }}</label>
-                  <select class="form-select" [id]="'question' + i" [(ngModel)]="question.answer" [name]="'question' + i" required>
-                    <option value="" disabled selected>Select your response</option>
-                    <option *ngFor="let option of question.options" [value]="option">{{ option }}</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Section 4: Final Decision -->
-          <div class="card mb-4">
-            <div class="card-header bg-light">
-              <h6 class="mb-0">Final Decision</h6>
-            </div>
-            <div class="card-body">
-              <div class="row g-3">
-                <div class="col-md-6">
-                  <label for="commentsToAuthor" class="form-label">Comments to Author</label>
-                  <textarea class="form-control" id="commentsToAuthor" [(ngModel)]="reviewForm.commentsToAuthor" name="commentsToAuthor" rows="4" required></textarea>
-                  <small class="text-muted">Minimum 5 characters required</small>
-                </div>
-                <div class="col-md-6">
-                  <label for="approvalAction" class="form-label">Decision</label>
-                  <select class="form-select" id="approvalAction" [(ngModel)]="reviewForm.approvalAction" name="approvalAction" required>
-                    <option value="" disabled selected>Select decision</option>
-                    <option value="Accept">Accept</option>
-                    <option value="Reject">Reject</option>
-                  </select>
-                  <div class="mt-3">
-                    <label class="form-label">Manuscript ID: <span class="fw-bold">{{ this.ManuscriptMasterId }}</span></label>
+              <div class="card-body p-1">
+                <div class="row g-3 ">
+                  <div class="col-md-3 mt-5">
+                    <label for="recommendation" class="form-label small">Reviewer Recommendation</label>
+                  </div>
+                  <div class="col-md-3 mt-5">
+                    <select class="form-select form-select-sm" id="recommendation" [(ngModel)]="reviewForm.recommendation"
+                      name="recommendation" required #recommendationRef="ngModel">
+                      <option value="" disabled selected>Select</option>
+                      <option value="Minor Revisions">Minor Revisions</option>
+                      <option value="Major Revisions">Major Revisions</option>
+                    </select>
+                    <div class="text-danger small"
+                      *ngIf="recommendationRef.invalid && (recommendationRef.touched || recommendationRef.dirty)">
+                      Recommendation is required.
+                    </div>
+                  </div>
+            
+                  <div class="col-md-3 mt-5">
+                    <label for="rating" class="form-label small">Manuscript Rating (1-10)</label>
+                  </div>
+                  <div class="col-md-3 mt-5">
+                    <input type="number" class="form-control form-control-sm" id="rating" min="1" max="10" [(ngModel)]="reviewForm.rating"
+                      name="rating" required #ratingRef="ngModel" />
+                    <div class="text-danger small" *ngIf="ratingRef.invalid && (ratingRef.touched || ratingRef.dirty)">
+                      Rating is required.
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
+            <!-- Section 2: Transfer and Comments -->
+            <div class="card mb-2">
+              <div class="card-header bg-light py-1 px-2">
+                <h6 class="mb-0 fs-6">Editor Communication</h6>
+              </div>
+              <div class="card-body p-1">
+                <div class="row g-3 ">
+                  <div class="col-md-3 mt-5">
+                    <label for="transferAuthorization" class="form-label small">Transfer Authorization</label>
+                  </div>
+                  <div class="col-md-3 mt-5">
+                    <select class="form-select form-select-sm" id="transferAuthorization"
+                      [(ngModel)]="reviewForm.transferAuthorization" name="transferAuthorization" required #transferAuthorizationRef="ngModel">
+                      <option value="" disabled selected>Select authorization</option>
+                      <option value="Yes">Yes</option>
+                      <option value="No">No</option>
+                    </select>
+                    <div class="text-danger small"
+                    *ngIf="transferAuthorizationRef.invalid && (transferAuthorizationRef.touched || transferAuthorizationRef.dirty)">
+                    Transfer Authorization  is required.
+                  </div>
+                  </div>
+                  <div class="col-md-3 mt-5">
+                    <label for="commentsToEditor" class="form-label small">Confidential Comments to Editor</label>
+                  </div>
+                  <div class="col-md-3 mt-5">
+                    <!-- <textarea class="form-control form-control-sm" id="commentsToEditor"
+                                                      [(ngModel)]="reviewForm.commentsToEditor" name="commentsToEditor" rows="4"></textarea>
+                                                  </div> -->
+              
+                    <textarea class="form-control form-control-sm" id="commentsToEditor" [(ngModel)]="reviewForm.commentsToEditor"
+                      name="commentsToEditor" required minlength="50" #commentsToEditorRef="ngModel" rows="5"></textarea>
+                    <div class="text-danger small"
+                      *ngIf="commentsToEditorRef.invalid && (commentsToEditorRef.touched || commentsToEditorRef.dirty)">
+                      <div *ngIf="commentsToEditorRef.errors?.['required']">Comments are required.</div>
+                      <div *ngIf="commentsToEditorRef.errors?.['minlength']">Minimum 50 characters required.</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              </div>
+  
+            <!-- Section 3: Review Questions -->
+            <div class="card mb-2">
+              <div class="card-header bg-light py-1 px-2">
+                <h6 class="mb-0 fs-6">Review Questions</h6>
+              </div>
+              <div class="card-body p-1">
+                <div class="row g-3">
+                  <div class="col-md-4" *ngFor="let question of reviewForm.questions; let i = index"> <br/>
+                    <label [for]="'question' + i" class="form-label small mb-2">{{ question.text }}</label>
+                    <!-- <select class="form-select form-select-sm" [id]="'question' + i" [(ngModel)]="question.answer" [name]="'question' + i" required>
+                      <option value="" disabled selected>Select response</option>
+                      <option *ngFor="let option of question.options" [value]="option">{{ option }}</option>
+                    </select> -->
+                    <select class="form-select form-select-sm" [id]="'question' + i" [(ngModel)]="question.answer" [name]="'question' + i"
+                      required #questionRef="ngModel">
+                      <option value="" disabled selected>Select</option>
+                      <option *ngFor="let option of question.options" [value]="option">{{ option }}</option>
+                    </select>
+                    <div class="text-danger small" *ngIf="questionRef.invalid && (questionRef.touched || questionRef.dirty)">
+                      Answer is required.
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+  
+            <!-- Section 4: Final Decision -->
+            <div class="card mb-2">
+              <div class="card-header bg-light py-1 px-2">
+                <h6 class="mb-0 fs-6">Final Decision</h6>
+              </div>
+              <div class="card-body p-1">
+                <div class="row g-3">
+                  <div class="col-md-3 mt-5">
+                    <label for="commentsToAuthor" class="form-label small">Comments to Author</label> </div>
+                    <div class="col-md-3 mt-5">
+                      <!-- <textarea class="form-control form-control-sm" id="commentsToAuthor" [(ngModel)]="reviewForm.commentsToAuthor" 
+                      name="commentsToAuthor" rows="5" required></textarea>
+                    <small class="text-muted small">Min 50 chars</small> -->
+                      <textarea class="form-control form-control-sm" id="commentsToAuthor" [(ngModel)]="reviewForm.commentsToAuthor"
+                        name="commentsToAuthor" required minlength="50" #commentsToAuthorRef="ngModel" rows="5"></textarea>
+                      <div class="text-danger small"
+                        *ngIf="commentsToAuthorRef.invalid && (commentsToAuthorRef.touched || commentsToAuthorRef.dirty)">
+                        <div *ngIf="commentsToAuthorRef.errors?.['required']">Comments are required.</div>
+                        <div *ngIf="commentsToAuthorRef.errors?.['minlength']">Minimum 50 characters required.</div>
+                      </div>
+                  </div>
+                  <div class="col-md-3 mt-5">
+                    <label for="approvalAction" class="form-label small">Decision</label></div>
+                    <div class="col-md-3 mt-5">
+                      <select class="form-select form-select-sm" id="approvalAction" [(ngModel)]="reviewForm.approvalAction" 
+                      name="approvalAction" required #approvalActionRef="ngModel">
+                      <option value="" disabled selected>Select decision</option>
+                      <option value="Accept">Accept</option>
+                      <option value="Reject">Reject</option>
+                    </select>
 
-          <!-- Form Footer -->
-          <div class="modal-footer">
-            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
-            <button type="submit" class="btn btn-primary" [disabled]="this.reviewForm.commentsToAuthor.length < 5">
-              <i class="bi bi-send-fill me-2"></i>Submit Review
-            </button>
-          </div>
-        </form>
+                    
+                  <div class="text-danger small"
+                  *ngIf="approvalActionRef.invalid && (approvalActionRef.touched || approvalActionRef.dirty)">
+                  Approval Action is required.
+                </div>
+                    <!-- <div class="mt-1">
+                      <label class="form-label small">Manuscript ID: <span class="fw-bold">{{ this.ManuscriptMasterId }}</span></label>
+                    </div> -->
+                  </div>
+                </div>
+              </div>
+            </div>
+  
+            <!-- Form Footer -->
+            <div class="modal-footer py-1 px-2">
+              <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
+              <button type="submit" class="btn btn-primary btn-sm" [disabled]="this.reviewForm.commentsToAuthor.length < 5">
+                <i class="bi bi-send-fill me-1"></i>Submit
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   </div>
-</div>
+  
 
  <!-- Reviewers Modal -->
 <!-- <div class="modal fade" id="ReviewerModal" tabindex="-1" aria-labelledby="ReviewerModalLabel" aria-hidden="true">
