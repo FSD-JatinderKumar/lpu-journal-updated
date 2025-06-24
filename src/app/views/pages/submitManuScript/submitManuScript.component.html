@@ -869,7 +869,123 @@
 
 
 <!-- Reviewers Modal -->
+ <!-- Reviewers Modal -->
+  <!-- New form added on 23-June-25 -->
 <div class="modal fade" id="ReviewerModal" tabindex="-1" aria-labelledby="ReviewerModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-centered">
+    <div class="modal-content custom-modal">
+      <div class="modal-header bg-light">
+        <h5 class="modal-title fw-bold" id="ReviewerModalLabel">Reviewer Submission Form</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form (ngSubmit)="submitReviewerForm()">
+          <!-- Section 1: Basic Review Information -->
+          <div class="card mb-4">
+            <div class="card-header bg-light">
+              <h6 class="mb-0">Review Details</h6>
+            </div>
+            <div class="card-body">
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label for="recommendation" class="form-label">Reviewer Recommendation</label>
+                  <select class="form-select" id="recommendation" [(ngModel)]="reviewForm.recommendation" name="recommendation" required>
+                    <option value="" disabled selected>Select recommendation</option>
+                    <option value="Minor Revisions">Minor Revisions</option>
+                    <option value="Major Revisions">Major Revisions</option>
+                  </select>
+                </div>
+                <div class="col-md-6">
+                  <label for="rating" class="form-label">Manuscript Rating (1-10)</label>
+                  <input type="number" class="form-control" id="rating" min="1" max="10" [(ngModel)]="reviewForm.rating" name="rating" required />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 2: Transfer and Comments -->
+          <div class="card mb-4">
+            <div class="card-header bg-light">
+              <h6 class="mb-0">Editor Communication</h6>
+            </div>
+            <div class="card-body">
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label for="transferAuthorization" class="form-label">Transfer Authorization</label>
+                  <select class="form-select" id="transferAuthorization" [(ngModel)]="reviewForm.transferAuthorization" name="transferAuthorization" required>
+                    <option value="" disabled selected>Select authorization</option>
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                  </select>
+                </div>
+                <div class="col-md-6">
+                  <label for="commentsToEditor" class="form-label">Confidential Comments to Editor</label>
+                  <textarea class="form-control" id="commentsToEditor" [(ngModel)]="reviewForm.commentsToEditor" name="commentsToEditor" rows="3"></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 3: Review Questions (now with dropdowns) -->
+          <div class="card mb-4">
+            <div class="card-header bg-light">
+              <h6 class="mb-0">Review Questions</h6>
+            </div>
+            <div class="card-body">
+              <div class="row g-3">
+                <div class="col-md-6" *ngFor="let question of reviewForm.questions; let i = index">
+                  <label [for]="'question' + i" class="form-label">{{ question.text }}</label>
+                  <select class="form-select" [id]="'question' + i" [(ngModel)]="question.answer" [name]="'question' + i" required>
+                    <option value="" disabled selected>Select your response</option>
+                    <option *ngFor="let option of question.options" [value]="option">{{ option }}</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 4: Final Decision -->
+          <div class="card mb-4">
+            <div class="card-header bg-light">
+              <h6 class="mb-0">Final Decision</h6>
+            </div>
+            <div class="card-body">
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label for="commentsToAuthor" class="form-label">Comments to Author</label>
+                  <textarea class="form-control" id="commentsToAuthor" [(ngModel)]="reviewForm.commentsToAuthor" name="commentsToAuthor" rows="4" required></textarea>
+                  <small class="text-muted">Minimum 5 characters required</small>
+                </div>
+                <div class="col-md-6">
+                  <label for="approvalAction" class="form-label">Decision</label>
+                  <select class="form-select" id="approvalAction" [(ngModel)]="reviewForm.approvalAction" name="approvalAction" required>
+                    <option value="" disabled selected>Select decision</option>
+                    <option value="Accept">Accept</option>
+                    <option value="Reject">Reject</option>
+                  </select>
+                  <div class="mt-3">
+                    <label class="form-label">Manuscript ID: <span class="fw-bold">{{ this.ManuscriptMasterId }}</span></label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Form Footer -->
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-primary" [disabled]="this.reviewForm.commentsToAuthor.length < 5">
+              <i class="bi bi-send-fill me-2"></i>Submit Review
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+ <!-- Reviewers Modal -->
+<!-- <div class="modal fade" id="ReviewerModal" tabindex="-1" aria-labelledby="ReviewerModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-xl modal-dialog-centered">
     <div class="modal-content custom-modal">
       <div class="modal-header">
@@ -878,7 +994,91 @@
       </div>
       <div class="modal-body">
         <form (ngSubmit)="submitReviewerForm()">
-          <!-- Reviewer Recommendation Term Dropdown -->
+         
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label class="form-label">Reviewer Recommendation Term:</label>
+              <select class="form-select" [(ngModel)]="reviewForm.recommendation" name="recommendation" required>
+                <option value="Minor Revisions">Minor Revisions</option>
+                <option value="Major Revisions">Major Revisions</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Overall Reviewer Manuscript Rating:</label>
+              <input type="number" class="form-control" [(ngModel)]="reviewForm.rating" name="rating" required />
+            </div>
+          </div>
+
+         
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label class="form-label">Transfer Authorization Response:</label>
+              <select class="form-select" [(ngModel)]="reviewForm.transferAuthorization" name="transferAuthorization" required>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Comments to Editor:</label>
+              <textarea class="form-control" [(ngModel)]="reviewForm.commentsToEditor" name="commentsToEditor" rows="5"></textarea>
+            </div>
+          </div>
+ 
+          <div class="row mb-3">
+            <div class="col-md-12">
+              <h6>Reviewer Questions:</h6>
+            </div>
+            <div class="col-md-12" *ngFor="let question of reviewForm.questions; let i = index">
+              <label class="form-label">{{ question.text }}</label>
+              <div *ngFor="let option of question.options">
+                <input type="radio" [name]="'question' + i" [value]="option" [(ngModel)]="question.answer" required />
+                {{ option }}
+              </div>
+            </div>
+          </div>
+
+         
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label class="form-label">Comments to Author:</label>
+              <textarea class="form-control" [(ngModel)]="reviewForm.commentsToAuthor" name="commentsToAuthor" rows="4" required></textarea>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Accept / Reject:</label>
+              <select class="form-select" [(ngModel)]="reviewForm.approvalAction" name="approvalAction" required>
+                <option value="" disabled selected>-- Select --</option>
+                <option value="Accept">Accept</option>
+                <option value="Reject">Reject</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <div class="col-md-12">
+              <label class="form-label">Sending Manuscript Master ID: {{ this.ManuscriptMasterId }}</label>
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-success" [disabled]="this.reviewForm.commentsToAuthor.length < 5">Submit Review</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div> -->
+
+<!-- <div class="modal fade" id="ReviewerModal" tabindex="-1" aria-labelledby="ReviewerModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-centered">
+    <div class="modal-content custom-modal">
+      <div class="modal-header">
+        <h5 class="modal-title" id="ReviewerModalLabel">Reviewer Form</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form (ngSubmit)="submitReviewerForm()">
+         
           <div class="row">
             <div class="col-md-3 mb-3">
               <label class="form-label">Reviewer Recommendation Term:</label>
@@ -897,7 +1097,7 @@
               <input type="number" class="form-control" [(ngModel)]="reviewForm.rating" name="rating" />
             </div>
           </div>
-          <!--  Feedback form   -->
+    
           <div class="row">
             <div class="col-md-3 mb-3">
               <label class="form-label">Transfer Authorization Response:</label>
@@ -915,11 +1115,11 @@
             </div>
             <div class="col-md-3 mb-3">
               <textarea class="form-control" [(ngModel)]="reviewForm.commentsToEditor" name="commentsToEditor"
-                rows="3"></textarea>
+                rows="5"></textarea>
             </div>
           </div>
 
-          <!-- Reviewer Questions -->
+ 
           <div class="row">
             <div class="col-md-4 mb-3" *ngFor="let question of reviewForm.questions; let i = index">
               <label class="form-label">{{ question.text }}</label>
@@ -958,4 +1158,4 @@
       </div>
     </div>
   </div>
-</div>
+</div>  -->

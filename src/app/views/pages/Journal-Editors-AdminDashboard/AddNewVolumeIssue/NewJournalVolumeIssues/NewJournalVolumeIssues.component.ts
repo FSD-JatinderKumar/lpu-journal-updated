@@ -182,6 +182,7 @@ import { finalize, forkJoin } from 'rxjs'
 })
 export class NewJournalVolumeIssuesComponent implements OnInit {
   journalForm!: FormGroup;
+  JournalIdString: any
   selectedFile: File | null = null;
   dataSource: any[] = []; dataX: any; booksData: any; dataShowing: any = false;
   userRole: any; BookId: any; JournalId: any; JournalTitle: any = ''; name: any;
@@ -258,6 +259,7 @@ export class NewJournalVolumeIssuesComponent implements OnInit {
       journal => journal.id == this.JournalTitle
     );
     this.currentJournalId = idx.id;
+    this.JournalIdString = idx.journalId;
     this.currentJournalTitle = idx.journalTitle;
     this.currentJournalVolume = idx.volume;
   }

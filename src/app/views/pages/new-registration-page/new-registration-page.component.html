@@ -34,12 +34,16 @@
                   <input type="text" id="CandidateName" formControlName="CandidateName" class="form-control"
                     placeholder="Enter Your Name"
                     [ngClass]="{'is-invalid': isForm1Submitted && form1['CandidateName'].errors}">
-                  <div
-                    *ngIf="JournalUserAccountForm.get('CandidateName')?.invalid && JournalUserAccountForm.get('CandidateName')?.touched"
-                    class="text-danger">
-                    Please enter a valid CandidateName.
+                  <div *ngIf="JournalUserAccountForm.get('CandidateName')?.invalid && isForm1Submitted" class="text-danger">
+                    <ng-container *ngIf="JournalUserAccountForm.get('CandidateName')?.errors?.['required']">
+                      Please enter your name.
+                    </ng-container>
+                    <ng-container *ngIf="JournalUserAccountForm.get('CandidateName')?.errors?.['invalidName']">
+                      Please enter a valid name (e.g., "Dr. John Doe").
+                    </ng-container>
                   </div>
                 </div>
+                
 
                 <div class="col-md-6 mb-3">
                   <label for="EmailId">Email</label>
@@ -129,22 +133,13 @@
                       {{ role.label }}
                     </div>
                   </div>
-                  <!-- <div
-                            *ngIf="JournalUserAccountForm.get('UserRole')?.invalid && JournalUserAccountForm.get('UserRole')?.touched"
-                            class="text-danger">
-                            Please select a valid UserRole.
-                          </div> -->
+                
                   <div *ngIf="
                           (form1['UserRole'].touched || isForm1Submitted) &&
                           form1['UserRole'].errors?.['invalidRole']
                         " class="text-danger">
                     Please select at least one valid user role.
                   </div>
-
-
-
-
-
                 </div>
 
 
@@ -201,33 +196,6 @@
                   </div>
                 </div>
 
-                <!-- <div class="col-md-6 mb-3">
-                          <label for="Password">Password</label>
-                          <input type="password" id="Password" formControlName="Password" class="form-control" placeholder="Enter Password"
-                            [ngClass]="{'is-invalid': isForm1Submitted && form1['Password'].errors}">
-                        
-                          <div *ngIf="JournalUserAccountForm.get('Password')?.invalid && JournalUserAccountForm.get('Password')?.touched"
-                            class="text-danger">
-                            Please enter a valid Password.
-                          </div>
-                        
-                        </div>
-                        
-                        <div class="col-md-6 mb-3">
-                          <label for="ConfirmPassword">Confirm Password</label>
-                          <input type="password" id="ConfirmPassword" formControlName="ConfirmPassword" class="form-control"
-                            placeholder="Confirm Password" [ngClass]="{'is-invalid': isForm1Submitted && form1['ConfirmPassword'].errors}">
-                          <div
-                            *ngIf="JournalUserAccountForm.get('ConfirmPassword')?.invalid && JournalUserAccountForm.get('ConfirmPassword')?.touched"
-                            class="text-danger">
-                            Please Confirm Password.
-                          </div>
-                          <div
-                            *ngIf="JournalUserAccountForm.errors?.['mismatch'] && (JournalUserAccountForm.get('ConfirmPassword')?.touched || isForm1Submitted)"
-                            class="text-danger">
-                            Passwords do not match.
-                          </div>
-                        </div> -->
 
                 <div class="row">
                   <div class="col-md-4 mb-3">

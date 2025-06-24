@@ -56,7 +56,7 @@ export class NewRegistrationPageComponent implements OnInit {
   LoadForm() {
 
     this.JournalUserAccountForm = this.fb.group({
-      CandidateName: ['', Validators.required],
+      CandidateName: ['', [Validators.required, this.nameValidator]],
       EmailId: ['', [Validators.required, Validators.email]],
       InstituteName: ['', Validators.required],
       DepartmentName: ['', Validators.required],
@@ -70,6 +70,14 @@ export class NewRegistrationPageComponent implements OnInit {
 
     }, { validator: this.passwordMatchValidator });
   }
+
+
+  nameValidator(control: any) {
+    const namePattern = /^(Dr\. )?[A-Za-z]+( [A-Za-z]+)*$/; // Allows "Dr." prefix and spaces
+    return namePattern.test(control.value) ? null : { invalidName: true };
+  }
+
+  
   passwordMatchValidator(formGroup: FormGroup): { [key: string]: boolean } | null {
     const password = formGroup.get('Password')?.value;
     const confirmPassword = formGroup.get('ConfirmPassword')?.value;

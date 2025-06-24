@@ -91,17 +91,6 @@ export class LpujournalbookService {
     // return this.http.get<any>(`${LOCAL_API_URL}api/LpuJournal/GetJournalDetailsforAboutPage?JournalId=` + JournalId, httpOptions);
   }
 
-  GetJournalIssues(JournalId: any): Observable<any> {
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Authorization': `Bearer ${this.authToken}`
-      })
-    };
-    return this.http.get<any>(`${this.baseUrl}api/LpuJournal/GetJournalIssuesDetails?JournalId=` + JournalId, httpOptions);
-    // return this.http.get<any>(`${LOCAL_API_URL}api/LpuJournal/GetJournalDetailsforAboutPage?JournalId=` + JournalId, httpOptions);
-
-   
-  }
   GetAllJournalEditorsDetails(): Observable<any> {
     const httpOptions = {
       headers: new HttpHeaders({
@@ -478,6 +467,15 @@ export class LpujournalbookService {
     );
   }
 
+  GetJournalIssues(JournalId: any): Observable<any> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Authorization': `Bearer ${this.authToken}`
+      })
+    };
+    return this.http.get<any>(`${this.baseUrl}api/LpuJournal/GetJournalIssuesDetails?JournalId=` + JournalId, httpOptions);
+    // return this.http.get<any>(`${LOCAL_API_URL}api/LpuJournal/GetJournalDetailsforAboutPage?JournalId=` + JournalId, httpOptions);
+  }
   // GetJournalIssues(JournalId: any): Observable<any> {
   //   let token = this.storageService.getUser();
   //   let headers = new HttpHeaders()
