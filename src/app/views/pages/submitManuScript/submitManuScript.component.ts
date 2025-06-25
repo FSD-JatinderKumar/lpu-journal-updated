@@ -712,7 +712,6 @@ export class SubmitManuScriptComponent implements OnInit {
       next: (data) => {
         let result = data.item1[0]['returnData'];
         let errorCode = data.item1[0]['returnId'];
-
         if (result === 'success') {
           Swal.fire({
             title: 'Stored Remarks ',
@@ -733,6 +732,8 @@ export class SubmitManuScriptComponent implements OnInit {
               }))
             };
 
+          }).then(() => {
+            window.location.reload();
           });
         } else {
           Swal.fire({
