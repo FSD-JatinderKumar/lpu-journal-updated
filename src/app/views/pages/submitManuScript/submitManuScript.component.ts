@@ -102,6 +102,7 @@ export class SubmitManuScriptComponent implements OnInit {
     }
 
     this.LoadForm();
+    window.scrollTo(0, 0);
   }
 
   LoadForm() {
