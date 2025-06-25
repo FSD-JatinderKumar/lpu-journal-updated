@@ -807,11 +807,43 @@ externalReviewer = {
   contact: ''
 };
 
+selectedReviewerIds: string[] = [];
+
+toggleReviewerSelection(emailId: string): void {
+  const index = this.selectedReviewerIds.indexOf(emailId);
+  if (index > -1) {
+    this.selectedReviewerIds.splice(index, 1); // Deselect
+  } else {
+    this.selectedReviewerIds.push(emailId); // Select
+  }
+}
+isReviewerFormValid(): boolean {
+  if (this.reviewerType === 'internal') {
+    return this.selectedReviewerIds && this.selectedReviewerIds.length > 0;
+  }
+
+  if (this.reviewerType === 'external') {
+    return (
+      this.externalReviewer.name?.trim()?.length > 0 &&
+      this.externalReviewer.email?.trim()?.length > 0 &&
+      /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.externalReviewer.email) &&
+      this.externalReviewer.contact?.trim()?.length === 10 &&
+      /^[0-9]{10}$/.test(this.externalReviewer.contact)
+    );
+  }
+
+  return false;
+}
+getReviewerNameByEmail(email: string): string {
+  const reviewer = this.reviewerList.find(r => r.emailId === email);
+  return reviewer ? reviewer.candidateName : email;
+}
+
 assignReviewer() {
   const formData = new FormData();
 
   if (this.reviewerType === 'internal') {
-    if (!this.selectedReviewerId) {
+    if (!this.selectedReviewerIds) {
       alert('Please select an internal reviewer.');
       return;
     }
@@ -819,11 +851,14 @@ assignReviewer() {
     // alert(this.AssignedById +" reviewer Emaild " + this.selectedReviewerId)
     // Append form data to the FormData object
     formData.append('JournalId', this.selectedJournalId);
-    formData.append('AssignedTo', this.selectedReviewerId);
+    formData.append('AssignedTo', this.selectedReviewerIds.join(','));
     formData.append('SubmittedBy', this.AssignedById);
     formData.append('RecordId', this.RecordId);
-
-    this.assignInternalReviewer(formData);
+    console.log('Submitting Form Data:');
+    formData.forEach((value, key) => {
+      console.log(key + ':', value);
+    });
+    // this.assignInternalReviewer(formData);
 
   } else if (this.reviewerType === 'external') {
     const { name, email, contact } = this.externalReviewer;
@@ -844,8 +879,11 @@ assignReviewer() {
     formData.append('PasswordText', contact);
     formData.append('SubmittedBy', this.AssignedById);
     formData.append('AuthorEmailId', this.AuthorEmailId);
-    
-    this.assignExternalReviewer(formData);
+    console.log('Submitting Form Data:');
+      formData.forEach((value, key) => {
+        console.log(key + ':', value);
+      }); 
+    // this.assignExternalReviewer(formData);
   }
 
 }

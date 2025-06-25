@@ -9,6 +9,9 @@ import { FormsModule, NgForm } from '@angular/forms';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MaterialModule } from 'src/material.module';
+import { MatSelectModule } from '@angular/material/select';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 const routes: Routes = [
   {
@@ -26,7 +29,11 @@ const routes: Routes = [
       FormsModule,
       MaterialModule,
       MatDialogModule,
-      ReactiveFormsModule
+      ReactiveFormsModule, 
+      MatSelectModule,
+      MatFormFieldModule,
+      MatInputModule
+      // MatSelectModule and MatFormFieldModule      
     ],
   
   })
