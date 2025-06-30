@@ -731,7 +731,7 @@
 
 <div class="modal fade" id="assignReviewerModal" tabindex="-1" aria-labelledby="assignReviewerModalLabel"
   aria-hidden="true">
-  <div class="modal-dialog">
+  <div class="modal-dialog custom-tall-modal">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="assignReviewerModalLabel">Assign Reviewer</h5>
@@ -778,7 +778,7 @@
                   <div class="form-check">
                     <input class="form-check-input" type="checkbox" [id]="reviewer.emailId" [value]="reviewer.emailId"
                       [checked]="selectedReviewerIds.includes(reviewer.emailId)"
-                      (change)="toggleReviewerSelection(reviewer.emailId)" />
+                      (change)="toggleReviewerSelection(reviewer.emailId, $event)" />
                     <label class="form-check-label" [for]="reviewer.emailId">
                       {{ reviewer.candidateName }}
                     </label>

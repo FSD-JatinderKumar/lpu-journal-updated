@@ -809,14 +809,37 @@ externalReviewer = {
 
 selectedReviewerIds: string[] = [];
 
-toggleReviewerSelection(emailId: string): void {
-  const index = this.selectedReviewerIds.indexOf(emailId);
-  if (index > -1) {
-    this.selectedReviewerIds.splice(index, 1); // Deselect
-  } else {
-    this.selectedReviewerIds.push(emailId); // Select
+toggleReviewerSelection(email: string, event: Event): void {
+  const checkbox = event.target as HTMLInputElement;
+  const isChecked = checkbox.checked;
+
+  const index = this.selectedReviewerIds.indexOf(email);
+
+  if (isChecked && index === -1) {
+    if (this.selectedReviewerIds.length >= 3) {
+      checkbox.checked = false;
+      alert('Maximum 3 reviewers can be selected.');
+      return;
+    }
+    this.selectedReviewerIds.push(email);
+  } else if (!isChecked && index !== -1) {
+    this.selectedReviewerIds.splice(index, 1);
   }
 }
+
+
+// toggleReviewerSelection(email: string): void {
+//   const index = this.selectedReviewerIds.indexOf(email);
+//   if (index > -1) {
+//     this.selectedReviewerIds.splice(index, 1);
+//   } else {
+//     if (this.selectedReviewerIds.length < 3) {
+//       this.selectedReviewerIds.push(email);
+//     } else {
+//       alert('Maximum 3 reviewers can be selected.');
+//     }
+//   }
+// }
 isReviewerFormValid(): boolean {
   if (this.reviewerType === 'internal') {
     return this.selectedReviewerIds && this.selectedReviewerIds.length > 0;
@@ -851,14 +874,15 @@ assignReviewer() {
     // alert(this.AssignedById +" reviewer Emaild " + this.selectedReviewerId)
     // Append form data to the FormData object
     formData.append('JournalId', this.selectedJournalId);
-    formData.append('AssignedTo', this.selectedReviewerIds.join(','));
+    // formData.append('AssignedTo', this.selectedReviewerIds.join(','));
+    formData.append('MultipleAssignedTo', this.selectedReviewerIds.join(','));
     formData.append('SubmittedBy', this.AssignedById);
     formData.append('RecordId', this.RecordId);
-    console.log('Submitting Form Data:');
-    formData.forEach((value, key) => {
-      console.log(key + ':', value);
-    });
-    // this.assignInternalReviewer(formData);
+    // console.log('Submitting Form Data:');
+    // formData.forEach((value, key) => {
+    //   console.log(key + ':', value);
+    // });
+    this.assignInternalReviewer(formData);
 
   } else if (this.reviewerType === 'external') {
     const { name, email, contact } = this.externalReviewer;
@@ -879,11 +903,11 @@ assignReviewer() {
     formData.append('PasswordText', contact);
     formData.append('SubmittedBy', this.AssignedById);
     formData.append('AuthorEmailId', this.AuthorEmailId);
-    console.log('Submitting Form Data:');
-      formData.forEach((value, key) => {
-        console.log(key + ':', value);
-      }); 
-    // this.assignExternalReviewer(formData);
+    // console.log('Submitting Form Data:');
+    //   formData.forEach((value, key) => {
+    //     console.log(key + ':', value);
+    //   }); 
+    this.assignExternalReviewer(formData);
   }
 
 }
@@ -923,7 +947,7 @@ assignInternalReviewer(data:any){
     }
   });
 
-  alert(`Journal ID: ${this.selectedJournalId} assigned to Reviewer ID: ${this.selectedReviewerId}`);
+  alert(`Journal ID: ${this.selectedJournalId} assigned to Reviewer ID: ${this.selectedReviewerIds.join(',')}`);
 
   // Close modal after success
   let modal = bootstrap.Modal.getInstance(document.getElementById('assignReviewerModal'));
