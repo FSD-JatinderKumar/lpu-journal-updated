@@ -24,6 +24,8 @@ import { forkJoin } from 'rxjs';
   styleUrls: ['./submitManuScript.component.scss']
 })
 export class SubmitManuScriptComponent implements OnInit {
+  @ViewChild('reviewerForm') reviewerForm: NgForm | undefined;
+
   emailId: any = ''; candidateName: any; supervisorName: any; mobileNumber: any; instituteName: any;
   departmentName: any; idProofType: any = 'select'; idProofNumber: any; address: any; password: any; confirmPassword: any; userRole: any = 'select';
   cifUserForm!: FormGroup; isForm1Submitted: boolean = false; IdProofFileName: string | null = null; IdProofFile: string | null = null;
@@ -847,11 +849,17 @@ isReviewerFormValid(): boolean {
 
   if (this.reviewerType === 'external') {
     return (
-      this.externalReviewer.name?.trim()?.length > 0 &&
-      this.externalReviewer.email?.trim()?.length > 0 &&
-      /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.externalReviewer.email) &&
-      this.externalReviewer.contact?.trim()?.length === 10 &&
-      /^[0-9]{10}$/.test(this.externalReviewer.contact)
+      this.externalReviewers.length >= 3 &&
+      this.externalReviewers.every(r =>
+        r.name?.trim() &&
+        /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(r.email) &&
+        /^\d{10}$/.test(r.contact)
+      )
+      // this.externalReviewer.name?.trim()?.length > 0 &&
+      // this.externalReviewer.email?.trim()?.length > 0 &&
+      // /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.externalReviewer.email) &&
+      // this.externalReviewer.contact?.trim()?.length === 10 &&
+      // /^[0-9]{10}$/.test(this.externalReviewer.contact)
     );
   }
 
@@ -862,59 +870,115 @@ getReviewerNameByEmail(email: string): string {
   return reviewer ? reviewer.candidateName : email;
 }
 
+// assignReviewer() {
+//   const formData = new FormData();
+//   if (!this.isReviewerFormValid()) return;
+//   if (this.reviewerType === 'internal') {
+//     if (!this.selectedReviewerIds) {
+//       alert('Please select an internal reviewer.');
+//       return;
+//     }
+
+//     // alert(this.AssignedById +" reviewer Emaild " + this.selectedReviewerId)
+//     // Append form data to the FormData object
+//     formData.append('JournalId', this.selectedJournalId);
+//     // formData.append('AssignedTo', this.selectedReviewerIds.join(','));
+//     formData.append('MultipleAssignedTo', this.selectedReviewerIds.join(','));
+//     formData.append('SubmittedBy', this.AssignedById);
+//     formData.append('RecordId', this.RecordId);
+//     // console.log('Submitting Form Data:');
+//     // formData.forEach((value, key) => {
+//     //   console.log(key + ':', value);
+//     // });
+//     this.assignInternalReviewer(formData);
+
+//   } else if (this.reviewerType === 'external') {
+//     const { name, email, contact } = this.externalReviewer;
+
+//     if (!name || !email || !contact) {
+//       alert('Please fill all external reviewer details.');
+//       return;
+//     }
+
+//     formData.append('JournalTitle', this.JournalTitle);
+//     formData.append('JournalId', this.selectedJournalId);
+//     formData.append('AssignedTo', email); // Use email as unique ID    
+//     formData.append('RecordId', this.RecordId);
+//     formData.append('CandidateName', name);
+//     formData.append('UserEmail', email);
+//     formData.append('MobileNumber', contact);
+//     formData.append('UserType', '2');
+//     formData.append('PasswordText', contact);
+//     formData.append('SubmittedBy', this.AssignedById);
+//     formData.append('AuthorEmailId', this.AuthorEmailId);
+//     // console.log('Submitting Form Data:');
+//     //   formData.forEach((value, key) => {
+//     //     console.log(key + ':', value);
+//     //   }); 
+//     this.assignExternalReviewer(formData);
+//   }
+
+// }
+
 assignReviewer() {
   const formData = new FormData();
+  if (!this.isReviewerFormValid()) return;
 
   if (this.reviewerType === 'internal') {
-    if (!this.selectedReviewerIds) {
-      alert('Please select an internal reviewer.');
+    if (!this.selectedReviewerIds || this.selectedReviewerIds.length === 0) {
+      alert('Please select at least one internal reviewer.');
       return;
     }
 
-    // alert(this.AssignedById +" reviewer Emaild " + this.selectedReviewerId)
-    // Append form data to the FormData object
     formData.append('JournalId', this.selectedJournalId);
-    // formData.append('AssignedTo', this.selectedReviewerIds.join(','));
     formData.append('MultipleAssignedTo', this.selectedReviewerIds.join(','));
     formData.append('SubmittedBy', this.AssignedById);
     formData.append('RecordId', this.RecordId);
-    // console.log('Submitting Form Data:');
-    // formData.forEach((value, key) => {
-    //   console.log(key + ':', value);
-    // });
+
     this.assignInternalReviewer(formData);
-
   } else if (this.reviewerType === 'external') {
-    const { name, email, contact } = this.externalReviewer;
-
-    if (!name || !email || !contact) {
-      alert('Please fill all external reviewer details.');
+    if (!this.externalReviewers || this.externalReviewers.length < 3) {
+      alert('Please add at least 3 external reviewers.');
       return;
     }
 
-    formData.append('JournalTitle', this.JournalTitle);
-    formData.append('JournalId', this.selectedJournalId);
-    formData.append('AssignedTo', email); // Use email as unique ID    
-    formData.append('RecordId', this.RecordId);
-    formData.append('CandidateName', name);
-    formData.append('UserEmail', email);
-    formData.append('MobileNumber', contact);
-    formData.append('UserType', '2');
-    formData.append('PasswordText', contact);
-    formData.append('SubmittedBy', this.AssignedById);
-    formData.append('AuthorEmailId', this.AuthorEmailId);
-    // console.log('Submitting Form Data:');
-    //   formData.forEach((value, key) => {
-    //     console.log(key + ':', value);
-    //   }); 
-    this.assignExternalReviewer(formData);
+    this.externalReviewers.forEach(reviewer => {
+      if (!reviewer.name || !reviewer.email || !reviewer.contact) {
+        alert('All external reviewer fields are required.');
+        return;
+      }
+
+      const reviewerFormData = new FormData();
+      reviewerFormData.append('JournalTitle', this.JournalTitle);
+      reviewerFormData.append('JournalId', this.selectedJournalId);
+      reviewerFormData.append('AssignedTo', reviewer.email);
+      reviewerFormData.append('RecordId', this.RecordId);
+      reviewerFormData.append('CandidateName', reviewer.name);
+      reviewerFormData.append('UserEmail', reviewer.email);
+      reviewerFormData.append('MobileNumber', reviewer.contact);
+      reviewerFormData.append('UserType', '2');
+      reviewerFormData.append('PasswordText', reviewer.contact);
+      reviewerFormData.append('SubmittedBy', this.AssignedById);
+      reviewerFormData.append('AuthorEmailId', this.AuthorEmailId);
+
+      this.assignExternalReviewer(reviewerFormData); // send one by one
+    });
   }
 
+ 
+  this.resetReviewerForm();
+
+  const modalEl = document.getElementById('assignReviewerModal');
+  if (modalEl) {
+    const modalInstance = bootstrap.Modal.getInstance(modalEl);
+    modalInstance?.hide();
+  }
 }
 
-
 assignInternalReviewer(data:any){
-
+  if (this.reviewerForm) {
+    this.reviewerForm.resetForm();
+  }
   this.journalWebApiService.AssignNewReviewerForJournal(data).subscribe({
     next: (data) => {
       let result = data.item1[0]['returnData'];
@@ -955,7 +1019,7 @@ assignInternalReviewer(data:any){
 }
 
 assignExternalReviewer(data:any){
-  
+  if (!this.isReviewerFormValid()) return;
   this.journalWebApiService.AssignExternalReviewerForJournal(data).subscribe({
     next: (data) => {
       let result = data.item1[0]['returnData'];
@@ -989,6 +1053,14 @@ assignExternalReviewer(data:any){
   modal?.hide();
 }
 
+ngAfterViewInit(): void {
+  const modalEl = document.getElementById('assignReviewerModal');
+  if (modalEl) {
+    modalEl.addEventListener('hidden.bs.modal', () => {
+      this.resetReviewerForm();
+    });
+  }
+}
 
   //  Editors login action Data grid start 
 
@@ -1067,8 +1139,7 @@ assignExternalReviewer(data:any){
   ReviewerRemarksData: any[] = [];
   ReviewerRemarksDataColumns: string[] = [];
   searchText: string = '';
-  filteredReviewerRemarksData: any[] = []; // 👈 for storing filtered results
-
+  filteredReviewerRemarksData: any[] = [];  
 
   // Display headers mapping
   displayedReviewerRemarksColumnHeaders: { [key: string]: string } = {
@@ -1292,5 +1363,40 @@ assignExternalReviewer(data:any){
       return { key: formattedKey, value };
     });
   }
+
+  resetReviewerForm() {
+    // Reset form state
+    if (this.reviewerForm) {
+      this.reviewerForm.resetForm();
+    }
+  
+    // Clear reviewer type & selections
+    this.reviewerType = 'internal';
+    this.selectedReviewerIds = [];
+  
+    // Reset external reviewers list
+    this.externalReviewers = [
+      { name: '', email: '', contact: '' }
+    ];
+  }
+  
+
+
+  externalReviewers: any[] = [
+    { name: '', email: '', contact: '' }
+  ];
+  
+  addExternalReviewer() {
+    this.externalReviewers.push({ name: '', email: '', contact: '' });
+  }
+  
+  removeExternalReviewer(index: number) {
+    if (this.externalReviewers.length > 1) {
+      this.externalReviewers.splice(index, 1);
+    }
+  }
+  
+ 
+ 
 }
 

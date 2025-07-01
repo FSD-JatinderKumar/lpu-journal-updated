@@ -1,6 +1,6 @@
 declare var bootstrap: any;
 import { DatePipe } from '@angular/common';
-import { AbstractControl, FormControl, FormGroup, UntypedFormGroup, ValidatorFn } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, NgForm, UntypedFormGroup, ValidatorFn } from '@angular/forms';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Inject, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -18,6 +18,8 @@ import { forkJoin } from 'rxjs'
   styleUrls: ['./EDManuscript-Details.component.scss'],standalone: false
 })
 export class EDManuscriptDetailsComponent implements OnInit {
+  @ViewChild('reviewerForm') reviewerForm: NgForm | undefined;
+  
   fromDate: any; booksDataColumns: any; toDate: any; pipe = new DatePipe('en-CA');
   dataSource: any[] = []; dataX: any; booksData: any; dataShowing: any = false;
   userRole: any; BookId: any; JournalId: any; JournalTitle: any; name: any;
@@ -223,8 +225,11 @@ export class EDManuscriptDetailsComponent implements OnInit {
     }
   }
 
-
-  AssignedById: any; selectedReviewerId: any = ''; selectedJournalId: any;
+  selectedJournalId: any;
+  selectedReviewerId: string = '';
+  // reviewerList: any[] = [];
+ 
+  AssignedById: any;
   RecordId: any;
   onTakeAction(rowData: any) {
     // console.log(JSON.stringify(rowData))
@@ -232,61 +237,371 @@ export class EDManuscriptDetailsComponent implements OnInit {
     this.AssignedById = rowData['emailId'];
     this.RecordId = rowData['id'];
   }
-  assignReviewer() {
-    if (!this.selectedReviewerId) {
-      alert('Please select a reviewer.');
+
+  markAllFieldsTouched(form: NgForm) {
+    Object.values(form.controls).forEach(control => {
+      control.markAsTouched();
+    });
+  }
+  
+  reviewerType: 'internal' | 'external' = 'internal';
+// selectedReviewerId: string = '';
+externalReviewer = {
+  name: '',
+  email: '',
+  contact: ''
+};
+
+selectedReviewerIds: string[] = [];
+
+toggleReviewerSelection(email: string, event: Event): void {
+  const checkbox = event.target as HTMLInputElement;
+  const isChecked = checkbox.checked;
+
+  const index = this.selectedReviewerIds.indexOf(email);
+
+  if (isChecked && index === -1) {
+    if (this.selectedReviewerIds.length >= 3) {
+      checkbox.checked = false;
+      alert('Maximum 3 reviewers can be selected.');
       return;
     }
-    // AssignNewReviewerForJournal
+    this.selectedReviewerIds.push(email);
+  } else if (!isChecked && index !== -1) {
+    this.selectedReviewerIds.splice(index, 1);
+  }
+}
 
 
-    const formData = new FormData();
-    // alert(this.AssignedById +" reviewer Emaild " + this.selectedReviewerId)
-    // Append form data to the FormData object
+// toggleReviewerSelection(email: string): void {
+//   const index = this.selectedReviewerIds.indexOf(email);
+//   if (index > -1) {
+//     this.selectedReviewerIds.splice(index, 1);
+//   } else {
+//     if (this.selectedReviewerIds.length < 3) {
+//       this.selectedReviewerIds.push(email);
+//     } else {
+//       alert('Maximum 3 reviewers can be selected.');
+//     }
+//   }
+// }
+isReviewerFormValid(): boolean {
+  if (this.reviewerType === 'internal') {
+    return this.selectedReviewerIds && this.selectedReviewerIds.length > 0;
+  }
+
+  if (this.reviewerType === 'external') {
+    return (
+      this.externalReviewers.length >= 3 &&
+      this.externalReviewers.every(r =>
+        r.name?.trim() &&
+        /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(r.email) &&
+        /^\d{10}$/.test(r.contact)
+      )
+      // this.externalReviewer.name?.trim()?.length > 0 &&
+      // this.externalReviewer.email?.trim()?.length > 0 &&
+      // /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.externalReviewer.email) &&
+      // this.externalReviewer.contact?.trim()?.length === 10 &&
+      // /^[0-9]{10}$/.test(this.externalReviewer.contact)
+    );
+  }
+
+  return false;
+}
+getReviewerNameByEmail(email: string): string {
+  const reviewer = this.reviewerList.find(r => r.emailId === email);
+  return reviewer ? reviewer.candidateName : email;
+}
+
+// assignReviewer() {
+//   const formData = new FormData();
+//   if (!this.isReviewerFormValid()) return;
+//   if (this.reviewerType === 'internal') {
+//     if (!this.selectedReviewerIds) {
+//       alert('Please select an internal reviewer.');
+//       return;
+//     }
+
+//     // alert(this.AssignedById +" reviewer Emaild " + this.selectedReviewerId)
+//     // Append form data to the FormData object
+//     formData.append('JournalId', this.selectedJournalId);
+//     // formData.append('AssignedTo', this.selectedReviewerIds.join(','));
+//     formData.append('MultipleAssignedTo', this.selectedReviewerIds.join(','));
+//     formData.append('SubmittedBy', this.AssignedById);
+//     formData.append('RecordId', this.RecordId);
+//     // console.log('Submitting Form Data:');
+//     // formData.forEach((value, key) => {
+//     //   console.log(key + ':', value);
+//     // });
+//     this.assignInternalReviewer(formData);
+
+//   } else if (this.reviewerType === 'external') {
+//     const { name, email, contact } = this.externalReviewer;
+
+//     if (!name || !email || !contact) {
+//       alert('Please fill all external reviewer details.');
+//       return;
+//     }
+
+//     formData.append('JournalTitle', this.JournalTitle);
+//     formData.append('JournalId', this.selectedJournalId);
+//     formData.append('AssignedTo', email); // Use email as unique ID    
+//     formData.append('RecordId', this.RecordId);
+//     formData.append('CandidateName', name);
+//     formData.append('UserEmail', email);
+//     formData.append('MobileNumber', contact);
+//     formData.append('UserType', '2');
+//     formData.append('PasswordText', contact);
+//     formData.append('SubmittedBy', this.AssignedById);
+//     formData.append('AuthorEmailId', this.AuthorEmailId);
+//     // console.log('Submitting Form Data:');
+//     //   formData.forEach((value, key) => {
+//     //     console.log(key + ':', value);
+//     //   }); 
+//     this.assignExternalReviewer(formData);
+//   }
+
+// }
+AuthorEmailId: any;
+assignReviewer() {
+  const formData = new FormData();
+  if (!this.isReviewerFormValid()) return;
+
+  if (this.reviewerType === 'internal') {
+    if (!this.selectedReviewerIds || this.selectedReviewerIds.length === 0) {
+      alert('Please select at least one internal reviewer.');
+      return;
+    }
+
     formData.append('JournalId', this.selectedJournalId);
-    formData.append('AssignedTo', this.selectedReviewerId);
+    formData.append('MultipleAssignedTo', this.selectedReviewerIds.join(','));
     formData.append('SubmittedBy', this.AssignedById);
     formData.append('RecordId', this.RecordId);
 
+    this.assignInternalReviewer(formData);
+  } else if (this.reviewerType === 'external') {
+    if (!this.externalReviewers || this.externalReviewers.length < 3) {
+      alert('Please add at least 3 external reviewers.');
+      return;
+    }
 
-    this.journalWebApiService.AssignNewReviewerForJournal(formData).subscribe({
-      next: (data) => {
-        let result = data.item1[0]['returnData'];
-        let errorCode = data.item1[0]['returnId'];
+    this.externalReviewers.forEach(reviewer => {
+      if (!reviewer.name || !reviewer.email || !reviewer.contact) {
+        alert('All external reviewer fields are required.');
+        return;
+      }
 
-        if (result === 'success') {
-          Swal.fire({
-            title: 'Reviewer Assiged ',
-            text: data.item1[0]['msg'],
-            icon: 'success',
-          }).then(() => {
-            window.location.reload();
-          });
-        } else {
-          Swal.fire({
-            title: 'Some Technical Issue',
-            text: result,
-            icon: 'error',
-          }).then(() => {
-            window.location.reload();
-          });
-        }
-      },
-      error: (err) => {
+      const reviewerFormData = new FormData();
+      reviewerFormData.append('JournalTitle', this.JournalTitle);
+      reviewerFormData.append('JournalId', this.selectedJournalId);
+      reviewerFormData.append('AssignedTo', reviewer.email);
+      reviewerFormData.append('RecordId', this.RecordId);
+      reviewerFormData.append('CandidateName', reviewer.name);
+      reviewerFormData.append('UserEmail', reviewer.email);
+      reviewerFormData.append('MobileNumber', reviewer.contact);
+      reviewerFormData.append('UserType', '2');
+      reviewerFormData.append('PasswordText', reviewer.contact);
+      reviewerFormData.append('SubmittedBy', this.AssignedById);
+      reviewerFormData.append('AuthorEmailId', this.AuthorEmailId);
+
+      this.assignExternalReviewer(reviewerFormData); // send one by one
+    });
+  }
+
+ 
+  this.resetReviewerForm();
+
+  const modalEl = document.getElementById('assignReviewerModal');
+  if (modalEl) {
+    const modalInstance = bootstrap.Modal.getInstance(modalEl);
+    modalInstance?.hide();
+  }
+}
+
+assignInternalReviewer(data:any){
+  if (this.reviewerForm) {
+    this.reviewerForm.resetForm();
+  }
+  this.journalWebApiService.AssignNewReviewerForJournal(data).subscribe({
+    next: (data) => {
+      let result = data.item1[0]['returnData'];
+      let errorCode = data.item1[0]['returnId'];
+
+      if (result === 'success') {
         Swal.fire({
-          title: 'Error Occurred',
-          text: 'Unable to complete the request. Please try again later.',
+          title: 'Reviewer Assiged ',
+          text: data.item1[0]['msg'],
+          icon: 'success',
+        }).then(() => {
+          window.location.reload();
+        });
+      } else {
+        Swal.fire({
+          title: 'Some Technical Issue',
+          text: result,
           icon: 'error',
+        }).then(() => {
+          window.location.reload();
         });
       }
+    },
+    error: (err) => {
+      Swal.fire({
+        title: 'Error Occurred',
+        text: 'Unable to complete the request. Please try again later.',
+        icon: 'error',
+      });
+    }
+  });
+
+  alert(`Journal ID: ${this.selectedJournalId} assigned to Reviewer ID: ${this.selectedReviewerIds.join(',')}`);
+
+  // Close modal after success
+  let modal = bootstrap.Modal.getInstance(document.getElementById('assignReviewerModal'));
+  modal.hide();
+}
+
+assignExternalReviewer(data:any){
+  if (!this.isReviewerFormValid()) return;
+  this.journalWebApiService.AssignExternalReviewerForJournal(data).subscribe({
+    next: (data) => {
+      let result = data.item1[0]['returnData'];
+      let errorCode = data.item1[0]['returnId'];
+
+      if (result === 'success') {
+        Swal.fire({
+          title: 'Reviewer Assigned',
+          text: data.item1[0]['msg'],
+          icon: 'success',
+        }).then(() => window.location.reload());
+      } else {
+        Swal.fire({
+          title: 'Some Technical Issue',
+          text: result,
+          icon: 'error',
+        }).then(() => window.location.reload());
+      }
+    },
+    error: () => {
+      Swal.fire({
+        title: 'Error Occurred',
+        text: 'Unable to complete the request. Please try again later.',
+        icon: 'error',
+      });
+    }
+  });
+
+  // Close modal
+  const modal = bootstrap.Modal.getInstance(document.getElementById('assignReviewerModal'));
+  modal?.hide();
+}
+
+ngAfterViewInit(): void {
+  const modalEl = document.getElementById('assignReviewerModal');
+  if (modalEl) {
+    modalEl.addEventListener('hidden.bs.modal', () => {
+      this.resetReviewerForm();
     });
-
-    alert(`Journal ID: ${this.selectedJournalId} assigned to Reviewer ID: ${this.selectedReviewerId}`);
-
-    // Close modal after success
-    let modal = bootstrap.Modal.getInstance(document.getElementById('assignReviewerModal'));
-    modal.hide();
   }
+}
+
+resetReviewerForm() {
+  // Reset form state
+  if (this.reviewerForm) {
+    this.reviewerForm.resetForm();
+  }
+
+  // Clear reviewer type & selections
+  this.reviewerType = 'internal';
+  this.selectedReviewerIds = [];
+
+  // Reset external reviewers list
+  this.externalReviewers = [
+    { name: '', email: '', contact: '' }
+  ];
+}
+
+
+
+externalReviewers: any[] = [
+  { name: '', email: '', contact: '' }
+];
+
+addExternalReviewer() {
+  this.externalReviewers.push({ name: '', email: '', contact: '' });
+}
+
+removeExternalReviewer(index: number) {
+  if (this.externalReviewers.length > 1) {
+    this.externalReviewers.splice(index, 1);
+  }
+}
+
+
+
+  // AssignedById: any; selectedReviewerId: any = ''; selectedJournalId: any;
+  // RecordId: any;
+  // onTakeAction(rowData: any) {
+  //   // console.log(JSON.stringify(rowData))
+  //   this.selectedJournalId = rowData['journalId'];
+  //   this.AssignedById = rowData['emailId'];
+  //   this.RecordId = rowData['id'];
+  // }
+  // assignReviewer() {
+  //   if (!this.selectedReviewerId) {
+  //     alert('Please select a reviewer.');
+  //     return;
+  //   }
+  //   // AssignNewReviewerForJournal
+
+
+  //   const formData = new FormData();
+  //   // alert(this.AssignedById +" reviewer Emaild " + this.selectedReviewerId)
+  //   // Append form data to the FormData object
+  //   formData.append('JournalId', this.selectedJournalId);
+  //   formData.append('AssignedTo', this.selectedReviewerId);
+  //   formData.append('SubmittedBy', this.AssignedById);
+  //   formData.append('RecordId', this.RecordId);
+
+
+  //   this.journalWebApiService.AssignNewReviewerForJournal(formData).subscribe({
+  //     next: (data) => {
+  //       let result = data.item1[0]['returnData'];
+  //       let errorCode = data.item1[0]['returnId'];
+
+  //       if (result === 'success') {
+  //         Swal.fire({
+  //           title: 'Reviewer Assiged ',
+  //           text: data.item1[0]['msg'],
+  //           icon: 'success',
+  //         }).then(() => {
+  //           window.location.reload();
+  //         });
+  //       } else {
+  //         Swal.fire({
+  //           title: 'Some Technical Issue',
+  //           text: result,
+  //           icon: 'error',
+  //         }).then(() => {
+  //           window.location.reload();
+  //         });
+  //       }
+  //     },
+  //     error: (err) => {
+  //       Swal.fire({
+  //         title: 'Error Occurred',
+  //         text: 'Unable to complete the request. Please try again later.',
+  //         icon: 'error',
+  //       });
+  //     }
+  //   });
+
+  //   alert(`Journal ID: ${this.selectedJournalId} assigned to Reviewer ID: ${this.selectedReviewerId}`);
+
+  //   // Close modal after success
+  //   let modal = bootstrap.Modal.getInstance(document.getElementById('assignReviewerModal'));
+  //   modal.hide();
+  // }
 
 
   reviewerList: any[] = [];

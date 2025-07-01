@@ -311,3 +311,26 @@ form {
     overflow: hidden; /* ensures no scrollbar */
   }
   
+
+  /* Custom size for modal (not using Bootstrap modal-xl or scrollable) */
+.custom-modal-size {
+  max-width: 900px;
+  width: 95%;
+  margin: 1.75rem auto;
+}
+
+/* Optional: cap modal height on very tall screens */
+@media (min-height: 1000px) {
+  .custom-modal-size {
+    margin-top: 4rem;
+    margin-bottom: 4rem;
+  }
+}
+
+/* Optional: full-width buttons and form spacing inside modal */
+.modal-content {
+  padding: 1.5rem;
+}
+.modal-body {
+  padding-top: 0.5rem;
+}
