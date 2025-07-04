@@ -130,18 +130,18 @@ export class LpujournalbookService {
   }
 
 
-  addJournalData(dataSoft: FormData): Observable<any> {
-    let token = this.storageService.getUser();
-    let headers = new HttpHeaders()
-      .set('Authorization', 'Bearer ' + token)
-      .set('Accept', '*/*',);
+  // addJournalData(dataSoft: FormData): Observable<any> {
+  //   let token = this.storageService.getUser();
+  //   let headers = new HttpHeaders()
+  //     .set('Authorization', 'Bearer ' + token)
+  //     .set('Accept', '*/*',);
 
-    //httpOptions.headers.set('Authentication', 'Bearer ' + token);
-    return this.http.post(
-      this.baseUrl + 'api/LpuJournal/JournalMasterNew', dataSoft,
-      { headers }
-    );
-  }
+  //   //httpOptions.headers.set('Authentication', 'Bearer ' + token);
+  //   return this.http.post(
+  //     this.baseUrl + 'api/LpuJournal/JournalMasterNew', dataSoft,
+  //     { headers }
+  //   );
+  // }
 
 
   AddJournalUserAccount(newUserData: FormData): Observable<any> {
@@ -486,4 +486,20 @@ export class LpujournalbookService {
   //     { headers }
   //   );
   // }
+
+
+  
+  addJournalData(dataSoft:FormData): Observable<any> {
+    debugger;
+    let token = this.storageService.getUser();
+    let headers = new HttpHeaders()
+    .set('Authorization', 'Bearer ' + token)
+    .set('Accept', '*/*',);
+
+    //httpOptions.headers.set('Authentication', 'Bearer ' + token);
+    return this.http.post(
+       'https://localhost:7125/api/LpuJournal/JournalMasterNew',dataSoft,
+     {headers}
+    );
+  }
 }

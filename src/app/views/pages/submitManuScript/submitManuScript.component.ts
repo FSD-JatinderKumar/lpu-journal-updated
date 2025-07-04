@@ -27,7 +27,8 @@ export class SubmitManuScriptComponent implements OnInit {
   @ViewChild('reviewerForm') reviewerForm: NgForm | undefined;
 
   emailId: any = ''; candidateName: any; supervisorName: any; mobileNumber: any; instituteName: any;
-  departmentName: any; idProofType: any = 'select'; idProofNumber: any; address: any; password: any; confirmPassword: any; userRole: any = 'select';
+  departmentName: any; idProofType: any = 'select'; idProofNumber: any; address: any; password: any; confirmPassword: any; 
+  userRole: any = 'select';
   cifUserForm!: FormGroup; isForm1Submitted: boolean = false; IdProofFileName: string | null = null; IdProofFile: string | null = null;
   sessionData: any[] = []; BookId: any; data: any[] = []; bookData: any; JournalDetails: any; detailsArray: any;
   fileStatus: boolean = false; fileName: any; errorMessage: any; isLoginFailed: boolean = false; FileData: any; array: any[] = [];
