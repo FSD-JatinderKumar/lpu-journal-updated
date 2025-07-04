@@ -58,7 +58,7 @@ import { AllJournalsDetailsModule } from './views/pages/Journal-Publisher/All-Jo
 import { AllJournalsDetailsComponent } from './views/pages/Journal-Publisher/All-Journals-Details/All-Journals-Details.component';
 import { AllUserDetailsModule } from './views/pages/Journal-Publisher/All-User-Details/All-User-Details.module';
 import { AllUserDetailsComponent } from './views/pages/Journal-Publisher/All-User-Details/All-User-Details.component';
-import { NewJournalComponentModule } from './views/pages/Journal-Publisher/NewJournal/NewJournal.module';
+import { JournalFormComponentModule } from './views/pages/Journal-Publisher/NewJournal/NewJournal.module';
 import { UpdateJournalDetailsModule } from './views/pages/Journal-Publisher/update-journal-details/update-journal-details.module';
 import { UpdateJournalDetailsComponent } from './views/pages/Journal-Publisher/update-journal-details/update-journal-details.component';
 import { EditorHeaderModule } from './views/pages/Journal-Editors-AdminDashboard/Editor-Top-Bar/EditorHeader.moudle';
@@ -93,11 +93,13 @@ import { submitManuScriptComponentModule } from './views/pages/submitManuScript/
 import { NewJournalVolumeIssuesComponent } from './views/pages/Journal-Editors-AdminDashboard/AddNewVolumeIssue/NewJournalVolumeIssues/NewJournalVolumeIssues.component';
 import { ViewAllJournalIssuesComponent } from './views/pages/Journal-Editors-AdminDashboard/ViewAllJournalIssues/ViewAllJournalIssues.component';
 import { JournalIssuesDetailsComponent } from './views/pages/JournalIssuesDetails/JournalIssuesDetails.component';
+import { JournalFormComponent } from './views/pages/Journal-Publisher/NewJournal/NewJournal.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NewRegistrationPageComponent,
+    JournalFormComponent,
     InternalUserLoginComponent,
     ExternalUserLoginComponent,
     ManuScriptReportComponent,
@@ -192,7 +194,6 @@ import { JournalIssuesDetailsComponent } from './views/pages/JournalIssuesDetail
     TopMenuBarModule,
     AllJournalsDetailsModule, 
     AllUserDetailsModule,
-    NewJournalComponentModule,
     UpdateJournalDetailsModule, 
 
     EditorHeaderModule,

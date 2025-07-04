@@ -1,5 +1,5 @@
 
-import { NewJournalComponent } from './NewJournal.component';
+import { JournalFormComponent } from './NewJournal.component';
  
 
 import { ReactiveFormsModule } from '@angular/forms';
@@ -17,7 +17,7 @@ import { MaterialModule } from 'src/material.module';
 const routes: Routes = [
   {
     path: '',
-    component: NewJournalComponent, 
+    component: JournalFormComponent, 
   }
 ]
 
@@ -29,7 +29,7 @@ const routes: Routes = [
     ],
   
   })
-export class NewJournalComponentModule { }
+export class JournalFormComponentModule { }
 
 
 

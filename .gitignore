@@ -25,6 +25,9 @@
 *.zip
 # Node
 /node_modules
+/node_modules222
+/node_modules-backup
+/node_modules0101
 npm-debug.log
 yarn-error.log
 

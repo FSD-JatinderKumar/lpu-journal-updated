@@ -4,11 +4,16 @@ import { ContactusComponent } from './views/pages/contactus/contactus.component'
 import { JournalAboutComponent } from './views/pages/journal-about/journal-about.component';
 import { submitManuScriptComponentModule } from './views/pages/submitManuScript/submitManuScript.module';
 import { ManuScriptReportComponent } from './views/pages/ManuScriptReport/ManuScriptReport.component';
-
+import { JournalFormComponent } from './views/pages/Journal-Publisher/NewJournal/NewJournal.component';
 const routes: Routes = [
   {
     path: '',
     children: [
+      {
+        path:"NewJournalForms",
+        component: JournalFormComponent,
+        
+      },
       {
         path:"signup",
         loadChildren: () => import('./views/pages/new-registration-page/new-registration-page.module').then(m => m.NewRegistrationPageModule)
