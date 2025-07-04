@@ -498,7 +498,7 @@ export class LpujournalbookService {
 
     //httpOptions.headers.set('Authentication', 'Bearer ' + token);
     return this.http.post(
-       'https://localhost:7125/api/LpuJournal/JournalMasterNew',dataSoft,
+      this.baseUrl+  'api/LpuJournal/JournalMasterNew',dataSoft,
      {headers}
     );
   }
