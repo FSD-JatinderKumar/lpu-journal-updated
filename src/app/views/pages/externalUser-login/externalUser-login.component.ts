@@ -345,4 +345,3 @@ export class ExternalUserLoginComponent implements OnInit {
   isLoading: boolean = false;
 
 }
-

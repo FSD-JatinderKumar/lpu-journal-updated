@@ -82,14 +82,14 @@
                     <span class="text-dark">{{ bookData?.editorName }}</span>
                   </div>
                 </div>
-                <div class="row mb-4">
+                <!-- <div class="row mb-4">
                   <div class="col-md-2">
                     <label class="form-label">Author Email:</label>
                   </div>
                   <div class="col-md-4 text-start">
                     <span class="text-dark">{{ this.AuthorEmailId }}</span>
                   </div>
-                </div>
+                </div> -->
                 <div class="row mb-4">
                   <div class="col-md-2">
                     <label for="journalId">Journal ID:</label>
@@ -776,15 +776,15 @@
             <label class="form-label">Select Reviewers:</label>
 
           
-            <div class="dropdown w-100">
-              <button class="btn btn-outline-dark dropdown-toggle w-100 text-start" type="button"
+            <div class="dropdown">
+              <button class="btn btn-outline-dark dropdown-toggle w-60 text-start" type="button"
                 data-bs-toggle="dropdown" aria-expanded="false">
                 {{ selectedReviewerIds.length > 0 ? selectedReviewerIds.length + ' reviewer(s) selected' : 'Select
                 Reviewers' }}
               </button>
 
            
-              <ul class="dropdown-menu w-100 p-2 shadow-sm border" style="max-height: 220px; overflow-y: auto;">
+              <ul class="dropdown-menu w-60 p-2 shadow-sm border" style="max-height: 200px; overflow-y: auto;">
                 <li *ngFor="let reviewer of reviewerList">
                   <div class="form-check">
                     <input class="form-check-input" type="checkbox" [id]="reviewer.emailId" [value]="reviewer.emailId"
@@ -802,16 +802,23 @@
             <div *ngIf="reviewerForm.submitted && selectedReviewerIds.length === 0" class="text-danger mt-2">
               Please select at least one reviewer.
             </div>
-          
             <div class="mt-2" *ngIf="selectedReviewerIds.length > 0">
               <label class="form-label fw-semibold">Selected Reviewer(s):</label>
-              <ul class="list-group list-group-flush small">
-                <li class="list-group-item px-0 py-1" *ngFor="let email of selectedReviewerIds">
-                  {{ getReviewerNameByEmail(email) }}
-                </li>
-              </ul>
+              <span class=" fw-semibold">
+                {{ getSelectedReviewers() }}
+              </span>
             </div>
-            
+
+
+           <!-- <div class="mt-2" *ngIf="selectedReviewerIds.length > 0">
+            // //   <label class="form-label fw-semibold">Selected Reviewer(s):</label>
+            // //   <ul class="list-group list-group-flush small">
+            // //     <li class="px-0 py-1" *ngFor="let email of selectedReviewerIds">
+            // //       {{ getReviewerNameByEmail(email) }}
+            // //     </li>
+            // //   </ul>
+            // // </div>
+          -->
             </div>
 
 

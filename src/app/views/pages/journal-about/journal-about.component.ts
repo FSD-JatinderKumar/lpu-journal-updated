@@ -184,4 +184,47 @@ export class JournalAboutComponent implements OnInit {
     // this.EditorialboardmembersReviews = this.filteredEditors.filter((item: { editorType: string; }) => item.editorType.toLowerCase().includes('reviewers '));
   }
 
+  // GetDataforEditors() {
+  //   const sortByHIndexDesc = (a: any, b: any) => (b.hIndex || 0) - (a.hIndex || 0);
+  
+  //   this.EditorInChief = this.filteredEditors
+  //     .filter((item: { editorType: string }) =>
+  //       item.editorType.toLowerCase().includes('editor in chief')
+  //     )
+  //     .sort(sortByHIndexDesc);
+  
+  //   this.AssociateEditor = this.filteredEditors
+  //     .filter((item: { editorType: string }) =>
+  //       item.editorType.toLowerCase().includes('associate editors')
+  //     )
+  //     .sort(sortByHIndexDesc);
+  
+  //   this.ManagingEditor = this.filteredEditors
+  //     .filter((item: { editorType: string }) =>
+  //       item.editorType.toLowerCase().includes('managing editor')
+  //     )
+  //     .sort(sortByHIndexDesc);
+  
+  //   this.ManagingEditorNames = this.ManagingEditor.map(
+  //     (editor: { editorName: any }, index: number) => {
+  //       const color = index % 2 === 0 ? 'EditorColor1' : 'EditorColor2'; // Alternate colors
+  //       return `<span style="color: ${color}">${editor.editorName}</span>`;
+  //     }
+  //   ).join('<br/>');
+  
+  //   this.AssistantEditors = this.filteredEditors
+  //     .filter((item: { editorType: string }) =>
+  //       item.editorType.toLowerCase().includes('assistant editor')
+  //     )
+  //     .sort(sortByHIndexDesc);
+  
+  //   // Uncomment below if you want to sort reviewers similarly
+  //   this.EditorialboardmembersReviews = this.filteredEditors
+  //     .filter((item: { editorType: string }) =>
+  //       item.editorType.toLowerCase().includes('reviewers')
+  //     )
+  //     .sort(sortByHIndexDesc);
+  // }
+  
+
 }

@@ -1112,7 +1112,7 @@ ngAfterViewInit(): void {
   EditordisplayedColumns: string[] = [
     // 'journalTitle',
     'manuScript',
-    'editorInChief',
+    // 'editorInChief',
     'emailId',
     'userName',
     'uploadedOn',
@@ -1124,7 +1124,7 @@ ngAfterViewInit(): void {
   EditordisplayedColumnsHeader: string[] = [
     // 'Journal Title',
     'Manu Script',
-    'Editor In Chief',
+    // 'Editor In Chief',
     'User Email Id',
     'User Name',
     'Uploaded Date',
@@ -1398,6 +1398,12 @@ ngAfterViewInit(): void {
   }
   
  
+// In your component TypeScript file
+getSelectedReviewers(): string {
+  return this.selectedReviewerIds
+    .map(email => this.getReviewerNameByEmail(email))
+    .join(', ');
+}
  
 }
 
