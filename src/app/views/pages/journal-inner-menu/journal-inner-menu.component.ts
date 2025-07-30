@@ -40,6 +40,10 @@ export class JournalInnerMenuComponent implements OnInit {
     event.preventDefault(); // Prevent default anchor behavior
     this.router.navigate(['/your-route', { bookId, name, action: 'GetIssues' }]); // Adjust the route as needed
   }
+
+  scrollToTop() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });    
+  }
   ngOnInit(): void {
     var BookId = this.route.snapshot.params['Id'];
     var name = this.route.snapshot.params['name'];
@@ -54,6 +58,7 @@ export class JournalInnerMenuComponent implements OnInit {
       this.BookId = BookId;
       this.name = name;
     }
+ 
   }
   checkUserLogin() {
     const GetCookieData = this.cookieService.get('authData');

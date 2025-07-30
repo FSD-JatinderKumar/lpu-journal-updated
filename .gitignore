@@ -23,6 +23,7 @@
 /bazel-out
 *.7z
 *.zip
+*Zip-Build
 # Node
 /node_modules
 /node_modules222

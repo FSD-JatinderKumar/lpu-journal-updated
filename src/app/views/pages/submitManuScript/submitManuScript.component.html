@@ -1,6 +1,18 @@
 <app-topslider></app-topslider>
 <app-journalmenubar></app-journalmenubar>
 <app-journal-inner-menu></app-journal-inner-menu>
+ 
+<ng-container *ngIf="IsUploading; else dataLoadedBlock">
+  <!-- Loader Template -->
+  <div class="text-center">
+      <div class="text-center">
+          <span class="text-danger fs-3">Loading </span><br />
+          <div class="spinner-grow text-dark text-center" style="width: 14rem; height: 14rem;" role="status">
+          </div>
+      </div>
+  </div>
+</ng-container>
+<ng-template #dataLoadedBlock>
 <div class="row" id="ActionPage" *ngIf="isLoginFailed===false; else loginFailed">
   <div class="row d-flex justify-content-center mt-2">
     <!-- <div class="col-md-10 text-center">
@@ -106,8 +118,102 @@
                     <span class="text-dark">{{ this.AuthorEmailId }}</span>
                   </div>
                 </div>
-
                 <form [formGroup]="scriptUploadForm" (ngSubmit)="onSubmit()">
+                  <div class="row mb-4 d-none">
+                      <div class="col-md-2">
+                          <label for="journalTitle">Journal Title:</label>
+                      </div>
+                      <div class="col-md-4 text-start">
+                          <span class="text-dark">{{ JournalTitle }}</span>
+                      </div>
+                      <div class="col-md-2">
+                          <label for="JournalSubTitle">Journal SubTitle:</label>
+                      </div>
+                      <div class="col-md-4">
+                          <span class="text-dark">{{ JournalSubTitle }}</span>
+                      </div>
+                  </div>
+              
+                  <div class="row mb-4 mt-2">
+                      <div class="col-md-2 mt-3">
+                          <label for="ManuScriptTitle">Manuscript Title</label>
+                      </div>
+                      <div class="col-md-4">
+                          <input type="text" class="form-control" formControlName="ManuScriptTitle" placeholder="Provide Manuscript Title" />
+                          <div *ngIf="submitted || scriptUploadForm.get('ManuScriptTitle')?.touched" class="text-danger">
+                              <small *ngIf="scriptUploadForm.get('ManuScriptTitle')?.errors?.['required']">Manuscript Title is required.</small>
+                          </div>
+                      </div>
+                  </div>
+              
+                  <div class="row mb-4">
+                      <div class="col-md-2">
+                          <label for="ManuScriptType">Manuscript Type:</label>
+                      </div>
+                      <div class="col-md-4">
+                          <select class="form-select" formControlName="ManuScriptType">
+                              <option value="Select" disabled selected>Select Manuscript Type</option>
+                              <option [value]="dropDown.ManuScriptType" *ngFor="let dropDown of ManuScriptTypes">
+                                  {{ dropDown.ManuScriptType }}
+                              </option>
+                          </select>
+                          <div *ngIf="submitted || scriptUploadForm.get('ManuScriptType')?.touched" class="text-danger">
+                              <small *ngIf="scriptUploadForm.get('ManuScriptType')?.errors?.['required']">Manuscript Type is required.</small>
+                          </div>
+                      </div>
+                  </div>
+              
+                  <div class="row mb-4">
+                      <div class="col-md-2">
+                          <label for="SubmissionType" class="form-label">Submission Type:</label>
+                      </div>
+                      <div class="col-md-4">
+                          <select class="form-select" formControlName="SubmissionType" (change)="onSubmissionTypeChange($event)">
+                              <option value="Select" disabled selected>Select Submission Type</option>
+                              <option [value]="dropDown.SubmissionType" *ngFor="let dropDown of SubmissionTypes">
+                                  {{ dropDown.SubmissionType }}
+                              </option>
+                          </select>
+                          <div *ngIf="submitted || scriptUploadForm.get('SubmissionType')?.touched" class="text-danger">
+                              <small *ngIf="scriptUploadForm.get('SubmissionType')?.errors?.['required']">Submission Type is required.</small>
+                          </div>
+                      </div>
+                  </div>
+              
+                  <div *ngIf="submissionType === 'Manuscript'" class="row mb-3">
+                      <div class="col-md-2">
+                          <label for="SubItemType" class="form-label">Sub Item Type:</label>
+                      </div>
+                      <div class="col-md-4">
+                          <select class="form-select" formControlName="SubItemType">
+                              <option value="Select" disabled selected>Select Sub Item Type</option>
+                              <option [value]="dropDown.SubItemType" *ngFor="let dropDown of SubItemType">
+                                  {{ dropDown.SubItemType }}
+                              </option>
+                          </select>
+                      </div>
+                  </div>
+              
+                  <div class="row">
+                      <div class="col-md-2">
+                          <label for="file" class="form-label">Upload File:</label>
+                      </div>
+                      <div class="col-md-4">
+                          <input type="file" id="File" name="File" formControlName="file" class="form-control" (change)="onFileSelected($event)" accept="*.*" />
+                      </div>
+                      <div class="col-md-6 text-center text-danger">
+                          If file size > 20 MB kindly send additional file to Editor In Chief
+                      </div>
+                  </div>
+              
+                  <div class="row">
+                      <div class="col-md-12 text-center">
+                          <button type="submit" class="btn btn-primary" [disabled]="scriptUploadForm.invalid">Attach More Document</button>
+                      </div>
+                  </div>
+              </form>
+              
+                <!-- <form [formGroup]="scriptUploadForm" (ngSubmit)="onSubmit()">
                   <div class="row mb-4 d-none">
                     <div class="col-md-2">
                       <label for="journalTitle">Journal Title:</label>
@@ -123,6 +229,17 @@
                     </div>
                   </div>
 
+                  <div class="row mb-4 mt-2">
+                    <div class="col-md-2 mt-3">
+                      <label for="ManuScriptTitle">Manuscript Title</label>
+                    </div>
+                    <div class="col-md-4">
+                      <input type="text" class="form-control" formControlName="ManuScriptTitle" style="width: auto;" placeholder="Provide Manuscript Title"/>
+                      <div *ngIf="submitted || ManuScriptTitle?.touched || ManuScriptTitle?.errors" class="text-danger">
+                        <small *ngIf="ManuScriptTitle?.errors?.['required']">ManuScriptTitle  is required.</small>
+                      </div>
+                    </div>
+                  </div>
                   <div class="row mb-4">
                     <div class="col-md-2">
                       <label for="ManuScriptType">Manuscript Type:</label>
@@ -134,6 +251,9 @@
                           {{ dropDown.ManuScriptType }}
                         </option>
                       </select>
+                      <div *ngIf="submitted || ManuScriptType?.touched || ManuScriptType?.errors" class="text-danger">
+                        <small *ngIf="ManuScriptType?.errors?.['required']">ManuScriptType  is required.</small>
+                      </div>
                     </div>
                   </div>
                   <div class="row mb-4">
@@ -148,6 +268,9 @@
                           {{ dropDown.SubmissionType }}
                         </option>
                       </select>
+                      <div *ngIf="submitted || SubmissionType?.touched || SubmissionType?.errors" class="text-danger">
+                        <small *ngIf="SubmissionType?.errors?.['required']">SubmissionType  is required.</small>
+                      </div>
                     </div>
                   </div>
                   <div *ngIf="submissionType === 'Manuscript'" class="row mb-3">
@@ -183,7 +306,7 @@
                     </div>
                   </div>
 
-                </form>
+                </form> -->
               </div>
               <div class="container  ">
                 <!-- Cart Items Dashboard -->
@@ -192,6 +315,7 @@
                   <table class="table table-bordered table-hover">
                     <thead>
                       <tr>
+                        <th>Manuscript Title</th>
                         <th>Script Type</th>
                         <th>Submission Type</th>
                         <th>SubItem </th>
@@ -201,6 +325,7 @@
                     </thead>
                     <tbody>
                       <tr *ngFor="let item of cartItems; let i = index">
+                        <td>{{ item.ManuScriptTitle }}</td>
                         <td>{{ item.ManuScriptType }}</td>
                         <td>{{ item.SubmissionType }}</td>
                         <td>{{ (item.SubItemType=='Select' || item.SubItemType=='') ? 'NA':item.SubItemType }}</td>
@@ -210,19 +335,19 @@
                         </td>
                       </tr>
                       <tr>
-                        <td colspan="5" class="text-center">
+                        <td colspan="6" class="text-center">
                           <button (click)="generateZip()">Generate ZIP</button>
                         </td>
                       </tr>
                       <tr>
-                        <td colspan="5" class="text-center">
+                        <td colspan="6" class="text-center">
                           <label for="noteMsg" class="form-label">Note: Kindly click on generate Zip Button to enable
                             the Submit
                             Manuscript Button </label>
                         </td>
                       </tr>
                       <tr>
-                        <td colspan="5"> <button class="btn btn-dark" (click)="uploadFile()"
+                        <td colspan="6"> <button class="btn btn-dark" (click)="uploadFile()"
                             [disabled]="!this.generatedFile">Submit Manuscript </button>
                         </td>
                       </tr>
@@ -716,6 +841,7 @@
     </div>
   </div>
 </div>
+</ng-template>
 <ng-template #loginFailed>
   <div class="vh-100 text-center " *ngIf="isLoginFailed">
     <h3 class="text-center fs-2 m-5 text-warn pt-5 "> Login Failed . </h3>
@@ -729,330 +855,71 @@
   </div>
 </ng-template>
 
-
- 
-
- <div class="modal fade" id="assignReviewerModal" tabindex="-1" aria-labelledby="assignReviewerModalLabel"
-  aria-hidden="true">
-  <!-- <div class="modal-dialog modal-lg modal-dialog-scrollable">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="assignReviewerModalLabel">Assign Reviewer</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body"> -->
-        <div class="modal-dialog custom-modal-size">
-          <div class="modal-content rounded-3 shadow-lg">
-            <div class="modal-header bg-primary text-white">
-              <h5 class="modal-title" id="assignReviewerModalLabel">Assign Reviewer</h5>
-              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-      
-            <div class="modal-body">
-       <form (ngSubmit)="assignReviewer()" #reviewerForm="ngForm">
-           
-          <div class="mb-3">
-            <label class="form-label">Journal</label>
-            <input type="text" class="form-control" [(ngModel)]="JournalTitle" name="journalTitle" readonly />
+<!-- Working logic for 3 internal user or one external user  -->
+<div class="modal fade" id="assignReviewerModal" tabindex="-1" aria-labelledby="assignReviewerModalLabel" aria-hidden="true">
+  <div class="modal-dialog custom-modal-size">
+      <div class="modal-content rounded-3 shadow-lg">
+          <div class="modal-header ">
+              <h5 class="fw-bold fs-4" id="assignReviewerModalLabel">Assign Reviewer</h5>
+              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close" (click)="resetSelectedReviewers()"></button>
           </div>
-
-           
-          <div class="mb-3">
-            <label class="form-label">Reviewer Type:</label>
-            <div class="form-check">
-              <input class="form-check-input" type="radio" id="internal" name="reviewerType" [(ngModel)]="reviewerType"
-                value="internal" required />
-              <label class="form-check-label" for="internal">Internal Reviewer</label>
-            </div>
-            <div class="form-check">
-              <input class="form-check-input" type="radio" id="external" name="reviewerType" [(ngModel)]="reviewerType"
-                value="external" />
-              <label class="form-check-label" for="external">External Reviewer</label>
-            </div>
-          </div>
-
-          
-          <div class="mb-3" *ngIf="reviewerType === 'internal'">
-            <label class="form-label">Select Reviewers:</label>
-
-          
-            <div class="dropdown">
-              <button class="btn btn-outline-dark dropdown-toggle w-60 text-start" type="button"
-                data-bs-toggle="dropdown" aria-expanded="false">
-                {{ selectedReviewerIds.length > 0 ? selectedReviewerIds.length + ' reviewer(s) selected' : 'Select
-                Reviewers' }}
-              </button>
-
-           
-              <ul class="dropdown-menu w-60 p-2 shadow-sm border" style="max-height: 200px; overflow-y: auto;">
-                <li *ngFor="let reviewer of reviewerList">
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" [id]="reviewer.emailId" [value]="reviewer.emailId"
-                      [checked]="selectedReviewerIds.includes(reviewer.emailId)"
-                      (change)="toggleReviewerSelection(reviewer.emailId, $event)" />
-                    <label class="form-check-label" [for]="reviewer.emailId">
-                      {{ reviewer.candidateName }}
-                    </label>
+          <div class="modal-body">
+            <form (ngSubmit)="assignReviewer()" #reviewerForm="ngForm">
+              <div class="mb-3">
+                <label class="form-label">Journal Title</label>
+                <input type="text" class="form-control" [(ngModel)]="JournalTitle" name="journalTitle" readonly />
+              </div>
+              <div class="row">
+              <div class="col-md-6">
+                <label class="form-label fw-bold mb-3">Select Reviewer(s)</label>
+                <div class="dropdown mb-3">
+                  <button class="btn btn-outline-dark dropdown-toggle w-42 text-start" type="button" data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                    {{ selectedReviewerIds.length > 0 ? selectedReviewerIds.length + ' reviewer(s) selected' : 'Select at least 2
+                    Reviewers' }}
+                  </button>
+                  <ul class="dropdown-menu w-42 p-2 shadow-sm" style="max-height: 200px; overflow-y: auto;">
+                    <li *ngFor="let reviewer of reviewerList">
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" [id]="reviewer.emailId" [value]="reviewer.emailId"
+                          [checked]="selectedReviewerIds.includes(reviewer.emailId)"
+                          (change)="toggleReviewerSelection(reviewer.emailId, $event)" />
+                        <label class="form-check-label" [for]="reviewer.emailId">
+                          {{ reviewer.candidateName }}
+                        </label>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div *ngIf="reviewerForm.submitted && selectedReviewerIds.length === 0" class="text-danger mb-3">
+                  Please select at least one reviewer.
+                </div>
+                <div class="mb-3" *ngIf="selectedReviewerIds.length > 0">
+                  <label class="form-label fw-bold">Selected Reviewer(s):</label>
+                  <div class="d-flex flex-wrap gap-1">
+                    <span *ngFor="let email of selectedReviewerIds; let last = last; let i = index">
+                      <span class="fw-semibold">{{ i + 1 }}.</span>
+                      {{ getReviewerNameByEmail(email) }}<span *ngIf="!last">, </span>
+                    </span>
                   </div>
-                </li>
-              </ul>
-            </div>
-
-          
-            <div *ngIf="reviewerForm.submitted && selectedReviewerIds.length === 0" class="text-danger mt-2">
-              Please select at least one reviewer.
-            </div>
-            <div class="mt-2" *ngIf="selectedReviewerIds.length > 0">
-              <label class="form-label fw-semibold">Selected Reviewer(s):</label>
-              <span class=" fw-semibold">
-                {{ getSelectedReviewers() }}
-              </span>
-            </div>
-
-
-           <!-- <div class="mt-2" *ngIf="selectedReviewerIds.length > 0">
-            // //   <label class="form-label fw-semibold">Selected Reviewer(s):</label>
-            // //   <ul class="list-group list-group-flush small">
-            // //     <li class="px-0 py-1" *ngFor="let email of selectedReviewerIds">
-            // //       {{ getReviewerNameByEmail(email) }}
-            // //     </li>
-            // //   </ul>
-            // // </div>
-          -->
-            </div>
-
-
-          
-          <div *ngIf="reviewerType === 'external'">
-        
-            <div class="mb-3">
-              <label for="externalName" class="form-label">Reviewer Name</label>
-              <input type="text" class="form-control" [(ngModel)]="externalReviewer.name" name="externalName" required
-                #nameRef="ngModel" [ngClass]="{ 'is-invalid': nameRef.invalid && nameRef.touched }" />
-              <div *ngIf="nameRef.invalid && nameRef.touched" class="text-danger">
-                Reviewer name is required.
+                </div>
               </div>
             </div>
-
-          
-            <div class="mb-3">
-              <label for="externalEmail" class="form-label">Reviewer Email</label>
-              <input type="email" class="form-control" [(ngModel)]="externalReviewer.email" name="externalEmail"
-                required email #emailRef="ngModel" [ngClass]="{ 'is-invalid': emailRef.invalid && emailRef.touched }" />
-              <div *ngIf="emailRef.invalid && emailRef.touched" class="text-danger">
-                Valid reviewer email is required.
+              <div class="modal-footer justify-content-center border-top-0">
+                <button type="button" class="btn btn-outline-secondary me-2" data-bs-dismiss="modal"
+                  (click)="resetSelectedReviewers(); scrollToTop()">Cancel</button>
+                <button type="submit" class="btn btn-primary" [disabled]="selectedReviewerIds.length < 2"
+                  (click)="reviewerForm.ngSubmit.emit(); scrollToTop()">Assign Reviewers</button>
               </div>
-            </div>
-
-          
-            <div class="mb-3">
-              <label for="externalContact" class="form-label">Contact Number</label>
-              <input type="tel" class="form-control" [(ngModel)]="externalReviewer.contact" name="externalContact"
-                required pattern="^[0-9]{10}$" #contactRef="ngModel"
-                [ngClass]="{ 'is-invalid': contactRef.invalid && contactRef.touched }" />
-              <div *ngIf="contactRef.invalid && contactRef.touched" class="text-danger">
-                Enter a valid 10-digit contact number.
-              </div>
-            </div>
+            </form>
           </div>
-
-          
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-            <button type="submit" class="btn btn-success" 
-             [disabled]="!isReviewerFormValid()"
-            (click)="markAllFieldsTouched(reviewerForm)">
-            Assign Reviewer
-            </button>
-             
-          </div>
-        </form>  
       </div>
-
-    </div>
   </div>
-</div>  
+</div>
 
-
-
-
-
-
-<!-- Reviewers Modal -->
-<!-- Reviewers Modal -->
-<!-- New form added on 23-June-25 -->
-<!-- <div class="modal fade" id="ReviewerModal" tabindex="-1" aria-labelledby="ReviewerModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-xl modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header bg-light py-2">
-        <h5 class="modal-title fs-6 fw-bold" id="ReviewerModalLabel">Reviewer Submission Form {{ this.ManuscriptMasterId
-          }}</h5>
-        <button type="button" class="btn-close btn-sm" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body p-2">
-        <form (ngSubmit)="submitReviewerForm()">
-          
-          <div class="card mb-2">
-            <div class="card-header bg-light py-1 px-2">
-              <h6 class="mb-0 fs-6">Review Details</h6>
-            </div>
-            <div class="card-body p-1">
-              <div class="row g-3 ">
-                <div class="col-md-3 mt-5">
-                  <label for="recommendation" class="form-label small">Reviewer Term</label>
-                </div>
-                <div class="col-md-3 mt-5">
-                  <select class="form-select form-select-sm" id="recommendation" [(ngModel)]="reviewForm.recommendation"
-                    name="recommendation" required #recommendationRef="ngModel">
-                    <option value="" disabled selected>Select</option>
-                    <option value="Minor Revisions">Minor Revisions</option>
-                    <option value="Major Revisions">Major Revisions</option>
-                  </select>
-                  <div class="text-danger small"
-                    *ngIf="recommendationRef.invalid && (recommendationRef.touched || recommendationRef.dirty)">
-                    Term is required.
-                  </div>
-                </div>
-
-                <div class="col-md-3 mt-5">
-                  <label for="rating" class="form-label small">Manuscript Rating (1-10)</label>
-                </div>
-                <div class="col-md-3 mt-5">
-                  <input type="number" class="form-control form-control-sm" id="rating" min="1" max="10"
-                    [(ngModel)]="reviewForm.rating" name="rating" required #ratingRef="ngModel" />
-                  <div class="text-danger small" *ngIf="ratingRef.invalid && (ratingRef.touched || ratingRef.dirty)">
-                    Rating is required.
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-         
-          <div class="card mb-2">
-            <div class="card-header bg-light py-1 px-2">
-              <h6 class="mb-0 fs-6">Editor Communication</h6>
-            </div>
-            <div class="card-body p-1">
-              <div class="row g-3 ">
-                <div class="col-md-3 mt-5">
-                  <label for="transferAuthorization" class="form-label small">Transfer Authorization</label>
-                </div>
-                <div class="col-md-3 mt-5">
-                  <select class="form-select form-select-sm" id="transferAuthorization"
-                    [(ngModel)]="reviewForm.transferAuthorization" name="transferAuthorization" required
-                    #transferAuthorizationRef="ngModel">
-                    <option value="" disabled selected>Select authorization</option>
-                    <option value="Yes">Yes</option>
-                    <option value="No">No</option>
-                  </select>
-                  <div class="text-danger small"
-                    *ngIf="transferAuthorizationRef.invalid && (transferAuthorizationRef.touched || transferAuthorizationRef.dirty)">
-                    Transfer Authorization is required.
-                  </div>
-                </div>
-                <div class="col-md-3 mt-5">
-                  <label for="commentsToEditor" class="form-label small">Confidential Comments to Editor</label>
-                </div>
-                <div class="col-md-3 mt-5">
-                 
-                  <textarea class="form-control form-control-sm" id="commentsToEditor"
-                    [(ngModel)]="reviewForm.commentsToEditor" name="commentsToEditor" required minlength="50"
-                    #commentsToEditorRef="ngModel" rows="5"></textarea>
-                  <div class="text-danger small"
-                    *ngIf="commentsToEditorRef.invalid && (commentsToEditorRef.touched || commentsToEditorRef.dirty)">
-                    <div *ngIf="commentsToEditorRef.errors?.['required']">Comments are required.</div>
-                    <div *ngIf="commentsToEditorRef.errors?.['minlength']">Minimum 50 characters required.</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          
-          <div class="card mb-2">
-            <div class="card-header bg-light py-1 px-2">
-              <h6 class="mb-0 fs-6">Review Questions</h6>
-            </div>
-            <div class="card-body p-1">
-              <div class="row g-3">
-                <div class="col-md-4" *ngFor="let question of reviewForm.questions; let i = index"> <br />
-                  <label [for]="'question' + i" class="form-label small mb-2">{{ question.text }}</label>
-                  
-                  <select class="form-select form-select-sm" [id]="'question' + i" [(ngModel)]="question.answer"
-                    [name]="'question' + i" required #questionRef="ngModel">
-                    <option value="" disabled selected>Select</option>
-                    <option *ngFor="let option of question.options" [value]="option">{{ option }}</option>
-                  </select>
-                  <div class="text-danger small"
-                    *ngIf="questionRef.invalid && (questionRef.touched || questionRef.dirty)">
-                    Answer is required.
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-         
-          <div class="card mb-2">
-            <div class="card-header bg-light py-1 px-2">
-              <h6 class="mb-0 fs-6">Final Decision</h6>
-            </div>
-            <div class="card-body p-1">
-              <div class="row g-3">
-                <div class="col-md-2 mt-5">
-                  <label for="commentsToAuthor" class="form-label small">Comments to Author</label>
-                </div>
-                <div class="col-md-3 mt-5">
-                
-                  <textarea class="form-control form-control-sm" id="commentsToAuthor"
-                    [(ngModel)]="reviewForm.commentsToAuthor" name="commentsToAuthor" required minlength="50"
-                    #commentsToAuthorRef="ngModel" rows="5"></textarea>
-                  <div class="text-danger small"
-                    *ngIf="commentsToAuthorRef.invalid && (commentsToAuthorRef.touched || commentsToAuthorRef.dirty)">
-                    <div *ngIf="commentsToAuthorRef.errors?.['required']">Comments are required.</div>
-                    <div *ngIf="commentsToAuthorRef.errors?.['minlength']">Minimum 50 characters required.</div>
-                  </div>
-                </div>
-                <div class="col-md-3 mt-5">
-                  <label for="approvalAction" class="form-label small">Decision</label>
-                </div>
-                <div class="col-md-3 mt-5">
-                  <select class="form-select form-select-sm" id="approvalAction" [(ngModel)]="reviewForm.approvalAction"
-                    name="approvalAction" required #approvalActionRef="ngModel">
-                    <option value="" disabled selected>Select decision</option>
-                    <option value="Accept with minor corrections">Accept with minor corrections</option>
-                    <option value="Accept with major corrections">Accept with major corrections</option>
-                    <option value="Accept in the current form">Accept in the current form</option>
-                    <option value="Editing requires">Editing requires</option>
-                   
-                  </select>
-
-
-                  <div class="text-danger small"
-                    *ngIf="approvalActionRef.invalid && (approvalActionRef.touched || approvalActionRef.dirty)">
-                    Approval Action is required.
-                  </div>
-                
-                </div>
-              </div>
-            </div>
-          </div>
-
-      
-          <div class="modal-footer py-1 px-2">
-            <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
-            <button type="submit" class="btn btn-primary btn-sm"
-              [disabled]="this.reviewForm.commentsToAuthor.length < 5">
-              <i class="bi bi-send-fill me-1"></i>Submit
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
-</div> -->
-
-<!-- Reviewers Modal -->
+<!-- submitReviewerForm Reviewers Modal -->
 <div class="modal fade" id="ReviewerModal" tabindex="-1" aria-labelledby="ReviewerModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-xl modal-dialog-centered">
     <div class="modal-content custom-modal">
@@ -1186,178 +1053,3 @@
     </div>
   </div>
 </div>
-<!-- Reviewers Modal -->
-<!-- <div class="modal fade" id="ReviewerModal" tabindex="-1" aria-labelledby="ReviewerModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-xl modal-dialog-centered">
-    <div class="modal-content custom-modal">
-      <div class="modal-header">
-        <h5 class="modal-title" id="ReviewerModalLabel">Reviewer Form</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <form (ngSubmit)="submitReviewerForm()">
-         
-          <div class="row mb-3">
-            <div class="col-md-6">
-              <label class="form-label">Reviewer Recommendation Term:</label>
-              <select class="form-select" [(ngModel)]="reviewForm.recommendation" name="recommendation" required>
-                <option value="Minor Revisions">Minor Revisions</option>
-                <option value="Major Revisions">Major Revisions</option>
-              </select>
-            </div>
-            <div class="col-md-6">
-              <label class="form-label">Overall Reviewer Manuscript Rating:</label>
-              <input type="number" class="form-control" [(ngModel)]="reviewForm.rating" name="rating" required />
-            </div>
-          </div>
-
-         
-          <div class="row mb-3">
-            <div class="col-md-6">
-              <label class="form-label">Transfer Authorization Response:</label>
-              <select class="form-select" [(ngModel)]="reviewForm.transferAuthorization" name="transferAuthorization" required>
-                <option value="Yes">Yes</option>
-                <option value="No">No</option>
-              </select>
-            </div>
-            <div class="col-md-6">
-              <label class="form-label">Comments to Editor:</label>
-              <textarea class="form-control" [(ngModel)]="reviewForm.commentsToEditor" name="commentsToEditor" rows="5"></textarea>
-            </div>
-          </div>
- 
-          <div class="row mb-3">
-            <div class="col-md-12">
-              <h6>Reviewer Questions:</h6>
-            </div>
-            <div class="col-md-12" *ngFor="let question of reviewForm.questions; let i = index">
-              <label class="form-label">{{ question.text }}</label>
-              <div *ngFor="let option of question.options">
-                <input type="radio" [name]="'question' + i" [value]="option" [(ngModel)]="question.answer" required />
-                {{ option }}
-              </div>
-            </div>
-          </div>
-
-         
-          <div class="row mb-3">
-            <div class="col-md-6">
-              <label class="form-label">Comments to Author:</label>
-              <textarea class="form-control" [(ngModel)]="reviewForm.commentsToAuthor" name="commentsToAuthor" rows="4" required></textarea>
-            </div>
-            <div class="col-md-6">
-              <label class="form-label">Accept / Reject:</label>
-              <select class="form-select" [(ngModel)]="reviewForm.approvalAction" name="approvalAction" required>
-                <option value="" disabled selected>-- Select --</option>
-                <option value="Accept">Accept</option>
-                <option value="Reject">Reject</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="row mb-3">
-            <div class="col-md-12">
-              <label class="form-label">Sending Manuscript Master ID: {{ this.ManuscriptMasterId }}</label>
-            </div>
-          </div>
-
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-            <button type="submit" class="btn btn-success" [disabled]="this.reviewForm.commentsToAuthor.length < 5">Submit Review</button>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
-</div> -->
-
-<!-- <div class="modal fade" id="ReviewerModal" tabindex="-1" aria-labelledby="ReviewerModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-xl modal-dialog-centered">
-    <div class="modal-content custom-modal">
-      <div class="modal-header">
-        <h5 class="modal-title" id="ReviewerModalLabel">Reviewer Form</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <form (ngSubmit)="submitReviewerForm()">
-         
-          <div class="row">
-            <div class="col-md-3 mb-3">
-              <label class="form-label">Reviewer Recommendation Term:</label>
-            </div>
-            <div class="col-md-3 mb-3">
-              <select class="form-select" [(ngModel)]="reviewForm.recommendation" name="recommendation" required>
-                <option value="Minor Revisions">Minor Revisions</option>
-                <option value="Major Revisions">Major Revisions</option>
-              </select>
-            </div>
-
-            <div class="col-md-3 mb-3">
-              <label class="form-label">Overall Reviewer Manuscript Rating:</label>
-            </div>
-            <div class="col-md-3 mb-3">
-              <input type="number" class="form-control" [(ngModel)]="reviewForm.rating" name="rating" />
-            </div>
-          </div>
-    
-          <div class="row">
-            <div class="col-md-3 mb-3">
-              <label class="form-label">Transfer Authorization Response:</label>
-            </div>
-            <div class="col-md-3 mb-3">
-              <select class="form-select" [(ngModel)]="reviewForm.transferAuthorization" name="transferAuthorization"
-                required>
-                <option value="Yes">Yes</option>
-                <option value="No">No</option>
-              </select>
-            </div>
-
-            <div class="col-md-3 mb-3">
-              <label class="form-label">Comments to Editor:</label>
-            </div>
-            <div class="col-md-3 mb-3">
-              <textarea class="form-control" [(ngModel)]="reviewForm.commentsToEditor" name="commentsToEditor"
-                rows="5"></textarea>
-            </div>
-          </div>
-
- 
-          <div class="row">
-            <div class="col-md-4 mb-3" *ngFor="let question of reviewForm.questions; let i = index">
-              <label class="form-label">{{ question.text }}</label>
-              <div *ngFor="let option of question.options">
-                <input type="radio" [name]="'question' + i" [value]="option" [(ngModel)]="question.answer" required />
-                {{ option }}
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-4 mb-3">
-              <label class="form-label">Comments to Author:</label>
-              <textarea class="form-control" [(ngModel)]="reviewForm.commentsToAuthor" name="commentsToAuthor"
-                rows="4"></textarea>
-            </div>
-            <div class="col-md-4 mb-3">
-              <label class="form-label">Accept / Reject</label>
-              <select class="form-select" [(ngModel)]="reviewForm.approvalAction" name="approvalAction" required="">
-                <option value="Select" selected>-- Select --</option>
-                <option value="Accept">Accept</option>
-                <option value="Reject">Reject</option>
-              </select>
-            </div>
-            <div class="col-md-4 mb-3">
-              <label class="form-label">Sending Manuscript master Id {{this.ManuscriptMasterId }}</label>              
-            </div>
-
-          </div>
-
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-            <button type="submit" class="btn btn-success" [disabled]=" this.reviewForm.commentsToAuthor.length<5">Submit
-              Review</button>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
-</div>  -->

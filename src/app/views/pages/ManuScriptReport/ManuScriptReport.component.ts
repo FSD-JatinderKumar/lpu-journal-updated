@@ -211,9 +211,11 @@ export class ManuScriptReportComponent implements OnInit {
         this.dataSource = dataX.item1;
         this.dataLoaded = true;
         this.ManuscriptData = dataX.item1;
-        // console.log("ALL EDitors  Data" + JSON.stringify(this.ManuscriptData))
+        console.log("ALL EDitors  Data" + JSON.stringify(this.ManuscriptData))
         if (this.ManuscriptData.length > 0) {
           this.ManuscriptDataColumns = Object.keys(this.ManuscriptData[0]);
+          // console.log(JSON.stringify(this.ManuscriptDataColumns))
+
           this.calculateTotalPagesManuscript();
           this.updatePaginatedDataManuscript();
         }
@@ -238,18 +240,17 @@ export class ManuScriptReportComponent implements OnInit {
   
   displayedManuscriptColumns: string[] = [
     // 'journalId',
+    // 'manuScriptTitle',
     'journalTitle',
-    'manuScript',
     'editorInChief',
     'emailId',
     'userName',
-    'submissionType',
     'fileUrl',
     'journalId'
   ];
   displayedManuscriptColumnHeaders: { [key: string]: string } = {
     journalTitle: 'Journal Title',
-    manuScript: 'Manu Script',
+    // manuScriptTitle: 'Manuscript Title',
     editorInChief: 'Author Name',
     emailId: 'User Email',
     userName: 'User Name',
@@ -266,7 +267,7 @@ export class ManuScriptReportComponent implements OnInit {
   // "Manuscript,Manuscript","fileUrl":"53_1482989762_24_2025_merged-files.zip","file":null,"editorInChief":"Dr. Neeta Raj Sharma","userId":null,"subItemType":null}
   ManuscriptdisplayedColumns: string[] = [
     'journalTitle',
-    // 'manuScriptType',
+    // 'manuScriptTitle',
     'submissionType',
     'editorInChief',
     'fileUrl',
