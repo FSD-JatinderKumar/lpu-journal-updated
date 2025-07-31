@@ -17,7 +17,7 @@
   <div class="container-fluid ">
     <div class="row">
       <div class="col-md-12" *ngIf="EditorData.length > 0; else NoData">
-        <div class="table-responsive ">
+        <!-- <div class="table-responsive ">
           <table class="table table-bordered table-striped table-hover">
             <thead>
               <tr>
@@ -29,12 +29,12 @@
                 <td *ngFor="let col of displayedEditorColumns">
                   <ng-container [ngSwitch]="col">
                     <button *ngSwitchCase="'fileUrl'" class="btn btn-dark" (click)="onSelectFileEditorX(row[col])">
-                      <!-- View File -->
+                      
                       <i class="bi bi-file-earmark-text"></i>
                     </button>
                     <button *ngSwitchCase="'journalId'" class="btn btn-primary" (click)="onTakeAction(row)"
                       data-bs-toggle="modal" data-bs-target="#assignReviewerModal">
-                      <!-- Assign -->
+                     
                       <i class="bi bi-exclamation-circle"></i>
                     </button>
                     <span *ngSwitchDefault>{{ row[col] }}</span>
@@ -48,6 +48,66 @@
             <button (click)="previousPageEditor()" [disabled]="currentPageEditor === 1">Previous</button>
             <span>Page {{ currentPageEditor }} of {{ totalPagesEditor }}</span>
             <button (click)="nextPageEditor()" [disabled]="currentPageEditor === totalPagesEditor">Next</button>
+          </div>
+        </div> -->
+
+        <div class="table-responsive">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th *ngFor="let col of displayedEditorColumns">
+                  {{ displayedEditorColumnHeaders[col] }}
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let row of paginatedEditorData">
+                <td *ngFor="let col of displayedEditorColumns">
+                  <ng-container [ngSwitch]="col">
+                    <button *ngSwitchCase="'fileUrl'" class="btn btn-dark btn-sm"
+                      (click)="onSelectFileEditorX(row[col])">
+                      <i class="bi bi-file-earmark-text"></i>
+                    </button>
+                    <span *ngSwitchCase="'reviewerAssigned'">
+                      <button *ngIf="row[col]==null; else NA" class="btn btn-success btn-sm me-4"
+                        (click)="onTakeAction(row)" data-bs-toggle="modal"
+                        data-bs-target="#assignReviewerModal">
+                        <i class="bi bi-circle"></i>
+                      </button>                                    
+                    </span>
+                    <ng-template #NA>
+                      <div class="themeClr">
+                        <span class="text-success ">
+                          Reviewer Assigned
+                          <!-- Current Reviewer <br/>{{row[col]}}  -->
+                        </span>
+                      </div>
+                    </ng-template>
+                    <span *ngSwitchCase="'manuScriptTitle'">
+                      <span [ngClass]="{'text-danger me-2': !row[col]?.length}">
+                        {{ row[col]?.length ? row[col] : 'Not Provided' }}
+                      </span>
+                    </span>
+                    <span *ngSwitchCase="'journalId'">
+                      <button  class="btn btn-danger btn-sm"
+                      (click)="onDeleteAction(row)" >
+                      <i class="bi bi-exclamation-circle"></i>
+                    </button>
+                    </span>
+                    <span *ngSwitchDefault>{{ row[col] }}</span>
+                  </ng-container>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <!-- Pagination Controls -->
+          <div class="pagination-controls">
+            <button (click)="previousPageEditor()"
+              [disabled]="currentPageEditor === 1">Previous</button>
+            <span> Page {{ currentPageEditor }} of {{ totalPagesEditor }} </span>
+            <button (click)="nextPageEditor()"
+              [disabled]="currentPageEditor >= totalPagesEditor">Next</button>
           </div>
         </div>
       </div>

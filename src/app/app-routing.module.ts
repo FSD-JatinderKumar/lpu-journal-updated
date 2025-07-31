@@ -237,6 +237,14 @@ const routes: Routes = [
         path: ":Id/:name/UserRRD",
         loadChildren: () => import('./views/pages/RoleWise-Dashboard/EditorDashboard/EDReviewersRemarks-Details/EDReviewersRemarks-Details.module').then(m=>m.EDReviewersRemarksDetailsModule)
       },
+      {
+        path: ":Id/:name/EDNewIssue",
+        loadChildren: () => import('./views/pages/RoleWise-Dashboard/EditorDashboard/AddNewVolumeIssue/NewJournalVolumeIssues/EDNewJournalVolume.module').then(m=>m.EDNewJournalVolumeModule)
+      },
+      {
+        path: ":Id/:name/EDAllssues",
+        loadChildren: () => import('./views/pages/RoleWise-Dashboard/EditorDashboard/ViewAllJournalIssues/EDAllJournalVolumes.module').then(m=>m.EDAllJournalVolumesModule)
+      },
       // {
       //   path: "ReviewersRemarks",
       //   loadChildren: () => import('./views/pages/Journal-Editors-AdminDashboard/ReviewersRemarks-Details/ReviewersRemarks-Details.module').then(m=>m.ReviewersRemarksDetailsModule)

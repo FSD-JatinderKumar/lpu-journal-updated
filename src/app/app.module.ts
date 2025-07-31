@@ -94,9 +94,12 @@ import { NewJournalVolumeIssuesComponent } from './views/pages/Journal-Editors-A
 import { ViewAllJournalIssuesComponent } from './views/pages/Journal-Editors-AdminDashboard/ViewAllJournalIssues/ViewAllJournalIssues.component';
 import { JournalIssuesDetailsComponent } from './views/pages/JournalIssuesDetails/JournalIssuesDetails.component';
 import { JournalFormComponent } from './views/pages/Journal-Publisher/NewJournal/NewJournal.component';
+import { EDNewJournalVolumeComponent } from './views/pages/RoleWise-Dashboard/EditorDashboard/AddNewVolumeIssue/NewJournalVolumeIssues/EDNewJournalVolume.component';
+import { EDAllJournalVolumesComponent } from './views/pages/RoleWise-Dashboard/EditorDashboard/ViewAllJournalIssues/EDAllJournalVolumes.component';
 
 @NgModule({
   declarations: [
+    EDNewJournalVolumeComponent,
     AppComponent,
     NewRegistrationPageComponent,
     JournalFormComponent,
@@ -165,7 +168,8 @@ import { JournalFormComponent } from './views/pages/Journal-Publisher/NewJournal
     ForgotPasswordComponent,
     NewJournalVolumeIssuesComponent, 
     ViewAllJournalIssuesComponent, 
-    JournalIssuesDetailsComponent
+    JournalIssuesDetailsComponent,
+    EDAllJournalVolumesComponent
     
     
   ],
@@ -209,6 +213,7 @@ import { JournalFormComponent } from './views/pages/Journal-Publisher/NewJournal
     EDManuscriptDetailsModule,
     EDReviewersRemarksDetailsModule,
     submitManuScriptComponentModule,
+    
     
     
   ],

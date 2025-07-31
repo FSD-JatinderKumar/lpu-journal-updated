@@ -142,26 +142,51 @@ export class EDManuscriptDetailsComponent implements OnInit {
   totalPagesEditor: number = 1;
 
   // Simplified and corrected column definitions
+  
+  
+  // EditordisplayedColumns: string[] = [
+  //   // 'journalTitle',
+  //   // 'manuScript',
+  //   'manuScriptTitle',
+  //   // 'editorInChief',
+  //   'emailId',
+  //   'userName',
+  //   'uploadedOn',
+  //   'fileUrl',
+  //   'reviewerAssigned',
+  //   'journalId',
+  // ];
+
+  // EditordisplayedColumnsHeader: string[] = [
+  //   // 'Journal Title',
+  //   'manuScriptTitle',
+  //   // 'Manuscript',
+  //   // 'Editor In Chief',
+  //   'User Email',
+  //   'User Name',
+  //   'Uploaded Date',
+  //   'Download File',
+  //   'Action'
+  // ];
   displayedEditorColumns: string[] = [
-    // 'journalTitle',
-    'manuScript',
+    'manuScriptTitle',
     'editorInChief',
-    // 'emailId',
     'userName',
     'submissionType',
     'fileUrl',
-    'journalId'
+    'reviewerAssigned',
+    'journalId',
   ];
 
   displayedEditorColumnHeaders: { [key: string]: string } = {
     // journalTitle: 'Journal Title',
-    manuScript: 'Manuscript',
+    manuScriptTitle: 'Manuscript Title',
     editorInChief: 'Author Name',
-    // emailId: 'Submitted User Email',
     userName: 'Submitted By',
     submissionType: 'Submission Type',
     fileUrl: 'File Download',
-    journalId: 'Assign Reviewer'
+    reviewerAssigned: 'Assign Reviewer',
+    journalId: 'Delete Action'
   };
 
 
@@ -630,4 +655,89 @@ removeExternalReviewer(index: number) {
     // this.selectedReviewerId.value='select';
   }
 
+  // added on 31-July-25
+ 
+  
+  EditordisplayedColumns: string[] = [
+    // 'journalTitle',
+    // 'manuScript',
+    'manuScriptTitle',
+    // 'editorInChief',
+    'emailId',
+    'userName',
+    'uploadedOn',
+    'fileUrl',
+    'reviewerAssigned',
+    'journalId',
+  ];
+
+  EditordisplayedColumnsHeader: string[] = [
+    // 'Journal Title',
+    'manuScriptTitle',
+    // 'Manuscript',
+    // 'Editor In Chief',
+    'User Email',
+    'User Name',
+    'Uploaded Date',
+    'Download File',
+    'Action'
+  ];
+
+  
+  onDeleteAction(rowData: any) {
+    this.selectedJournalId = rowData['journalId'];
+    this.AssignedById = rowData['emailId'];
+    this.RecordId = rowData['id'];
+    Swal.fire({
+      title: "Disapproval reason",
+      // text: "Disapproval reason",
+      input: 'text',
+      showCancelButton: true
+    }).then((result) => {
+      if (result.value) {
+        const Reasons= result.value;
+        const formData = new FormData();
+        formData.append('RecordId', this.RecordId);
+        formData.append('DisapprovalReason', Reasons);
+        formData.append('UpdatedBy', this.AssignedById);
+        this.DisableDuplicateManuscript(formData);
+      } else {
+        this.showCancelledSwal();
+      }
+    });
+  }
+
+
+
+
+  private DisableDuplicateManuscript(formData: FormData) {
+    this.journalWebApiService.UpdateManuscript(formData).subscribe((data: any) => {
+      // alert(JSON.stringify(data))
+      if (data.item1[0].msg === 'success') {
+        Swal.fire(
+          ' Action Applied !',
+          '',
+          'success'
+        ).then(() => {
+          window.location.reload();
+        });
+      } else {
+        Swal.fire(
+          'Action Failed !',
+          '',
+          'error'
+        ).then(() => {
+          window.location.reload();
+        });
+      }
+    });
+  }
+
+  private showCancelledSwal() {
+    Swal.fire(
+      'Cancelled',
+      ' ',
+      'error'
+    );
+  }
 }
