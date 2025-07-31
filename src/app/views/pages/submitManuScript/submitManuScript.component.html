@@ -7,7 +7,7 @@
   <div class="text-center">
       <div class="text-center">
           <span class="text-danger fs-3">Loading </span><br />
-          <div class="spinner-grow text-dark text-center" style="width: 14rem; height: 14rem;" role="status">
+          <div class="spinner-grow text-dark text-center" style="width: 85rem; height: 85rem;" role="status">
           </div>
       </div>
   </div>
@@ -621,11 +621,11 @@
                                       <i class="bi bi-file-earmark-text"></i>
                                     </button>
                                     <span *ngSwitchCase="'reviewerAssigned'">
-                                      <button *ngIf="row[col]==null; else NA" class="btn btn-danger btn-sm"
+                                      <button *ngIf="row[col]==null; else NA" class="btn btn-success btn-sm me-4"
                                         (click)="onTakeAction(row)" data-bs-toggle="modal"
                                         data-bs-target="#assignReviewerModal">
-                                        <i class="bi bi-exclamation-circle"></i>
-                                      </button>
+                                        <i class="bi bi-circle"></i>
+                                      </button>                                    
                                     </span>
                                     <ng-template #NA>
                                       <div class="themeClr">
@@ -635,6 +635,17 @@
                                         </span>
                                       </div>
                                     </ng-template>
+                                    <span *ngSwitchCase="'manuScriptTitle'">
+                                      <span [ngClass]="{'text-danger me-2': !row[col]?.length}">
+                                        {{ row[col]?.length ? row[col] : 'Not Provided' }}
+                                      </span>
+                                    </span>
+                                    <span *ngSwitchCase="'journalId'">
+                                      <button  class="btn btn-danger btn-sm"
+                                      (click)="onDeleteAction(row)" >
+                                      <i class="bi bi-exclamation-circle"></i>
+                                    </button>
+                                    </span>
                                     <span *ngSwitchDefault>{{ row[col] }}</span>
                                   </ng-container>
                                 </td>
@@ -706,24 +717,6 @@
                                       </ng-container>
                                     </span>
 
-                                    <!-- <span *ngSwitchCase="'journalId'" class="col-md-6">
-                                      <ng-container *ngIf="row.isActionable; else NoApp">
-                                        <button class="btn btn-success btn-sm" (click)="ChangeApproveStatus(row)"
-                                          [ngClass]="'btn-success'">
-                                          <i class="bi bi-check-circle"></i>
-                                        </button>
-                                        <button class="btn btn-danger btn-sm" (click)="DisapproveStatus(row)"
-                                          [ngClass]=" 'btn-danger'">
-                                          <i class="bi bi-x-circle"></i>
-                                        </button>
-                                      </ng-container>
-                                      <ng-template #NoApp>
-                                        <span class="text-danger "> <i class="bi bi-x-circle  "></i><br />Action Applied
-                                        </span>
-                                      </ng-template>
-        
-        
-                                    </span> -->
 
                                     <span *ngSwitchCase="'isApproved'">
                                       <span [ngClass]="row[col] === '1' ? 'text-success' : 'text-danger'">
@@ -746,10 +739,7 @@
                                     <span *ngSwitchDefault>{{ row[col] }}</span>
                                   </ng-container>
                                 </td>
-                                <!-- <td>
-                                                <button class="btn btn-success btn-sm" (click)="ChangeApproveStatus(row)">Approve</button>
-                                                <button class="btn btn-danger btn-sm" (click)="DisapproveStatus(row)">Disapprove</button>
-                                              </td> -->
+                               
                               </tr>
                             </tbody>
                           </table>

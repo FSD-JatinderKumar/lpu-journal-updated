@@ -490,15 +490,23 @@ export class LpujournalbookService {
 
   
   addJournalData(dataSoft:FormData): Observable<any> {
-    debugger;
     let token = this.storageService.getUser();
     let headers = new HttpHeaders()
     .set('Authorization', 'Bearer ' + token)
     .set('Accept', '*/*',);
-
-    //httpOptions.headers.set('Authentication', 'Bearer ' + token);
     return this.http.post(
       this.baseUrl+  'api/LpuJournal/JournalMasterNew',dataSoft,
+     {headers}
+    );
+  }
+  // added on 31-July-25
+  UpdateManuscript(dataSoft:FormData): Observable<any> {
+    let token = this.storageService.getUser();
+    let headers = new HttpHeaders()
+    .set('Authorization', 'Bearer ' + token)
+    .set('Accept', '*/*',);
+    return this.http.post(
+      this.baseUrl+ 'api/LpuJournal/UpdateManuscriptStatus',dataSoft,
      {headers}
     );
   }

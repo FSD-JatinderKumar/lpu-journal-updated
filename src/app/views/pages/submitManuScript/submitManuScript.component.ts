@@ -1046,7 +1046,7 @@ export class SubmitManuScriptComponent implements OnInit {
     'journalTitle',
     'uploadedOn',
     'manuScript',
-    // 'manuscriptTitle',
+    'manuscriptTitle',
     'editorInChief',
     'emailId',
     'userName',
@@ -1057,7 +1057,7 @@ export class SubmitManuScriptComponent implements OnInit {
   displayedEditorColumnHeaders: { [key: string]: string } = {
     journalTitle: 'Journal Title',
     manuScript: 'Manuscript',
-    // manuScriptTitle: 'ManuscriptTitle',
+    manuScriptTitle: 'ManuscriptTitle',
     editorInChief: 'Editor In Chief',
     emailId: 'Submitted by',
     userName: 'Correspond Author',
@@ -1065,7 +1065,7 @@ export class SubmitManuScriptComponent implements OnInit {
     submissionType: 'Submitted Script ',
     fileUrl: 'Document',
     reviewerAssigned: 'Action',
-    // journalId: 'Actions'
+    journalId: 'Delete Action'
   };
 
 
@@ -1076,19 +1076,19 @@ export class SubmitManuScriptComponent implements OnInit {
   EditordisplayedColumns: string[] = [
     // 'journalTitle',
     // 'manuScript',
-    // 'manuScriptTitle',
+    'manuScriptTitle',
     // 'editorInChief',
     'emailId',
     'userName',
     'uploadedOn',
     'fileUrl',
     'reviewerAssigned',
-    // 'journalId',
+    'journalId',
   ];
 
   EditordisplayedColumnsHeader: string[] = [
     // 'Journal Title',
-    // 'manuScriptTitle',
+    'manuScriptTitle',
     // 'Manuscript',
     // 'Editor In Chief',
     'User Email',
@@ -1376,5 +1376,58 @@ export class SubmitManuScriptComponent implements OnInit {
     window.scrollTo({ top: 0, behavior: 'smooth' });    
   }
   
+// added on 31-July-25
+ 
+  
+  
+  onDeleteAction(rowData: any) {
+    this.selectedJournalId = rowData['journalId'];
+    this.AssignedById = rowData['emailId'];
+    this.RecordId = rowData['id'];
+    Swal.fire({
+      title: "Disapproval reason",
+      // text: "Disapproval reason",
+      input: 'text',
+      showCancelButton: true
+    }).then((result) => {
+      if (result.value) {
+        const Reasons= result.value;
+        const formData = new FormData();
+        formData.append('RecordId', this.RecordId);
+        formData.append('DisapprovalReason', Reasons);
+        formData.append('UpdatedBy', this.AssignedById);
+        this.DisableDuplicateManuscript(formData);
+      } else {
+        this.showCancelledSwal();
+      }
+    });
+  }
+
+
+
+
+  private DisableDuplicateManuscript(formData: FormData) {
+    this.journalWebApiService.UpdateManuscript(formData).subscribe((data: any) => {
+      // alert(JSON.stringify(data))
+      if (data.item1[0].msg === 'success') {
+        Swal.fire(
+          ' Action Applied !',
+          '',
+          'success'
+        ).then(() => {
+          window.location.reload();
+        });
+      } else {
+        Swal.fire(
+          'Action Failed !',
+          '',
+          'error'
+        ).then(() => {
+          window.location.reload();
+        });
+      }
+    });
+  }
+
 }
 

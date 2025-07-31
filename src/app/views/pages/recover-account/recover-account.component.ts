@@ -183,7 +183,7 @@ export class RecoverAccountComponent implements OnInit {
       title: this.errorMessage,
       icon: 'error'
     }).then(() => {
-      this.emailFormGroup.reset();
+      // this.emailFormGroup.reset();
       this.currentStep = 1;
     });
   }
