@@ -488,7 +488,7 @@ export class SubmitManuScriptComponent implements OnInit {
         this.dataSource = dataX.item1;
         this.dataLoaded = true;
         this.EditorData = dataX.item1;
-        console.log("ALL Manuscript   Data ******" + JSON.stringify(this.EditorData))
+        // console.log(JSON.stringify(this.EditorData));
         if (this.EditorData.length > 0) {
           this.EditorDataColumns = Object.keys(this.EditorData[0]);
           this.calculateTotalPagesEditor();
@@ -515,8 +515,7 @@ export class SubmitManuScriptComponent implements OnInit {
       next: (dataX: any) => {
         this.dataSource = dataX.item1;
         this.reviewerList = dataX.item1;
-        // console.log("ALL Reviewerlist" + JSON.stringify(this.reviewerList))
-
+       console.log("ALL Reviewerlist" + JSON.stringify(this.reviewerList))
       },
       error: (error: any) => {
         this.dataShowing = false;
@@ -930,7 +929,7 @@ export class SubmitManuScriptComponent implements OnInit {
 
   getReviewerNameByEmail(email: string): string {
     const reviewer = this.reviewerList.find(r => r.emailId === email);
-    return reviewer ? reviewer.candidateName : email;
+    return reviewer ? reviewer.candidateName: email;
   }
 
 
@@ -1042,12 +1041,11 @@ export class SubmitManuScriptComponent implements OnInit {
   // 21-feb-25
 
   displayedEditorColumns: string[] = [
-    // 'journalId',
-    'journalTitle',
+    // 'journalTitle',
     'uploadedOn',
     'manuScript',
     'manuscriptTitle',
-    'editorInChief',
+    // 'editorInChief',
     'emailId',
     'userName',
     'submissionType',
@@ -1055,14 +1053,14 @@ export class SubmitManuScriptComponent implements OnInit {
     // 'journalId'
   ];
   displayedEditorColumnHeaders: { [key: string]: string } = {
-    journalTitle: 'Journal Title',
-    manuScript: 'Manuscript',
-    manuScriptTitle: 'ManuscriptTitle',
-    editorInChief: 'Editor In Chief',
+    // journalTitle: 'Journal',
+    manuScript: 'Manuscript Type',
+    manuScriptTitle: 'Manuscript Title',
+    // editorInChief: 'Editor In Chief',
     emailId: 'Submitted by',
-    userName: 'Correspond Author',
+    userName: 'Correspondend Author',
     uploadedOn: 'Date of Submition',
-    submissionType: 'Submitted Script ',
+    // submissionType: 'Submitted Script ',
     fileUrl: 'Document',
     reviewerAssigned: 'Action',
     journalId: 'Delete Action'
@@ -1075,27 +1073,30 @@ export class SubmitManuScriptComponent implements OnInit {
 
   EditordisplayedColumns: string[] = [
     // 'journalTitle',
-    // 'manuScript',
+    'manuScript',
     'manuScriptTitle',
     // 'editorInChief',
     'emailId',
     'userName',
     'uploadedOn',
+    // 'submissionType',
     'fileUrl',
     'reviewerAssigned',
     'journalId',
   ];
 
   EditordisplayedColumnsHeader: string[] = [
-    // 'Journal Title',
-    'manuScriptTitle',
-    // 'Manuscript',
-    // 'Editor In Chief',
-    'User Email',
-    'User Name',
-    'Uploaded Date',
-    'Download File',
-    'Action'
+    'Journal Title',
+    'Manuscript Type',
+    'ManuscriptTitle',
+    'Editor In Chief',
+    'Submitted by',
+    'Corresponding Author',
+    'Date of Submition',
+    // 'Submitted Script ',
+    'Document',
+    'Action',
+    'Delete Action'
   ];
 
 
@@ -1408,7 +1409,7 @@ export class SubmitManuScriptComponent implements OnInit {
 
   private DisableDuplicateManuscript(formData: FormData) {
     this.journalWebApiService.UpdateManuscript(formData).subscribe((data: any) => {
-      // alert(JSON.stringify(data))
+       alert(JSON.stringify(data))
       if (data.item1[0].msg === 'success') {
         Swal.fire(
           ' Action Applied !',
