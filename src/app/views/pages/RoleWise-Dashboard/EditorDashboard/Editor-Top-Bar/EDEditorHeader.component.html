@@ -60,15 +60,114 @@
           <li><a (click)="VisitUrl(BookId, name, 'Policies/PublicationChargePolicy')">Publication Charge/Waiver
               Policy</a></li>
         </ul>
-      </li>
-
+        </li>
+        
+        <li class="nextdrop" *ngIf="LoginStatus === true; else loginRequired">
+          <label for="drop-2" class="toggle" onclick="myFunction(this)">
+            {{ userRoleText }} Action
+          </label>
+          <a class="dropa">
+            {{ userRoleText }} Action
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+              class="bi bi-caret-down-fill" viewBox="0 0 16 16">
+              <path
+                d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z" />
+            </svg>
+          </a>
+          <input type="checkbox" id="drop-2" />
+  
+          <ul>
+            
+            <ng-container *ngIf="userRoleText === 'Editor'">
+              <li><a (click)="VisitUrl(BookId, name, 'UserED')">All Manuscripts</a></li>
+              <li><a (click)="VisitUrl(BookId, name, 'UserRRD')">All Reviewer's Remarks</a></li>
+            </ng-container> 
+           
+             
+  
+            <!-- Reviewer Menu -->
+             <ng-container *ngIf="userRoleText === 'Reviewer'">
+              <li><a (click)="VisitUrl(BookId, name, 'ReviewerDashboard')">View My Manuscripts</a></li>
+              <li><a (click)="VisitUrl(BookId, name, 'ReviewersRemarks')">Review Manuscript</a></li>
+            </ng-container>
+  
+            <!-- Publisher Menu -->
+             <ng-container *ngIf="userRoleText === 'Publisher'">
+              <li><a (click)="VisitUrl(BookId, name, 'PublisherPanel')">Publish Section</a></li>
+            </ng-container>
+  
+            <!-- Super Admin Menu -->
+            <ng-container *ngIf="userRoleText === 'Super Admin'">
+              <li><a (click)="VisitUrl(BookId, name, 'UserED')">All Manuscripts</a></li>
+              <li><a (click)="VisitUrl(BookId, name, 'UserRRD')">All Reviewer's Remarks</a></li>
+              <li><a (click)="VisitUrl(BookId, name, 'ReviewerDashboard')">Manuscript</a></li>
+              <li><a (click)="VisitUrl(BookId, name, 'ReviewersRemarks')">Review Manuscript</a></li>
+              <li><a (click)="VisitUrl(BookId, name, 'PublisherPanel')">Publish Section</a></li>
+              <li><a (click)="VisitUrl(BookId, name, 'MyManuScript')">Requests</a></li>
+              <li><a (click)="VisitUrl(BookId, name, 'AuthorDashboard')">Upload New</a></li>
+            </ng-container>
+  
+            <!-- User Menu -->
+            <ng-container *ngIf="userRoleText === 'User'">
+              <li><a (click)="VisitUrl(BookId, name, 'ViewManuscripts')">View My Manuscripts</a></li>
+              <li><a (click)="VisitUrl(BookId, name, 'AuthorDashboard')">Upload New Manuscript</a></li>
+              <li><a (click)="VisitUrl(BookId, name, 'ReviewersRemarks')">Review Manuscript</a></li>
+            </ng-container>
+          </ul>
+        </li>
+        <li class="nextdrop"  *ngIf="userRoleText === 'Editor'">
+          <label for="drop-1" class="toggle" onclick="myFunction(this)">Volumes</label>
+          <a class="dropa">
+            Volumes
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+              class="bi bi-caret-down-fill" viewBox="0 0 16 16">
+              <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z" />
+            </svg>
+          </a>
+          <input type="checkbox" id="drop-1" />
+          <ul>
+                <li><a (click)="VisitUrl(BookId, name,'EDNewIssue')">Add New Issue</a></li>
+                <li><a (click)="VisitUrl(BookId, name,'EDAllssues')">View All Volumes </a></li>
+          </ul>
+        </li>
+        <!-- Logout shown separately -->
+       
+        <!-- <li *ngIf="selectedRole !== '-1' ; else loginRequired" ><a (click)="VisitUrl(BookId, name, 'RecoverPasswordReset')">Change Password </a></li>
+           
+        <li *ngIf="selectedRole !== '-1'; else loginRequired">
+          <a (click)="Logout()">Logout</a>
+        </li> -->
+  
+     
+        
+        <li class="nextdrop" *ngIf="LoginStatus === true;">
+          <label for="drop-2" class="toggle" onclick="PlusMinusFunction(this)">Account Settings</label>
+          <a class="dropa">Account Settings <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+              class="bi bi-caret-down-fill" viewBox="0 0 16 16">
+              <path
+                d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z" />
+            </svg></a>
+          <input type="checkbox" id="drop-2" />
+          <ul>
+            <li><a (click)="VisitUrl(BookId, name, 'RecoverPasswordReset')">Change Password </a></li>
+            <li><a (click)="Logout()">Logout</a></li>
+          </ul>
+        </li>
+        <!-- <li *ngIf="LoginStatus=== true;"><a (click)="Logout()">Logout</a></li> -->
+        
+        <ng-template #loginRequired>
+          <li>
+            <a (click)="VisitUrl(BookId, name, 'ExternalLogin')">Login </a>
+          </li>
+        </ng-template>
+      
       <!-- Role-Based Dashboard Menu -->
-      <li class="nextdrop" *ngIf="selectedRole != '-1'; else loginRequired">
-        <label for="drop-2" class="toggle" onclick="myFunction(this)">
+      <!-- <li class="nextdrop" *ngIf="selectedRole !== '-1'; else loginRequired">  
+          <label for="drop-2" class="toggle" onclick="myFunction(this)">
           {{ userRoleText }} Action
         </label>
         <a class="dropa">
-          {{ userRoleText }} Dashboard
+          {{ userRoleText }} Action
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
             class="bi bi-caret-down-fill" viewBox="0 0 16 16">
             <path
@@ -82,7 +181,7 @@
           <ng-container *ngIf="userRoleText === 'Editor'">
             <li><a (click)="VisitUrl(BookId, name, 'UserED')">All Manuscripts</a></li>
             <li><a (click)="VisitUrl(BookId, name, 'UserRRD')">All Reviewer's Remarks</a></li>
-          </ng-container>
+          </ng-container>-->
          
             <!-- <ul>
               
@@ -90,42 +189,42 @@
           </ng-container> -->
 
           <!-- Reviewer Menu -->
-          <ng-container *ngIf="userRoleText === 'Reviewer'">
-            <li><a (click)="VisitUrl(BookId, name, 'ReviewerDashboard')">Manuscript</a></li>
-            <li><a (click)="VisitUrl(BookId, name, 'ReviewersRemarks')">Remarks</a></li>
-          </ng-container>
+          <!-- <ng-container *ngIf="userRoleText === 'Reviewer'">
+            <li><a (click)="VisitUrl(BookId, name, 'ReviewerDashboard')">View My Manuscripts</a></li>
+            <li><a (click)="VisitUrl(BookId, name, 'ReviewersRemarks')">Review Manuscript</a></li>
+          </ng-container> -->
 
           <!-- Publisher Menu -->
-          <ng-container *ngIf="userRoleText === 'Publisher'">
+          <!-- <ng-container *ngIf="userRoleText === 'Publisher'">
             <li><a (click)="VisitUrl(BookId, name, 'PublisherPanel')">Publish Section</a></li>
-          </ng-container>
+          </ng-container> -->
 
           <!-- Super Admin Menu -->
-          <ng-container *ngIf="userRoleText === 'Super Admin'">
+          <!-- <ng-container *ngIf="userRoleText === 'Super Admin'">
             <li><a (click)="VisitUrl(BookId, name, 'UserED')">All Manuscripts</a></li>
             <li><a (click)="VisitUrl(BookId, name, 'UserRRD')">All Reviewer's Remarks</a></li>
             <li><a (click)="VisitUrl(BookId, name, 'ReviewerDashboard')">Manuscript</a></li>
-            <li><a (click)="VisitUrl(BookId, name, 'ReviewersRemarks')">Remarks</a></li>
+            <li><a (click)="VisitUrl(BookId, name, 'ReviewersRemarks')">Review Manuscript</a></li>
             <li><a (click)="VisitUrl(BookId, name, 'PublisherPanel')">Publish Section</a></li>
             <li><a (click)="VisitUrl(BookId, name, 'MyManuScript')">Requests</a></li>
             <li><a (click)="VisitUrl(BookId, name, 'AuthorDashboard')">Upload New</a></li>
-          </ng-container>
+          </ng-container> -->
 
           <!-- User Menu -->
-          <ng-container *ngIf="userRoleText === 'User'">
-            <li><a (click)="VisitUrl(BookId, name, 'ViewManuscripts')">My Requests</a></li>
-            <li><a (click)="VisitUrl(BookId, name, 'AuthorDashboard')">Upload New</a></li>
+          <!-- <ng-container *ngIf="userRoleText === 'User'">
+            <li><a (click)="VisitUrl(BookId, name, 'ViewManuscripts')">View My Manuscripts</a></li>
+            <li><a (click)="VisitUrl(BookId, name, 'AuthorDashboard')">Upload New Manuscript</a></li>
+            <li><a (click)="VisitUrl(BookId, name, 'ReviewersRemarks')">Review Manuscript</a></li>
           </ng-container>
         </ul>
-      </li>
-      <li class="nextdrop"  *ngIf="userRoleText === 'Editor'">
+      </li> -->
+      <!-- <li class="nextdrop"  *ngIf="userRoleText === 'Editor'">
         <label for="drop-1" class="toggle" onclick="myFunction(this)">Volumes</label>
         <a class="dropa">
           Volumes
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
             class="bi bi-caret-down-fill" viewBox="0 0 16 16">
-            <path
-              d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z" />
+            <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z" />
           </svg>
         </a>
         <input type="checkbox" id="drop-1" />
@@ -133,18 +232,21 @@
               <li><a (click)="VisitUrl(BookId, name,'EDNewIssue')">Add New Issue</a></li>
               <li><a (click)="VisitUrl(BookId, name,'EDAllssues')">View All Volumes </a></li>
         </ul>
-      </li>
+      </li> -->
       <!-- Logout shown separately -->
-      <li *ngIf="selectedRole != '-1'">
+     
+      <!-- <li *ngIf="selectedRole !== '-1' ; else loginRequired" ><a (click)="VisitUrl(BookId, name, 'RecoverPasswordReset')">Change Password </a></li>
+         
+      <li *ngIf="selectedRole !== '-1'; else loginRequired">
         <a (click)="Logout()">Logout</a>
-      </li>
+      </li> -->
 
       <!-- Login when no role -->
-      <ng-template #loginRequired>
+      <!-- <ng-template #loginRequired>
         <li>
           <a (click)="VisitUrl(BookId, name, 'RolewiseLogin')">Login</a>
         </li>
-      </ng-template>
+      </ng-template> -->
 
     </ul>
   </nav>

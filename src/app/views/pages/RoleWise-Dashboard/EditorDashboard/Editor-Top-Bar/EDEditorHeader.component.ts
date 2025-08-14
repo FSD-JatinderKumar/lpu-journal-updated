@@ -170,18 +170,18 @@
 // }
 
 import { Component, Input, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, NavigationEnd } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { LoginSessionService } from 'src/app/_services/login-session.service';
 import { LpujournalbookService } from 'src/app/_services/lpujournalbook.service';
 import { StorageService } from 'src/app/_services/storage.service';
 import Swal from 'sweetalert2';
- 
+
 @Component({
   selector: 'app-EDEditorHeader',
   templateUrl: './EDEditorHeader.component.html',
-  styleUrls: ['./EDEditorHeader.component.scss'],standalone: false
+  styleUrls: ['./EDEditorHeader.component.scss'], standalone: false
 })
 export class EDEditorHeaderComponent implements OnInit {
   isDisabled: boolean = true;
@@ -211,18 +211,50 @@ export class EDEditorHeaderComponent implements OnInit {
     private route: ActivatedRoute,
     private StoragesServices: StorageService,
     private cookieService: CookieService
-  ) {
-    
+  ) { }
+  scrollToTop() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
   ngOnInit(): void {
-    this.BookId = this.route.snapshot.params['Id'];
-    this.name = this.route.snapshot.params['name'];
-    if (this.selectedRole != '-1') {
-      this.LoginStatus = this.checkUserLogin();
+    var BookId = this.route.snapshot.params['Id'];
+    var name = this.route.snapshot.params['name'];
+    this.LoginStatus = this.checkUserLogin();
+    if (BookId != undefined && this.LoginStatus == true || this.selectedRole != '-1') {
+      this.BookId = BookId;
+      this.name = name;
       this.getUserRolesforId();
+      this.GetAllIssues(BookId);
     }
-
+    else {
+      this.BookId = BookId;
+      this.name = name;
+    }
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+      }
+    });
   }
+  JournalIssues: any[] = [];
+  GetAllIssues(JournalId: any) {
+    this.journalWebApiService.GetJournalIssues(JournalId).subscribe({
+      next: (dataX: any) => {
+        this.JournalIssues = dataX.item1 || [];
+      },
+      error: (error: any) => {
+        console.error('Error fetching journal issues', error);
+      }
+    });
+  }
+  // ngOnInit(): void {
+  //   this.BookId = this.route.snapshot.params['Id'];
+  //   this.name = this.route.snapshot.params['name'];
+  //   if (this.selectedRole != '-1') {
+  //     this.LoginStatus = this.checkUserLogin();
+  //     this.getUserRolesforId();
+  //   }
+
+  // }
   toggleNavbar(): void {
     this.isNavbarCollapsed = !this.isNavbarCollapsed;
   }
@@ -234,6 +266,7 @@ export class EDEditorHeaderComponent implements OnInit {
 
   goto(val: any): void {
     this.router.navigateByUrl(val);
+    this. scrollToTop();
   }
 
 
@@ -252,19 +285,18 @@ export class EDEditorHeaderComponent implements OnInit {
     { value: '3', label: 'Publisher Login' },
   ];
 
-  selectedRoles: string[] = [];userRole: any;
+  selectedRoles: string[] = []; userRole: any;
 
-
-  
 
   checkUserLogin(): Boolean | any {
     const GetCookieData = this.cookieService.get('authData');
-    if (GetCookieData) {
+    var status = this.StoragesServices.isLoggedIn();
+    if (GetCookieData && status == true) {
       try {
         const retrievedCookies = JSON.parse(GetCookieData);
         this.userRole = retrievedCookies.UserRole?.length > 0 ? retrievedCookies.UserRole : -1;
         this.userId = retrievedCookies.EmailId;
-        this.selectedRole= retrievedCookies.SelectedRole;
+        this.selectedRole = retrievedCookies.SelectedRole;
         // let Token = retrievedCookies.AccessToken;
         this.supervisorName = retrievedCookies.SupervisorName;
         this.departmentName = retrievedCookies.DepartmentName;
@@ -272,6 +304,7 @@ export class EDEditorHeaderComponent implements OnInit {
         return true;
       } catch (error) {
         console.log("error");
+        return false;
       }
     } else {
       return false;
@@ -291,23 +324,23 @@ export class EDEditorHeaderComponent implements OnInit {
           this.UserRole = roles;
           // Sort and join roles to compare easily
           const sortedRoles = [...roles].sort().join(',');
-      
-          if (this.selectedRole ==='0' && sortedRoles.includes(this.userRole)  ) {
+
+          if (this.selectedRole === '0' && sortedRoles.includes(this.userRole)) {
             this.userRoleText = 'Editor';
           }
           // Reviewer
-          else if (this.selectedRole === '2' && sortedRoles.includes(this.userRole)   ) {
+          else if (this.selectedRole === '2' && sortedRoles.includes(this.userRole)) {
             this.userRoleText = 'Reviewer';
           }
           // Publisher
-          else if (this.selectedRole === '3' && sortedRoles.includes(this.userRole)  ) {
+          else if (this.selectedRole === '3' && sortedRoles.includes(this.userRole)) {
             this.userRoleText = 'Publisher';
           }
           // Default fallback
-          else if (this.selectedRole ==='1' && sortedRoles.includes(this.userRole)   ){
+          else if (this.selectedRole === '1' && sortedRoles.includes(this.userRole)) {
             this.userRoleText = 'User';
           }
-        } 
+        }
       },
       error: (err) => {
         console.error('Error fetching user roles:', err);
@@ -316,43 +349,45 @@ export class EDEditorHeaderComponent implements OnInit {
       }
     });
   }
- 
+
 
   VisitUrl(Id: any, name: any, Sufix: any): void {
     this.router.navigateByUrl(`${Id}/${name}/${Sufix}`).then(() => {
       window.location.reload();
     });
+    this.scrollToTop();
   }
-
   VisitUserPage(Menu: any, Id: any, Sufix: any): void {
     this.router.navigateByUrl(`${Menu}/${Id}/${Sufix}`).then(() => {
       window.location.reload();
     });
+
+    this.scrollToTop();
   }
 
   VisitPage(Page: any): void {
     this.router.navigateByUrl(Page).then(() => {
       window.location.reload();
     });
+    this.scrollToTop();
   }
-
 
   Logout() {
     // Delete specific cookies
     this.cookieService.delete('authData');
     this.cookieService.delete('BookData');
-  
+
     // Ensure all cookies are cleared
     this.cookieService.deleteAll();
-  
+
     // Clear session and local storage
     sessionStorage.clear();
     localStorage.clear();
-  
+
     // Ensure session-related services are cleared
     this.AuthSession.clearSession();
     this.StoragesServices.clean();
-  
+
     // Reset user-related variables
     this.UserRole = null;
     this.user_Email = null;
@@ -360,7 +395,7 @@ export class EDEditorHeaderComponent implements OnInit {
     this.departmentName = null;
     this.candidateName = null;
     this.LoginStatus = false;
-  
+
     this.router.navigateByUrl('Home').then(() => {
       setTimeout(() => {
         location.reload();
@@ -368,6 +403,4 @@ export class EDEditorHeaderComponent implements OnInit {
     });
   }
 
-  
- 
 } 
