@@ -14,8 +14,8 @@ import { StorageService } from 'src/app/_services/storage.service';
 @Component({
   selector: 'LoginWithRoles-page',
   templateUrl: './LoginWithRoles.component.html',
-  styleUrls: ['./LoginWithRoles.component.scss'],standalone: false
-  
+  styleUrls: ['./LoginWithRoles.component.scss'], standalone: false
+
 })
 export class LoginWithRolesComponent implements OnInit {
   registrationNumber: any; EmployeeDetails: any[] = []; regdId: any; DriveDropDown: any; showNoDataFoundMessage: boolean | undefined;
@@ -26,7 +26,7 @@ export class LoginWithRolesComponent implements OnInit {
   JournalTitle: any; errorMessage: any;
   UserLoginForm!: FormGroup;
   Email: any;
-  selectedRole: any='-1';
+  selectedRole: any = '-1';
 
   JournalUserAccountForm!: FormGroup;
 
@@ -126,7 +126,7 @@ export class LoginWithRolesComponent implements OnInit {
       var encodedPassword = btoa(password);
       this.selectedRole = DataX.UserRoles;
       this.AuthoriseUserNewWay(uid, password);
-     
+
 
     }
   }
@@ -298,7 +298,7 @@ export class LoginWithRolesComponent implements OnInit {
   ];
 
   selectedRoles: string[] = [];
- 
+
 
 
 
