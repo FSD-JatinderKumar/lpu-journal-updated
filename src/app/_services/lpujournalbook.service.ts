@@ -511,4 +511,18 @@ export class LpujournalbookService {
      {headers}
     );
   }
+
+  //UpdateJournalIssueStatus
+  DisableIssue(dataSoft: FormData): Observable<any> {
+    let authToken = this.storageService.getUser();
+    let headers = new HttpHeaders()
+      .set('Authorization', 'Bearer ' + authToken)
+    return this.http.post(
+      //'https://localhost:7125/api/LpuJournal/UpdateJournalIssueStatus',
+       this.baseUrl + 'api/LpuJournal/UpdateJournalIssueStatus',
+      dataSoft,
+      { headers });
+    
+  }
+
 }

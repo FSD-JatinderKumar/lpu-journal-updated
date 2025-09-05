@@ -1,26 +1,23 @@
 declare var bootstrap: any;
 import { DatePipe } from '@angular/common';
-import { AbstractControl, FormControl, FormGroup, UntypedFormGroup, ValidatorFn } from '@angular/forms';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Inject, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from 'src/app/_services/auth.service';
 import { StorageService } from 'src/app/_services/storage.service';
-import { Validators } from '@angular/forms';
 import { LpujournalbookService } from 'src/app/_services/lpujournalbook.service';
 import Swal from 'sweetalert2';
 import { LoginSessionService } from 'src/app/_services/login-session.service';
 import { CookieService } from 'ngx-cookie-service';
-import { forkJoin } from 'rxjs'
 @Component({
   selector: 'app-Manuscript-Details',
   templateUrl: './Manuscript-Details.component.html',
-  standalone: false,styleUrls: ['./Manuscript-Details.component.scss']
+  standalone: false, styleUrls: ['./Manuscript-Details.component.scss']
 })
 export class ManuscriptDetailsComponent implements OnInit {
   fromDate: any; booksDataColumns: any; toDate: any; pipe = new DatePipe('en-CA');
   dataSource: any[] = []; dataX: any; booksData: any; dataShowing: any = false;
-  userRole: any; BookId: any; JournalId: any; JournalTitle: any =''; name: any;
+  userRole: any; BookId: any; JournalId: any; JournalTitle: any = ''; name: any;
   userId: any; serverUrl: any; supervisorName: any; departmentName: any;
   candidateName: any;
   displayedColumns: string[] = [
@@ -56,25 +53,25 @@ export class ManuscriptDetailsComponent implements OnInit {
 
   dataLoaded: boolean = false;
 
-  
+
   Logout() {
     this.cookieService.delete('authData');
     this.cookieService.delete('BookData');
-  
+
     this.cookieService.deleteAll();
-  
+
     sessionStorage.clear();
     localStorage.clear();
-  
+
     this.AuthSession.clearSession();
     this.StoragesServices.clean();
-  
+
     this.userRole = null;
     this.supervisorName = null;
     this.departmentName = null;
     this.candidateName = null;
     this.LoginStatus = false;
-  
+
     this.router.navigateByUrl('Home').then(() => {
       setTimeout(() => {
         location.reload();
@@ -83,24 +80,24 @@ export class ManuscriptDetailsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.serverUrl = 'https://files.lpu.in/umsweb/Journal/';     
+    this.serverUrl = 'https://files.lpu.in/umsweb/Journal/';
     let loginStatus = this.checkUserLogin();
-    
-    if (loginStatus == true) {    
-      this.loadJournals();      
+
+    if (loginStatus == true) {
+      this.loadJournals();
     } else {
       this.Logout();
     }
   }
-currentJournalId: any;
-currentJournalTitle: any;
+  currentJournalId: any;
+  currentJournalTitle: any;
   setJournalId() {
     // Find the journal object based on the selected ID
     let idx = this.journalListsData.find(
       journal => journal.id == this.JournalTitle
     );
-    this.currentJournalId= idx.id;
-    this.currentJournalTitle= idx.journalTitle;
+    this.currentJournalId = idx.id;
+    this.currentJournalTitle = idx.journalTitle;
     // alert(JSON.stringify(idx))
     this.showEditorData(this.currentJournalId);
     this.loadReviewers(this.currentJournalId);
@@ -221,15 +218,15 @@ currentJournalTitle: any;
 
 
   AssignedById: any; selectedReviewerId: any = ''; selectedJournalId: any;
-  RecordId: any; 
+  RecordId: any;
   // added on 22-5-25
-  SubmittedbyUserId: any; ManuscriptType: any;   submissionType: any;
+  SubmittedbyUserId: any; ManuscriptType: any; submissionType: any;
   onTakeAction(rowData: any) {
     // console.log(JSON.stringify(rowData))
     this.selectedJournalId = rowData['journalId'];
     this.AssignedById = rowData['emailId'];
     this.RecordId = rowData['id'];
-    this.ManuscriptType=rowData['manuScript']
+    this.ManuscriptType = rowData['manuScript']
   }
   assignReviewer() {
     if (!this.selectedReviewerId) {
@@ -299,7 +296,7 @@ currentJournalTitle: any;
       next: (dataX: any) => {
         this.dataSource = dataX.item1;
         this.reviewerList = dataX.item1;
-        
+
       },
       error: (error: any) => {
         this.dataShowing = false;
@@ -308,14 +305,14 @@ currentJournalTitle: any;
       },
       complete: () => {
         this.dataShowing = true;
-      
+
       }
     });
-   
+
   }
 
   journalListsData: any[] = [];
-  loadJournals() { 
+  loadJournals() {
     this.journalWebApiService.GetAllBooksDetails().subscribe({
       next: (dataX: any) => {
         this.dataSource = dataX.item1;
@@ -329,10 +326,10 @@ currentJournalTitle: any;
       },
       complete: () => {
         this.dataShowing = true;
-      
+
       }
     });
-   
+
   }
 
 }
