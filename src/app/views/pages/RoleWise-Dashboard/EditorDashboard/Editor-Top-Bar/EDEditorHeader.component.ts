@@ -311,35 +311,35 @@ export class EDEditorHeaderComponent implements OnInit {
     }
   }
 
-
   getUserRolesforId(): void {
-    this.journalWebApiService.GetUserRolesforUser(this.userId).subscribe({
+    this.journalWebApiService.GetUserRolesforUser (this.userId).subscribe({
       next: (response) => {
-        if (response?.item1?.length > 0) {
-          this.UserRolesData = response.item1[0];
-          const roles = this.UserRolesData?.userRole?.split(',') ?? [];
-          // if (this.selectedRole===undefined || this.selectedRole===null ) {
-          //   this.Logout(); 
-          //  }
-          this.UserRole = roles;
-          // Sort and join roles to compare easily
-          const sortedRoles = [...roles].sort().join(',');
+        const rolesData = response?.item1?.[0];
+       
+        if (!rolesData) {
+          this.UserRole = [];
+          this.userRoleText = '';
+          return;
+        }
+  
+        const roles = rolesData.userRole?.split(',') ?? [];
+        this.UserRole = roles;
+  
+        const sortedRoles = [...roles].sort().join(',');
+  
+        
 
-          if (this.selectedRole === '0' && sortedRoles.includes(this.userRole)) {
-            this.userRoleText = 'Editor';
-          }
-          // Reviewer
-          else if (this.selectedRole === '2' && sortedRoles.includes(this.userRole)) {
-            this.userRoleText = 'Reviewer';
-          }
-          // Publisher
-          else if (this.selectedRole === '3' && sortedRoles.includes(this.userRole)) {
-            this.userRoleText = 'Publisher';
-          }
-          // Default fallback
-          else if (this.selectedRole === '1' && sortedRoles.includes(this.userRole)) {
-            this.userRoleText = 'User';
-          }
+        const roleTextMap: Record<string, string> = {
+          '0': 'Editor',
+          '1': 'User',
+          '2': 'Reviewer',
+          '3': 'Publisher'
+        };
+  
+        if (this.selectedRole && sortedRoles.includes(this.userRole)) {
+          this.userRoleText = roleTextMap[this.selectedRole] ?? '';
+        } else {
+          this.userRoleText = '';
         }
       },
       error: (err) => {
@@ -349,6 +349,47 @@ export class EDEditorHeaderComponent implements OnInit {
       }
     });
   }
+  
+
+  // getUserRolesforId(): void {
+  //   this.journalWebApiService.GetUserRolesforUser(this.userId).subscribe({
+  //     next: (response) => {
+  //       if (response?.item1?.length > 0) {
+  //         this.UserRolesData = response.item1[0];
+  //         const roles = this.UserRolesData?.userRole?.split(',') ?? [];
+  //         // if (this.selectedRole===undefined || this.selectedRole===null ) {
+  //         //   this.Logout(); 
+  //         //  }
+  //         alert(roles+this.selectedRole)
+  //         this.UserRole = roles;
+  //         // Sort and join roles to compare easily
+  //         const sortedRoles = [...roles].sort().join(',');
+
+  //         if (this.selectedRole =='0' && sortedRoles.includes(this.userRole)) {
+  //           this.userRoleText = 'Editor';
+  //         }
+  //          // Default fallback
+  //          else if (this.selectedRole == '1' && sortedRoles.includes(this.userRole)) {
+  //           this.userRoleText = 'User';
+  //         }
+  //         // Reviewer
+  //         else if (this.selectedRole == '2' && sortedRoles.includes(this.userRole)) {
+  //           this.userRoleText = 'Reviewer';
+  //         }
+  //         // Publisher
+  //         else if (this.selectedRole == '3' && sortedRoles.includes(this.userRole)) {
+  //           this.userRoleText = 'Publisher';
+  //         }
+         
+  //       }
+  //     },
+  //     error: (err) => {
+  //       console.error('Error fetching user roles:', err);
+  //       this.UserRole = [];
+  //       this.userRoleText = '';
+  //     }
+  //   });
+  // }
 
 
   VisitUrl(Id: any, name: any, Sufix: any): void {

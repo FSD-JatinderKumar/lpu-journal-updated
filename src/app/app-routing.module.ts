@@ -23,8 +23,8 @@ const routes: Routes = [
       },
       {
         path: ':Id/:name/ExternalLogin',
-        // loadChildren: () => import('./views/pages/externalUser-login/externalUser-login.module').then(m => m.externalUserloginModule)
-        loadChildren: ()=> import('./views/pages/LoginWithRoles/LoginWithRoles.module').then(m=>m.LoginWithRolesModule)
+        loadChildren: () => import('./views/pages/externalUser-login/externalUser-login.module').then(m => m.externalUserloginModule)
+        // loadChildren: ()=> import('./views/pages/LoginWithRoles/LoginWithRoles.module').then(m=>m.LoginWithRolesModule)
       },
       {
         path: 'ExternalLogin',
