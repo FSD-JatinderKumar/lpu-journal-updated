@@ -10,6 +10,7 @@
     </label>
     <input type="checkbox" id="drop" />
     <ul class="menu">
+      <li class="nextdrop" *ngIf="JournalIssues.length > 0"> <a class="dropa" (click)="VisitUrl(BookId, name, 'GetIssues')"> Published Issues <span class="position-relative"> <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"> {{ JournalIssues.length }} <span class="visually-hidden">unread issues</span> </span> </span> </a> </li>
       <li><a (click)="VisitUrl(BookId, name, 'About')">About</a></li>
       <li><a (click)="VisitUrl(BookId, name, 'EditorialBoard')">Editorial Board</a></li>
 
@@ -253,7 +254,7 @@
 </div>
 
 
-<div class="container-fluid  mt-4 " *ngIf="this.candidateName.length>0 ; ">
+<div class="container-fluid  mt-4 " *ngIf="this.candidateName?.length>0 ; ">
   <div class="card">
     <div class="card-body">
       <div class="row d-flex justify-content-center">
